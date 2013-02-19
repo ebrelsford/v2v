@@ -1,0 +1,78 @@
+/*
+ * Table of contents:
+ *  
+ *  _base_
+ *  _state_
+ *  _layout_
+ *  _modules_
+ */
+
+
+/*
+ * _base_
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+}
+
+img {
+    border: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+p {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Clearfix boilerplate */
+
+.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+.clear {
+    clear: both;
+}
+
+
+/*
+ * _state_
+ */
+
+.is-open {
+}
+
+
+/*
+ * _layout_
+ */
+
+.grid {
+    box-sizing: padding-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    float: left;
+    width: 100%;
+}
+
+.grid-1-4 {
+    width: 25%;
+}
+
+.grid-3-4 {
+    width: 75%;
+}
+
+
+/*
+ * _modules_
+ */

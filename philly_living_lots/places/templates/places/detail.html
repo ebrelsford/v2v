@@ -1,0 +1,43 @@
+{% extends "places/base.html" %}
+{% load i18n place_map %}
+{% load url from future %}
+
+{% block content %}
+<div style="float: right;">
+    {% with object.get_geojson_url as places_url %}
+    {% place_map places_url 200 200 %}
+    {% endwith %}
+</div>
+<div>
+    <table>
+        <tr>
+            <th>{% trans "name" %}:</th>
+            <td>{{ object.name|default:"" }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "address line 1" %}:</th>
+            <td>{{ object.address_line1 }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "address line 2" %}:</th>
+            <td>{{ object.address_line2 }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "postal code" %}:</th>
+            <td>{{ object.postal_code }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "city" %}:</th>
+            <td>{{ object.city }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "state/province" %}:</th>
+            <td>{{ object.state_province }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "country" %}:</th>
+            <td>{{ object.country }}</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

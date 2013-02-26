@@ -9,11 +9,46 @@ class Owner(models.Model):
         unique=True,
     )
 
-    # TODO refer back to opa.AccountOwner
-    # TODO owner_type
-    # TODO aliases / LLCs ?
-    # TODO agency code from PRA data
+    OWNER_TYPE_CHOICES = (
+        ('private', 'private'),
+        ('public', 'public'),
+    )
+    owner_type = models.CharField(_('owner type'),
+        choices=OWNER_TYPE_CHOICES,
+        default='public',
+        max_length=20,
+    )
+
+    aliases = models.ManyToManyField('Alias',
+        help_text=_('Other names for this owner'),
+        verbose_name=_('aliases')
+    )
+    agency_codes = models.ManyToManyField('AgencyCode',
+        help_text=_('Agency codes used to refer to this owner'),
+        verbose_name=_('agency codes')
+    )
+    account_owners = models.ManyToManyField('opa.AccountOwner',
+        help_text=_('OPA account owners this owner contains'),
+        verbose_name=_('account owners')
+    )
 
     def __unicode__(self):
         return u'%s' % (self.name,)
 
+
+class AgencyCode(models.Model):
+    """
+    A code used in city data that refers to an agency as a property owner.
+
+    """
+    code = models.CharField(_('code'),
+        max_length=256,
+        unique=True,
+    )
+
+
+class Alias(models.Model):
+    name = models.CharField(_('name'),
+        max_length=256,
+        unique=True,
+    )

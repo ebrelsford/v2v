@@ -2,7 +2,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from phillydata.availableproperties.models import AvailableProperty
-from phillydata.owners.models import BillingAccount, Owner
+from phillydata.opa.models import BillingAccount
+from phillydata.owners.models import Owner
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation
 from places.models import Place

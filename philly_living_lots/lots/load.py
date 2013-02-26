@@ -8,7 +8,7 @@ from datetime import datetime
 from .models import Lot
 from phillydata.availableproperties.models import AvailableProperty
 from phillydata.opa.api import get_address_data
-from phillydata.owners.models import BillingAccount, Owner
+from phillydata.opa.models import AccountOwner, BillingAccount
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation
 from utils import html_unescape
@@ -23,53 +23,33 @@ def load_lots():
 def load_lots_with_violations():
     for violation in Violation.objects.all():
         parcel = find_parcel(violation.violation_location.point,
-                             violation.violation_location.address)
+                             address=violation.violation_location.address)
         if not parcel:
             print 'No parcel found for violation:', violation
             continue
 
-        lot, created = Lot.objects.get_or_create(
-            address_line1=violation.violation_location.address,
-
-            # TODO centroid
-            # TODO account for violations that don't agree with each other
-            defaults={
-                'parcel': parcel,
-                'polygon': parcel.geometry,
-
-                'postal_code': violation.violation_location.zip_code,
-                'city': 'Philadelphia',
-                'state_province': 'PA',
-                'country': 'USA',
-            },
-        )
+        # TODO centroid
+        # TODO account for violations that don't agree with each other
+        lot = get_or_create_lot(parcel, violation.violation_location.address,
+                                centroid=None,
+                                zipcode=violation.violation_location.zip_code)
         lot.violations.add(violation) # TODO check if it's already there?
 
 
 def load_lots_available(added_after=None):
-    # TODO abstract this a bit?
     properties = AvailableProperty.objects.all()
     if added_after:
         properties = properties.filter(added__gte=added_after)
     for available_property in properties:
-        parcel = find_parcel(available_property.centroid,
+        address = available_property.address
+        parcel = find_parcel(available_property.centroid, address=address,
                              mapreg=available_property.mapreg)
         if not parcel:
             print 'No parcel found for available property:', available_property
             continue
 
-        lot, created = Lot.objects.get_or_create(
-            address_line1=available_property.address,
-
-            defaults={
-                'parcel': parcel,
-                'centroid': available_property.centroid,
-                'polygon': parcel.geometry,
-                'city': 'Philadelphia',
-                'state_province': 'PA',
-                'country': 'USA',
-            },
-        )
+        lot = get_or_create_lot(parcel, address,
+                                centroid=available_property.centroid)
         lot.available_property = available_property
         lot.save()
 
@@ -80,10 +60,10 @@ def find_parcel(point, address=None, mapreg=None):
         geometry__contains=point,
     )
     if parcels.count() > 1:
-        print 'Found an unexpected number of parcels (%d) for point' % parcels.count(), point
+        print 'Found too many parcels (%d) for point' % parcels.count(), point
         if address:
             print 'Trying to filter by address: "%s"' % address
-            parcels = parcels.filter(address=address)
+            parcels = parcels.filter(address__iexact=address)
             if parcels.count() == 1:
                 print '  ...success!'
                 return parcels[0]
@@ -103,6 +83,22 @@ def find_parcel(point, address=None, mapreg=None):
         print 'No parcels found for point', point
 
 
+def get_or_create_lot(parcel, address, centroid=None, zipcode=None):
+    lot, created = Lot.objects.get_or_create(
+        address_line1=address,
+        defaults={
+            'parcel': parcel,
+            'polygon': parcel.geometry,
+            'centroid': centroid,
+            'postal_code': zipcode,
+            'city': 'Philadelphia',
+            'state_province': 'PA',
+            'country': 'USA',
+        },
+    )
+    return lot
+
+
 def find_opa_details(lot):
     # TODO shouldn't this be in phillydata.opa.* ?
     data = get_address_data(lot.address_line1)
@@ -111,7 +107,7 @@ def find_opa_details(lot):
     account_details = data['account_details']
 
     owner_names = ', '.join(account['owners'])
-    owner, created = Owner.objects.get_or_create(
+    owner, created = AccountOwner.objects.get_or_create(
         name=html_unescape(owner_names),
     )
 

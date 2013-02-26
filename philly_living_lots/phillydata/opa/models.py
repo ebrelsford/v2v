@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+import reversion
+
 
 class AccountOwner(models.Model):
 
@@ -105,3 +107,5 @@ class BillingAccount(models.Model):
         return u'%s: %s, %s, %s, %s' % (
             self.external_id, self.mailing_name, self.mailing_address,
             self.mailing_city, self.mailing_state_province,)
+
+reversion.register(BillingAccount)

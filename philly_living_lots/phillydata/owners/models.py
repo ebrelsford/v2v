@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+import reversion
+
 
 class Owner(models.Model):
 
@@ -21,19 +23,25 @@ class Owner(models.Model):
 
     aliases = models.ManyToManyField('Alias',
         help_text=_('Other names for this owner'),
-        verbose_name=_('aliases')
+        verbose_name=_('aliases'),
+        blank=True,
+        null=True,
     )
     agency_codes = models.ManyToManyField('AgencyCode',
         help_text=_('Agency codes used to refer to this owner'),
-        verbose_name=_('agency codes')
+        verbose_name=_('agency codes'),
+        blank=True,
+        null=True,
     )
     account_owners = models.ManyToManyField('opa.AccountOwner',
         help_text=_('OPA account owners this owner contains'),
-        verbose_name=_('account owners')
+        verbose_name=_('account owners'),
+        blank=True,
+        null=True,
     )
 
     def __unicode__(self):
-        return u'%s' % (self.name,)
+        return u'%s (%s)' % (self.name, self.owner_type)
 
 
 class AgencyCode(models.Model):
@@ -46,9 +54,21 @@ class AgencyCode(models.Model):
         unique=True,
     )
 
+    def __unicode__(self):
+        return self.code
+
 
 class Alias(models.Model):
     name = models.CharField(_('name'),
         max_length=256,
         unique=True,
     )
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('alias')
+        verbose_name_plural = _('aliases')
+
+reversion.register(Owner)

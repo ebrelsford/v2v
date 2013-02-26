@@ -4,10 +4,12 @@ from django.utils.translation import ugettext_lazy as _
 from sync.models import DataSource
 from .synchronizers import *
 
-# TODO move other apps (violations, opa, ...) into phillydata?
 
 class PhillyDataSource(DataSource):
+    """
+    A DataSource that is specific to Philadelphia.
 
+    """
     NAME_CHOICES = (
         ('praavailableproperties', 'PRA Available Properties'),
         ('opa', 'OPA API'),

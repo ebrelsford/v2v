@@ -3,6 +3,7 @@ Infrastructure for periodically synchronizing data sources. Users of this
 framework should define a Synchronizer sublcass for every DataSource subclass.
 
 """
+from django.utils.timezone import now
 
 
 def find_synchronizer(source_name):
@@ -17,6 +18,9 @@ def do_synchronize(data_source):
     synchronizer_cls = find_synchronizer(data_source.name)
     synchronizer = synchronizer_cls(data_source)
     synchronizer.sync(data_source)
+
+    data_source.last_synchronized = now()
+    data_source.save()
     print 'Done synchronizing with %s' % synchronizer.__class__.__name__
 
 

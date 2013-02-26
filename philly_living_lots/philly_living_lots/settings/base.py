@@ -81,6 +81,8 @@ MIDDLEWARE_CLASSES = (
 
     'fiber.middleware.ObfuscateEmailAddressMiddleware',
     'fiber.middleware.AdminPageMiddleware',
+
+    'reversion.middleware.RevisionMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -120,6 +122,8 @@ INSTALLED_APPS = (
     'contact_form',
     'fiber',
     'mptt',
+    'reversion',
+    'reversion_compare',
     'south',
 
     #
@@ -128,6 +132,7 @@ INSTALLED_APPS = (
     'contact',
     'lots',
     'phillydata',
+    'phillydata.availableproperties',
     'phillydata.owners',
     'phillydata.parcels',
     'phillydata.violations',

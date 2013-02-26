@@ -6,6 +6,7 @@ Utilities for loading lots, mostly from other models.
 from datetime import datetime
 
 from .models import Lot
+from phillydata.availableproperties.models import AvailableProperty
 from phillydata.opa.api import get_address_data
 from phillydata.owners.models import BillingAccount, Owner
 from phillydata.parcels.models import Parcel
@@ -21,7 +22,8 @@ def load_lots():
 
 def load_lots_with_violations():
     for violation in Violation.objects.all():
-        parcel = find_parcel(violation)
+        parcel = find_parcel(violation.violation_location.point,
+                             violation.violation_location.address)
         if not parcel:
             print 'No parcel found for violation:', violation
             continue
@@ -44,19 +46,65 @@ def load_lots_with_violations():
         lot.violations.add(violation) # TODO check if it's already there?
 
 
-def find_parcel(violation):
+def load_lots_available(added_after=None):
+    # TODO abstract this a bit?
+    properties = AvailableProperty.objects.all()
+    if added_after:
+        properties = properties.filter(added__gte=added_after)
+    for available_property in properties:
+        parcel = find_parcel(available_property.centroid,
+                             mapreg=available_property.mapreg)
+        if not parcel:
+            print 'No parcel found for available property:', available_property
+            continue
+
+        lot, created = Lot.objects.get_or_create(
+            address_line1=available_property.address,
+
+            defaults={
+                'parcel': parcel,
+                'centroid': available_property.centroid,
+                'polygon': parcel.geometry,
+                'city': 'Philadelphia',
+                'state_province': 'PA',
+                'country': 'USA',
+            },
+        )
+        lot.available_property = available_property
+        lot.save()
+
+
+def find_parcel(point, address=None, mapreg=None):
+    # TODO couldn't this be in phillydata.parcels.* ?
     parcels = Parcel.objects.filter(
-        geometry__contains=violation.violation_location.point,
+        geometry__contains=point,
     )
-    if parcels.count() != 1:
-        print 'Found an unexpected number of parcels (%d) for violation' % parcels.count(), violation
-        # TODO try to find one with matching address
+    if parcels.count() > 1:
+        print 'Found an unexpected number of parcels (%d) for point' % parcels.count(), point
+        if address:
+            print 'Trying to filter by address: "%s"' % address
+            parcels = parcels.filter(address=address)
+            if parcels.count() == 1:
+                print '  ...success!'
+                return parcels[0]
+        if mapreg:
+            print 'Trying to filter by mapreg: "%s"' % mapreg
+            parcels = parcels.filter(mapreg=mapreg)
+            if parcels.count() == 1:
+                print '  ...success!'
+                return parcels[0]
+
+        print 'Still too many parcels:'
         for parcel in parcels:
-            print parcel
-    return parcels[0]
+            print '\tparcel:', parcel
+    elif parcels.count() == 1:
+        return parcels[0]
+    else:
+        print 'No parcels found for point', point
 
 
 def find_opa_details(lot):
+    # TODO shouldn't this be in phillydata.opa.* ?
     data = get_address_data(lot.address_line1)
     if not data: return
     account = data['account_information']

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from phillydata.availableproperties.models import AvailableProperty
 from phillydata.owners.models import BillingAccount, Owner
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation
@@ -36,12 +37,18 @@ class Lot(Place):
         help_text=_('The violations associated with this lot.'),
         verbose_name=_('violations'),
     )
+    available_property = models.ForeignKey(AvailableProperty,
+        blank=True,
+        null=True,
+    )
+
+    added = models.DateTimeField(_('date added'),
+        auto_now_add=True,
+        help_text=('When this lot was added'),
+    )
 
     # TODO
-    # available for purchase (public)
     # land use
-    # owner
-    # recent sale
     # tax delinquency (private)
     # zoning
 

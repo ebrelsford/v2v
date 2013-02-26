@@ -20,9 +20,6 @@ class DataSource(models.Model):
     # (via)
     #  http://chase-seibert.github.com/blog/2010/07/09/djangocelery-quickstart-or-how-i-learned-to-stop-using-cron-and-love-celery.html
     #
-    # OR
-    #  https://github.com/rfk/django-supervisor
-    #
 
     description = models.TextField(_('description'),
         blank=True,
@@ -40,12 +37,12 @@ class DataSource(models.Model):
         help_text=_('The ordering of this source, lower numbers coming first.'),
     )
 
-    # TODO
-    # frequency
-    # last sync OR farm these out to another app?
+    last_synchronized = models.DateTimeField(_('last synchronized'),
+        help_text=('The last time this data source was synchronized'),
+    )
 
     def synchronize(self):
-        do_synchronize(self.name)
+        do_synchronize(self)
 
     def __unicode__(self):
         return u'%s' % (self.name,)

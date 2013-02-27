@@ -1,4 +1,4 @@
-Django==1.5c1
+Django==1.5
 Pillow==1.7.8
 South==0.7.6
 django-appconf==0.6
@@ -7,6 +7,8 @@ django-contact-form-gv==0.4.1
 django-debug-toolbar==0.9.4
 django-fiber==0.10.1
 django-mptt==0.5.5
+django-reversion==1.6.6
+django-reversion-compare==0.3.5
 djangorestframework==2.1.17
 docutils==0.10
 geojson==1.0.1

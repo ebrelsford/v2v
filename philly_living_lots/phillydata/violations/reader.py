@@ -1,16 +1,8 @@
-from pyproj import Proj, transform
 from re import match
 
 from odata.reader import ODataReader
+from phillydata.utils import to_lon_lat
 
-
-METERS_PER_FOOT = 0.304800609601219
-
-WGS84 = Proj(init='epsg:4326')
-API_PROJECTION = Proj('+proj=lcc +lat_1=39.93333333333333 '
-                    '+lat_2=40.96666666666667 +lat_0=39.33333333333334 '
-                    '+lon_0=-77.75 +x_0=600000 +y_0=0 +ellps=GRS80 '
-                    '+towgs84=0,0,0,0,0,0,0 +units=m +no_defs')
 
 ADDRESS_NUMBERED_STREET_REGEX = '^\d+\w+$'
 
@@ -26,12 +18,8 @@ class LIReader(ODataReader):
     def get_lon_lat(cls, location):
         (x, y) = (location['x'], location['y'])
         if not x or not y: return (None, None)
-
-        # convert to meters
-        (x, y) = [float(coord) * METERS_PER_FOOT for coord in (x, y)]
-
-        # reproject
-        return transform(API_PROJECTION, WGS84, x, y)
+        (x, y) = [float(coord) for coord in (x, y)]
+        return to_lon_lat(x, y)
 
     @classmethod
     def format_street_name(cls, street_name):

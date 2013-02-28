@@ -6,6 +6,7 @@ from phillydata.opa.models import BillingAccount
 from phillydata.owners.models import Owner
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation
+from phillydata.waterdept.models import WaterParcel
 from places.models import Place
 
 
@@ -41,6 +42,11 @@ class Lot(Place):
     available_property = models.ForeignKey(AvailableProperty,
         blank=True,
         null=True,
+    )
+    water_parcel = models.ForeignKey(WaterParcel,
+        blank=True,
+        null=True,
+        help_text=_('The parcel the Water Department defines for this lot')
     )
 
     added = models.DateTimeField(_('date added'),

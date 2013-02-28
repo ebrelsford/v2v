@@ -1,3 +1,4 @@
+import logging
 import traceback
 from urllib2 import URLError
 
@@ -5,11 +6,16 @@ from django.core.exceptions import MultipleObjectsReturned
 
 import reversion
 
-from lots.load import find_opa_details, load_lots_available
+from lots.load import load_lots_available
 from lots.models import Lot
 from sync.synchronizers import Synchronizer
 from .availableproperties.models import AvailableProperty
 from .availableproperties.reader import AvailablePropertyReader
+from .opa.adapter import find_opa_details
+from .waterdept.adapter import find_water_dept_details
+
+
+logger = logging.getLogger(__name__)
 
 
 class OPASynchronizer(Synchronizer):
@@ -21,8 +27,35 @@ class OPASynchronizer(Synchronizer):
         self.update_owner_data()
 
     def update_owner_data(self):
+        # TODO also lots where the owner has not been touched in a while?
+        # eg, last_seen for BillingAccount?
         for lot in Lot.objects.filter(owner__isnull=True):
-            find_opa_details(lot)
+            lot.billing_account = find_opa_details(lot.address_line1)
+            lot.owner = lot.billing_account.account_owner.owner
+            lot.save()
+
+
+class WaterDeptSynchronizer(Synchronizer):
+    """
+    A Synchronizer that updates Water Department data.
+
+    """
+    def sync(self, data_source):
+        logger.info('Starting to synchronize Water Department data.')
+        self.update_water_dept_data()
+        logger.info('Finished synchronizing Water Department data.')
+
+    def update_water_dept_data(self):
+        # TODO also lots where the water dept data has not been touched in a while?
+        for lot in Lot.objects.filter(water_parcel__isnull=True):
+            logger.debug('Updating Water Department data for lot %s' % lot)
+            try:
+                lot.water_parcel = find_water_dept_details(lot.polygon.centroid.x,
+                                                           lot.polygon.centroid.y)
+                lot.save()
+            except Exception:
+                logger.exception('Exception while updating Water Department '
+                                 'data for lot %s' % lot)
 
 
 class PRAAvailablePropertiesSynchronizer(Synchronizer):

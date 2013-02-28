@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'phillydata.owners',
     'phillydata.parcels',
     'phillydata.violations',
+    'phillydata.waterdept',
     'places',
     'sync',
 )
@@ -171,3 +172,5 @@ PLACES_CLOUDMADE_STYLE = '82682'
 FIBER_TEMPLATE_CHOICES = (
     ('base.html', 'Default template'),
 )
+
+SOUTH_TESTS_MIGRATE = False

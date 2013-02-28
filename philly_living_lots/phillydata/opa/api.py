@@ -12,7 +12,8 @@ def get_address_data(address):
     # TODO be more defensive
     try:
         url = BASE_URL + ADDRESS_ENDPOINT + quote_plus(address)
-        data = json.load(urlopen(url))
+        # TODO urllib2 exceptions
+        data = json.load(urlopen(url, None, 30))
         return data['property']
     except KeyError:
         print ('Could not find property in response for %s. Trying by account '

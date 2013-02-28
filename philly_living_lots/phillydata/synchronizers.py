@@ -24,15 +24,21 @@ class OPASynchronizer(Synchronizer):
 
     """
     def sync(self, data_source):
+        logger.info('Starting to synchronize OPA data.')
         self.update_owner_data()
+        logger.info('Finished synchronizing OPA data.')
 
     def update_owner_data(self):
         # TODO also lots where the owner has not been touched in a while?
         # eg, last_seen for BillingAccount?
         for lot in Lot.objects.filter(owner__isnull=True):
-            lot.billing_account = find_opa_details(lot.address_line1)
-            lot.owner = lot.billing_account.account_owner.owner
-            lot.save()
+            try:
+                lot.billing_account = find_opa_details(lot.address_line1)
+                lot.owner = lot.billing_account.account_owner.owner
+                lot.save()
+            except Exception:
+                logger.exception('Caught exception while getting OPA data for '
+                                 'lot %s' % lot)
 
 
 class WaterDeptSynchronizer(Synchronizer):

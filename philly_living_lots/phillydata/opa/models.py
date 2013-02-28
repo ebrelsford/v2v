@@ -10,8 +10,10 @@ class AccountOwner(models.Model):
         max_length=256,
         unique=True,
     )
-    billing_accounts = models.ManyToManyField('BillingAccount',
-        verbose_name=_('billing accounts'),
+    owner = models.ForeignKey('owners.Owner',
+        verbose_name=_('owner'),
+        blank=True,
+        null=True,
     )
 
     def __unicode__(self):
@@ -20,6 +22,11 @@ class AccountOwner(models.Model):
 
 class BillingAccount(models.Model):
 
+    account_owner = models.ForeignKey('AccountOwner',
+        verbose_name=_('account owner'),
+        blank=True,
+        null=True,
+    )
     external_id = models.CharField(_('external id'),
         max_length=50,
         help_text=_('The OPA account number'),

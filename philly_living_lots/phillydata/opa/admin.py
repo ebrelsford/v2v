@@ -12,7 +12,7 @@ class BillingAccountAdmin(CompareVersionAdmin):
 
 
 class AccountOwnerAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'owner',)
 
 admin.site.register(BillingAccount, BillingAccountAdmin)
 admin.site.register(AccountOwner, AccountOwnerAdmin)

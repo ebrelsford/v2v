@@ -1,5 +1,4 @@
 import logging
-import traceback
 
 from django.contrib.gis.geos import Point
 

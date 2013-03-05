@@ -13,7 +13,7 @@ def load_lots():
 
 
 def load_lots_with_violations():
-    for violation in Violation.objects.all():
+    for violation in Violation.objects.filter(lot=None):
         parcel = find_parcel(violation.violation_location.point,
                              address=violation.violation_location.address)
         if not parcel:

@@ -6,7 +6,7 @@ from django.core.exceptions import MultipleObjectsReturned
 
 import reversion
 
-from lots.load import load_lots_available
+from lots.load import load_lots_available, load_lots_with_violations
 from lots.models import Lot
 from sync.synchronizers import Synchronizer
 from .availableproperties.models import AvailableProperty
@@ -150,6 +150,10 @@ class LIViolationsSynchronizer(Synchronizer):
         logger.info('Starting to synchronize L&I Violation data.')
         self.update_violation_data()
         logger.info('Finished synchronizing L&I Violation data.')
+
+        logger.info('Adding lots with violations.')
+        load_lots_with_violations()
+        logger.info('Done lots with violations.')
 
     def update_violation_data(self):
         for code in self.codes:

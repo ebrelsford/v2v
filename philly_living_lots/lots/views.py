@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation, ViolationLocation
 from places.views import GeoJSONListView
+from .models import Lot
 
 
 class PlacesWithViolationsView(GeoJSONListView):
@@ -35,3 +36,30 @@ class PlacesWithViolationsMap(TemplateView):
     #def get_context_data(self, **kwargs):
         #context = super(TemplateView, self).get_context_data(**kwargs)
         #return context
+
+
+class LotsGeoJSON(GeoJSONListView):
+
+    def get_feature(self, lot):
+        try:
+            owner_name = lot.owner.name
+        except Exception:
+            owner_name = 'unknown'
+
+        return geojson.Feature(
+            lot.pk,
+            geometry=geojson.MultiPolygon(
+                coordinates=lot.polygon.coords,
+            ),
+            properties={
+                'is_available': lot.available_property is not None,
+                'owner': owner_name,
+            },
+        )
+
+    def get_queryset(self):
+        return Lot.objects.all().select_related('owner', 'available_property')
+
+
+class LotsMap(TemplateView):
+    template_name = 'lots/map.html'

@@ -1,0 +1,91 @@
+{% load places_util %}
+<!doctype html>
+<html>
+    <head>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
+        <![endif]-->
+        <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+        <script src="{{ STATIC_URL }}js/Leaflet.Bing.js"></script>
+        <script src="{{ STATIC_URL }}js/leaflet.utfgrid.js"></script>
+
+        <script>
+
+        var map;
+
+        $(document).ready(function() {
+
+            map = L.map('map', {
+                center: [39.952335, -75.163789],
+                zoom: 13,
+            });
+
+            /*
+            var cloudmade = L.tileLayer(
+                'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', 
+                {
+                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                    key: '{% places_setting PLACES_CLOUDMADE_KEY %}',
+                    styleId: '{% places_setting PLACES_CLOUDMADE_STYLE %}',
+                }
+            ).addTo(map);
+            */
+
+            var bing = new L.BingLayer('ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr').addTo(map);
+
+            var lots = L.tileLayer('http://localhost:8081/lots/{z}/{x}/{y}.png').addTo(map);
+
+            var utfgrid = new
+            L.UtfGrid('http://localhost:8081/lots_grid/{z}/{x}/{y}.json?callback={cb}', { resolution: 8 });
+            utfgrid.on('mouseover', function() {
+                console.log('hover!');
+            });
+
+            var interactiveLayerGroup = L.layerGroup([lots, utfgrid]);
+
+            map.addLayer(utfgrid);
+
+            var layersControl = L.control.layers({ 'Satellte': bing, }, 
+                { 'lots': interactiveLayerGroup, })
+                .addTo(map);
+
+            /*
+            var latlngs = [];
+            var feature_layer = L.geoJson(null, {
+
+                {% block layer_options %}
+                onEachFeature: function(data, layer) {
+                    layer.bindPopup('type: ' + data.properties.type + '<br />'
+                        + 'description: ' + data.properties.description);
+                },
+
+                style: function(feature) {
+                    return {
+                        fillColor: "#ffffff",
+                        color: "#000",
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: .1,
+                    }
+                },
+                {% endblock %}
+
+            });
+
+            $.get('/lots/geojson/', function(collection) {
+                feature_layer.addData(collection);
+                map.addLayer(feature_layer);
+            });
+            */
+
+        });
+        </script>
+    </head>
+    <body>
+        <h1>Lots</h1>
+        <div id="map" style="width: 800px; height: 600px;"></div>
+    </body>
+</html>

@@ -1,11 +1,13 @@
 from datetime import datetime
 from dateutil.tz import tzlocal
 import json
+import logging
 import re
 from urllib import urlencode
 from urllib2 import urlopen
 
 DATETIME_REGEX = re.compile('\D*(\d+)\D*')
+logger = logging.getLogger(__name__)
 
 
 class ODataReader(object):
@@ -25,6 +27,7 @@ class ODataReader(object):
     def get_url(self, url):
         while True:
             # load this url and return results
+            logger.debug('About to load violations from url %s' % url)
             response = json.load(urlopen(url))
             for result in response['d']['results']:
                 yield result
@@ -37,7 +40,13 @@ class ODataReader(object):
                 raise StopIteration
 
     @classmethod
-    def get_datetime(cls, timestamp):
+    def parse_datetime(cls, timestamp):
+        """Parse a datetime from an OData feed."""
         if not timestamp: return None
         timestamp = re.match(DATETIME_REGEX, timestamp).group(1)
         return datetime.fromtimestamp(float(timestamp[:-3]), tzlocal())
+
+    @classmethod
+    def format_datetime(cls, dt):
+        """Format a datetime into a form recognized in OData filters."""
+        return "DateTime'%s'" % datetime.isoformat(dt.replace(microsecond=0))

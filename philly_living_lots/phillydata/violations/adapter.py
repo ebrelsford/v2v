@@ -1,31 +1,23 @@
+import logging
 import traceback
 
 from django.contrib.gis.geos import Point
 
 from .models import Violation, ViolationLocation, ViolationType
-from .reader import LIViolationReader
+from .api import LIViolationReader
 
 
-"""
-codes worth looking at (from Stacey at L&I):
-    CP-802
-    PM-102.4/1
-    PM-302.2/4
-    PM-306.0/2
-    PM-306.0/91
-    PM-307.1/21
-"""
+logger = logging.getLogger(__name__)
 
 
-def load_violations(code, year=2013):
+def find_violations(code, since):
     reader = LIViolationReader()
-    for violation in reader.get(code, year):
+    for violation in reader.get(code, since=since):
         try:
             saved_violation = save_violation(violation)
-            print saved_violation
+            logger.debug('Added violation: %s' % saved_violation)
         except Exception:
-            print 'Failed to load violation:', violation
-            traceback.print_exc()
+            logger.exception('Failed to load violation: %s' % violation)
 
 
 def get_location(violation):
@@ -58,7 +50,7 @@ def save_violation(violation):
 
     saved_violation, created = Violation.objects.get_or_create(
         external_id=violation['violation_details_id'],
-        violation_datetime=LIViolationReader.get_datetime(violation.get('violation_datetime', None)),
+        violation_datetime=LIViolationReader.parse_datetime(violation.get('violation_datetime', None)),
         violation_location=violation_location,
         violation_type=violation_type,
     )

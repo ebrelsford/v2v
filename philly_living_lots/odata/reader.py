@@ -23,14 +23,18 @@ class ODataReader(object):
         return self.get_url(url)
 
     def get_url(self, url):
-        response = json.load(urlopen(url))
+        while True:
+            # load this url and return results
+            response = json.load(urlopen(url))
+            for result in response['d']['results']:
+                yield result
 
-        for result in response['d']['results']:
-            yield result
-
-        next_url = response['d'].get('__next', None)
-        if next_url:
-            yield self.get_url(next_url)
+            # try to load next url for pagination
+            try:
+                url = response['d']['__next']
+                url += '&' + urlencode({ '$format': 'json' })
+            except KeyError:
+                raise StopIteration
 
     @classmethod
     def get_datetime(cls, timestamp):

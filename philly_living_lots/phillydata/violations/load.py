@@ -1,3 +1,5 @@
+import traceback
+
 from django.contrib.gis.geos import Point
 
 from .models import Violation, ViolationLocation, ViolationType
@@ -18,8 +20,12 @@ codes worth looking at (from Stacey at L&I):
 def load_violations(code, year=2013):
     reader = LIViolationReader()
     for violation in reader.get(code, year):
-        saved_violation = save_violation(violation)
-        print saved_violation
+        try:
+            saved_violation = save_violation(violation)
+            print saved_violation
+        except Exception:
+            print 'Failed to load violation:', violation
+            traceback.print_exc()
 
 
 def get_location(violation):

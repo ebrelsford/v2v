@@ -9,8 +9,8 @@ import logging
 
 from .api import get_address_data
 from .models import AccountOwner, BillingAccount
-from philly_living_lots.utils import html_unescape
 from phillydata.owners.models import Owner
+from vacant_to_vibrant.utils import html_unescape
 
 
 logger = logging.getLogger(__name__)

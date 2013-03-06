@@ -92,9 +92,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
 )
 
-ROOT_URLCONF = 'philly_living_lots.urls'
+ROOT_URLCONF = 'vacant_to_vibrant.urls'
 
-WSGI_APPLICATION = 'philly_living_lots.wsgi.application'
+WSGI_APPLICATION = 'vacant_to_vibrant.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),

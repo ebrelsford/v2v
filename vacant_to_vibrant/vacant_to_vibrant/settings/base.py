@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     'compressor',
     'contact_form',
     'fiber',
+    'inplace',
     'mptt',
     'reversion',
     'reversion_compare',
@@ -138,7 +139,6 @@ INSTALLED_APPS = (
     'phillydata.parcels',
     'phillydata.violations',
     'phillydata.waterdept',
-    'places',
     'sync',
 )
 

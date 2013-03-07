@@ -22,12 +22,13 @@ class ArcGISRestServerReader(object):
         'outSR': '4326',
     }
 
-    def __init__(self, service_url, geometry_type, geometry):
+    def __init__(self, service_url, geometry_type, geometry, where=[]):
         self.service_url = service_url
         self.default_params.update({
             'geometry': geometry,
             'geometryType': geometry_type,
         })
+        self.where = where
 
     def __iter__(self):
         self.ids = self.get_object_ids()
@@ -40,7 +41,12 @@ class ArcGISRestServerReader(object):
         """
         params = self.default_params.copy()
         params.update(self.ids_params)
+        if self.where:
+            params.update({
+                'where': ' and '.join(self.where),
+            })
         url = self.service_url + urlencode(params)
+        print 'Getting object ids with url %s' % url
         data = json.load(urlopen(url))
         return data['objectIds']
 
@@ -64,6 +70,10 @@ class ArcGISRestServerReader(object):
         params.update({
             'objectIds': ','.join([str(id) for id in self.ids[offset:(offset + count)]]),
         })
+        if self.where:
+            params.update({
+                'where': ' and '.join(self.where),
+            })
 
         url = self.service_url + urlencode(params)
         print 'Getting objects with url', url

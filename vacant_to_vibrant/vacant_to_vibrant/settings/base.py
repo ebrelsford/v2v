@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'lots',
     'phillydata',
     'phillydata.availableproperties',
+    'phillydata.landuse',
     'phillydata.opa',
     'phillydata.owners',
     'phillydata.parcels',

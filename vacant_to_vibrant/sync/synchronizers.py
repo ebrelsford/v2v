@@ -3,7 +3,12 @@ Infrastructure for periodically synchronizing data sources. Users of this
 framework should define a Synchronizer sublcass for every DataSource subclass.
 
 """
+import logging
+
 from django.utils.timezone import now
+
+
+logger = logging.getLogger(__name__)
 
 
 def find_synchronizer(source_name):
@@ -17,11 +22,17 @@ def find_synchronizer(source_name):
 def do_synchronize(data_source):
     synchronizer_cls = find_synchronizer(data_source.name)
     synchronizer = synchronizer_cls(data_source)
-    synchronizer.sync(data_source)
+
+    logger.info('Synchronizing %s' % data_source)
+    try:
+        synchronizer.sync(data_source)
+    except Exception:
+        logger.exception('Exception while synchronizing %s' % data_source)
+        data_source.healthy = False
 
     data_source.last_synchronized = now()
     data_source.save()
-    print 'Done synchronizing with %s' % synchronizer.__class__.__name__
+    logger.info('Done synchronizing %s' % data_source)
 
 
 class Synchronizer(object):

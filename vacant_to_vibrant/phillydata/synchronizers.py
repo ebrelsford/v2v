@@ -1,16 +1,10 @@
 import logging
-import traceback
-from urllib2 import URLError
-
-from django.core.exceptions import MultipleObjectsReturned
-
-import reversion
 
 from lots.load import load_lots_available, load_lots_with_violations
 from lots.models import Lot
 from sync.synchronizers import Synchronizer
-from .availableproperties.models import AvailableProperty
-from .availableproperties.reader import AvailablePropertyReader
+from .availableproperties.adapter import (find_available_properties,
+                                          find_no_longer_available_properties)
 from .opa.adapter import find_opa_details
 from .violations.adapter import find_violations
 from .waterdept.adapter import find_water_dept_details
@@ -81,60 +75,17 @@ class PRAAvailablePropertiesSynchronizer(Synchronizer):
 
     """
     def sync(self, data_source):
-        print 'Synchronizing data for Available Properties'
+        logger.info('Synchronizing available properties.')
+        find_available_properties()
+        logger.info('Done synchronizing available properties.')
 
-        # update currently available properties
-        try:
-            reader = AvailablePropertyReader()
-            for feature in reader:
-                self.create_or_update(reader, feature)
-            print 'Done adding data for current Available Properties'
+        logger.info('Synchronizing no-longer available properties.')
+        find_no_longer_available_properties(data_source.last_synchronized)
+        logger.info('Done synchronizing no-longer available properties.')
 
-            # check for AvailableProperty objects that were not seen this time
-            no_longer_available = AvailableProperty.objects.filter(
-                last_seen__lt=data_source.last_synchronized
-            )
-            no_longer_available.update(status='no longer available')
-            print 'Done updating %d no-longer-available Available Properties' % (
-                no_longer_available.count(),
-            )
-        except URLError:
-            print ('Synchronizing Available Properties was interrupted by '
-                   'exception')
-            traceback.print_stack()
-            data_source.healthy = False
-            data_source.save()
-
-        # add appropriate lots for newly-added Available Properties
-        # TODO or is this its own Synchronizer?
+        logger.info('Adding lots with available properties.')
         load_lots_available(added_after=data_source.last_synchronized)
-
-    @reversion.create_revision()
-    def create_or_update(self, reader, feature):
-        try:
-            field_dict = reader.model_defaults(feature)
-            model, created = AvailableProperty.objects.get_or_create(
-                defaults=field_dict,
-                **reader.model_get_kwargs(feature)
-            )
-            if not created:
-                field_dict['status'] = 'available'
-                AvailableProperty.objects.filter(pk=model.pk).update(**field_dict)
-                model = AvailableProperty.objects.get(pk=model.pk)
-        except MultipleObjectsReturned:
-            # TODO try to narrow it down?
-            print ('Multiple objects found when searching for '
-                   'AvailableProperty objects with kwargs:',
-                   reader.model_get_kwargs(feature))
-        return model
-
-
-    def sync(self, data_source):
-        print 'hi, i am syncing over here'
-        # TODO
-        # update database
-        # then update lots
-        pass
+        logger.info('Done adding lots with available properties.')
 
 
 class LIViolationsSynchronizer(Synchronizer):
@@ -153,7 +104,7 @@ class LIViolationsSynchronizer(Synchronizer):
 
         logger.info('Adding lots with violations.')
         load_lots_with_violations()
-        logger.info('Done lots with violations.')
+        logger.info('Done adding lots with violations.')
 
     def update_violation_data(self):
         for code in self.codes:

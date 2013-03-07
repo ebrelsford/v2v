@@ -29,7 +29,7 @@ class BillingAccount(models.Model):
     )
     external_id = models.CharField(_('external id'),
         max_length=50,
-        help_text=_('The OPA account number'),
+        help_text=_('The OPA account number (also called "BRT number")'),
         unique=True,
     )
     property_address = models.CharField(_('property address'),

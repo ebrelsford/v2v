@@ -26,6 +26,7 @@ def _get_date(value, format='%Y%m%d', default=None):
     except Exception:
         return None
 
+
 def _defaults(data, override={}):
     try:
         billing_account = BillingAccount.objects.get(external_id=data['BRT NUM'])
@@ -51,6 +52,7 @@ def _defaults(data, override={}):
     }
     defaults.update(override)
     return defaults
+
 
 def _kwargs(data):
     return {

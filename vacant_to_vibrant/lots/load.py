@@ -133,4 +133,3 @@ def get_or_create_lot(parcel, address, centroid=None, zipcode=None):
         },
     )
     return lot
-

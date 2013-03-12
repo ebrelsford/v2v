@@ -14,7 +14,7 @@ urlpatterns += staticfiles_urlpatterns()
 urlpatterns = patterns('',
     url(r'^contact/', include('contact.urls', 'contact_form')),
     url(r'^lots/', include('lots.urls', 'lots')),
-    url(r'^places/', include('places.urls', 'places')),
+    url(r'^places/', include('inplace.urls', 'places')),
 
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),

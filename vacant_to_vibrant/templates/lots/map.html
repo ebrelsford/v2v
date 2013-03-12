@@ -1,4 +1,4 @@
-{% load places_util %}
+{% load inplace_tags %}
 <!doctype html>
 <html>
     <head>
@@ -28,8 +28,8 @@
                 'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', 
                 {
                     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                    key: '{% places_setting PLACES_CLOUDMADE_KEY %}',
-                    styleId: '{% places_setting PLACES_CLOUDMADE_STYLE %}',
+                    key: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
+                    styleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
                 }
             ).addTo(map);
             */

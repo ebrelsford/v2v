@@ -1,13 +1,14 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from inplace.models import Place
+
 from phillydata.availableproperties.models import AvailableProperty
 from phillydata.opa.models import BillingAccount
 from phillydata.owners.models import Owner
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation
 from phillydata.waterdept.models import WaterParcel
-from places.models import Place
 
 
 class Lot(Place):

@@ -2,9 +2,10 @@ import geojson
 
 from django.views.generic import TemplateView
 
+from inplace.views import GeoJSONListView
+
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation, ViolationLocation
-from places.views import GeoJSONListView
 from .models import Lot
 
 

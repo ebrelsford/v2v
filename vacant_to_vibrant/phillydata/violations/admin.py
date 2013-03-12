@@ -6,10 +6,13 @@ from .models import Violation, ViolationLocation, ViolationType
 
 class ViolationAdmin(admin.ModelAdmin):
     list_display = ('external_id', 'violation_datetime',)
+    readonly_fields = ('violation_location', 'violation_type',)
+    search_fields = ('violation_location__address',)
 
 
 class ViolationLocationAdmin(OSMGeoAdmin, admin.ModelAdmin):
     list_display = ('address', 'zip_code', 'external_id',)
+    search_fields = ('address', 'zip_code', 'external_id',)
 
 
 class ViolationTypeAdmin(admin.ModelAdmin):

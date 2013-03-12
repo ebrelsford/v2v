@@ -141,3 +141,6 @@ class TaxAccount(models.Model):
         null=True,
         help_text=_('The date this data was collected'),
     )
+
+    def __unicode__(self):
+        return '%s: %s' % (self.brt_number, self.property_address,)

@@ -7,6 +7,7 @@ from phillydata.availableproperties.models import AvailableProperty
 from phillydata.opa.models import BillingAccount
 from phillydata.owners.models import Owner
 from phillydata.parcels.models import Parcel
+from phillydata.taxaccounts.models import TaxAccount
 from phillydata.violations.models import Violation
 from phillydata.waterdept.models import WaterParcel
 
@@ -26,6 +27,13 @@ class Lot(Place):
         on_delete=models.SET_NULL,
         help_text=_("The owner's billing account for this lot."),
         verbose_name=_('billing account'),
+    )
+    tax_account = models.ForeignKey(TaxAccount,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text=_("The tax account for this lot."),
+        verbose_name=_('tax account'),
     )
     parcel = models.ForeignKey(Parcel,
         blank=True,

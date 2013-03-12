@@ -17,7 +17,7 @@ PARCEL_DATA_FILE = os.path.join(settings.DATA_ROOT,
                                 'Parcels/PhiladelphiaParcels201201.shp')
 
 
-def make_address(feature):
+def _make_address(feature):
     return utils.make_address(
         house_number=str(feature['HOUSE']),
         house_suffix=str(feature['SUF']),
@@ -29,12 +29,12 @@ def make_address(feature):
     )
 
 
-def save_parcel(feature):
+def _save_parcel(feature):
     geometry = feature.geom.transform(4326, clone=True).geos
     if isinstance(geometry, Polygon):
         geometry = MultiPolygon(geometry)
 
-    address = make_address(feature)
+    address = _make_address(feature)
     if address is '0':
         address = None
     parcel = Parcel(
@@ -49,10 +49,13 @@ def save_parcel(feature):
 
 
 def load_parcels(source=PARCEL_DATA_FILE):
+    """
+    Load parcels from the given shapefile.
+    """
     layer = DataSource(source)[0]
     for feature in layer:
         try:
-            save_parcel(feature)
+            _save_parcel(feature)
         except:
             print ('Could not save parcel for feature with OBJECTID=%s. '
                    'Skipping.') % feature['OBJECTID']

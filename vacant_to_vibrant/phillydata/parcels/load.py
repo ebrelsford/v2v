@@ -20,7 +20,9 @@ ADDRESS_COMPONENTS = ('HOUSE', 'SUF', 'UNIT', 'STDIR', 'STNAM', 'STDES',
 
 def get_address(feature):
     # TODO massage a bit to match violation data
-    return ' '.join([str(feature[k]) for k in ADDRESS_COMPONENTS if feature[k]])
+    components = [str(feature[k]) for k in ADDRESS_COMPONENTS if feature[k]]
+    components = filter(None, components)
+    return ' '.join(components)
 
 
 def save_parcel(feature):

@@ -118,6 +118,7 @@ INSTALLED_APPS = (
     #
     # third-party
     #
+    'actstream',
     'compressor',
     'contact_form',
     'fiber',
@@ -129,8 +130,10 @@ INSTALLED_APPS = (
     #
     # first-party
     #
+    'activity_stream',
     'contact',
     'lots',
+    'organize',
     'phillydata',
     'phillydata.availableproperties',
     'phillydata.landuse',

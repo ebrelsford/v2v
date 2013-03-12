@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'phillydata.opa',
     'phillydata.owners',
     'phillydata.parcels',
+    'phillydata.taxaccounts',
     'phillydata.violations',
     'phillydata.waterdept',
     'places',

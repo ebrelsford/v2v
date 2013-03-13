@@ -23,7 +23,6 @@
                 zoom: 13,
             });
 
-            /*
             var cloudmade = L.tileLayer(
                 'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', 
                 {
@@ -32,7 +31,6 @@
                     styleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
                 }
             ).addTo(map);
-            */
 
             var bing = new L.BingLayer('ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr').addTo(map);
 
@@ -48,9 +46,15 @@
 
             map.addLayer(utfgrid);
 
-            var layersControl = L.control.layers({ 'Satellte': bing, }, 
-                { 'lots': interactiveLayerGroup, })
-                .addTo(map);
+            var layersControl = L.control.layers(
+                { 
+                    'Satellte': bing, 
+                    'Streets': cloudmade, 
+                }, 
+                { 
+                    'lots': interactiveLayerGroup,
+                }
+            ).addTo(map);
 
             /*
             var latlngs = [];

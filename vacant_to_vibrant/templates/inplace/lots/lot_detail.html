@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n inplace_tags %}
+
+{% block content %}
+<div style="float: right;">
+    {% with lot.get_geojson_url as places_url %}
+    {% place_map places_url 200px 200px %}
+    {% endwith %}
+</div>
+<div>
+    <table>
+        <tr>
+            <th>{% trans "address line 1" %}:</th>
+            <td>{{ lot.address_line1 }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "postal code" %}:</th>
+            <td>{{ lot.postal_code }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "owner" %}:</th>
+            <td>{{ lot.owner }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "billing account" %}:</th>
+            <td>{{ lot.billing_account }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "tax account" %}:</th>
+            <td>{{ lot.tax_account }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "violations" %}:</th>
+            <td>{{ lot.violations.count }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "available" %}:</th>
+            <td>{{ lot.available_property }}</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

@@ -2,13 +2,13 @@
 <!doctype html>
 <html>
     <head>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
         <!--[if lte IE 8]>
-            <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
+            <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
         <![endif]-->
-        <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+        <script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
         <script src="{{ STATIC_URL }}js/Leaflet.Bing.js"></script>
         <script src="{{ STATIC_URL }}js/leaflet.utfgrid.js"></script>
 
@@ -36,15 +36,23 @@
 
             var lots = L.tileLayer('http://localhost:8081/lots/{z}/{x}/{y}.png').addTo(map);
 
-            var utfgrid = new
-            L.UtfGrid('http://localhost:8081/lots_grid/{z}/{x}/{y}.json?callback={cb}', { resolution: 8 });
-            utfgrid.on('mouseover', function() {
-                console.log('hover!');
+            var utfgrid = new L.UtfGrid('http://localhost:8081/lots_grid/{z}/{x}/{y}.json?callback={cb}', { resolution: 8 });
+
+            utfgrid.on('click', function(e) {
+                if (!e.data) { return false; }
+                var popup = L.popup({
+                    minWidth: 300,
+                })
+                    .setLatLng(e.latlng)
+                    .setContent('<div id="popup-content"></div>')
+                    .openOn(map);
+                $.get('/places/lots/lot/' + e.data.id + '/popup/', function(response) {
+                    $('#popup-content').html(response);
+                });
             });
+            map.addLayer(utfgrid);
 
             var interactiveLayerGroup = L.layerGroup([lots, utfgrid]);
-
-            map.addLayer(utfgrid);
 
             var layersControl = L.control.layers(
                 { 
@@ -55,35 +63,6 @@
                     'lots': interactiveLayerGroup,
                 }
             ).addTo(map);
-
-            /*
-            var latlngs = [];
-            var feature_layer = L.geoJson(null, {
-
-                {% block layer_options %}
-                onEachFeature: function(data, layer) {
-                    layer.bindPopup('type: ' + data.properties.type + '<br />'
-                        + 'description: ' + data.properties.description);
-                },
-
-                style: function(feature) {
-                    return {
-                        fillColor: "#ffffff",
-                        color: "#000",
-                        weight: 1,
-                        opacity: 1,
-                        fillOpacity: .1,
-                    }
-                },
-                {% endblock %}
-
-            });
-
-            $.get('/lots/geojson/', function(collection) {
-                feature_layer.addData(collection);
-                map.addLayer(feature_layer);
-            });
-            */
 
         });
         </script>

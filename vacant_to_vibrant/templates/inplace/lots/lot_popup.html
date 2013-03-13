@@ -1,0 +1,37 @@
+{% load i18n %}
+
+<div>
+    <table>
+        <tr>
+            <th>{% trans "address line 1" %}:</th>
+            <td>{{ object.address_line1 }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "postal code" %}:</th>
+            <td>{{ object.postal_code }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "owner" %}:</th>
+            <td>{{ object.owner }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "billing account" %}:</th>
+            <td>{{ object.billing_account }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "tax account" %}:</th>
+            <td>{{ object.tax_account }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "violations" %}:</th>
+            <td>{{ object.violations.count }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "available" %}:</th>
+            <td>{{ object.available_property }}</td>
+        </tr>
+    </table>
+</div>
+<a href="{{ object.get_absolute_url }}">
+    {% trans "permalink" %}
+</a>

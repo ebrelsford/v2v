@@ -1,10 +1,5 @@
-from re import match
-
 from odata.reader import ODataReader
-from phillydata.utils import to_lon_lat
-
-
-ADDRESS_NUMBERED_STREET_REGEX = '^\d+\w+$'
+from phillydata import utils
 
 
 class LIReader(ODataReader):
@@ -19,25 +14,16 @@ class LIReader(ODataReader):
         (x, y) = (location['x'], location['y'])
         if not x or not y: return (None, None)
         (x, y) = [float(coord) for coord in (x, y)]
-        return to_lon_lat(x, y)
-
-    @classmethod
-    def format_street_name(cls, street_name):
-        if match(ADDRESS_NUMBERED_STREET_REGEX, street_name):
-            return street_name.lower()
-        return street_name.title()
+        return utils.to_lon_lat(x, y)
 
     @classmethod
     def make_address(cls, location):
-        components = (
-            str(int(location['street_number'])), # chop off leading zeroes
-            location['street_direction'].title(),
-            cls.format_street_name(location['street_name']),
-            location['street_suffix'].title(),
+        return utils.make_address(
+            house_number=location['street_number'],
+            street_direction=location['street_direction'],
+            street_name=location['street_name'],
+            street_description=location['street_suffix'],
         )
-        components = [c.strip() for c in components if c]
-        components = filter(lambda c: c and c != '', components)
-        return ' '.join(components)
 
 
 class LIViolationReader(LIReader):

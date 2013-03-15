@@ -170,9 +170,7 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
         ]
 
 
-class AddPhotoView(CreateView):
-    form_class = PhotoForm
-    template_name = 'lots/content/add_photo.html'
+class AddContentView(CreateView):
 
     def _get_lot(self):
         try:
@@ -180,15 +178,18 @@ class AddPhotoView(CreateView):
         except Exception:
             raise Http404
 
+    def _get_content_name(self):
+        return self.form_class._meta.model._meta.object_name
+
     def get_context_data(self, **kwargs):
-        context = super(AddPhotoView, self).get_context_data(**kwargs)
+        context = super(AddContentView, self).get_context_data(**kwargs)
         context.update({
             'lot': self._get_lot(),
         })
         return context
 
     def get_initial(self):
-        initial = super(AddPhotoView, self).get_initial()
+        initial = super(AddContentView, self).get_initial()
         try:
             object_id = self.kwargs['pk']
         except KeyError:
@@ -200,73 +201,23 @@ class AddPhotoView(CreateView):
         return initial
 
     def get_success_url(self):
-        messages.info(self.request, 'Photo added successfully.')
+        messages.info(self.request, '%s added successfully.' %
+                      self._get_content_name())
         return self._get_lot().get_absolute_url()
 
-
-class AddNoteView(CreateView):
-    form_class = NoteForm
-    template_name = 'lots/content/add_note.html'
-
-    def _get_lot(self):
-        try:
-            return Lot.objects.get(pk=self.kwargs['pk'])
-        except Exception:
-            raise Http404
-
-    def get_context_data(self, **kwargs):
-        context = super(AddNoteView, self).get_context_data(**kwargs)
-        context.update({
-            'lot': self._get_lot(),
-        })
-        return context
-
-    def get_initial(self):
-        initial = super(AddNoteView, self).get_initial()
-        try:
-            object_id = self.kwargs['pk']
-        except KeyError:
-            raise Http404
-        initial.update({
-            'content_type': ContentType.objects.get_for_model(Lot),
-            'object_id': object_id,
-        })
-        return initial
-
-    def get_success_url(self):
-        messages.info(self.request, 'Note added successfully.')
-        return self._get_lot().get_absolute_url()
+    def get_template_names(self):
+        return [
+            'lots/content/add_%s.html' % self._get_content_name(),
+        ]
 
 
-class AddFileView(CreateView):
+class AddFileView(AddContentView):
     form_class = FileForm
-    template_name = 'lots/content/add_file.html'
 
-    def _get_lot(self):
-        try:
-            return Lot.objects.get(pk=self.kwargs['pk'])
-        except Exception:
-            raise Http404
 
-    def get_context_data(self, **kwargs):
-        context = super(AddFileView, self).get_context_data(**kwargs)
-        context.update({
-            'lot': self._get_lot(),
-        })
-        return context
+class AddNoteView(AddContentView):
+    form_class = NoteForm
 
-    def get_initial(self):
-        initial = super(AddFileView, self).get_initial()
-        try:
-            object_id = self.kwargs['pk']
-        except KeyError:
-            raise Http404
-        initial.update({
-            'content_type': ContentType.objects.get_for_model(Lot),
-            'object_id': object_id,
-        })
-        return initial
 
-    def get_success_url(self):
-        messages.info(self.request, 'File added successfully.')
-        return self._get_lot().get_absolute_url()
+class AddPhotoView(AddContentView):
+    form_class = PhotoForm

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import Organizer, OrganizerType, Watcher
+from .models import Organizer, OrganizerType, Watcher
 
 
 class OrganizerAdmin(admin.ModelAdmin):

@@ -7,11 +7,12 @@ admin.autodiscover()
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT, show_indexes=True)
+urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,
+                     show_indexes=True)
 
 urlpatterns += staticfiles_urlpatterns()
 
-urlpatterns = patterns('',
+urlpatterns += patterns('',
     url(r'^contact/', include('contact.urls', 'contact_form')),
     url(r'^lots/', include('lots.urls', 'lots')),
     url(r'^organize/', include('organize.urls', 'organize')),

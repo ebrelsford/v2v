@@ -1,22 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.forms import HiddenInput, IntegerField, ModelForm, ModelChoiceField
-
-from recaptcha_works.fields import RecaptchaField
+from django.forms import HiddenInput, IntegerField, ModelChoiceField
 
 from notify import notify_organizers_and_watchers, notify_facilitators
 from models import Organizer, Watcher
+from vacant_to_vibrant.forms import CaptchaForm
 from .widgets import PrefixLabelTextInput
-
-
-class CaptchaForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super(CaptchaForm, self).__init__(*args, **kwargs)
-
-        # if not logged in, add recaptcha. else, do nothing.
-        if not user or user.is_anonymous():
-            self.fields['recaptcha'] = RecaptchaField(label="Prove you're human")
 
 
 class ParticipantForm(CaptchaForm):

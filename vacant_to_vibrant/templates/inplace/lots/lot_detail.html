@@ -1,5 +1,5 @@
 {% extends "lots/base.html" %}
-{% load i18n inplace_tags organize_tags %}
+{% load i18n inplace_tags organize_tags photos_tags %}
 
 {% block title %}{{ block.super }} | {{ lot.address_line1 }}{% endblock %}
 
@@ -51,8 +51,13 @@
     <a href="{% url "lots:lot_organize" pk=lot.pk %}">click to organize</a>
     {% render_organizer_list for lot %}
 </div>
-<div class="organize">
+<div class="watch">
     <h3>Watch</h3>
     <a href="{% url "lots:lot_watch" pk=lot.pk %}">click to watch</a>
+</div>
+<div class="photos">
+    <h3>Photos</h3>
+    <a href="{% url "lots:add_photo" pk=lot.pk %}">click to add a photo</a>
+    {% render_photo_list for lot %}
 </div>
 {% endblock %}

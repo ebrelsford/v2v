@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     'compressor',
     'contact_form',
     'fiber',
+    'imagekit',
     'inplace',
     'jsonfield',
     'mptt',
@@ -147,6 +148,7 @@ INSTALLED_APPS = (
     'phillydata.taxaccounts',
     'phillydata.violations',
     'phillydata.waterdept',
+    'photos',
     'sync',
     'twitter',
 )

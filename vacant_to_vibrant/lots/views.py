@@ -1,6 +1,7 @@
 import geojson
 
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -13,6 +14,7 @@ from organize.models import Organizer, Watcher
 from organize.views import EditParticipantMixin
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation, ViolationLocation
+from photos.forms import PhotoForm
 from .models import Lot
 
 
@@ -164,3 +166,37 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
         return [
             'lots/organize/add_%s_success.html' % self._get_participant_type(),
         ]
+
+
+class AddPhotoView(CreateView):
+    form_class = PhotoForm
+    template_name = 'lots/content/add_photo.html'
+
+    def _get_lot(self):
+        try:
+            return Lot.objects.get(pk=self.kwargs['pk'])
+        except Exception:
+            raise Http404
+
+    def get_context_data(self, **kwargs):
+        context = super(AddPhotoView, self).get_context_data(**kwargs)
+        context.update({
+            'lot': self._get_lot(),
+        })
+        return context
+
+    def get_initial(self):
+        initial = super(AddPhotoView, self).get_initial()
+        try:
+            object_id = self.kwargs['pk']
+        except KeyError:
+            raise Http404
+        initial.update({
+            'content_type': ContentType.objects.get_for_model(Lot),
+            'object_id': object_id,
+        })
+        return initial
+
+    def get_success_url(self):
+        messages.info(self.request, 'Photo added successfully.')
+        return self._get_lot().get_absolute_url()

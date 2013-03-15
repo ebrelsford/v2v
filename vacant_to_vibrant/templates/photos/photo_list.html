@@ -1,0 +1,4 @@
+{% for photo in photos %}
+{{ photo.name }}
+<img src="{{ photo.thumbnail.url }}" />
+{% endfor %}

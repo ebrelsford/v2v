@@ -34,7 +34,14 @@ DATABASES = {
     }
 }
 
-LANGUAGE_CODE = 'en-us'
+gettext = lambda s: s
+
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('es', gettext('Spanish')),
+)
+
+LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 

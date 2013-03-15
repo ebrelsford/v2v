@@ -24,7 +24,7 @@ class RenderGenericRelationList(GenericRelationMixin, InclusionTag):
         Argument('target', required=True, resolve=True)
     )
 
-    # TODO unfortunately required
+    # NB: unfortunately required
     template = ''
 
     def get_context(self, context, target):

@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'actstream',
     'compressor',
     'contact_form',
+    'elephantblog',
     'feincms',
     'feincms.module.medialibrary',
     'feincms.module.page',
@@ -143,6 +144,7 @@ INSTALLED_APPS = (
     # first-party
     #
     'activity_stream',
+    'blog',
     'cms',
     'contact',
     'facebook',
@@ -223,4 +225,26 @@ MAILREADER_REPLY_PREFIX = 'Reply with text above this line to post a public note
 
 FEINCMS_RICHTEXT_INIT_CONTEXT = {
     'TINYMCE_JS_URL': STATIC_URL + 'js/lib/tiny_mce/tiny_mce.js',
+}
+
+def elephantblog_entry_url_app(self):
+    from feincms.content.application.models import app_reverse
+    return app_reverse('elephantblog_entry_detail', 'elephantblog.urls',
+                       kwargs={
+                           'year': self.published_on.strftime('%Y'),
+                           'month': self.published_on.strftime('%m'),
+                           'day': self.published_on.strftime('%d'),
+                           'slug': self.slug,
+                       })
+
+
+def elephantblog_categorytranslation_url_app(self):
+    from feincms.content.application.models import app_reverse
+    return app_reverse('elephantblog_category_detail', 'elephantblog.urls',
+                       kwargs={ 'slug': self.slug, })
+
+
+ABSOLUTE_URL_OVERRIDES = {
+    'elephantblog.entry': elephantblog_entry_url_app,
+    'elephantblog.categorytranslation': elephantblog_categorytranslation_url_app,
 }

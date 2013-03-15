@@ -26,5 +26,6 @@ Page.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('lightbox', _('lightbox')),
 ))
 Page.create_content_type(ApplicationContent, APPLICATIONS=(
+    ('elephantblog.urls', 'Blog'),
     ('pathways.urls', 'Pathways application'),
 ))

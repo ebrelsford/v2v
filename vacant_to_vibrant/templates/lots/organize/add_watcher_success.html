@@ -1,0 +1,43 @@
+{% extends "lots/base.html" %}
+{% load facebook_filters i18n lot_filters twitter_filters %}
+
+{% block title %}{{ block.super }}: {% trans "Watch a lot" %}{% endblock %}
+
+{% block content_main %}
+{{ block.super }}
+<div id="lot-details">
+    <h1>{% trans "Watch a lot" %}</h1>
+    <h2>
+        {% include "organize/block_link_snippet.html" %}
+    </h2>
+    <div>
+        {% if lot.sandy_dropoff_site or lot.sandy_distribution_site %}
+        <p>Success! You are now watching <a href="{{ lot.get_absolute_url }}">{% if lot.name %}{{ lot.name }}{% else %}{{ lot|lotname:"group" }}{% endif %}</a>.</p>
+        {% else %}
+        <p>Success! You are now watching a vacant lot that we're calling <a href="{{ lot.get_absolute_url }}">{% if lot.name %}{{ lot.name }}{% else %}{{ lot|lotname:"group" }}{% endif %}</a>.</p>
+        {% endif %}
+        <p>You will now receive emails when that lot is updated--when new organizers sign up on the lot and notes are added to it. If this was an accident or if you change your mind in the future, you can stop watching this lot at any time on <a href="{{ BASE_URL }}{{ object.get_edit_url }}">this page</a>. You should receive an email with this link soon.</p>
+        {% if nearby_lots %}
+        <p>Also, here are some lots near this one you might be interested in:
+            <ul class="nearby-lots">
+                {% for nearby in nearby_lots %}
+                <li>
+                    <a href="{{ nearby.get_absolute_url }}">{{ nearby|lotname:"group" }}</a>
+                    {{ nearby|lot_short_description }}
+                </li>
+                {% endfor %}
+            </ul>
+        </p>
+        {% endif %}
+        <p>
+            Let your friends know you're watching this lot! Share it on Twitter and Facebook:
+            <div>
+                {% with message="I just started watching "|add:lot.display_name|add:" on @596Acres" %}
+                {% tweet_button message link_to lot %}
+                {% endwith %}
+                {% share_button lot.get_absolute_url %}
+            </div>
+        </p>
+    </div>
+</div>
+{% endblock %}

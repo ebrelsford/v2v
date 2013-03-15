@@ -6,7 +6,7 @@ from recaptcha_works.fields import RecaptchaField
 
 from notify import notify_organizers_and_watchers, notify_facilitators
 from models import Organizer, Watcher
-from widgets import PrefixLabelTextInput
+from .widgets import PrefixLabelTextInput
 
 
 class CaptchaForm(ModelForm):

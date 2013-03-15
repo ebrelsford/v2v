@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ block.super }}: {% trans "Stop organizing" %}{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div>
+    <h1>{% trans "Stop organizing" %}</h1>
+    <h2>
+        {{ organizer.target }}
+    </h2>
+    <div>
+        <p>
+            {% blocktrans %}
+            Are you sure you want to stop organizing here?
+            {% endblocktrans %}
+        </p>
+        <p>
+            <form action="." method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next_url" value="{{ next_url }}" />
+                <input type="submit" value="Yes, stop organizing" />
+            </form>
+        </p>
+    </div>
+</div>
+{% endblock %}

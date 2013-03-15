@@ -1,7 +1,11 @@
 from django.conf.urls.defaults import patterns, url
 
-from .views import (PlacesWithViolationsView, PlacesWithViolationsMap,
-                    LotsGeoJSON, LotsMap)
+from recaptcha_works.decorators import fix_recaptcha_remote_ip
+
+from organize.models import Organizer, Watcher
+from .views import (EditLotParicipantView, PlacesWithViolationsView,
+                    PlacesWithViolationsMap, AddParticipantView, LotsGeoJSON,
+                    AddParticipantSuccessView, LotsMap)
 
 
 urlpatterns = patterns('',
@@ -9,5 +13,20 @@ urlpatterns = patterns('',
     url(r'^violations/map/$', PlacesWithViolationsMap.as_view()),
 
     url(r'^geojson/', LotsGeoJSON.as_view()),
+
+    url(r'^(?P<pk>\d+)/organize/$',
+        fix_recaptcha_remote_ip(AddParticipantView.as_view()),
+        name='lot_organize'),
+
+    url(r'^(?P<pk>\d+)/organize/organizer/(?P<hash>[^/]{9,})/success/$',
+        AddParticipantSuccessView.as_view(
+            model=Organizer,
+        ),
+        name='add_organizer_success'),
+
+    url(r'^organize/(?P<hash>[^/]{9,})/edit/$',
+        EditLotParicipantView.as_view(),
+        name='edit_participant'),
+
     url(r'^', LotsMap.as_view()),
 )

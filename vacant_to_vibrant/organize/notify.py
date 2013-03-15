@@ -3,12 +3,10 @@ from django.core.mail import mail_managers
 from django.template.loader import render_to_string
 
 from mail import mail_target_organizers, mail_target_watchers, mail_facilitators
-from models import Note, Organizer, Picture
+from models import Organizer
 
 
 url_suffixes = {
-    Note: '#notes',
-    Picture: '#pictures',
     Organizer: '#organizers',
 }
 
@@ -42,7 +40,6 @@ def notify_facilitators(obj):
         kwargs['excluded_emails'] = [obj.email]
     except Exception:
         kwargs['excluded_emails'] = []
-    kwargs['is_note'] = isinstance(obj, Note)
     kwargs['url_suffix'] = url_suffixes[obj.__class__]
 
     mail_facilitators(target, 'Lot updated!', message, **kwargs)
@@ -65,7 +62,6 @@ def notify_organizers_and_watchers(obj):
         kwargs['excluded_emails'] = [obj.email]
     except Exception:
         kwargs['excluded_emails'] = []
-    kwargs['is_note'] = isinstance(obj, Note)
     kwargs['url_suffix'] = url_suffixes[obj.__class__]
 
     mail_target_watchers(target, 'Watched target updated!', message, **kwargs)
@@ -78,10 +74,6 @@ def _get_object_message(o):
     Get a message specific to the given object.
     """
     # TODO push to templates?
-    if isinstance(o, Note):
-        return "A note was added by %s:\n\"%s\" " % (o.noter, o.text)
-    elif isinstance(o, Picture):
-        return 'A new picture was added with the description "%s".' % o.description
-    elif isinstance(o, Organizer):
+    if isinstance(o, Organizer):
         return "A new organizer named %s was added. " % o.name
     return ""

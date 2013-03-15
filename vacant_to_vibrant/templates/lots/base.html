@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n inplace_tags %}
+
+{% block content %}
+<div style="float: right;">
+    {% with lot.get_geojson_url as places_url %}
+    {% place_map places_url 200px 200px %}
+    {% endwith %}
+</div>
+<h2>{{ lot.address_line1 }}</h2>
+{% endblock %}

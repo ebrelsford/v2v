@@ -64,7 +64,7 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-SECRET_KEY = get_env_variable('GROWING_CITIES_SECRET_KEY')
+SECRET_KEY = get_env_variable('PHILLY_SECRET_KEY')
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -87,6 +87,7 @@ MIDDLEWARE_CLASSES = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.media',
     'django.core.context_processors.request',
     'django.core.context_processors.static',
@@ -123,6 +124,7 @@ INSTALLED_APPS = (
     'contact_form',
     'fiber',
     'inplace',
+    'jsonfield',
     'mptt',
     'reversion',
     'reversion_compare',
@@ -133,6 +135,7 @@ INSTALLED_APPS = (
     #
     'activity_stream',
     'contact',
+    'facebook',
     'lots',
     'organize',
     'phillydata',
@@ -145,6 +148,7 @@ INSTALLED_APPS = (
     'phillydata.violations',
     'phillydata.waterdept',
     'sync',
+    'twitter',
 )
 
 LOGGING = {
@@ -179,3 +183,23 @@ FIBER_TEMPLATE_CHOICES = (
 )
 
 SOUTH_TESTS_MIGRATE = False
+
+RECAPTCHA_PRIVATE_KEY = get_env_variable('PHILLY_RECAPTCHA_PRIVATE_KEY')
+RECAPTCHA_PUBLIC_KEY = get_env_variable('PHILLY_RECAPTCHA_PUBLIC_KEY')
+
+ORGANIZE_PARTICIPANT_SALT = get_env_variable('PHILLY_ORGANIZE_PARTICIPANT_SALT')
+
+ACTSTREAM_SETTINGS = {
+    'MANAGER': 'activity_stream.managers.PlaceActionManager',
+    'MODELS': (
+        'auth.user',
+        'lots.lot',
+        'organize.organizer',
+        'organize.watcher',
+    ),
+    'USE_JSONFIELD': True,
+}
+
+FACILITATORS = {
+    'global': [],
+}

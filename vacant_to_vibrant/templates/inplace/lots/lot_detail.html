@@ -1,13 +1,10 @@
-{% extends "base.html" %}
-{% load i18n inplace_tags %}
+{% extends "lots/base.html" %}
+{% load i18n inplace_tags organize_tags %}
 
 {% block content %}
-<div style="float: right;">
-    {% with lot.get_geojson_url as places_url %}
-    {% place_map places_url 200px 200px %}
-    {% endwith %}
-</div>
-<div>
+{{ block.super }}
+<div class="details">
+    <h3>Details</h3>
     <table>
         <tr>
             <th>{% trans "address line 1" %}:</th>
@@ -46,5 +43,10 @@
             <td>{{ lot.water_parcel }}</td>
         </tr>
     </table>
+</div>
+<div class="organize">
+    <h3>Organize</h3>
+    <a href="{% url "lots:lot_organize" pk=lot.pk %}">click to organize</a>
+    {% render_organizer_list for lot %}
 </div>
 {% endblock %}

@@ -14,12 +14,12 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 from django.views.generic import TemplateView
+from django.views.generic.base import ContextMixin
 from django.views.generic.edit import DeleteView
 
 from recaptcha_works.decorators import fix_recaptcha_remote_ip
 
 from lots.models import Lot
-from lots.util import get_nearby
 from .forms import OrganizerForm, WatcherForm
 from .models import Organizer, Watcher
 
@@ -104,7 +104,6 @@ class AddParticipantSuccessView(TemplateView):
             context['object'] = self.model.objects.filter(email_hash__istartswith=kwargs['email_hash'])[0]
         except Exception:
             raise Http404
-        context['nearby_lots'] = get_nearby(lot)
         return context
 
 
@@ -127,31 +126,33 @@ def edit_organizer(request, bbl=None, id=None):
     }, context_instance=RequestContext(request))
 
 
-def edit_participant(request, hash=None):
-    organizers = Organizer.objects.filter(email_hash__istartswith=hash).order_by('lot__bbl')
-    watchers = Watcher.objects.filter(email_hash__istartswith=hash).order_by('lot__bbl')
-    email = None
-    if watchers:
-        email = watchers[0].email
+class EditParticipantMixin(ContextMixin):
 
-    return render_to_response('organize/edit_participant.html', {
-        'email': email,
-        'hash': hash,
-        'organizers': organizers,
-        'watchers': watchers,
-    }, context_instance=RequestContext(request))
+    def get_context_data(self, **kwargs):
+        hash = self.get_participant_hash()
+        context = super(EditParticipantMixin, self).get_context_data(**kwargs)
+        context.update({
+            'organizers': Organizer.objects.filter(email_hash__istartswith=hash).order_by('added'),
+            'watchers': Watcher.objects.filter(email_hash__istartswith=hash).order_by('added'),
+        })
+        return context
+
+    def get_participant_hash(self):
+        raise NotImplementedError('Implement get_participant_hash() to use '
+                                  'EditParticipantMixin.')
 
 
 class DeleteParticipantView(DeleteView):
+
     def get_context_data(self, **kwargs):
         context = super(DeleteParticipantView, self).get_context_data(**kwargs)
-        context['lot'] = self.object.lot
+        context['target'] = self.object.target
         context['next_url'] = self.request.GET.get('next_url')
         return context
 
     def get_success_url(self):
         messages.info(self.request, self._get_success_message())
-        return self.request.POST.get('next_url', self.object.lot.get_absolute_url())
+        return self.request.POST.get('next_url', self.object.target.get_absolute_url())
 
     def _get_success_message(self):
         verb = 'working on'
@@ -159,4 +160,12 @@ class DeleteParticipantView(DeleteView):
             verb = 'organizing'
         elif isinstance(self.object, Watcher):
             verb = 'watching'
-        return 'You are no longer %s lot %s.' % (verb, self.object.lot.display_name)
+        return 'You are no longer %s %s.' % (verb, self.object.target)
+
+
+class DeleteOrganizerView(DeleteParticipantView):
+    model = Organizer
+
+
+class DeleteWatcherView(DeleteParticipantView):
+    model = Watcher

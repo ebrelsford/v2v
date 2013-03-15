@@ -1,0 +1,52 @@
+{% extends "lots/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ block.super }}: {% trans "Become an organizer" %}{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script>
+    function toggle_cbo_fields(show) {
+        var $cbo_fields = $(':input[name="facebook_page"],:input[name="url"]').parents('tr');
+        if (show) {
+            $cbo_fields.show();
+        }
+        else {
+            $cbo_fields.hide();
+        }
+    }
+
+    function is_cbo() {
+        return ($(':input[name="type"] :selected').text() 
+            === 'community based organization');
+    }
+
+    $(document).ready(function() {
+        toggle_cbo_fields(is_cbo());
+
+        $(':input[name="type"]').change(function() {
+            toggle_cbo_fields(is_cbo());
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div>
+    <h3>{% trans "Become an organizer" %}</h3>
+    <div>
+        <p>
+            {% blocktrans %}
+            Awesome! Tell us a little about yourself.
+            {% endblocktrans %}
+        </p>
+        <p> 
+            {% blocktrans %}
+            If you select "community based organization" from the dropdown below, you will be able to add your organization's webpage, which will automatically become a link, and facebook link, a feed from which will appear directly on this page. 
+            {% endblocktrans %}
+        </p>
+        {% include "organize/form_snippet.html" %}
+    </div>
+</div>
+{% endblock %}

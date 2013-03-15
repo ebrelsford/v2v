@@ -19,7 +19,8 @@ def mass_mailing(subject, message, objects, template_name, **kwargs):
     _mail_multiple_personalized(
         subject,
         messages,
-        from_email=settings.ORGANIZERS_EMAIL,
+        # TODO replace with something more sustainable
+        #from_email=settings.ORGANIZERS_EMAIL,
         **kwargs
     )
 
@@ -163,7 +164,9 @@ def _mail_multiple_personalized(subject, messages, **kwargs):
 
 
 def _mail_multiple(subject, message, email_addresses,
-                   from_email=settings.ORGANIZERS_EMAIL, cc=None, bcc=None,
+                   # TODO replace
+                   #from_email=settings.ORGANIZERS_EMAIL,
+                   cc=None, bcc=None,
                    html_message=None, connection=None, fail_silently=True):
     """
     Sends a message to multiple email addresses. Based on

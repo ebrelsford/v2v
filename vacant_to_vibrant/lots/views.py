@@ -9,6 +9,7 @@ from django.views.generic import CreateView, TemplateView
 
 from inplace.views import GeoJSONListView
 
+from notes.forms import NoteForm
 from organize.forms import OrganizerForm, WatcherForm
 from organize.models import Organizer, Watcher
 from organize.views import EditParticipantMixin
@@ -199,4 +200,38 @@ class AddPhotoView(CreateView):
 
     def get_success_url(self):
         messages.info(self.request, 'Photo added successfully.')
+        return self._get_lot().get_absolute_url()
+
+
+class AddNoteView(CreateView):
+    form_class = NoteForm
+    template_name = 'lots/content/add_note.html'
+
+    def _get_lot(self):
+        try:
+            return Lot.objects.get(pk=self.kwargs['pk'])
+        except Exception:
+            raise Http404
+
+    def get_context_data(self, **kwargs):
+        context = super(AddNoteView, self).get_context_data(**kwargs)
+        context.update({
+            'lot': self._get_lot(),
+        })
+        return context
+
+    def get_initial(self):
+        initial = super(AddNoteView, self).get_initial()
+        try:
+            object_id = self.kwargs['pk']
+        except KeyError:
+            raise Http404
+        initial.update({
+            'content_type': ContentType.objects.get_for_model(Lot),
+            'object_id': object_id,
+        })
+        return initial
+
+    def get_success_url(self):
+        messages.info(self.request, 'Note added successfully.')
         return self._get_lot().get_absolute_url()

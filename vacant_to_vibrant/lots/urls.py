@@ -7,7 +7,8 @@ from organize.models import Organizer, Watcher
 from .models import Lot
 from .views import (EditLotParicipantView, PlacesWithViolationsView,
                     PlacesWithViolationsMap, AddParticipantView, LotsGeoJSON,
-                    AddParticipantSuccessView, LotsMap, AddPhotoView)
+                    AddParticipantSuccessView, LotsMap, AddPhotoView,
+                    AddNoteView)
 
 
 urlpatterns = patterns('',
@@ -53,6 +54,10 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/photos/add/$',
         fix_recaptcha_remote_ip(AddPhotoView.as_view()),
         name='add_photo'),
+
+    url(r'^(?P<pk>\d+)/notes/add/$',
+        fix_recaptcha_remote_ip(AddNoteView.as_view()),
+        name='add_note'),
 
     url(r'^', LotsMap.as_view()),
 )

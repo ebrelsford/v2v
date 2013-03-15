@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     'contact',
     'facebook',
     'lots',
+    'notes',
     'organize',
     'phillydata',
     'phillydata.availableproperties',

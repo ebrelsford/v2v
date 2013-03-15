@@ -1,0 +1,10 @@
+<ul>
+    {% for organizer in organizers %}
+    <li>
+    {{ organizer.name }}<br />
+    {{ organizer.phone }}<br />
+    {{ organizer.email }}<br />
+    {{ organizer.notes }}
+    </li>
+    {% endfor %}
+</ul>

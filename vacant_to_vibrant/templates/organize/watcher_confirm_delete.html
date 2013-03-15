@@ -1,15 +1,12 @@
 {% extends "lots/base.html" %}
-{% load i18n sekizai_tags %}
+{% load i18n %}
 
 {% block title %}{{ block.super }}: {% trans "Stop watching" %}{% endblock %}
 
-{% block content_main %}
+{% block content %}
 {{ block.super }}
 <div id="lot-details">
-    <h1>{% trans "Stop watching" %}</h1>
-    <h2>
-        {% include "organize/block_link_snippet.html" %}
-    </h2>
+    <h3>{% trans "Stop watching" %}</h3>
     <div>
         <p>
             {% blocktrans %}

@@ -13,7 +13,7 @@
         <p>You will now receive emails when that lot is updated--when new
         organizers sign up on the lot and notes are added to it. If this was an
         accident or if you change your mind in the future, you can stop
-        organizing this lot at any time on <a href="{{ participant.get_edit_url }}">this page</a>. You should receive an email with this link soon.</p>
+        organizing this lot at any time on <a href="{% url "lots:edit_participant" hash=participant.email_hash %}">this page</a>. You should receive an email with this link soon.</p>
  
         <p>Be aware that your contact information is now posted publicly on the <a href="{{ lot.get_absolute_url }}">lot's page</a> so others who are interested in the site can get in touch with you.</p>
 

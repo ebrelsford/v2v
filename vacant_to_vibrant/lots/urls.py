@@ -15,16 +15,30 @@ urlpatterns = patterns('',
     url(r'^geojson/', LotsGeoJSON.as_view()),
 
     url(r'^(?P<pk>\d+)/organize/$',
-        fix_recaptcha_remote_ip(AddParticipantView.as_view()),
+        fix_recaptcha_remote_ip(AddParticipantView.as_view(
+            model=Organizer,
+        )),
         name='lot_organize'),
 
-    url(r'^(?P<pk>\d+)/organize/organizer/(?P<hash>[^/]{9,})/success/$',
+    url(r'^(?P<pk>\d+)/watch/$',
+        fix_recaptcha_remote_ip(AddParticipantView.as_view(
+            model=Watcher,
+        )),
+        name='lot_watch'),
+
+    url(r'^(?P<pk>\d+)/organize/organizer/(?P<hash>[^/]{30,})/success/$',
         AddParticipantSuccessView.as_view(
             model=Organizer,
         ),
         name='add_organizer_success'),
 
-    url(r'^organize/(?P<hash>[^/]{9,})/edit/$',
+    url(r'^(?P<pk>\d+)/organize/watcher/(?P<hash>[^/]{30,})/success/$',
+        AddParticipantSuccessView.as_view(
+            model=Watcher,
+        ),
+        name='add_watcher_success'),
+
+    url(r'^organize/(?P<hash>[^/]{30,})/edit/$',
         EditLotParicipantView.as_view(),
         name='edit_participant'),
 

@@ -3,13 +3,10 @@
 
 {% block title %}{{ block.super }}: {% trans "Watch a lot" %}{% endblock %}
 
-{% block content_main %}
+{% block content %}
 {{ block.super }}
 <div id="lot-details">
-    <h1>{% trans "Watch a lot" %}</h1>
-    <h2>
-        {% include "organize/block_link_snippet.html" %}
-    </h2>
+    <h3>{% trans "Watch a lot" %}</h3>
     <div>
         <span>{% trans "Fill out this form to receive notifications when other people start watching or organizing on this lot. Your information will only be shared with organizers of this lot." %}</span>
         {% include "organize/form_snippet.html" %}

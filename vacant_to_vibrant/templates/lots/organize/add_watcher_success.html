@@ -1,24 +1,26 @@
 {% extends "lots/base.html" %}
-{% load facebook_filters i18n lot_filters twitter_filters %}
+{% load facebook_tags i18n twitter_tags %}
 
 {% block title %}{{ block.super }}: {% trans "Watch a lot" %}{% endblock %}
 
-{% block content_main %}
+{% block content %}
 {{ block.super }}
 <div id="lot-details">
-    <h1>{% trans "Watch a lot" %}</h1>
-    <h2>
-        {% include "organize/block_link_snippet.html" %}
-    </h2>
+    <h3>{% trans "Watch a lot" %}</h3>
     <div>
         {% if lot.sandy_dropoff_site or lot.sandy_distribution_site %}
-        <p>Success! You are now watching <a href="{{ lot.get_absolute_url }}">{% if lot.name %}{{ lot.name }}{% else %}{{ lot|lotname:"group" }}{% endif %}</a>.</p>
+        <p>Success! You are now watching <a href="{{ lot.get_absolute_url }}">{% if lot.name %}{{ lot.name }}{% else %}{{ lot.address_line1 }}{% endif %}</a>.</p>
         {% else %}
-        <p>Success! You are now watching a vacant lot that we're calling <a href="{{ lot.get_absolute_url }}">{% if lot.name %}{{ lot.name }}{% else %}{{ lot|lotname:"group" }}{% endif %}</a>.</p>
+        <p>Success! You are now watching a vacant lot that we're calling <a href="{{ lot.get_absolute_url }}">{% if lot.name %}{{ lot.name }}{% else %}{{ lot.address_line1 }}{% endif %}</a>.</p>
         {% endif %}
-        <p>You will now receive emails when that lot is updated--when new organizers sign up on the lot and notes are added to it. If this was an accident or if you change your mind in the future, you can stop watching this lot at any time on <a href="{{ BASE_URL }}{{ object.get_edit_url }}">this page</a>. You should receive an email with this link soon.</p>
+        <p>You will now receive emails when that lot is updated--when new
+        organizers sign up on the lot and notes are added to it. If this was an
+        accident or if you change your mind in the future, you can stop watching
+        this lot at any time on <a href="{% url "lots:edit_participant" hash=participant.email_hash %}">this page</a>. You should receive an email with this link soon.</p>
         {% if nearby_lots %}
         <p>Also, here are some lots near this one you might be interested in:
+        (TODO add back)
+        {% comment %}
             <ul class="nearby-lots">
                 {% for nearby in nearby_lots %}
                 <li>
@@ -27,12 +29,16 @@
                 </li>
                 {% endfor %}
             </ul>
+        {% endcomment %}
         </p>
         {% endif %}
         <p>
             Let your friends know you're watching this lot! Share it on Twitter and Facebook:
             <div>
-                {% with message="I just started watching "|add:lot.display_name|add:" on @596Acres" %}
+                {% comment %}
+                TODO twitter handle
+                {% endcomment %}
+                {% with message="I just started watching "|add:lot.name|add:" on @" %}
                 {% tweet_button message link_to lot %}
                 {% endwith %}
                 {% share_button lot.get_absolute_url %}

@@ -49,4 +49,8 @@
     <a href="{% url "lots:lot_organize" pk=lot.pk %}">click to organize</a>
     {% render_organizer_list for lot %}
 </div>
+<div class="organize">
+    <h3>Watch</h3>
+    <a href="{% url "lots:lot_watch" pk=lot.pk %}">click to watch</a>
+</div>
 {% endblock %}

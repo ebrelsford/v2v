@@ -8,7 +8,8 @@ from django.views.generic import CreateView, TemplateView
 
 from inplace.views import GeoJSONListView
 
-from organize.forms import OrganizerForm
+from organize.forms import OrganizerForm, WatcherForm
+from organize.models import Organizer, Watcher
 from organize.views import EditParticipantMixin
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation, ViolationLocation
@@ -95,9 +96,13 @@ class EditLotParicipantView(EditParticipantMixin, TemplateView):
                 return None
 
 
-class AddParticipantView(CreateView):
-    form_class = OrganizerForm
-    template_name = 'lots/organize/add_organizer.html'
+class ParticipantMixin(object):
+
+    def _get_participant_type(self):
+        return self.model._meta.object_name.lower()
+
+
+class AddParticipantView(ParticipantMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(AddParticipantView, self).get_context_data(**kwargs)
@@ -105,6 +110,12 @@ class AddParticipantView(CreateView):
             'lot': Lot.objects.get(pk=self.kwargs['pk']),
         })
         return context
+
+    def get_form_class(self):
+        if self.model is Organizer:
+            return OrganizerForm
+        elif self.model is Watcher:
+            return WatcherForm
 
     def get_initial(self):
         initial = super(AddParticipantView, self).get_initial()
@@ -120,25 +131,36 @@ class AddParticipantView(CreateView):
 
     def get_success_url(self):
         try:
-            return reverse('lots:add_organizer_success',
+            return reverse('lots:add_%s_success' % self._get_participant_type(),
                            kwargs={
-                               'hash': self.object.email_hash[:9],
+                               'hash': self.object.email_hash[:30],
                                'pk': self.object.target_id,
                            })
         except Exception:
             raise Http404
 
+    def get_template_names(self):
+        return [
+            'lots/organize/add_%s.html' % self._get_participant_type(),
+        ]
 
-class AddParticipantSuccessView(TemplateView):
+
+class AddParticipantSuccessView(ParticipantMixin, TemplateView):
     model = None
-    template_name = 'lots/organize/add_organizer_success.html'
 
     def get_context_data(self, **kwargs):
 
         context = super(AddParticipantSuccessView, self).get_context_data(**kwargs)
         context['lot'] = get_object_or_404(Lot, pk=kwargs['pk'])
         try:
-            context['participant'] = self.model.objects.filter(email_hash__istartswith=kwargs['hash'])[0]
+            context['participant'] = self.model.objects.filter(
+                email_hash__istartswith=kwargs['hash']
+            )[0]
         except Exception:
             raise Http404
         return context
+
+    def get_template_names(self):
+        return [
+            'lots/organize/add_%s_success.html' % self._get_participant_type(),
+        ]

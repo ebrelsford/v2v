@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load fiber_tags %}
+{% load feincms_tags %}
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -17,7 +17,7 @@
     {% block scripts %}{% endblock %}
 
 </head>
-<body class="{% block body_class %}{{ fiber_page.title|slugify }}{% endblock %}">
+<body>
 	<div>
 		<div>
 			<header>
@@ -27,24 +27,14 @@
                     </h1>
                 </div>
 				<nav id="mainmenu" class="clearfix">
-					{% show_menu "mainmenu" 1 1 %}
 				</nav>
 			</header>
 			<aside id="aside-left">
 				<nav id="submenu">
-					{% show_menu "mainmenu" 2 3 %}
 				</nav>
 			</aside>
 			<section id="main">
-				<nav id="breadcrumbs" class="clearfix">
-					<ul>
-						{% for fiber_page in fiber_current_pages %}
-						<li>
-							<a href="{{ fiber_page.get_absolute_url }}">{{ fiber_page.title }}</a>
-						</li>
-						{% endfor %}
-					</ul>
-				</nav>
+				<nav id="breadcrumbs" class="clearfix"></nav>
 
                 {% if messages %}
                 <ul class="messages">
@@ -56,12 +46,12 @@
 
 				<article>
                     {% block content %}
-					{% show_page_content "main" %}
+                    {% feincms_render_region feincms_page "main" request %}
                     {% endblock %}
 				</article>
 			</section>
 			<aside id="aside-right">
-				{% show_page_content "aside" %}
+                {% feincms_render_region feincms_page "sidebar" request %}
 			</aside>
 		</div>
 	</div>

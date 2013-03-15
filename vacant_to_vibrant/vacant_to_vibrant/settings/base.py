@@ -79,9 +79,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'fiber.middleware.ObfuscateEmailAddressMiddleware',
-    'fiber.middleware.AdminPageMiddleware',
-
     'reversion.middleware.RevisionMiddleware',
 )
 
@@ -122,7 +119,9 @@ INSTALLED_APPS = (
     'actstream',
     'compressor',
     'contact_form',
-    'fiber',
+    'feincms',
+    'feincms.module.medialibrary',
+    'feincms.module.page',
     'imagekit',
     'inplace',
     'jsonfield',
@@ -135,6 +134,7 @@ INSTALLED_APPS = (
     # first-party
     #
     'activity_stream',
+    'cms',
     'contact',
     'facebook',
     'files',
@@ -210,3 +210,7 @@ FACILITATORS = {
 }
 
 MAILREADER_REPLY_PREFIX = 'Reply with text above this line to post a public note.'
+
+FEINCMS_RICHTEXT_INIT_CONTEXT = {
+    'TINYMCE_JS_URL': STATIC_URL + 'js/lib/tiny_mce/tiny_mce.js',
+}

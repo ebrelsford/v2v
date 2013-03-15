@@ -21,12 +21,5 @@ urlpatterns += patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
-    #
-    # fiber
-    #
-    (r'^api/v2/', include('fiber.rest_api.urls')),
-    (r'^admin/fiber/', include('fiber.admin_urls')),
-    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', {'packages': ('fiber',),}),
-
-    (r'', 'fiber.views.page'),
+    url(r'', include('feincms.urls')),
 )

@@ -1,5 +1,5 @@
 {% extends "lots/base.html" %}
-{% load i18n inplace_tags notes_tags organize_tags photos_tags %}
+{% load files_tags i18n inplace_tags notes_tags organize_tags photos_tags %}
 
 {% block title %}{{ block.super }} | {{ lot.address_line1 }}{% endblock %}
 
@@ -64,5 +64,10 @@
     <h3>Notes</h3>
     <a href="{% url "lots:add_note" pk=lot.pk %}">click to add a note</a>
     {% render_note_list for lot %}
+</div>
+<div class="files">
+    <h3>Files</h3>
+    <a href="{% url "lots:add_file" pk=lot.pk %}">click to add a file</a>
+    {% render_file_list for lot %}
 </div>
 {% endblock %}

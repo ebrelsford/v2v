@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'activity_stream',
     'contact',
     'facebook',
+    'files',
     'lots',
     'notes',
     'organize',

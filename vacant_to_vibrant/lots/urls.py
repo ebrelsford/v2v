@@ -8,7 +8,7 @@ from .models import Lot
 from .views import (EditLotParicipantView, PlacesWithViolationsView,
                     PlacesWithViolationsMap, AddParticipantView, LotsGeoJSON,
                     AddParticipantSuccessView, LotsMap, AddPhotoView,
-                    AddNoteView)
+                    AddNoteView, AddFileView)
 
 
 urlpatterns = patterns('',
@@ -58,6 +58,10 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/notes/add/$',
         fix_recaptcha_remote_ip(AddNoteView.as_view()),
         name='add_note'),
+
+    url(r'^(?P<pk>\d+)/files/add/$',
+        fix_recaptcha_remote_ip(AddFileView.as_view()),
+        name='add_file'),
 
     url(r'^', LotsMap.as_view()),
 )

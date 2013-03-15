@@ -1,0 +1,12 @@
+{% autoescape off %}{% if is_note %}{{ MAILREADER_REPLY_PREFIX }}
+
+{% endif %}Greetings. There has been a change to something you are watching.
+
+{{ message }}
+
+View details here: {{ BASE_URL }}{{ target.get_absolute_url }}{{ obj_url_suffix }}
+
+--
+{% if is_note %}If you reply to this email it will be posted as a public note on the lot's page.
+
+{% endif %}You are receiving this email because you are watching {{ target }}. Please go here to change this: {{ BASE_URL }}{% url "lots:edit_participant" hash=participant.email_hash %}{% endautoescape %}

@@ -204,3 +204,5 @@ ACTIVITY_STREAM_DEFAULT_ACTOR_PK = get_env_variable('PHILLY_ACTSTREAM_DEFAULT_AC
 FACILITATORS = {
     'global': [],
 }
+
+MAILREADER_REPLY_PREFIX = 'Reply with text above this line to post a public note.'

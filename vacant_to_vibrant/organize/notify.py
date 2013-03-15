@@ -52,10 +52,6 @@ def notify_organizers_and_watchers(obj):
     target = obj.target
     if not target: return
 
-    # don't notify of new organizers when a group already has access
-    # TODO is this still relevant?
-    #if target.group_has_access and isinstance(obj, Organizer): return
-
     message = _get_object_message(obj)
     kwargs = {}
     try:
@@ -64,6 +60,7 @@ def notify_organizers_and_watchers(obj):
         kwargs['excluded_emails'] = []
     kwargs['url_suffix'] = url_suffixes[obj.__class__]
 
+    # TODO s/target/<name_of_target_model>/
     mail_target_watchers(target, 'Watched target updated!', message, **kwargs)
     mail_target_organizers(target, 'Organized target updated!', message,
                            **kwargs)

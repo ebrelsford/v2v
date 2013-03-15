@@ -70,3 +70,7 @@ class Lot(Place):
 
     def __unicode__(self):
         return u'Lot (%s)' % (self.address_line1,)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('lots:lot_detail', (), { 'pk': self.pk, })

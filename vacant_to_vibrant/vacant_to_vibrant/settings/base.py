@@ -95,6 +95,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.request',
     'django.core.context_processors.static',
+
+    'feincms.context_processors.add_page_if_missing',
 )
 
 ROOT_URLCONF = 'vacant_to_vibrant.urls'
@@ -148,6 +150,7 @@ INSTALLED_APPS = (
     'lots',
     'notes',
     'organize',
+    'pathways',
     'phillydata',
     'phillydata.availableproperties',
     'phillydata.landuse',

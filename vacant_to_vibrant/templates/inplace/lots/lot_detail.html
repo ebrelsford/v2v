@@ -1,6 +1,8 @@
 {% extends "lots/base.html" %}
 {% load i18n inplace_tags organize_tags %}
 
+{% block title %}{{ block.super }} | {{ lot.address_line1 }}{% endblock %}
+
 {% block content %}
 {{ block.super }}
 <div class="details">

@@ -7,5 +7,9 @@
     {% place_map places_url 200px 200px %}
     {% endwith %}
 </div>
-<h2>{{ lot.address_line1 }}</h2>
+<h2>
+    <a href="{{ lot.get_absolute_url }}">
+        {{ lot.address_line1 }}
+    </a>
+</h2>
 {% endblock %}

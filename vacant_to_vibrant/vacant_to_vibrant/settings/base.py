@@ -244,7 +244,15 @@ def elephantblog_categorytranslation_url_app(self):
                        kwargs={ 'slug': self.slug, })
 
 
+def pathways_pathway_url_app(self):
+    from feincms.content.application.models import app_reverse
+    return app_reverse('pathway_detail', 'pathways.urls', kwargs={
+        'slug': self.slug,
+    })
+
+
 ABSOLUTE_URL_OVERRIDES = {
     'elephantblog.entry': elephantblog_entry_url_app,
     'elephantblog.categorytranslation': elephantblog_categorytranslation_url_app,
+    'pathways.pathway': pathways_pathway_url_app,
 }

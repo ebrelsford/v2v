@@ -1,0 +1,21 @@
+{% extends feincms_page.template.path|default:"base.html" %}
+{% load feincms_tags i18n %}
+
+{% block content %}
+<h3>Pathways</h3>
+<div class="pathways-content">
+    {% for pathway in pathway_list %}
+    <article>
+        <header>
+            <a href="{{ pathway.get_absolute_url }}">
+                {{ pathway.name }}
+            </a>
+        </header>
+        <div>
+            {% if pathway.first_image %}{{ pathway.first_image.render }}{% endif %}
+            {% if pathway.first_richtext %}{{ pathway.first_richtext.render }}{% endif %}
+        </div>
+    </article>
+    {% endfor %}
+</div>
+{% endblock %}

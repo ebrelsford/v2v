@@ -5,6 +5,8 @@ from feincms.content.application.models import ApplicationContent
 from feincms.content.richtext.models import RichTextContent
 from feincms.content.medialibrary.models import MediaFileContent
 
+from pathways.models import Pathway
+
 
 Page.register_extensions(
     'feincms.module.extensions.datepublisher',
@@ -26,6 +28,19 @@ Page.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('lightbox', _('lightbox')),
 ))
 Page.create_content_type(ApplicationContent, APPLICATIONS=(
-    ('elephantblog.urls', 'Blog'),
-    ('pathways.urls', 'Pathways application'),
+    ('elephantblog', _('Blog'), {'urls': 'elephantblog.urls'}),
+    ('pathways', _('Pathways'), {'urls': 'pathways.urls'}),
+))
+
+
+Pathway.register_extensions(
+    'feincms.module.extensions.translations',
+)
+Pathway.register_regions(
+    ('main', _('Main content area')),
+)
+Pathway.create_content_type(RichTextContent)
+Pathway.create_content_type(MediaFileContent, TYPE_CHOICES=(
+    ('default', _('default')),
+    ('lightbox', _('lightbox')),
 ))

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load feincms_tags %}
+{% load feincms_tags feincms_page_tags %}
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -27,6 +27,10 @@
                     </h1>
                 </div>
 				<nav id="mainmenu" class="clearfix">
+                {% feincms_nav feincms_page level=1 depth=1 as mainmenu %}
+                {% for page in mainmenu %}
+                    <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+                {% endfor %}
 				</nav>
 			</header>
 			<aside id="aside-left">

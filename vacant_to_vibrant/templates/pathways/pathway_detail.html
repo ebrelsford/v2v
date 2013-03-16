@@ -1,7 +1,13 @@
-{% extends "base.html" %}
+{% extends feincms_page.template.path|default:"base.html" %}
+{% load feincms_tags i18n %}
 
 {% block content %}
-{{ block.super }}
-
-<h3>{{ pathway.name }}</h3>
+<article>
+    <header>
+        <h3>{{ pathway.name }}</h3>
+    </header>
+    <div class="pathway-content">
+        {% feincms_render_region object "main" request %}
+    </div>
+</article>
 {% endblock %}

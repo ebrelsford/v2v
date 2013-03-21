@@ -6,6 +6,8 @@ Pillow==1.7.8
 South==0.7.6
 TileStache==1.45.0
 Werkzeug==0.8.3
+argparse==1.2.1
+django-activity-stream==0.4.4
 django-appconf==0.6
 django-classy-tags==0.4
 django-compressor==1.2
@@ -21,8 +23,10 @@ django-reversion==1.6.6
 django-reversion-compare==0.3.5
 djangorestframework==2.1.17
 docutils==0.10
+-e git://github.com/ebrelsford/feincms-elephantblog.git@9a9b7f2ba355bd9112f83465c2bae1006d941d04#egg=feincms_elephantblog-dev
 geojson==1.0.1
 ipython==0.13.1
+lxml==3.1.0
 johnny-cache==1.4
 psycopg2==2.4.6
 pyproj==1.9.3

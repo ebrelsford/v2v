@@ -26,7 +26,7 @@
             var cloudmade = L.tileLayer(
                 'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', 
                 {
-                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://www.openstreetmap.org/copyright">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
                     key: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
                     styleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
                 }
@@ -68,6 +68,6 @@
         </script>
     </head>
     <body>
-        <div id="map" style="width: 800px; height: 600px;"></div>
+        <div id="map" style="width: 100%; height: 300px;"></div>
     </body>
 </html>

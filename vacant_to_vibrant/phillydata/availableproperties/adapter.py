@@ -6,6 +6,7 @@ from django.utils.timezone import now
 
 import reversion
 
+from ..utils import fix_address
 from .api import AvailablePropertyReader
 from .models import AvailableProperty
 
@@ -68,7 +69,7 @@ def model_defaults(feature):
             'centroid': Point(feature['geometry']['x'],
                               feature['geometry']['y']),
             'mapreg': feature['attributes']['MAPREG'],
-            'address': feature['attributes']['REF_ADDRES'],
+            'address': fix_address(feature['attributes']['REF_ADDRES']),
             'description': feature['attributes']['DESCR'],
             'agency': feature['attributes']['AGENCY'],
             'price': round(float(feature['attributes']['PRICE']), 2),

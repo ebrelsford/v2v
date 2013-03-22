@@ -39,6 +39,15 @@ def format_street_name(street_name):
     return street_name.title()
 
 
+def fix_address(address):
+    """Fix the formatting of an address for display."""
+    components = address.split()
+
+    # assume everything can be a street name
+    components = [format_street_name(c) for c in components]
+    return ' '.join(components)
+
+
 def make_address(house_number=None, house_suffix=None, house_unit=None,
                  street_direction=None, street_name=None,
                  street_description=None, street_description_suffix=None):

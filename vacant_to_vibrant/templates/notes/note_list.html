@@ -1,0 +1,24 @@
+{% load i18n %}
+
+<ul>
+    {% for note in notes %}
+    <li class="note-detail">
+        <table>
+            <tbody>
+                <tr>
+                    <th class="field-label">{% trans "author" %}:</th>
+                    <td>{{ note.author }}</td>
+                </tr>
+                <tr>
+                    <th class="field-label">{% trans "added" %}:</th>
+                    <td>{{ note.added }}</td>
+                </tr>
+                <tr>
+                    <th class="field-label">{% trans "text" %}:</th>
+                    <td>{{ note.text|urlize|linebreaks }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </li>
+    {% endfor %}
+</ul>

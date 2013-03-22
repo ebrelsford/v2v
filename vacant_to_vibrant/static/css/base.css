@@ -33,6 +33,10 @@ p {
     padding-bottom: 10px;
 }
 
+th {
+    text-align: left;
+}
+
 /* Clearfix boilerplate */
 
 .clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
@@ -99,4 +103,8 @@ p {
     border-top: 1px solid black;
     margin-top: 50px;
     margin-bottom: 25px;
+}
+
+.field-label {
+    font-weight: bold;
 }

@@ -1,10 +1,28 @@
+{% load i18n %}
+
 <ul>
     {% for organizer in organizers %}
     <li>
-    {{ organizer.name }}<br />
-    {{ organizer.phone }}<br />
-    {{ organizer.email }}<br />
-    {{ organizer.notes }}
+        <table>
+            <tbody>
+                <tr>
+                    <th class="field-label">{% trans "name" %}:</th>
+                    <td>{{ organizer.name }}</td>
+                </tr>
+                <tr>
+                    <th class="field-label">{% trans "phone" %}:</th>
+                    <td>{{ organizer.phone }}</td>
+                </tr>
+                <tr>
+                    <th class="field-label">{% trans "email" %}:</th>
+                    <td>{{ organizer.email }}</td>
+                </tr>
+                <tr>
+                    <th class="field-label">{% trans "notes" %}:</th>
+                    <td>{{ organizer.notes|urlize|linebreaks }}</td>
+                </tr>
+            </tbody>
+        </table>
     </li>
     {% endfor %}
 </ul>

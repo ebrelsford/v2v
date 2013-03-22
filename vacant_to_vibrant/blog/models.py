@@ -8,17 +8,18 @@ from elephantblog.models import Entry
 
 
 Entry.register_extensions(
-    'feincms.module.extensions.datepublisher',
     'feincms.module.extensions.translations',
+    'feincms.module.extensions.datepublisher',
 )
 
 Entry.register_regions(
     ('main', _('Main content area')),
 )
 
-Entry.create_content_type(RichTextContent,
-                          cleanse=feincms_cleanse.cleanse_html,
-                          regions=('main',)
+Entry.create_content_type(
+    RichTextContent,
+    cleanse=feincms_cleanse.cleanse_html,
+    regions=('main',)
 )
 
 Entry.create_content_type(MediaFileContent, TYPE_CHOICES=(

@@ -42,6 +42,7 @@ def model_get_kwargs(feature):
         'object_id': feature['attributes']['OBJECTID'],
     }
 
+
 def model_defaults(feature):
     """
     Get LandUseArea defaults--useful for get_or_create()--for the feature.

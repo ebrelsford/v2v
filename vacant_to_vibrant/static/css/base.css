@@ -83,3 +83,20 @@ p {
 /*
  * _modules_
  */
+
+#mainmenu {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#aside-right {
+    padding-left: 25px;
+}
+
+#footer {
+    border-top: 1px solid black;
+    margin-top: 50px;
+    margin-bottom: 25px;
+}

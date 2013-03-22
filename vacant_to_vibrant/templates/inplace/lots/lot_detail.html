@@ -57,7 +57,9 @@
 </div>
 <div class="photos">
     <h3>Photos</h3>
-    <a href="{% url "lots:add_photo" pk=lot.pk %}">click to add a photo</a>
+    <div>
+        <a href="{% url "lots:add_photo" pk=lot.pk %}">click to add a photo</a>
+    </div>
     {% render_photo_list for lot %}
 </div>
 <div class="notes">

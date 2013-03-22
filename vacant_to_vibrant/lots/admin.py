@@ -7,6 +7,6 @@ from .models import Lot
 class LotAdmin(OSMGeoAdmin, admin.ModelAdmin):
     exclude = ('centroid',)
     list_display = ('address_line1', 'city', 'owner', 'billing_account',)
-    readonly_fields = ('parcel', 'violations',)
+    readonly_fields = ('land_use_area', 'parcel', 'violations',)
 
 admin.site.register(Lot, LotAdmin)

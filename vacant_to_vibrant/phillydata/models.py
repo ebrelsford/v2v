@@ -11,9 +11,10 @@ class PhillyDataSource(DataSource):
 
     """
     NAME_CHOICES = (
-        ('praavailableproperties', 'PRA Available Properties'),
-        ('opa', 'OPA API'),
         ('liviolations', 'L&I Violations'),
+        ('landusearea', 'Land Use Areas'),
+        ('opa', 'OPA API'),
+        ('praavailableproperties', 'PRA Available Properties'),
         ('waterdept', 'Water Department data'),
     )
     name = models.CharField(_('name'),

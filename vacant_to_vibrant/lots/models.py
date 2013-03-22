@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from inplace.models import Place
 
 from phillydata.availableproperties.models import AvailableProperty
+from phillydata.landuse.models import LandUseArea
 from phillydata.opa.models import BillingAccount
 from phillydata.owners.models import Owner
 from phillydata.parcels.models import Parcel
@@ -42,6 +43,13 @@ class Lot(Place):
         help_text=_('The parcel this lot is based on.'),
         verbose_name=_('parcel'),
     )
+    land_use_area = models.ForeignKey(LandUseArea,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text=_('The land use area for this lot.'),
+        verbose_name=_('land use'),
+    )
     violations = models.ManyToManyField(Violation,
         blank=True,
         null=True,
@@ -65,7 +73,6 @@ class Lot(Place):
 
     # TODO
     # land use
-    # tax delinquency (private)
     # zoning
 
     def __unicode__(self):

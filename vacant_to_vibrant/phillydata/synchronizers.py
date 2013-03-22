@@ -1,10 +1,12 @@
 import logging
 
-from lots.load import load_lots_available, load_lots_with_violations
+from lots.load import (load_lots_available, load_lots_with_violations,
+                       load_lots_land_use_vacant)
 from lots.models import Lot
 from sync.synchronizers import Synchronizer
 from .availableproperties.adapter import (find_available_properties,
                                           find_no_longer_available_properties)
+from .landuse.adapter import find_land_use_areas
 from .opa.adapter import find_opa_details
 from .violations.adapter import find_violations
 from .waterdept.adapter import find_water_dept_details
@@ -57,6 +59,19 @@ class WaterDeptSynchronizer(Synchronizer):
             except Exception:
                 logger.exception('Exception while updating Water Department '
                                  'data for lot %s' % lot)
+
+
+class LandUseAreaSynchronizer(Synchronizer):
+    """Synchronizes LandUseAreas."""
+
+    def sync(self, data_source):
+        logger.info('Synchronizing vacant land use area data.')
+        find_land_use_areas()
+        logger.info('Done synchronizing vacant land use area data.')
+
+        logger.info('Adding lots with vacant land use areas.')
+        load_lots_land_use_vacant(added_after=data_source.last_synchronized)
+        logger.info('Done adding lots with vacant land use areas.')
 
 
 class PRAAvailablePropertiesSynchronizer(Synchronizer):

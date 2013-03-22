@@ -32,6 +32,15 @@ def load_lots_with_violations():
 
 
 def load_lots_available(added_after=None):
+    """
+    Find Parcels and add Lots for AvailableProperty added after the given
+    datetime.
+
+    Known issues: does not always find parcels associated, generally because
+    the AvailableProperty data contains addresses that are ranges, eg,
+    "1230 - 34 Burns St".
+
+    """
     properties = AvailableProperty.objects.all()
     if added_after:
         properties = properties.filter(added__gte=added_after)

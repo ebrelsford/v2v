@@ -23,23 +23,35 @@ Page.register_templates({
 })
 
 Page.create_content_type(RichTextContent)
+
 Page.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('default', _('default')),
     ('lightbox', _('lightbox')),
 ))
+
 Page.create_content_type(ApplicationContent, APPLICATIONS=(
+    ('lots.map_urls', _('Lots map')),
     ('elephantblog', _('Blog'), {'urls': 'elephantblog.urls'}),
-    ('pathways', _('Pathways'), {'urls': 'pathways.urls'}),
+    ('pathways.urls', _('Pathways')),
+    ('contact_form', _('Contact form'), {
+        'urls': 'contact.form_urls',
+    }),
+    ('contact_success', _('Contact success'), {
+        'urls': 'contact.success_urls',
+    }),
 ))
 
 
 Pathway.register_extensions(
     'feincms.module.extensions.translations',
 )
+
 Pathway.register_regions(
     ('main', _('Main content area')),
 )
+
 Pathway.create_content_type(RichTextContent)
+
 Pathway.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('default', _('default')),
     ('lightbox', _('lightbox')),

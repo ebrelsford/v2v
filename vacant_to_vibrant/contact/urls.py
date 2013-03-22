@@ -2,8 +2,13 @@ from django.conf.urls.defaults import patterns, url
 
 from .views import ContactFormView, ContactCompleted
 
-
-urlpatterns = patterns('',
+form_urls = patterns('',
     url('^$', ContactFormView.as_view(), name='form'),
+)
+
+
+success_urls = patterns('',
     url('^success/$', ContactCompleted.as_view(), name='completed'),
 )
+
+urlpatterns = form_urls + success_urls

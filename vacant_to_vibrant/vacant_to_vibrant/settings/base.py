@@ -254,5 +254,4 @@ def pathways_pathway_url_app(self):
 ABSOLUTE_URL_OVERRIDES = {
     'elephantblog.entry': elephantblog_entry_url_app,
     'elephantblog.categorytranslation': elephantblog_categorytranslation_url_app,
-    'pathways.pathway': pathways_pathway_url_app,
 }

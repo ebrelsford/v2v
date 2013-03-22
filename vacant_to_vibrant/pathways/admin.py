@@ -19,8 +19,8 @@ class PathwayAdmin(item_editor.ItemEditor):
     fieldsets = [
         [None, {
             'fields': [
-                ('is_active',),
-                ('name', 'slug'),
+                ('is_active', 'author',),
+                ('name', 'slug',),
             ]
         }],
         item_editor.FEINCMS_CONTENT_FIELDSET,

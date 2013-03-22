@@ -18,27 +18,23 @@
 
 </head>
 <body>
-	<div>
-		<div>
-			<header>
-                <div id="logo">
-                    <h1>
-                        <a href="/">Vacant to Vibrant</a>
-                    </h1>
-                </div>
-				<nav id="mainmenu" class="clearfix">
-                {% feincms_nav feincms_page level=1 depth=1 as mainmenu %}
-                {% for page in mainmenu %}
-                    <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
-                {% endfor %}
-				</nav>
-			</header>
-			<aside id="aside-left">
-				<nav id="submenu">
-				</nav>
-			</aside>
-			<section id="main">
-				<nav id="breadcrumbs" class="clearfix"></nav>
+	<div id="page-wrapper">
+        <header>
+            <div id="logo">
+                <h1>
+                    <a href="/">Vacant to Vibrant</a>
+                </h1>
+            </div>
+            <nav id="mainmenu" class="clearfix">
+            {% feincms_nav feincms_page level=2 depth=1 as mainmenu %}
+            {% for page in mainmenu %}
+                <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+            {% endfor %}
+            </nav>
+        </header>
+        <div class="content-wrapper">
+            <section id="main" class="grid grid-3-4">
+                <nav id="breadcrumbs" class="clearfix"></nav>
 
                 {% if messages %}
                 <ul class="messages">
@@ -48,16 +44,19 @@
                 </ul>
                 {% endif %}
 
-				<article>
+                <article>
                     {% block content %}
                     {% feincms_render_region feincms_page "main" request %}
                     {% endblock %}
-				</article>
-			</section>
-			<aside id="aside-right">
+                </article>
+            </section>
+            <aside id="aside-right" class="grid grid-1-4">
                 {% feincms_render_region feincms_page "sidebar" request %}
-			</aside>
-		</div>
+            </aside>
+        </div>
+        <div id="footer" class="clear">
+            {% feincms_render_region feincms_page "footer" request %}
+        </div>
 	</div>
 </body>
 </html>

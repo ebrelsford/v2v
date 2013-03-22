@@ -1,0 +1,31 @@
+{% load i18n %}
+
+<ul>
+    {% for file in files %}
+    <li class="file-detail">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="{{ file.document.url }}">
+                            {{ file.title }}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="field-label">{% trans "uploader" %}:</th>
+                    <td>{{ file.your_name }}</td>
+                </tr>
+                <tr>
+                    <th class="field-label">{% trans "added" %}:</th>
+                    <td>{{ file.added }}</td>
+                </tr>
+                <tr>
+                    <th class="field-label">{% trans "description" %}:</th>
+                    <td>{{ file.description|urlize|linebreaks }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </li>
+    {% endfor %}
+</ul>

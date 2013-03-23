@@ -11,59 +11,33 @@
         <script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
         <script src="{{ STATIC_URL }}js/Leaflet.Bing.js"></script>
         <script src="{{ STATIC_URL }}js/leaflet.utfgrid.js"></script>
+        <script src="{{ STATIC_URL }}js/leaflet.lotmap.js"></script>
 
         <script>
-
-        var map;
-
         $(document).ready(function() {
-
-            map = L.map('map', {
+            var map = L.map('map', {
                 center: [39.952335, -75.163789],
                 zoom: 13,
+                cloudmadeKey: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
+                cloudmadeStyleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
+                bingKey: 'ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr',
+                enableLayersControl: true,
+                lotGridBaseUrl: 'http://localhost:8081/lots_grid/',
+                lotGridResolution: 8,
+                lotTilesBaseUrl: 'http://localhost:8081/lots/',
+                lotClickHandler: function(e) {
+                    if (!e.data) { return false; }
+                    var popup = L.popup({
+                        minWidth: 300,
+                    })
+                        .setLatLng(e.latlng)
+                        .setContent('<div id="popup-content"></div>')
+                        .openOn(map);
+                    $.get('/places/lots/lot/' + e.data.id + '/popup/', function(response) {
+                        $('#popup-content').html(response);
+                    });
+                },
             });
-
-            var cloudmade = L.tileLayer(
-                'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', 
-                {
-                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://www.openstreetmap.org/copyright">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                    key: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
-                    styleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
-                }
-            ).addTo(map);
-
-            var bing = new L.BingLayer('ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr').addTo(map);
-
-            var lots = L.tileLayer('http://localhost:8081/lots/{z}/{x}/{y}.png').addTo(map);
-
-            var utfgrid = new L.UtfGrid('http://localhost:8081/lots_grid/{z}/{x}/{y}.json?callback={cb}', { resolution: 8 });
-
-            utfgrid.on('click', function(e) {
-                if (!e.data) { return false; }
-                var popup = L.popup({
-                    minWidth: 300,
-                })
-                    .setLatLng(e.latlng)
-                    .setContent('<div id="popup-content"></div>')
-                    .openOn(map);
-                $.get('/places/lots/lot/' + e.data.id + '/popup/', function(response) {
-                    $('#popup-content').html(response);
-                });
-            });
-            map.addLayer(utfgrid);
-
-            var interactiveLayerGroup = L.layerGroup([lots, utfgrid]);
-
-            var layersControl = L.control.layers(
-                { 
-                    'Satellte': bing, 
-                    'Streets': cloudmade, 
-                }, 
-                { 
-                    'lots': interactiveLayerGroup,
-                }
-            ).addTo(map);
-
         });
         </script>
     </head>

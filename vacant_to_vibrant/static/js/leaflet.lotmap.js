@@ -12,6 +12,7 @@ L.Map.include({
         enableLayersControl: Boolean,
         lotTilesBaseUrl: String,
         lotGridBaseUrl: String,
+        lotCentroidUrl: String,
     },
     */
 
@@ -21,9 +22,9 @@ L.Map.include({
         this.addSatelliteLayer();
         this.addLotTilesLayer();
         this.addLotGridLayer();
+        this.addLotCentroidLayer();
 
         this.addLayersControl();
-        this.addClickHandler();
     },
 
     addBaseLayer: function() {
@@ -54,7 +55,34 @@ L.Map.include({
         this.lotsUtfgrid = new L.UtfGrid(url, {
             resolution: this.options.lotGridResolution,
         });
+        if (this.options.lotClickHandler) {
+            var map = this;
+            map.lotsUtfgrid.on('click', function(e) {
+                e.targetType = 'utfgrid';
+                map.options.lotClickHandler(e);
+            });
+        }
         this.addLayer(this.lotsUtfgrid);
+    },
+
+    addLotCentroidLayer: function() {
+        if (!this.options.lotCentroidUrl) return;
+        var map = this;
+        $.getJSON(this.options.lotCentroidUrl, function(data) {
+            var geojsonLayer = L.geoJson(data, {
+                onEachFeature: function(feature, layer) {
+                    if (!map.options.lotClickHandler) return;
+                    layer.on('click', function(e) {
+                        e.data = feature;
+                        e.targetType = 'layer';
+                        map.options.lotClickHandler(e);
+                    });
+                },   
+            });
+            var markerCluster = new L.MarkerClusterGroup();
+            markerCluster.addLayer(geojsonLayer);
+            map.addLayer(markerCluster);
+        });
     },
 
     addLayersControl: function() {
@@ -69,16 +97,6 @@ L.Map.include({
                 'lots': interactiveLayerGroup,
             }
         ).addTo(this);
-    },
-
-    addClickHandler: function() {
-        if (!this.options.lotClickHandler) return;
-
-        if (this.lotsUtfgrid) {
-            this.lotsUtfgrid.on('click', this.options.lotClickHandler);
-        }
-        
-        // add other potential lot layers here
     },
 
 });

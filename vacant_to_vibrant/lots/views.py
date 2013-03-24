@@ -1,4 +1,5 @@
 import geojson
+import json
 
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -52,25 +53,25 @@ class PlacesWithViolationsMap(TemplateView):
 
 class LotsGeoJSON(GeoJSONListView):
 
-    def get_feature(self, lot):
-        try:
-            owner_name = lot.owner.name
-        except Exception:
-            owner_name = 'unknown'
+    def _get_filters(self):
+        print self.request.GET
+        return {}
 
+    def get_feature(self, lot):
         return geojson.Feature(
             lot.pk,
-            geometry=geojson.MultiPolygon(
-                coordinates=lot.polygon.coords,
-            ),
-            properties={
-                'is_available': lot.available_property is not None,
-                'owner': owner_name,
-            },
+            geometry=json.loads(lot.centroid.geojson),
+            properties={},
         )
 
     def get_queryset(self):
-        return Lot.objects.all().select_related('owner', 'available_property')
+        #organized_lot_pks = Organizer.objects.all().values_list('target_id', flat=True)
+        #return Lot.objects.filter(pk__in=organized_lot_pks)
+
+        self._get_filters()
+        return Lot.objects.all()
+        #return Lot.objects.filter(pk=65667)
+        #return Lot.objects.all().select_related('owner', 'available_property')
 
 
 class LotsMap(TemplateView):

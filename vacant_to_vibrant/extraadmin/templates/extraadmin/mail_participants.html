@@ -1,0 +1,57 @@
+{% load applicationcontent_tags compress i18n inplace_tags %}
+
+{% block media %}
+<script>
+    function mail_participants_update_counts(with_bbox) {
+        var url = '{% app_reverse "mail_participants" "extraadmin.urls" %}?' 
+            + $('form').serialize();
+
+        $.getJSON(url, function(data) {
+            $('.organizer-count').text(data.organizers);
+            $('.watcher-count').text(data.watchers);
+        });
+    }
+
+    $(document).ready(function() {
+        $('#map').lotmap({
+            onViewportChange: function() {
+                $(':input[name="bbox"]').val($('#map').data('lotmap').getCurrentBBOX());
+                mail_participants_update_counts(true);
+            },
+        });
+
+        // initialize counts
+        mail_participants_update_counts(false);
+
+        $('#lot-details .filter').change(function() {
+            mail_participants_update_counts(true);
+        });
+
+        $('input[name="participant_types"]').change(function() {
+            var participant_types = $.map($('input[name="participant_types"]:checked'), function(e, i) { return $(e).val(); });
+            $('#map').data('lotmap').filterByUserType(participant_types);
+        });
+
+    });
+</script>
+{% endblock %}
+
+{% block content_main %}
+<div>
+    <h1>{% trans "Email Participants" %}</h1>
+    <div>
+        <span>{% trans "Please enter your email below." %}</span>
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <div>
+                This email will be sent to <span class="organizer-count">X</span> organizers and <span class="watcher-count">Y</span> watchers in the following lots:
+            </div>
+            {% include "lots/map/cluster.html" %}
+            <input type="submit" value="{% trans "submit" %}" />
+        </form>
+    </div>
+</div>
+{% endblock %}

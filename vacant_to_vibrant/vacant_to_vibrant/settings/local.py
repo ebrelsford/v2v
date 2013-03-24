@@ -2,6 +2,7 @@ from .base import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+TASTYPIE_FULL_DEBUG = DEBUG
 
 TIME_ZONE = 'America/New_York'
 

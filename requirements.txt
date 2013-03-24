@@ -9,6 +9,7 @@ Werkzeug==0.8.3
 argparse==1.2.1
 django-activity-stream==0.4.4
 django-appconf==0.6
+django-braces==1.0.0
 django-classy-tags==0.4
 django-compressor==1.2
 django-contact-form-gv==0.4.1
@@ -21,6 +22,7 @@ django-mptt==0.5.5
 django-recaptcha-works==0.3.4
 django-reversion==1.6.6
 django-reversion-compare==0.3.5
+django-tastypie==0.9.14
 djangorestframework==2.1.17
 docutils==0.10
 -e git://github.com/feincms/feincms-elephantblog@465b30bf727bc456f44e7f64a0738efadd845618#egg=feincms_elephantblog-dev

@@ -33,6 +33,7 @@ Page.create_content_type(MediaFileContent, TYPE_CHOICES=(
 Page.create_content_type(ApplicationContent, APPLICATIONS=(
     ('lots.map_urls', _('Lots map')),
     ('elephantblog', _('Blog'), {'urls': 'elephantblog.urls'}),
+    ('extraadmin.urls', _('Extra admin functions')),
     ('pathways.urls', _('Pathways')),
     ('contact_form', _('Contact form'), {
         'urls': 'contact.form_urls',

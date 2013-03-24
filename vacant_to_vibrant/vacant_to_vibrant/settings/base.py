@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'blog',
     'cms',
     'contact',
+    'extraadmin',
     'facebook',
     'files',
     'lots',

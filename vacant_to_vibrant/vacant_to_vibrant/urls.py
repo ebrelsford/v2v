@@ -7,6 +7,9 @@ admin.autodiscover()
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+from api.api import v1_api
+
+
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,
                      show_indexes=True)
 
@@ -19,6 +22,8 @@ urlpatterns += patterns('',
 
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^api/', include(v1_api.urls)),
 
     url(r'', include('feincms.urls')),
 )

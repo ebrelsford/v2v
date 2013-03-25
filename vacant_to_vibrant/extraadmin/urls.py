@@ -1,9 +1,11 @@
 from django.conf.urls.defaults import patterns, url
 
-from .views import MailParticipantsView
+from .views import MailParticipantsView, MailParticipantsCountView
 
 urlpatterns = patterns('',
     url(r'^$', MailParticipantsView.as_view()),
     url(r'^participants/mail/$', MailParticipantsView.as_view(),
-        name="mail_participants"),
+        name='mail_participants'),
+    url(r'^participants/count/$', MailParticipantsCountView.as_view(),
+        name='mail_participants_count'),
 )

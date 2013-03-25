@@ -10,5 +10,6 @@
 
 {% block options %}
 {{ block.super }}
-        lotCentroidUrl: '/api/v1/lotlist/?organizers=True&watchers=True',
+    lotCentroidUrl: '/api/v1/lotlist/?participant_types=organizers&' +
+        'participant_types=watchers',
 {% endblock %}

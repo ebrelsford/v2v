@@ -3,7 +3,7 @@
 {% block media %}
 <script>
     function mail_participants_update_counts(with_bbox) {
-        var url = '{% app_reverse "mail_participants" "extraadmin.urls" %}?' 
+        var url = '{% app_reverse "mail_participants_count" "extraadmin.urls" %}?' 
             + $('form').serialize();
 
         $.getJSON(url, function(data) {
@@ -13,17 +13,19 @@
     }
 
     $(document).ready(function() {
+        /*
         $('#map').lotmap({
             onViewportChange: function() {
                 $(':input[name="bbox"]').val($('#map').data('lotmap').getCurrentBBOX());
                 mail_participants_update_counts(true);
             },
         });
+        */
 
         // initialize counts
         mail_participants_update_counts(false);
 
-        $('#lot-details .filter').change(function() {
+        $(':input').change(function() {
             mail_participants_update_counts(true);
         });
 

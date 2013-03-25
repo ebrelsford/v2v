@@ -10,16 +10,13 @@ from .models import Lot
 
 class GenericRelationFilterMixin(object):
 
-    def add_generic_filter(self, filters, orm_filters, filter_name,
-                           generic_class):
-        if filters.get(filter_name, None) != 'True':
-            return orm_filters
+    def add_generic_filter(self, orm_filters, generic_class):
         objs = generic_class.objects.filter(
             target_type=ContentType.objects.get_for_model(Lot),
         )
-        if not orm_filters.get('pk__in', None):
-            orm_filters['pk__in'] = []
-        orm_filters['pk__in'] += objs.values_list('target_id', flat=True)
+        pks = orm_filters.get('pk__in', [])
+        orm_filters['pk__in'] = pks + list(set(objs.values_list('target_id',
+                                                                flat=True)))
         return orm_filters
 
 
@@ -27,10 +24,11 @@ class LotResource(GenericRelationFilterMixin, ModelResource):
 
     def build_filters(self, filters={}):
         orm_filters = super(LotResource, self).build_filters(filters=filters)
-        orm_filters = self.add_generic_filter(filters, orm_filters,
-                                              'organizers', Organizer)
-        orm_filters = self.add_generic_filter(filters, orm_filters,
-                                              'watchers', Watcher)
+        participant_types = filters.getlist('participant_types', [])
+        if 'organizers' in participant_types:
+            orm_filters = self.add_generic_filter(orm_filters, Organizer)
+        if 'watchers' in participant_types:
+            orm_filters = self.add_generic_filter(orm_filters, Watcher)
         return orm_filters
 
     class Meta:
@@ -47,3 +45,4 @@ class LotListResource(LotResource):
     class Meta(LotResource.Meta):
         fields = ['id', 'centroid',]
         serializer = GeoJSONSerializer()
+        max_limit = 100000

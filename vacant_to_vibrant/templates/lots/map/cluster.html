@@ -10,6 +10,6 @@
 
 {% block options %}
 {{ block.super }}
-    lotCentroidUrl: '/api/v1/lotlist/?participant_types=organizers&' +
-        'participant_types=watchers',
+    lotCentroidBaseUrl: '{% url "api_dispatch_list" api_name="v1" resource_name="lotlist" %}',
+    lotCentroidQueryString: 'participant_types=organizers&participant_types=watchers',
 {% endblock %}

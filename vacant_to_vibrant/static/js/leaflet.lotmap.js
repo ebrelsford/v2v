@@ -12,7 +12,7 @@ L.Map.include({
         enableLayersControl: Boolean,
         lotTilesBaseUrl: String,
         lotGridBaseUrl: String,
-        lotCentroidUrl: String,
+        lotCentroidBaseUrl: String,
     },
     */
 
@@ -65,10 +65,10 @@ L.Map.include({
         this.addLayer(this.lotsUtfgrid);
     },
 
-    addLotCentroidLayer: function() {
-        if (!this.options.lotCentroidUrl) return;
+    _loadLotCentroidLayer: function(queryString) {
+        if (!this.options.lotCentroidBaseUrl) return;
         var map = this;
-        $.getJSON(this.options.lotCentroidUrl, function(data) {
+        $.getJSON(this.options.lotCentroidBaseUrl + '?' + queryString, function(data) {
             var geojsonLayer = L.geoJson(data.objects, {
                 onEachFeature: function(feature, layer) {
                     if (!map.options.lotClickHandler) return;
@@ -79,10 +79,23 @@ L.Map.include({
                     });
                 },   
             });
-            var markerCluster = new L.MarkerClusterGroup();
-            markerCluster.addLayer(geojsonLayer);
-            map.addLayer(markerCluster);
+            if (!map.lotsCentroids) {
+                map.lotsCentroids = new L.MarkerClusterGroup();
+            }
+            else {
+                map.lotsCentroids.clearLayers();
+            }
+            map.lotsCentroids.addLayer(geojsonLayer);
+            map.addLayer(map.lotsCentroids);
         });
+    },
+
+    addLotCentroidLayer: function() {
+        this._loadLotCentroidLayer(this.options.lotCentroidQueryString);
+    },
+
+    reloadLotCentroidLayer: function(queryString) {
+        this._loadLotCentroidLayer(queryString);
     },
 
     addLayersControl: function() {

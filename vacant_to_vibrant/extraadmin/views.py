@@ -30,6 +30,7 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
         participant_types = form.cleaned_data['participant_types']
         bbox = form.cleaned_data['bbox']
 
+        # TODO filter rest of POST using LotResource
         # TODO owner type?
         filters = Q(
         )

@@ -48,7 +48,7 @@
 
                     $('input[name="participant_types"]').change(function() {
                         var participant_types = $.map($('input[name="participant_types"]:checked'), function(e, i) { return $(e).val(); });
-                        $('#map').data('lotmap').filterByUserType(participant_types);
+                        LOTS_MAP.reloadLotCentroidLayer($('form').serialize());
                     });
 
                 });

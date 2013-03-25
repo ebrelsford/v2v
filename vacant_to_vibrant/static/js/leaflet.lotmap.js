@@ -69,7 +69,7 @@ L.Map.include({
         if (!this.options.lotCentroidUrl) return;
         var map = this;
         $.getJSON(this.options.lotCentroidUrl, function(data) {
-            var geojsonLayer = L.geoJson(data, {
+            var geojsonLayer = L.geoJson(data.objects, {
                 onEachFeature: function(feature, layer) {
                     if (!map.options.lotClickHandler) return;
                     layer.on('click', function(e) {

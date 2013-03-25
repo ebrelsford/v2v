@@ -7,41 +7,45 @@
 <![endif]-->
 <script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
 <script src="{{ STATIC_URL }}js/leaflet.lotmap.js"></script>
+<script src="{{ STATIC_URL }}js/leaflet.geojsonbounds.js"></script>
 
 {% block includes %}{% endblock %}
 
 <script>
-$(document).ready(function() {
-    var map = L.map('map', {
-        {% block options %}
-        center: [39.952335, -75.163789],
-        zoom: 13,
-        cloudmadeKey: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
-        cloudmadeStyleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
-        bingKey: 'ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr',
-        lotClickHandler: function(e) {
-            if (!e.data) { return false; }
-            var popupOptions = {
-                minWidth: 300,
-            }
-            var popupContent = '<div id="popup-content"></div>';
-            if (e.targetType == 'utfgrid') {
-                var popup = L.popup(popupOptions)
-                    .setContent(popupContent)
-                    .setLatLng(e.latlng)
-                    .openOn(map);
-            }
-            else {
-                e.target.bindPopup(popupContent, popupOptions).openPopup();
-            }
-            $.get('/places/lots/lot/' + e.data.id + '/popup/', function(response) {
-                $('#popup-content').html(response);
-            });
-        },
-        {% endblock %}
+    var LOTS_MAP;
+    $(document).ready(function() {
+        LOTS_MAP = L.map('map', {
+            {% block options %}
+            center: [39.952335, -75.163789],
+            zoom: 13,
+            cloudmadeKey: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
+            cloudmadeStyleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
+            bingKey: 'ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr',
+            lotClickHandler: function(e) {
+                if (!e.data) { return false; }
+                var popupOptions = {
+                    minWidth: 300,
+                }
+                var popupContent = '<div id="popup-content"></div>';
+                if (e.targetType == 'utfgrid') {
+                    var popup = L.popup(popupOptions)
+                        .setContent(popupContent)
+                        .setLatLng(e.latlng)
+                        .openOn(map);
+                }
+                else {
+                    e.target.bindPopup(popupContent, popupOptions).openPopup();
+                }
+                $.get('/places/lots/lot/' + e.data.id + '/popup/', function(response) {
+                    $('#popup-content').html(response);
+                });
+            },
+            {% endblock %}
+        });
     });
-});
 </script>
+
+{% block extra_scripts %}{% endblock %}
 
 {% block map_markup %}
 <div id="map" style="width: 100%; height: 300px;"></div>

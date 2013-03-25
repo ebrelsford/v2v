@@ -34,6 +34,7 @@ class LotResource(GenericRelationFilterMixin, ModelResource):
     class Meta:
         queryset = Lot.objects.all()
         filtering = {
+            'centroid': ALL,
             'polygon': ALL,
         }
         default_format = 'geojson'

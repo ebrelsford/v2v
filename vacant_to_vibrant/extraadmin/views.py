@@ -57,48 +57,24 @@ class MailParticipantsCountView(JSONResponseView):
 
     def get_context_data(self, **kwargs):
         orm_filters = LotResource().build_filters(filters=self.request.GET)
+        lot_pks = Lot.objects.filter(**orm_filters).values_list('pk', flat=True)
         watcher_count = 0
         organizer_count = 0
         participant_types = self.request.GET.getlist('participant_types', [])
         if 'watchers' in participant_types:
             watcher_count = Watcher.objects.filter(
                 target_type=ContentType.objects.get_for_model(Lot),
-                target_id__in=orm_filters['pk__in'],
+                target_id__in=lot_pks,
             ).distinct().count()
         if 'organizers' in participant_types:
             organizer_count = Organizer.objects.filter(
                 target_type=ContentType.objects.get_for_model(Lot),
-                target_id__in=orm_filters['pk__in'],
+                target_id__in=lot_pks,
             ).distinct().count()
         return {
             'organizers': organizer_count,
             'watchers': watcher_count,
         }
-
-
-def mail_participants_count(request):
-    participant_types = request.GET.getlist('participant_types')
-    bbox = request.GET.get('bbox', None)
-
-    lots = Lot.objects.filter()
-    if bbox:
-        p = Polygon.from_bbox(bbox.split(','))
-        lots = lots.filter(centroid__within=p)
-
-    organizers = 0
-    if 'organizers' in participant_types:
-        # TODO in Django 1.4, could use distinct('organizer__email') ?
-        organizers = len(set(lots.exclude(organizer=None).values_list('organizer__email', flat=True)))
-
-    watchers = 0
-    if 'watchers' in participant_types:
-        watchers = len(set(lots.exclude(watcher=None).values_list('watcher__email', flat=True)))
-
-    counts = {
-        'organizers': organizers,
-        'watchers': watchers,
-    }
-    return HttpResponse(json.dumps(counts), mimetype='application/json')
 
 
 @permission_required('organize.email_participants')

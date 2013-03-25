@@ -44,11 +44,15 @@
 
                     $(':input').change(function() {
                         mail_participants_update_counts(true);
-                    });
 
-                    $('input[name="participant_types"]').change(function() {
-                        var participant_types = $.map($('input[name="participant_types"]:checked'), function(e, i) { return $(e).val(); });
-                        LOTS_MAP.reloadLotCentroidLayer($('form').serialize());
+                        if ($(':input[name="participant_types"]:checked').length > 0) {
+                            LOTS_MAP.reloadLotCentroidLayer($('form').serialize());
+                        }
+                        else {
+                            // if there aren't any participant types selected,
+                            // don't show anything--no emails will go out
+                            LOTS_MAP.clearLotCentroidLayer();
+                        }
                     });
 
                 });

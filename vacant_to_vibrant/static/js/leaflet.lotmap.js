@@ -79,12 +79,7 @@ L.Map.include({
                     });
                 },   
             });
-            if (!map.lotsCentroids) {
-                map.lotsCentroids = new L.MarkerClusterGroup();
-            }
-            else {
-                map.lotsCentroids.clearLayers();
-            }
+            map.clearLotCentroidLayer();
             map.lotsCentroids.addLayer(geojsonLayer);
             map.addLayer(map.lotsCentroids);
         });
@@ -92,6 +87,15 @@ L.Map.include({
 
     addLotCentroidLayer: function() {
         this._loadLotCentroidLayer(this.options.lotCentroidQueryString);
+    },
+
+    clearLotCentroidLayer: function() {
+        if (this.lotsCentroids) {
+            this.lotsCentroids.clearLayers();
+        }
+        else {
+            this.lotsCentroids = new L.MarkerClusterGroup();
+        }
     },
 
     reloadLotCentroidLayer: function(queryString) {

@@ -24,6 +24,8 @@ class LotResource(GenericRelationFilterMixin, ModelResource):
 
     def build_filters(self, filters={}):
         orm_filters = super(LotResource, self).build_filters(filters=filters)
+        if 'centroid__within' in orm_filters and orm_filters['centroid__within'] == '':
+            del orm_filters['centroid__within']
         participant_types = filters.getlist('participant_types', [])
         if 'organizers' in participant_types:
             orm_filters = self.add_generic_filter(orm_filters, Organizer)

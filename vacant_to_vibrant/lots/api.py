@@ -20,7 +20,8 @@ class LotResource(ModelResource):
                 '%s__isnull' % participant_type: False,
             })
             participant_type_filters = participant_type_filters | f
-        orm_filters['pk__in'] = Lot.objects.filter(participant_type_filters).values_list('pk', flat=True)
+        lots = Lot.objects.filter(participant_type_filters)
+        orm_filters['pk__in'] = lots.values_list('pk', flat=True)
 
         return orm_filters
 

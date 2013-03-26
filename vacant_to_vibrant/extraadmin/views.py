@@ -62,12 +62,12 @@ class MailParticipantsCountView(JSONResponseView):
         if 'watchers' in participant_types:
             watcher_count = Watcher.objects.filter(
                 content_type=ContentType.objects.get_for_model(Lot),
-                object_id=lot_pks,
+                object_id__in=lot_pks,
             ).distinct().count()
         if 'organizers' in participant_types:
             organizer_count = Organizer.objects.filter(
                 content_type=ContentType.objects.get_for_model(Lot),
-                object_id=lot_pks,
+                object_id__in=lot_pks,
             ).distinct().count()
         return {
             'organizers': organizer_count,

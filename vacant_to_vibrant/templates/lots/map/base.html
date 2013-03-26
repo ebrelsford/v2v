@@ -27,11 +27,13 @@
                     minWidth: 300,
                 }
                 var popupContent = '<div id="popup-content"></div>';
+                console.log(e);
                 if (e.targetType == 'utfgrid') {
+                    console.log('utfgrid');
                     var popup = L.popup(popupOptions)
                         .setContent(popupContent)
                         .setLatLng(e.latlng)
-                        .openOn(map);
+                        .openOn(LOTS_MAP);
                 }
                 else {
                     e.target.bindPopup(popupContent, popupOptions).openPopup();

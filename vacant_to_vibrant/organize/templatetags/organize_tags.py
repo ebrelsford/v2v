@@ -18,8 +18,8 @@ class OrganizersMixin(object):
 
     def get_organizers(self, target):
         return Organizer.objects.filter(
-            target_type=ContentType.objects.get_for_model(target),
-            target_id=target.pk,
+            content_type=ContentType.objects.get_for_model(target),
+            object_id=target.pk,
         )
 
 

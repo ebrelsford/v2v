@@ -12,10 +12,10 @@ class GenericRelationFilterMixin(object):
 
     def add_generic_filter(self, orm_filters, generic_class):
         objs = generic_class.objects.filter(
-            target_type=ContentType.objects.get_for_model(Lot),
+            content_type=ContentType.objects.get_for_model(Lot),
         )
         pks = orm_filters.get('pk__in', [])
-        orm_filters['pk__in'] = pks + list(set(objs.values_list('target_id',
+        orm_filters['pk__in'] = pks + list(set(objs.values_list('object_id',
                                                                 flat=True)))
         return orm_filters
 

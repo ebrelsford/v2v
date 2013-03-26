@@ -17,8 +17,8 @@ class Migration(SchemaMigration):
             ('email_hash', self.gf('django.db.models.fields.CharField')(max_length=40, null=True, blank=True)),
             ('added', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('added_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
-            ('target_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
-            ('target_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['organize.OrganizerType'])),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('notes', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
@@ -35,8 +35,8 @@ class Migration(SchemaMigration):
             ('email_hash', self.gf('django.db.models.fields.CharField')(max_length=40, null=True, blank=True)),
             ('added', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('added_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
-            ('target_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
-            ('target_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
         ))
         db.send_create_signal(u'organize', ['Watcher'])
 
@@ -67,6 +67,7 @@ class Migration(SchemaMigration):
             'action_object_object_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'actor_content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'actor'", 'to': u"orm['contenttypes.ContentType']"}),
             'actor_object_id': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'data': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'place': ('django.contrib.gis.db.models.fields.PointField', [], {'null': 'True', 'blank': 'True'}),
@@ -116,15 +117,15 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Organizer'},
             'added': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'added_by': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             'email_hash': ('django.db.models.fields.CharField', [], {'max_length': '40', 'null': 'True', 'blank': 'True'}),
             'facebook_page': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'notes': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
-            'target_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'target_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
             'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['organize.OrganizerType']"}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
@@ -138,13 +139,13 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Watcher'},
             'added': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'added_by': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             'email_hash': ('django.db.models.fields.CharField', [], {'max_length': '40', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
-            'target_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'target_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"})
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'})
         }
     }
 

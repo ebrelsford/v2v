@@ -9,12 +9,12 @@ from .widgets import PrefixLabelTextInput
 
 
 class ParticipantForm(CaptchaForm):
-    target_type = ModelChoiceField(
+    content_type = ModelChoiceField(
         label='target type',
         queryset=ContentType.objects.all(),
         widget=HiddenInput()
     )
-    target_id = IntegerField(
+    object_id = IntegerField(
         label='target id',
         widget=HiddenInput()
     )

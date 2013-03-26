@@ -1,8 +1,10 @@
+from django.contrib.contenttypes.generic import GenericRelation
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from inplace.models import Place
 
+from organize.models import Organizer, Watcher
 from phillydata.availableproperties.models import AvailableProperty
 from phillydata.landuse.models import LandUseArea
 from phillydata.opa.models import BillingAccount
@@ -70,6 +72,9 @@ class Lot(Place):
         auto_now_add=True,
         help_text=('When this lot was added'),
     )
+
+    organizers = GenericRelation(Organizer)
+    watchers = GenericRelation(Watcher)
 
     # TODO
     # land use

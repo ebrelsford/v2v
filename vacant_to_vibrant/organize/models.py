@@ -22,9 +22,9 @@ class Participant(models.Model):
     added = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, null=True, blank=True)
 
-    target_type = models.ForeignKey(ContentType)
-    target_id = models.PositiveIntegerField()
-    target = generic.GenericForeignKey('target_type', 'target_id')
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    target = generic.GenericForeignKey('content_type', 'object_id')
 
     class Meta:
         abstract = True

@@ -32,15 +32,15 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
 
         if 'organizers' in participant_types:
             organizers = Organizer.objects.filter(
-                target_type=ContentType.objects.get_for_model(Lot),
-                target_id__in=lot_pks,
+                content_type=ContentType.objects.get_for_model(Lot),
+                object_id=lot_pks,
             ).distinct()
             organizers = organizers.exclude(email='')
             mass_mail_organizers(subject, message, organizers)
         if 'watchers' in participant_types:
             watchers = Watcher.objects.filter(
-                target_type=ContentType.objects.get_for_model(Lot),
-                target_id__in=lot_pks,
+                content_type=ContentType.objects.get_for_model(Lot),
+                object_id=lot_pks,
             )
             watchers = watchers.exclude(email='')
             mass_mail_watchers(subject, message, watchers)
@@ -61,13 +61,13 @@ class MailParticipantsCountView(JSONResponseView):
         participant_types = self.request.GET.getlist('participant_types', [])
         if 'watchers' in participant_types:
             watcher_count = Watcher.objects.filter(
-                target_type=ContentType.objects.get_for_model(Lot),
-                target_id__in=lot_pks,
+                content_type=ContentType.objects.get_for_model(Lot),
+                object_id=lot_pks,
             ).distinct().count()
         if 'organizers' in participant_types:
             organizer_count = Organizer.objects.filter(
-                target_type=ContentType.objects.get_for_model(Lot),
-                target_id__in=lot_pks,
+                content_type=ContentType.objects.get_for_model(Lot),
+                object_id=lot_pks,
             ).distinct().count()
         return {
             'organizers': organizer_count,

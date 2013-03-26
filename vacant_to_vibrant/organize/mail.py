@@ -73,8 +73,8 @@ def mail_target_organizers(target, subject, message, excluded_emails=[],
     Sends a message to organizers of a given target.
     """
     organizers = Organizer.objects.filter(
-        target_type=ContentType.objects.get_for_model(target),
-        target_id=target.pk,
+        content_type=ContentType.objects.get_for_model(target),
+        object_id=target.pk,
     )
     organizers = [o for o in organizers if o.email not in excluded_emails]
     messages = _get_messages(
@@ -94,8 +94,8 @@ def mail_target_watchers(target, subject, message, excluded_emails=[],
     Sends a message to watchers of a given target.
     """
     watchers = Watcher.objects.filter(
-        target_type=ContentType.objects.get_for_model(target),
-        target_id=target.pk,
+        content_type=ContentType.objects.get_for_model(target),
+        object_id=target.pk,
     )
     watchers = [w for w in watchers if w.email not in excluded_emails]
     messages = _get_messages(

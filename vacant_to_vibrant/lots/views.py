@@ -65,7 +65,7 @@ class LotsGeoJSON(GeoJSONListView):
         )
 
     def get_queryset(self):
-        #organized_lot_pks = Organizer.objects.all().values_list('target_id', flat=True)
+        #organized_lot_pks = Organizer.objects.all().values_list('object_id', flat=True)
         #return Lot.objects.filter(pk__in=organized_lot_pks)
 
         self._get_filters()
@@ -125,12 +125,12 @@ class AddParticipantView(ParticipantMixin, CreateView):
     def get_initial(self):
         initial = super(AddParticipantView, self).get_initial()
         try:
-            target_id = self.kwargs['pk']
+            object_id = self.kwargs['pk']
         except KeyError:
             raise Http404
         initial.update({
-            'target_type': ContentType.objects.get_for_model(Lot),
-            'target_id': target_id,
+            'content_type': ContentType.objects.get_for_model(Lot),
+            'object_id': object_id,
         })
         return initial
 
@@ -139,7 +139,7 @@ class AddParticipantView(ParticipantMixin, CreateView):
             return reverse('lots:add_%s_success' % self._get_participant_type(),
                            kwargs={
                                'hash': self.object.email_hash[:30],
-                               'pk': self.object.target_id,
+                               'pk': self.object.object_id,
                            })
         except Exception:
             raise Http404

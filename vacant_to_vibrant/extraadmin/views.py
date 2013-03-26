@@ -1,12 +1,8 @@
-from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.gis.geos import Polygon
-from django.db.models import Q
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
+from feincms.content.application.models import app_reverse
 
 from forms import MailParticipantsForm
 from generic.views import JSONResponseView
@@ -23,32 +19,36 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
     permission_required = ('organize.email_participants')
     template_name = 'extraadmin/mail_participants.html'
 
+    # TODO validation--there have to be watchers or organizers selected!
+
     def form_valid(self, form):
         subject = form.cleaned_data['subject']
         message = form.cleaned_data['message']
 
         participant_types = form.cleaned_data['participant_types']
-        bbox = form.cleaned_data['bbox']
 
-        # TODO filter rest of POST using LotResource
-        # TODO owner type?
-        filters = Q(
-        )
-
-        if bbox:
-            p = Polygon.from_bbox(bbox.split(','))
-            filters = filters & Q(lot__centroid__within=p)
+        orm_filters = LotResource().build_filters(filters=self.request.POST)
+        lot_pks = Lot.objects.filter(**orm_filters).values_list('pk', flat=True)
 
         if 'organizers' in participant_types:
-            organizers = Organizer.objects.filter(filters, email__isnull=False)
+            organizers = Organizer.objects.filter(
+                target_type=ContentType.objects.get_for_model(Lot),
+                target_id__in=lot_pks,
+            ).distinct()
             organizers = organizers.exclude(email='')
             mass_mail_organizers(subject, message, organizers)
         if 'watchers' in participant_types:
-            watchers = Watcher.objects.filter(filters, email__isnull=False)
+            watchers = Watcher.objects.filter(
+                target_type=ContentType.objects.get_for_model(Lot),
+                target_id__in=lot_pks,
+            )
             watchers = watchers.exclude(email='')
             mass_mail_watchers(subject, message, watchers)
 
         return super(MailParticipantsView, self).form_valid(form)
+
+    def get_success_url(self):
+        return app_reverse('mail_participants_success', 'extraadmin.urls')
 
 
 class MailParticipantsCountView(JSONResponseView):
@@ -75,7 +75,7 @@ class MailParticipantsCountView(JSONResponseView):
         }
 
 
-@permission_required('organize.email_participants')
-def mail_participants_done(request):
-    return render_to_response('extraadmin/mail_participants_done.html', {},
-                              context_instance=RequestContext(request))
+class MailParticipantsSuccessView(LoginRequiredMixin, PermissionRequiredMixin,
+                                  TemplateView):
+    permission_required = ('organize.email_participants')
+    template_name = 'extraadmin/mail_participants_success.html'

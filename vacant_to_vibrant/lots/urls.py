@@ -27,13 +27,13 @@ urlpatterns = patterns('',
         fix_recaptcha_remote_ip(AddParticipantView.as_view(
             model=Organizer,
         )),
-        name='lot_organize'),
+        name='add_organizer'),
 
     url(r'^(?P<pk>\d+)/watch/$',
         fix_recaptcha_remote_ip(AddParticipantView.as_view(
             model=Watcher,
         )),
-        name='lot_watch'),
+        name='add_watcher'),
 
     url(r'^(?P<pk>\d+)/organize/organizer/(?P<hash>[^/]{30,})/success/$',
         AddParticipantSuccessView.as_view(

@@ -38,11 +38,6 @@ class Participant(models.Model):
                                    self.email).hexdigest()
         super(Participant, self).save(*args, **kwargs)
 
-    @models.permalink
-    def get_edit_url(self):
-        return ('organize.views.edit_participant', (),
-                { 'hash': self.email_hash[:9] })
-
 
 class Organizer(Participant):
     """

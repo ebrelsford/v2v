@@ -48,12 +48,12 @@
 </div>
 <div class="organize">
     <h3>Organize</h3>
-    <a href="{% url "lots:lot_organize" pk=lot.pk %}">click to organize</a>
+    <a href="{% url "lots:add_organizer" pk=lot.pk %}">click to organize</a>
     {% render_organizer_list for lot %}
 </div>
 <div class="watch">
     <h3>Watch</h3>
-    <a href="{% url "lots:lot_watch" pk=lot.pk %}">click to watch</a>
+    <a href="{% url "lots:add_watcher" pk=lot.pk %}">click to watch</a>
 </div>
 <div class="photos">
     <h3>Photos</h3>

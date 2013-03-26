@@ -12,17 +12,13 @@ def mass_mailing(subject, message, objects, template_name, **kwargs):
     for obj in objects:
         # message gets sent once to each unique email address, thanks to dict
         messages[obj.email] = render_to_string(template_name, {
-            'BASE_URL': Site.objects.get_current().domain,
+            'site': Site.objects.get_current(),
             'target': obj.target,
             'message': message,
             'obj': obj,
         })
 
-    _mail_multiple_personalized(
-        subject,
-        messages,
-        **kwargs
-    )
+    _mail_multiple_personalized(subject, messages, **kwargs)
 
 
 def mass_mail_watchers(subject, message, watchers, **kwargs):

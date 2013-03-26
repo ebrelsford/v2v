@@ -2,4 +2,4 @@
 
 --
 
-You are receiving this email because you are watching lot {{ lot.bbl }} on 596acres.org. Please go here to change this: {{ BASE_URL }}{{ obj.get_edit_url }}{% endautoescape %}
+You are receiving this email because you are watching lot {{ target.address_line1|default:"unknown address" }} on {{ site.name }}. Please go here to change this: http://{{ site.domain }}{% url "lots:edit_participant" hash=obj.email_hash %}{% endautoescape %}

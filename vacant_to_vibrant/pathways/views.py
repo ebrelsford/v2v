@@ -17,6 +17,7 @@ class PathwaysFeinCMSMixin(object):
 class PathwaysDetailView(PathwaysFeinCMSMixin, DetailView):
     model = Pathway
 
+
 class PathwaysListView(PathwaysFeinCMSMixin, ListView):
     #model = Pathway
     queryset = Pathway.objects.all()

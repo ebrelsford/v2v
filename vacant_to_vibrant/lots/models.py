@@ -77,7 +77,6 @@ class Lot(Place):
     watchers = GenericRelation(Watcher)
 
     # TODO
-    # land use
     # zoning
 
     def __unicode__(self):

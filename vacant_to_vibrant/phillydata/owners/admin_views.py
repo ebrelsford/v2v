@@ -9,6 +9,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import FormView
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
+from chosen.forms import ChosenSelect, ChosenModelChoiceField
 
 from lots.models import Lot
 from .models import Alias, Owner
@@ -67,10 +68,12 @@ class AddAnotherWidgetWrapper(forms.Widget):
 
 
 class MakeAliasesForm(forms.Form):
+    #owner = ChosenModelChoiceField(
     owner = forms.ModelChoiceField(
         queryset=Owner.objects.all().order_by('name'),
         widget=AddAnotherWidgetWrapper(
-            forms.Select(),
+            #forms.Select(),
+            ChosenSelect(),
             Owner,
         )
     )

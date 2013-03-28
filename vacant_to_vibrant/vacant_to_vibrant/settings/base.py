@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     # third-party
     #
     'actstream',
+    'chosen',
     'compressor',
     'contact_form',
     'elephantblog',

@@ -4,7 +4,22 @@
 
 {% block extrahead %}
 {{ block.super }}
+<script src="{{ STATIC_URL }}admin/js/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}admin/js/jquery.init.js"></script>
 <script src="{{ STATIC_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+<script>
+    function updateChosen() {
+        django.jQuery('#id_owner').trigger('liszt:updated');
+    }
+
+    django.jQuery(document).ready(function() {
+        var $ = django.jQuery;
+        $('#id_owner').bind('DOMNodeInserted', function() {
+            window.setTimeout(updateChosen, 10);
+        });
+    });
+
+</script>
 {% endblock %}
 
 {% block bodyclass %}change-list{% endblock %}
@@ -32,6 +47,7 @@
     aliases for:
 </div>
 
+{{ form.media }}
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

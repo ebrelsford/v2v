@@ -10,6 +10,7 @@ argparse==1.2.1
 django-activity-stream==0.4.4
 django-appconf==0.6
 django-braces==1.0.0
+django-chosen==0.1
 django-classy-tags==0.4
 django-compressor==1.2
 django-contact-form-gv==0.4.1

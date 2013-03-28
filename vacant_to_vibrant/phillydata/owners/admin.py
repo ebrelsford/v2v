@@ -14,6 +14,7 @@ class OwnerAdmin(CompareVersionAdmin):
     list_display = ('name', 'owner_type', 'agency_codes_summary',
                     'aliases_summary',)
     list_filter = ('owner_type', 'agency_codes',)
+    readonly_fields = ('aliases',)
     search_fields = ('name',)
 
     def agency_codes_summary(self, obj):

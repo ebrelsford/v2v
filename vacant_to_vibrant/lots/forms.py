@@ -26,4 +26,6 @@ class FiltersForm(forms.Form):
         widget=forms.CheckboxSelectMultiple(attrs={ 'class': 'filter', }),
     )
 
+    is_available = forms.BooleanField(label='is available')
+
     # TODO lot filters! Dynamically add to form?

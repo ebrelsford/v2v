@@ -40,6 +40,9 @@ class LotResource(ModelResource):
             lots = Lot.objects.filter(participant_type_filters)
             orm_filters['pk__in'] = lots.values_list('pk', flat=True)
 
+        is_available = filters.get('is_available', 'off') == 'on'
+        orm_filters['available_property__isnull'] = not is_available
+
         return orm_filters
 
     class Meta:

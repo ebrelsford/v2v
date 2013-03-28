@@ -1,0 +1,10 @@
+{% extends "lots/map/cluster.html" %}
+
+{% block options %}
+{{ block.super }}
+    lotCentroidQueryString: 'limit=1000',
+{% endblock %}
+
+{% comment %}
+{% extends "lots/map/utfgrid.html" %}
+{% endcomment %}

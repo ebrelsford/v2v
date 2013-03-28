@@ -18,6 +18,7 @@ from organize.views import EditParticipantMixin
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation, ViolationLocation
 from photos.forms import PhotoForm
+from .forms import FiltersForm
 from .models import Lot
 
 
@@ -76,6 +77,13 @@ class LotsGeoJSON(GeoJSONListView):
 
 class LotsMap(TemplateView):
     template_name = 'lots/map.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(LotsMap, self).get_context_data(**kwargs)
+        context.update({
+            'filters': FiltersForm(),
+        })
+        return context
 
 
 class EditLotParicipantView(EditParticipantMixin, TemplateView):

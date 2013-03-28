@@ -68,11 +68,9 @@ class AddAnotherWidgetWrapper(forms.Widget):
 
 
 class MakeAliasesForm(forms.Form):
-    #owner = ChosenModelChoiceField(
     owner = forms.ModelChoiceField(
         queryset=Owner.objects.all().order_by('name'),
         widget=AddAnotherWidgetWrapper(
-            #forms.Select(),
             ChosenSelect(),
             Owner,
         )

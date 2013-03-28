@@ -1,0 +1,52 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static admin_modify %}
+{% load admin_urls %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+{% endblock %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> &rsaquo; 
+    <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_label|capfirst|escape }}</a> &rsaquo; 
+    {% if has_change_permission %}
+        <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    {% else %}
+        {{ opts.verbose_name_plural|capfirst }}
+    {% endif %} &rsaquo; {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div>
+    You are about to make 
+    <ul>
+        {% for owner in owners_to_delete %}
+        <li>{{ owner.name }}</li>
+        {% endfor %} 
+    </ul>
+    aliases for:
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div>
+        <p>
+            This means that the names listed above will be deleted, and 
+            everything marked as being owned by those names will now be owned
+            by the owner you selected. The deleted names will be kept as 
+            aliases of the owner you selected.
+        </p>
+        <p>
+            Are you sure you want to do this?    
+        </p>
+    </div>
+    <input type="submit" value="{% trans "Yes, I'm sure" %}" />
+</form>
+
+{% endblock %}

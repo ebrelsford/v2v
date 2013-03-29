@@ -21,7 +21,7 @@ def find_available_properties():
             create_or_update(available_property)
         except Exception:
             logger.exception(('Unexpected exception while adding '
-                              'AvailableProperty "%s"' % available_property))
+                              'AvailableProperty "%s"') % available_property)
 
 
 def find_no_longer_available_properties(since):
@@ -46,7 +46,7 @@ def create_or_update(available_property):
         kwargs = model_get_kwargs(available_property)
         model, created = AvailableProperty.objects.get_or_create(
             defaults=defaults,
-            **model_get_kwargs(available_property)
+            **kwargs
         )
         if not created:
             defaults['status'] = 'available'

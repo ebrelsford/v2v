@@ -13,23 +13,27 @@ logger = logging.getLogger(__name__)
 def find_land_use_areas():
     reader = LandUseReader()
     for land_use_area in reader:
-        create_or_update(land_use_area)
+        try:
+            create_or_update(land_use_area)
+        except Exception:
+            logger.exception(('Unexpected exception while adding LandUseArea '
+                              '"%s"') % land_use_area)
 
 
 def create_or_update(land_use_area):
     try:
         field_dict = model_defaults(land_use_area)
+        kwargs = model_get_kwargs(land_use_area)
         model, created = LandUseArea.objects.get_or_create(
             defaults=field_dict,
-            **model_get_kwargs(land_use_area)
+            **kwargs
         )
         if not created:
             LandUseArea.objects.filter(pk=model.pk).update(**field_dict)
             model = LandUseArea.objects.get(pk=model.pk)
     except MultipleObjectsReturned:
-        # TODO try to narrow it down?
-        print ('Multiple objects found when searching for LandUseArea objects '
-               'with kwargs:', model_get_kwargs(land_use_area))
+        logger.exception(('Multiple objects found when searching for '
+                          'LandUseArea with kwargs: %s') % str(kwargs))
     return model
 
 

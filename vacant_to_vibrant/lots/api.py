@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from inplace.api.serializers import GeoJSONSerializer
 from tastypie import fields
@@ -6,6 +6,7 @@ from tastypie.contrib.gis.resources import ModelResource
 from tastypie.resources import ALL, ALL_WITH_RELATIONS
 
 from phillydata.owners.models import Owner
+from .forms import FiltersForm
 from .models import Lot
 
 
@@ -40,8 +41,24 @@ class LotResource(ModelResource):
             lots = Lot.objects.filter(participant_type_filters)
             orm_filters['pk__in'] = lots.values_list('pk', flat=True)
 
-        is_available = filters.get('is_available', 'off') == 'on'
-        orm_filters['available_property__isnull'] = not is_available
+        if 'violations_count' in filters:
+            violations_count = filters.get('violations_count', 0)
+            if violations_count > 0:
+                lots = Lot.objects.all().annotate(violations_count=Count('violations'))
+                lots = lots.filter(violations_count=violations_count)
+                orm_filters['pk__in'] = orm_filters.get('pk__in', []) + list(lots.values_list('pk', flat=True))
+
+        # TODO fix weird hybrid of API/Django form-processing
+        # -> Make the form widgets perform more like an API?
+        form = FiltersForm(filters)
+        form.is_valid()
+        cleaned_data = form.cleaned_data
+
+        for f in ('available_property', 'billing_account', 'tax_account',
+                  'parcel', 'land_use_area', 'violations',):
+            filter_name = 'has_%s' % f
+            if filter_name in cleaned_data and cleaned_data[filter_name] is not None:
+                orm_filters['%s__isnull' % f] = not cleaned_data[filter_name]
 
         return orm_filters
 

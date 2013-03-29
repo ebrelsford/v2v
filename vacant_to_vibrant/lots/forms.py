@@ -26,6 +26,13 @@ class FiltersForm(forms.Form):
         widget=forms.CheckboxSelectMultiple(attrs={ 'class': 'filter', }),
     )
 
-    is_available = forms.BooleanField(label='is available')
+    has_available_property = forms.NullBooleanField()
+    has_billing_account = forms.NullBooleanField()
+    has_tax_account = forms.NullBooleanField()
+    has_parcel = forms.NullBooleanField()
+    has_land_use_area = forms.NullBooleanField()
+    has_violations = forms.NullBooleanField()
+
+    violations_count = forms.IntegerField()
 
     # TODO lot filters! Dynamically add to form?

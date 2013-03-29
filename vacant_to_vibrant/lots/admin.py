@@ -52,6 +52,7 @@ class LotAdmin(OSMGeoAdmin, admin.ModelAdmin):
 
 class UseAdmin(admin.ModelAdmin):
     list_display = ('name',)
+    prepopulated_fields = {'slug': ('name',),}
 
 
 admin.site.register(Lot, LotAdmin)

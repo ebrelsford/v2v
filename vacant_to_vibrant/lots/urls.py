@@ -8,7 +8,7 @@ from .models import Lot
 from .views import (EditLotParicipantView, PlacesWithViolationsView,
                     PlacesWithViolationsMap, AddParticipantView, LotsGeoJSON,
                     AddParticipantSuccessView, AddPhotoView,
-                    AddNoteView, AddFileView)
+                    AddNoteView, AddFileView, LotsCountView)
 
 
 urlpatterns = patterns('',
@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^violations/map/$', PlacesWithViolationsMap.as_view()),
 
     url(r'^geojson/', LotsGeoJSON.as_view()),
+    url(r'^count/', LotsCountView.as_view()),
 
     url(r'^(?P<pk>\d+)/$',
         PlacesDetailView.as_view(

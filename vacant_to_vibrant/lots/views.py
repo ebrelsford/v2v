@@ -11,6 +11,7 @@ from django.views.generic import CreateView, TemplateView
 from inplace.views import GeoJSONListView
 
 from files.forms import FileForm
+from generic.views import JSONResponseView
 from notes.forms import NoteForm
 from organize.forms import OrganizerForm, WatcherForm
 from organize.models import Organizer, Watcher
@@ -18,8 +19,9 @@ from organize.views import EditParticipantMixin
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation, ViolationLocation
 from photos.forms import PhotoForm
+from .api import LotResource
 from .forms import FiltersForm
-from .models import Lot
+from .models import Lot, Use
 
 
 class PlacesWithViolationsView(GeoJSONListView):
@@ -75,6 +77,20 @@ class LotsGeoJSON(GeoJSONListView):
         #return Lot.objects.all().select_related('owner', 'available_property')
 
 
+class LotsCountView(JSONResponseView):
+
+    def get_context_data(self, **kwargs):
+        orm_filters = LotResource().build_filters(filters=self.request.GET)
+        lots = Lot.objects.filter(**orm_filters)
+        context = {
+            'lots-count': lots.count(),
+            'no-known-use-count': lots.filter(known_use=None).count()
+        }
+        for use in Use.objects.all():
+            context['%s-count' % use.slug] = lots.filter(known_use=use).count()
+        return context
+
+
 class LotsMap(TemplateView):
     template_name = 'lots/map.html'
 
@@ -82,6 +98,7 @@ class LotsMap(TemplateView):
         context = super(LotsMap, self).get_context_data(**kwargs)
         context.update({
             'filters': FiltersForm(),
+            'uses': Use.objects.all().order_by('name'),
         })
         return context
 

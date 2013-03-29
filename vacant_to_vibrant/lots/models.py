@@ -93,6 +93,7 @@ class Lot(Place):
 
 class Use(models.Model):
     name = models.CharField(_('name'), max_length=200)
+    slug = models.SlugField(_('slug'), max_length=200)
 
     def __unicode__(self):
         return self.name

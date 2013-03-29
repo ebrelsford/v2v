@@ -1,5 +1,7 @@
 from django import forms
 
+from .models import Use
+
 
 class FiltersForm(forms.Form):
     centroid__within = forms.CharField(widget=forms.HiddenInput)
@@ -35,4 +37,20 @@ class FiltersForm(forms.Form):
 
     violations_count = forms.IntegerField()
 
+    known_use__name__in = forms.MultipleChoiceField(
+        choices=(),
+        widget=forms.CheckboxSelectMultiple(attrs={ 'class': 'filter', }),
+    )
+
     # TODO lot filters! Dynamically add to form?
+
+    def __init__(self, *args, **kwargs):
+        super(FiltersForm, self).__init__(*args, **kwargs)
+        self.fields['known_use__name__in'].choices = ([('None', 'None'),] +
+                                                      self._get_uses())
+
+    def _get_uses(self):
+        uses = []
+        for use in Use.objects.all().order_by('name'):
+            uses += [(use.name, use.name),]
+        return uses

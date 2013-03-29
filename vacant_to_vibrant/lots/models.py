@@ -67,6 +67,10 @@ class Lot(Place):
         null=True,
         help_text=_('The parcel the Water Department defines for this lot')
     )
+    known_use = models.ForeignKey('Use',
+        blank=True,
+        null=True,
+    )
 
     added = models.DateTimeField(_('date added'),
         auto_now_add=True,
@@ -85,3 +89,10 @@ class Lot(Place):
     @models.permalink
     def get_absolute_url(self):
         return ('lots:lot_detail', (), { 'pk': self.pk, })
+
+
+class Use(models.Model):
+    name = models.CharField(_('name'), max_length=200)
+
+    def __unicode__(self):
+        return self.name

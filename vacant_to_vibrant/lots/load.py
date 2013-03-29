@@ -2,12 +2,17 @@
 Utilities for loading lots, mostly from other models.
 
 """
-from .models import Lot
+import logging
+
 from phillydata.availableproperties.models import AvailableProperty
 from phillydata.landuse.models import LandUseArea
-from phillydata.parcels.utils import find_parcel
+from phillydata.parcels.models import Parcel
 from phillydata.taxaccounts.models import TaxAccount
 from phillydata.violations.models import Violation
+from .models import Lot
+
+
+logger = logging.getLogger(__name__)
 
 
 def load_lots():
@@ -18,10 +23,14 @@ def load_lots():
 
 def load_lots_with_violations():
     for violation in Violation.objects.filter(lot=None):
-        parcel = find_parcel(centroid=violation.violation_location.point,
-                             address=violation.violation_location.address)
-        if not parcel:
-            print 'No parcel found for violation:', violation
+        try:
+            parcel = Parcel.objects.get_fuzzy(
+                address=violation.violation_location.address,
+                centroid=violation.violation_location.point
+            )
+        except Exception:
+            logger.exception(('Exception while finding Parcel for violation: '
+                              '%s') % str(violation))
             continue
 
         # TODO account for violations that don't agree with each other
@@ -47,11 +56,15 @@ def load_lots_available(added_after=None):
         properties = properties.filter(added__gte=added_after)
     for available_property in properties:
         address = available_property.address
-        parcel = find_parcel(centroid=available_property.centroid,
-                             address=address, mapreg=available_property.mapreg)
-        if not parcel:
-            print 'No parcel found for available property:', available_property
-            continue
+        try:
+            parcel = Parcel.objects.get_fuzzy(
+                address=address,
+                centroid=available_property.centroid,
+                mapreg=available_property.mapreg
+            )
+        except Exception:
+            logger.exception(('Exception while finding parcel for available '
+                              'property: %s') % str(available_property))
 
         lot = get_or_create_lot(parcel, address,
                                 centroid=available_property.centroid)
@@ -68,10 +81,11 @@ def load_lots_land_use_vacant(added_after=None):
     if added_after:
         areas = areas.filter(added__gte=added_after)
     for area in areas:
-        parcel = find_parcel(centroid=area.geometry.centroid)
-        if not parcel:
-            print 'No parcel found for LandUseArea:', area
-            print '\tAdding lot with just LandUseArea'
+        try:
+            parcel = Parcel.objects.get_fuzzy(centroid=area.geometry.centroid)
+        except Exception:
+            logger.exception('No parcel found for LandUseArea %s' % str(area))
+            logger.debug('Adding lot with just LandUseArea')
         lot, created = Lot.objects.get_or_create(
             defaults=_get_lot_defaults(land_use_area=area, parcel=parcel),
             **_get_lot_kwargs(land_use_area=area, parcel=parcel)
@@ -85,11 +99,11 @@ def load_lots_by_tax_account():
     tax_accounts = TaxAccount.objects.filter(building_description='vacantLand')
     for tax_account in tax_accounts:
         address = tax_account.property_address
-        parcel = find_parcel(address=address)
-
-        if not parcel:
-            print 'No parcel found for tax account:', tax_account
-            continue
+        try:
+            parcel = Parcel.objects.get_fuzzy(address=address)
+        except Exception:
+            logger.exception('No parcel found for tax account %s' %
+                             str(tax_account))
 
         lot = get_or_create_lot(parcel, address)
         lot.tax_account = tax_account

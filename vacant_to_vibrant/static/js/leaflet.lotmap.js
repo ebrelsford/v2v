@@ -65,28 +65,40 @@ L.Map.include({
         this.addLayer(this.lotsUtfgrid);
     },
 
-    _loadLotCentroidLayer: function(queryString) {
-        if (!this.options.lotCentroidBaseUrl) return;
-        var map = this;
-        $.getJSON(this.options.lotCentroidBaseUrl + '?' + queryString, function(data) {
-            var geojsonLayer = L.geoJson(data.objects, {
-                onEachFeature: function(feature, layer) {
-                    if (!map.options.lotClickHandler) return;
-                    layer.on('click', function(e) {
-                        e.data = feature;
-                        e.targetType = 'layer';
-                        map.options.lotClickHandler(e);
-                    });
-                },   
-            });
-            map.clearLotCentroidLayer();
-            map.lotsCentroids.addLayer(geojsonLayer);
-            map.addLayer(map.lotsCentroids);
+    _getLotCentroidLayer: function() {
+        return new L.MarkerClusterGroup({
+            getGeoJsonFromData: function(data) {
+                return data.objects;
+            },
+            getNextPageUrlFromData: function(data) {
+                return data.meta.next;
+            },
         });
     },
 
-    addLotCentroidLayer: function() {
-        this._loadLotCentroidLayer(this.options.lotCentroidQueryString);
+    _loadLotCentroidLayer: function(queryString, clear) {
+        if (!this.options.lotCentroidBaseUrl) return;
+        var map = this;
+
+        if (!map.lotsCentroids) {
+            map.lotsCentroids = map._getLotCentroidLayer();
+        }
+        if (clear) {
+            map.clearLotCentroidLayer();
+        }
+
+        var url = this.options.lotCentroidBaseUrl + '?' + queryString;
+        map.lotsCentroids.addPaginatedLayer(url, {
+            onEachFeature: function(feature, layer) {
+                if (!map.options.lotClickHandler) return;
+                layer.on('click', function(e) {
+                    e.data = feature;
+                    e.targetType = 'layer';
+                    map.options.lotClickHandler(e);
+                });
+            },   
+        });
+        map.addLayer(map.lotsCentroids);
     },
 
     clearLotCentroidLayer: function() {
@@ -98,8 +110,19 @@ L.Map.include({
         }
     },
 
+    addLotCentroidLayer: function(queryString) {
+        if (!queryString) {
+            queryString = this.options.lotCentroidQueryString;
+        }
+        this._loadLotCentroidLayer(queryString, true);
+    },
+    
+    addToLotCentroidLayer: function(queryString) {
+        this._loadLotCentroidLayer(queryString, false);
+    },
+
     reloadLotCentroidLayer: function(queryString) {
-        this._loadLotCentroidLayer(queryString);
+        this._loadLotCentroidLayer(queryString, true);
     },
 
     addLayersControl: function() {

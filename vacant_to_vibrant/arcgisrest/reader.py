@@ -1,7 +1,11 @@
 import json
+import logging
 from urllib import urlencode
 from urllib2 import urlopen, URLError
 import traceback
+
+
+logger = logging.getLogger(__name__)
 
 
 class ArcGISRestServerReader(object):
@@ -46,9 +50,8 @@ class ArcGISRestServerReader(object):
                 'where': ' and '.join(self.where),
             })
         url = self.service_url + urlencode(params)
-        print 'Getting object ids with url %s' % url
-        data = json.load(urlopen(url))
-        return data['objectIds']
+        logger.debug('Getting object ids with url "%s"' % url)
+        return json.load(urlopen(url))['objectIds']
 
     def get_all(self, page_size=50):
         """
@@ -76,13 +79,12 @@ class ArcGISRestServerReader(object):
             })
 
         url = self.service_url + urlencode(params)
-        print 'Getting objects with url', url
+        logger.debug('Getting objects with url "%s"' % url)
 
         try:
             data = json.load(urlopen(url))
             for feature in data['features']:
                 yield feature
         except URLError:
-            print 'URLError while fetching url:', url
-            traceback.print_stack()
+            logger.exception('Exception while fetching url "%s"' % url)
             raise

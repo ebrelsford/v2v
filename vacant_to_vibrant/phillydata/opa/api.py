@@ -1,6 +1,9 @@
 import json
+import logging
 from urllib import quote_plus
-from urllib2 import urlopen
+from urllib2 import urlopen, URLError
+
+logger = logging.getLogger(__name__)
 
 
 BASE_URL = 'http://api.phillyaddress.com/'
@@ -9,15 +12,13 @@ ACCOUNT_ENDPOINT = 'account/'
 
 
 def get_address_data(address):
-    # TODO be more defensive
     try:
         url = BASE_URL + ADDRESS_ENDPOINT + quote_plus(address)
-        # TODO urllib2 exceptions
         data = json.load(urlopen(url, None, 30))
         return data['property']
     except KeyError:
-        print ('Could not find property in response for %s. Trying by account '
-               'number') % address
+        logger.debug(('Could not find property in response for %s. Trying by '
+                      'account number') % address)
 
         # Try to find a matching property in the response's properties
         if 'properties' in data:
@@ -25,7 +26,11 @@ def get_address_data(address):
                 if prop['address'].lower() == address.lower():
                     return get_account_data(prop['account_number'])
 
+        logger.debug('Could not find property by account number, either.')
         return None
+    except URLError:
+        logger.exception('Exception while querying OPA API with URL "%s"' %
+                         url)
 
 
 def get_account_data(account):
@@ -34,5 +39,6 @@ def get_account_data(account):
         data = json.load(urlopen(url))
         return data['property']
     except Exception:
-        print 'There was an exception while getting OPA data for account', account
+        logger.exception('Exception while getting OPA data for account %s'
+                         % str(account))
         return None

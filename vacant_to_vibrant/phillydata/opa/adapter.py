@@ -72,11 +72,10 @@ def find_opa_details(address):
         name=owner_name,
         defaults={ 'owner': Owner.objects.get_or_create(owner_name), }
     )
-    print 'account_owner:', account_owner
 
     # get or create billing account
-    defaults = billing_account_defaults(data, { 'account_owner': account_owner, })
-    print defaults
+    defaults = billing_account_defaults(data,
+                                        {'account_owner': account_owner,})
     billing_account, created = BillingAccount.objects.get_or_create(
         defaults=defaults, **billing_account_kwargs(data))
     if not created:

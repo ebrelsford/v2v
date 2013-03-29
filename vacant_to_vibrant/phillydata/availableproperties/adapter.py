@@ -1,4 +1,4 @@
-import traceback
+import logging
 
 from django.contrib.gis.geos import Point
 from django.core.exceptions import MultipleObjectsReturned
@@ -11,39 +11,50 @@ from .api import AvailablePropertyReader
 from .models import AvailableProperty
 
 
+logger = logging.getLogger(__name__)
+
+
 def find_available_properties():
     reader = AvailablePropertyReader()
     for available_property in reader:
-        create_or_update(available_property)
+        try:
+            create_or_update(available_property)
+        except Exception:
+            logger.exception(('Unexpected exception while adding '
+                              'AvailableProperty "%s"' % available_property))
 
 
 def find_no_longer_available_properties(since):
-    # check for AvailableProperty objects that were not seen this time
+    """
+    Check for AvailableProperty objects that were not seen the last time we
+    looked.
+    """
+    logger.info('Looking for no-longer-available AvailableProperty objects.')
+
     no_longer_available = AvailableProperty.objects.filter(
         last_seen__lt=since
-    )
-    no_longer_available.update(status='no longer available')
-    print 'Done updating %d no-longer-available Available Properties' % (
-        no_longer_available.count(),
-    )
+    ).update(status='no longer available')
+
+    logger.info(('Found and updated %d no-longer-available AvailableProperties '
+                 'objects') % no_longer_available)
 
 
 @reversion.create_revision()
 def create_or_update(available_property):
     try:
-        field_dict = model_defaults(available_property)
+        defaults = model_defaults(available_property)
+        kwargs = model_get_kwargs(available_property)
         model, created = AvailableProperty.objects.get_or_create(
-            defaults=field_dict,
+            defaults=defaults,
             **model_get_kwargs(available_property)
         )
         if not created:
-            field_dict['status'] = 'available'
-            AvailableProperty.objects.filter(pk=model.pk).update(**field_dict)
+            defaults['status'] = 'available'
+            AvailableProperty.objects.filter(pk=model.pk).update(**defaults)
             model = AvailableProperty.objects.get(pk=model.pk)
     except MultipleObjectsReturned:
-        # TODO try to narrow it down?
-        print ('Multiple objects found when searching for AvailableProperty '
-               'objects with kwargs:', model_get_kwargs(available_property))
+        logger.exception(('Multiple objects found when searching for '
+                          'AvailableProperty with kwargs: %s') % str(kwargs))
     return model
 
 
@@ -79,7 +90,6 @@ def model_defaults(feature):
             'last_seen': now(),
         }
     except Exception:
-        print 'Exception fetching Available Property model defaults!'
-        print '    Feature:', feature
-        traceback.print_stack()
+        logger.exception(('Exception fetching Available Property model '
+                          'defaults for feature %s') % feature)
         return None

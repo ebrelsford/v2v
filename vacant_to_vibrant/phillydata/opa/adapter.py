@@ -56,14 +56,9 @@ def get_address(data):
     return dict([(k, html_unescape(v)) for k, v in address_details.items()])
 
 
-def find_opa_details(address):
-    """Get or create a BillingAccount for the given address."""
-    logger.debug('Getting OPA data for address "%s"' % address)
-    data = get_address_data(address)
-    if not data:
-        raise Exception('Could not find OPA details for "%s"' % address)
-
+def get_or_create_account_owner(data):
     account = data['account_information']
+
     # sorting owner names to keep internally consistent
     owner_name = ', '.join(sorted(account['owners']))
     owner_name = html_unescape(owner_name)
@@ -72,13 +67,25 @@ def find_opa_details(address):
         name=owner_name,
         defaults={ 'owner': Owner.objects.get_or_create(owner_name), }
     )
+    return account_owner
 
-    # get or create billing account
+
+def get_or_create_billing_account(data, account_owner):
     defaults = billing_account_defaults(data,
                                         {'account_owner': account_owner,})
     billing_account, created = BillingAccount.objects.get_or_create(
         defaults=defaults, **billing_account_kwargs(data))
     if not created:
         BillingAccount.objects.filter(pk=billing_account.pk).update(**defaults)
-
     return billing_account
+
+
+def find_opa_details(address):
+    """Get or create a BillingAccount for the given address."""
+    logger.debug('Getting OPA data for address "%s"' % address)
+    data = get_address_data(address)
+    if not data:
+        raise Exception('Could not find OPA details for "%s"' % address)
+
+    account_owner = get_or_create_account_owner(data)
+    return get_or_create_billing_account(data, account_owner)

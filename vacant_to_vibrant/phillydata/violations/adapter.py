@@ -35,7 +35,6 @@ def get_location(violation):
 
 
 def get_violation_type(violation):
-    # get type
     violation_type, created = ViolationType.objects.get_or_create(
         code=violation['violation_code'],
         li_description=violation['violation_code_description'],

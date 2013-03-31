@@ -70,9 +70,11 @@ class AvailableProperty(models.Model):
     #
     # Meta
     #
+    STATUS_NEW = 'new and available'
+    STATUS_AVAILABLE = 'available'
     STATUS_CHOICES = (
-        ('new and available', 'new and available'),
-        ('available', 'available'),
+        (STATUS_NEW, STATUS_NEW),
+        (STATUS_AVAILABLE, STATUS_AVAILABLE),
         ('no longer available', 'no longer available'),
     )
     status = models.CharField(_('status'),

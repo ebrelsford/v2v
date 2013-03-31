@@ -25,13 +25,16 @@ class DataSource(models.Model):
         blank=True,
         null=True,
     )
+
     enabled = models.BooleanField(_('enabled'),
         default=True,
     )
+
     healthy = models.BooleanField(_('healthy'),
         default=True,
         help_text=_('Was synchronizing successful last attempt?'),
     )
+
     ordering = models.IntegerField(_('ordering'),
         default=1,
         help_text=_('The ordering of this source, lower numbers coming first.'),

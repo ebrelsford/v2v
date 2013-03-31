@@ -18,6 +18,20 @@ class OwnerManager(models.Manager):
                 return self.create(name=name, **defaults)
 
 
+class Alias(models.Model):
+    name = models.CharField(_('name'),
+        max_length=256,
+        unique=True,
+    )
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('alias')
+        verbose_name_plural = _('aliases')
+
+
 class Owner(models.Model):
 
     objects = OwnerManager()
@@ -54,6 +68,26 @@ class Owner(models.Model):
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.owner_type)
 
+    def add_alias(self, alias_name):
+        alias, created = Alias.objects.get_or_create(name=alias_name)
+        self.aliases.add(alias)
+        return alias
+
+    def make_alias(self, other_owner):
+        """Make other_owner an alias for this owner."""
+
+        # redirect all relationships to this owner
+        for related in self._meta.get_all_related_objects():
+            related.model.objects.filter(owner=other_owner).update(owner=self)
+
+        # redirect aliases to this owner
+        for alias in other_owner.aliases.all():
+            self.aliases.add(alias)
+        self.add_alias(other_owner.name)
+
+        # get rid of the other owner
+        other_owner.delete()
+
 
 class AgencyCode(models.Model):
     """
@@ -67,19 +101,5 @@ class AgencyCode(models.Model):
 
     def __unicode__(self):
         return self.code
-
-
-class Alias(models.Model):
-    name = models.CharField(_('name'),
-        max_length=256,
-        unique=True,
-    )
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _('alias')
-        verbose_name_plural = _('aliases')
 
 reversion.register(Owner)

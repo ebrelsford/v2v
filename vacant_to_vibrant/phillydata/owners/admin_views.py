@@ -12,6 +12,7 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from chosen.forms import ChosenSelect
 
 from lots.models import Lot
+from ..opa.models import AccountOwner
 from .models import Alias, Owner
 
 class AddAnotherWidgetWrapper(forms.Widget):
@@ -117,26 +118,16 @@ class MakeAliasesView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
         owners_to_delete = form.cleaned_data['owners_to_delete']
         aliases_added = owners_to_delete.count()
 
-        self._add_aliases(owner, owners_to_delete)
-        self._delete_aliased_owners(owner, owners_to_delete)
+        self._make_aliases(owner, owners_to_delete)
 
         messages.success(self.request,
                          'Added %d aliases to %s' % (aliases_added, owner.name))
         return super(MakeAliasesView, self).form_valid(form)
 
-    def _add_aliases(self, owner, owners_to_delete):
-        """Add aliases to the given owner."""
-        for owner_to_delete in owners_to_delete:
-            alias, created = Alias.objects.get_or_create(
-                name=owner_to_delete.name
-            )
-            owner.aliases.add(alias)
-        owner.save()
-
-    def _delete_aliased_owners(self, owner, owners_to_delete):
+    def _make_aliases(self, owner, owners_to_delete):
         """
-        Delete owners that are now aliases, reassigning related models first.
+        Create aliases for the given owner and move related objects to it, then
+        delete the aliased owners.
         """
         for owner_to_delete in owners_to_delete:
-            Lot.objects.filter(owner=owner_to_delete).update(owner=owner)
-        owners_to_delete.delete()
+            owner.make_alias(owner_to_delete)

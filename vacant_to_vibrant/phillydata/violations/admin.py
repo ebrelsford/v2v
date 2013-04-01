@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.contrib.gis.admin import OSMGeoAdmin
 
+from reversion_compare.admin import CompareVersionAdmin
+
 from .models import Violation, ViolationLocation, ViolationType
 
 
-class ViolationAdmin(admin.ModelAdmin):
+class ViolationAdmin(CompareVersionAdmin):
     list_display = ('external_id', 'violation_datetime',)
     readonly_fields = ('violation_location', 'violation_type',)
     search_fields = ('violation_location__address',)

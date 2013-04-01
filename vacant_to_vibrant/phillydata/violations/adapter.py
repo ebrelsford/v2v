@@ -2,6 +2,8 @@ import logging
 
 from django.contrib.gis.geos import Point
 
+import reversion
+
 from .models import Violation, ViolationLocation, ViolationType
 from .api import LIViolationReader
 
@@ -42,6 +44,7 @@ def get_violation_type(violation):
     return violation_type
 
 
+@reversion.create_revision()
 def save_violation(violation):
     violation_location = get_location(violation)
     violation_type = get_violation_type(violation)

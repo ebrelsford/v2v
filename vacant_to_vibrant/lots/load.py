@@ -4,6 +4,8 @@ Utilities for loading lots, mostly from other models.
 """
 import logging
 
+import reversion
+
 from phillydata.availableproperties.models import AvailableProperty
 from phillydata.landuse.models import LandUseArea
 from phillydata.parcels.models import Parcel
@@ -34,9 +36,12 @@ def load_lots_with_violations():
             continue
 
         # TODO account for violations that don't agree with each other
-        lot = get_or_create_lot(parcel, violation.violation_location.address,
-                                centroid=violation.violation_location.point,
-                                zipcode=violation.violation_location.zip_code)
+        with reversion.create_revision():
+            lot = get_or_create_lot(
+                parcel, violation.violation_location.address,
+                centroid=violation.violation_location.point,
+                zipcode=violation.violation_location.zip_code
+            )
         if not lot.violations.filter(pk=violation.pk):
             lot.violations.add(violation)
 
@@ -66,10 +71,11 @@ def load_lots_available(added_after=None):
             logger.exception(('Exception while finding parcel for available '
                               'property: %s') % str(available_property))
 
-        lot = get_or_create_lot(parcel, address,
-                                centroid=available_property.centroid)
-        lot.available_property = available_property
-        lot.save()
+        with reversion.create_revision():
+            lot = get_or_create_lot(parcel, address,
+                                    centroid=available_property.centroid)
+            lot.available_property = available_property
+            lot.save()
 
 
 def load_lots_land_use_vacant(added_after=None):
@@ -113,9 +119,10 @@ def load_lots_by_tax_account():
 def get_or_create_lot(parcel, address, polygon=None, centroid=None,
                       zipcode=None):
     lot, created = Lot.objects.get_or_create(
-        defaults=_get_lot_kwargs(address=address, parcel=parcel),
-        **_get_lot_defaults(address=address, parcel=parcel, centroid=centroid,
-                            polygon=polygon, zipcode=zipcode)
+        defaults=_get_lot_defaults(address=address, parcel=parcel,
+                                   centroid=centroid, polygon=polygon,
+                                   zipcode=zipcode),
+        **_get_lot_kwargs(address=address, parcel=parcel)
     )
     return lot
 

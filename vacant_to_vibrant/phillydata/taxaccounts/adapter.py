@@ -1,9 +1,12 @@
 from datetime import datetime
 
+import reversion
+
 from .models import TaxAccount
 from phillydata.opa.models import BillingAccount
 
 
+@reversion.create_revision()
 def create_or_update_tax_account(data, override={}):
     defaults = _defaults(data, override={})
     water_parcel, created = TaxAccount.objects.get_or_create(

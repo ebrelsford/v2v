@@ -3,10 +3,12 @@ from django.contrib.gis.admin import OSMGeoAdmin
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 
+from reversion_compare.admin import CompareVersionAdmin
+
 from .models import Lot, Use
 
 
-class LotAdmin(OSMGeoAdmin, admin.ModelAdmin):
+class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
     exclude = ('available_property', 'parcel',)
     list_display = ('address_line1', 'city', 'owner', 'known_use',
                     'billing_account',)
@@ -14,6 +16,7 @@ class LotAdmin(OSMGeoAdmin, admin.ModelAdmin):
     readonly_fields = ('added', 'available_property_link', 'billing_account',
                        'land_use_area', 'owner', 'parcel_link', 'tax_account',
                        'violations', 'water_parcel',)
+    search_fields = ('address_line1',)
 
     fieldsets = (
         (None, {

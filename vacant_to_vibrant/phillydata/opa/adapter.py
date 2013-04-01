@@ -7,6 +7,8 @@ Kind of a proxy/adapter for OPA data.
 from datetime import datetime
 import logging
 
+import reversion
+
 from .api import get_address_data
 from .models import AccountOwner, BillingAccount
 from phillydata.owners.models import Owner
@@ -56,6 +58,7 @@ def get_address(data):
     return dict([(k, html_unescape(v)) for k, v in address_details.items()])
 
 
+@reversion.create_revision()
 def get_or_create_account_owner(data):
     account = data['account_information']
 
@@ -70,6 +73,7 @@ def get_or_create_account_owner(data):
     return account_owner
 
 
+@reversion.create_revision()
 def get_or_create_billing_account(data, account_owner):
     defaults = billing_account_defaults(data,
                                         {'account_owner': account_owner,})

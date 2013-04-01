@@ -28,7 +28,12 @@ class ODataReader(object):
         while True:
             # load this url and return results
             logger.debug('About to load violations from url %s' % url)
-            response = json.load(urlopen(url))
+            try:
+                response = json.load(urlopen(url))
+            except:
+                logger.exception('Exception while loading url: %s' % url)
+                raise
+
             for result in response['d']['results']:
                 yield result
 

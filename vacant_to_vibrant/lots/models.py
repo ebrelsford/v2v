@@ -2,7 +2,7 @@ from django.contrib.contenttypes.generic import GenericRelation
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from inplace.models import Place
+from inplace.models import Place, PlaceManager
 
 from organize.models import Organizer, Watcher
 from phillydata.availableproperties.models import AvailableProperty
@@ -13,9 +13,16 @@ from phillydata.parcels.models import Parcel
 from phillydata.taxaccounts.models import TaxAccount
 from phillydata.violations.models import Violation
 from phillydata.waterdept.models import WaterParcel
+from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
+
+
+class LotManager(InitialRevisionManagerMixin, PlaceManager):
+    pass
 
 
 class Lot(Place):
+
+    objects = LotManager()
 
     owner = models.ForeignKey(Owner,
         blank=True,

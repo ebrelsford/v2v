@@ -1,6 +1,12 @@
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
+
+
+class LandUseAreaManager(InitialRevisionManagerMixin, models.GeoManager):
+    pass
+
 
 class LandUseArea(models.Model):
     """
@@ -11,7 +17,7 @@ class LandUseArea(models.Model):
 
     """
 
-    objects = models.GeoManager()
+    objects = LandUseAreaManager()
 
     geometry = models.MultiPolygonField(_('geometry'))
 

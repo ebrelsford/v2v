@@ -1,13 +1,19 @@
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
+
+
+class ViolationManager(InitialRevisionManagerMixin, models.GeoManager):
+    pass
+
 
 class Violation(models.Model):
     """
     A violation on a specific parcel.
 
     """
-    objects = models.GeoManager()
+    objects = ViolationManager()
     violation_type = models.ForeignKey('ViolationType')
     violation_location = models.ForeignKey('ViolationLocation')
 

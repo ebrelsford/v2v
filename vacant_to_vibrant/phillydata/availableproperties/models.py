@@ -3,6 +3,12 @@ from django.utils.translation import ugettext_lazy as _
 
 import reversion
 
+from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
+
+
+class AvailablePropertyManager(InitialRevisionManagerMixin, models.GeoManager):
+    pass
+
 
 class AvailableProperty(models.Model):
     """
@@ -10,7 +16,7 @@ class AvailableProperty(models.Model):
     Authority.
 
     """
-    objects = models.GeoManager()
+    objects = AvailablePropertyManager()
     centroid = models.PointField(_('centroid'))
 
     #

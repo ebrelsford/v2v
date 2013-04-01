@@ -3,6 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 
 import reversion
 
+from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
+
 
 class AccountOwner(models.Model):
 
@@ -20,7 +22,13 @@ class AccountOwner(models.Model):
         return u'%s' % (self.name,)
 
 
+class BillingAccountManager(InitialRevisionManagerMixin, models.Manager):
+    pass
+
+
 class BillingAccount(models.Model):
+
+    objects = BillingAccountManager()
 
     account_owner = models.ForeignKey('AccountOwner',
         verbose_name=_('account owner'),

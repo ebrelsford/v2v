@@ -1,6 +1,12 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
+
+
+class WaterParcelManager(InitialRevisionManagerMixin, models.Manager):
+    pass
+
 
 class WaterParcel(models.Model):
     """
@@ -9,6 +15,8 @@ class WaterParcel(models.Model):
     May not be strictly the same as parcels as defined by Records.
 
     """
+
+    objects = WaterParcelManager()
 
     # TODO shape?
     #"Shape": "POLYGON ((2703814.74156681 254477.754747897, 2703813.02798755 254463.902413398, 2703743.47825789 254472.777067557, 2703745.30371356 254486.647118554, 2703814.74156681 254477.754747897))",

@@ -4,18 +4,22 @@ from django.utils.translation import ugettext_lazy as _
 
 import reversion
 
+from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
 
-class OwnerManager(models.Manager):
+
+class OwnerManager(InitialRevisionManagerMixin, models.Manager):
 
     def get_or_create(self, name, defaults={}):
         """Get or create an owner while taking aliases into account."""
         try:
-            return self.get(name__iexact=name)
+            return self.get(name__iexact=name), False
         except ObjectDoesNotExist:
             try:
-                return self.get(aliases__name__iexact=name)
+                return self.get(aliases__name__iexact=name), False
             except ObjectDoesNotExist:
-                return self.create(name=name, **defaults)
+                obj = self.create(name=name, **defaults)
+                self._save_initial_revision(obj)
+                return obj, True
 
 
 class Alias(models.Model):

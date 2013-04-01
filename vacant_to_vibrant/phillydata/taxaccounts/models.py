@@ -1,8 +1,16 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
+
+
+class TaxAccountManager(InitialRevisionManagerMixin, models.Manager):
+    pass
+
 
 class TaxAccount(models.Model):
+
+    objects = TaxAccountManager()
 
     owner_name = models.CharField(_('owner name'),
         max_length=256,

@@ -21,6 +21,8 @@ def find_synchronizer(source_name):
 
 
 def _should_synchronize(data_source):
+    if data_source.synchronize_in_progress:
+        return False
     if not data_source.next_synchronize:
         return True
     return data_source.next_synchronize < now()

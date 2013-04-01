@@ -1,4 +1,4 @@
-Django==1.5
+Django==1.5.1
 FeinCMS==1.7.4
 ModestMaps==1.4.1
 PIL==1.1.7

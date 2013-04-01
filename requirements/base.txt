@@ -17,7 +17,7 @@ django-contact-form-gv==0.4.1
 django-debug-toolbar==0.9.4
 django-extensions==1.1.1
 django-imagekit==2.0.3
--e git://github.com/ebrelsford/django-inplace.git@1915bc8b350c2d7146e58f0fa516dd6f6e9caa4e#egg=django_inplace-dev
+-e git://github.com/ebrelsford/django-inplace.git@cd701505816dcff0f56cd9af332b308b4ead596f#egg=django_inplace-dev
 django-jsonfield==0.9.2
 django-mptt==0.5.5
 django-recaptcha-works==0.3.4
@@ -26,6 +26,7 @@ django-reversion-compare==0.3.5
 django-tastypie==0.9.14
 djangorestframework==2.1.17
 docutils==0.10
+feincms-cleanse==2
 -e git://github.com/feincms/feincms-elephantblog@465b30bf727bc456f44e7f64a0738efadd845618#egg=feincms_elephantblog-dev
 geojson==1.0.1
 ipython==0.13.1

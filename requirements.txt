@@ -17,7 +17,7 @@ django-contact-form-gv==0.4.1
 django-debug-toolbar==0.9.4
 django-extensions==1.1.1
 django-imagekit==2.0.3
--e git://github.com/ebrelsford/django-inplace.git@1c2309aef7319d7578a73354193dee84e31c0989#egg=django_inplace-dev
+-e git://github.com/ebrelsford/django-inplace.git@1915bc8b350c2d7146e58f0fa516dd6f6e9caa4e#egg=django_inplace-dev
 django-jsonfield==0.9.2
 django-mptt==0.5.5
 django-recaptcha-works==0.3.4

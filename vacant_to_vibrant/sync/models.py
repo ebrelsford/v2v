@@ -40,8 +40,21 @@ class DataSource(models.Model):
         help_text=_('The ordering of this source, lower numbers coming first.'),
     )
 
+    synchronize_frequency = models.IntegerField(_('synchronize frequency'),
+        blank=True,
+        null=True,
+        help_text=_('The number of hours that should pass between '
+                    'synchronizations of this source.'),
+    )
+
+    next_synchronize = models.DateTimeField(_('next synchronize'),
+        blank=True,
+        null=True,
+        help_text=_('The next time this data source should be synchronized.'),
+    )
+
     last_synchronized = models.DateTimeField(_('last synchronized'),
-        help_text=('The last time this data source was synchronized'),
+        help_text=_('The last time this data source was synchronized'),
     )
 
     def synchronize(self):
@@ -52,3 +65,4 @@ class DataSource(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ('ordering',)

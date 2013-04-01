@@ -41,6 +41,7 @@ def do_synchronize(data_source):
     logger.info('Synchronizing %s' % data_source)
     try:
         synchronizer.sync(data_source)
+        data_source.healthy = True
     except Exception:
         logger.exception('Exception while synchronizing %s' % data_source)
         data_source.healthy = False

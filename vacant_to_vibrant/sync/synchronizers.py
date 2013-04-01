@@ -38,6 +38,9 @@ def do_synchronize(data_source):
     if not _should_synchronize(data_source): return
     synchronizer = find_synchronizer(data_source.name)(data_source)
 
+    data_source.synchronize_in_progress = True
+    data_source.save()
+
     logger.info('Synchronizing %s' % data_source)
     try:
         synchronizer.sync(data_source)
@@ -47,6 +50,7 @@ def do_synchronize(data_source):
         data_source.healthy = False
 
     data_source = _update_next_synchronize(data_source)
+    data_source.synchronize_in_progress = False
     data_source.last_synchronized = now()
     data_source.save()
     logger.info('Done synchronizing %s' % data_source)

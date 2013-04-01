@@ -4,7 +4,7 @@ from .models import PhillyDataSource
 
 
 class PhillyDataSourceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'healthy', 'ordering', 'last_synchronized',
-                    'next_synchronize',)
+    list_display = ('name', 'healthy', 'synchronize_in_progress', 'ordering',
+                    'last_synchronized', 'next_synchronize',)
 
 admin.site.register(PhillyDataSource, PhillyDataSourceAdmin)

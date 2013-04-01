@@ -40,6 +40,11 @@ class DataSource(models.Model):
         help_text=_('The ordering of this source, lower numbers coming first.'),
     )
 
+    synchronize_in_progress = models.BooleanField(_('synchronize in progress'),
+        default = False,
+        help_text=_('Is the source being synchronized right now?'),
+    )
+
     synchronize_frequency = models.IntegerField(_('synchronize frequency'),
         blank=True,
         null=True,

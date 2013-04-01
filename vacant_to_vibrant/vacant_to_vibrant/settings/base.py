@@ -26,11 +26,11 @@ DATABASES = {
         # # grant all privileges on database philly_living_lots to
         # philly_living_lots;
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': get_env_variable('PHILLY_LIVING_LOTS_DB_NAME'),
-        'USER': get_env_variable('PHILLY_LIVING_LOTS_DB_USER'),
-        'PASSWORD': get_env_variable('PHILLY_LIVING_LOTS_DB_PASSWORD'),
-        'HOST': get_env_variable('PHILLY_LIVING_LOTS_DB_HOST'),
-        'PORT': get_env_variable('PHILLY_LIVING_LOTS_DB_PORT'),
+        'NAME': get_env_variable('PHILLY_DB_NAME'),
+        'USER': get_env_variable('PHILLY_DB_USER'),
+        'PASSWORD': get_env_variable('PHILLY_DB_PASSWORD'),
+        'HOST': get_env_variable('PHILLY_DB_HOST'),
+        'PORT': get_env_variable('PHILLY_DB_PORT'),
     }
 }
 

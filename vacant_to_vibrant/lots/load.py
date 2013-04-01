@@ -4,6 +4,8 @@ Utilities for loading lots, mostly from other models.
 """
 import logging
 
+from django.core.exceptions import DoesNotExist, MultipleObjectsReturned
+
 import reversion
 
 from phillydata.availableproperties.models import AvailableProperty
@@ -30,6 +32,10 @@ def load_lots_with_violations():
                 address=violation.violation_location.address,
                 centroid=violation.violation_location.point
             )
+        except (MultipleObjectsReturned, DoesNotExist):
+            logger.warn('Could not find parcel for violation: %s' %
+                        str(violation))
+            continue
         except Exception:
             logger.exception(('Exception while finding Parcel for violation: '
                               '%s') % str(violation))

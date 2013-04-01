@@ -13,8 +13,8 @@ class Command(BaseCommand):
         self.stdout.write('sync: Running syncdata')
 
         for data_source_cls in DataSource.__subclasses__():
-            print 'sync: Synchronizing %s' % data_source_cls.__name__
             for data_source in data_source_cls.objects.all():
+                print 'sync: Synchronizing %s' % data_source.get_name_display()
                 try:
                     data_source.synchronize()
                 except Exception:

@@ -2,17 +2,12 @@ from django.conf import settings
 from django.core.mail import mail_managers
 from django.template.loader import render_to_string
 
-from mail import mail_target_organizers, mail_target_watchers, mail_facilitators
-from models import Organizer
-
-
-url_suffixes = {
-    Organizer: '#organizers',
-}
+from .mail import (mail_target_organizers, mail_target_watchers,
+                   mail_facilitators)
 
 
 def notify_managers(obj):
-    obj_model_name = obj.__class__.__name__.lower()
+    obj_model_name = obj._meta.object_name.lower()
     template_dir = 'organize/notifications'
     subject_template_name = '%s/managers_new_%s_subject.txt' % (template_dir,
                                                                 obj_model_name)
@@ -31,46 +26,47 @@ def notify_facilitators(obj):
     """
     Send facilitators updates.
     """
-    target = obj.target
+    target = obj.content_object
     if not target: return
 
-    message = _get_object_message(obj)
-    kwargs = {}
+    kwargs = {
+        'obj': obj,
+    }
     try:
         kwargs['excluded_emails'] = [obj.email]
     except Exception:
         kwargs['excluded_emails'] = []
-    kwargs['url_suffix'] = url_suffixes[obj.__class__]
 
-    mail_facilitators(target, 'Lot updated!', message, **kwargs)
+    template = ('organize/notifications/facilitators_new_%s.txt' %
+                obj._meta.object_name.lower())
+    subject = 'Lot updated--new %s' % obj._meta.object_name
+    mail_facilitators(target, subject, template=template, **kwargs)
 
 
 def notify_organizers_and_watchers(obj):
     """
-    Send Organizers and Watchers of a given target updates.
+    Send Organizers and Watchers a notification that the given obj was added
+    to its target.
     """
-    target = obj.target
+    target = obj.content_object
     if not target: return
 
-    message = _get_object_message(obj)
-    kwargs = {}
+    kwargs = {
+        'obj': obj,
+    }
     try:
         kwargs['excluded_emails'] = [obj.email]
     except Exception:
         kwargs['excluded_emails'] = []
-    kwargs['url_suffix'] = url_suffixes[obj.__class__]
 
-    # TODO s/target/<name_of_target_model>/
-    mail_target_watchers(target, 'Watched target updated!', message, **kwargs)
-    mail_target_organizers(target, 'Organized target updated!', message,
-                           **kwargs)
+    organizers_template = ('organize/notifications/organizers_new_%s.txt' %
+                           obj._meta.object_name.lower())
+    organizers_subject = 'Organized %s updated!' % target._meta.object_name
+    mail_target_organizers(target, organizers_subject,
+                           template=organizers_template, **kwargs)
 
-
-def _get_object_message(o):
-    """
-    Get a message specific to the given object.
-    """
-    # TODO push to templates?
-    if isinstance(o, Organizer):
-        return "A new organizer named %s was added. " % o.name
-    return ""
+    watchers_template = ('organize/notifications/watchers_new_%s.txt' %
+                           obj._meta.object_name.lower())
+    watchers_subject = 'Watched %s updated!' % target._meta.object_name
+    mail_target_watchers(target, watchers_subject,
+                         template=watchers_template, **kwargs)

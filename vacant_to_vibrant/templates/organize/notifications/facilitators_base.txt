@@ -1,0 +1,6 @@
+{% autoescape off %}{% block header %}{% endblock %}Hello again. There has been a change to a lot, and we thought you should know about it.
+
+{% block details %}{% endblock %}
+
+--
+{% block footer %}You are receiving this email because you are are a facilitator in this part of the city.{% endblock %}{% endautoescape %}

@@ -1,7 +1,6 @@
 {% autoescape off %}{% if is_note %}{{ MAILREADER_REPLY_PREFIX }}
 
-{% endif %}Hello again from 596 Acres. There has been a change to a lot, and we
-thought you should know about it.
+{% endif %}Hello again. There has been a change to a lot, and we thought you should know about it.
 
 {{ message }}
 

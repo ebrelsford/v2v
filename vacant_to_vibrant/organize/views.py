@@ -102,13 +102,16 @@ class DeleteParticipantView(DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super(DeleteParticipantView, self).get_context_data(**kwargs)
-        context['target'] = self.object.target
+        context['target'] = self.object.content_object
         context['next_url'] = self.request.GET.get('next_url')
         return context
 
     def get_success_url(self):
         messages.info(self.request, self._get_success_message())
-        return self.request.POST.get('next_url', self.object.target.get_absolute_url())
+        return self.request.POST.get(
+            'next_url',
+            self.object.content_object.get_absolute_url()
+        )
 
     def _get_success_message(self):
         verb = 'working on'
@@ -116,7 +119,7 @@ class DeleteParticipantView(DeleteView):
             verb = 'organizing'
         elif isinstance(self.object, Watcher):
             verb = 'watching'
-        return 'You are no longer %s %s.' % (verb, self.object.target)
+        return 'You are no longer %s %s.' % (verb, self.object.content_object)
 
 
 class DeleteOrganizerView(DeleteParticipantView):

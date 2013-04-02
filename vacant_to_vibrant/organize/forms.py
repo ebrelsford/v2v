@@ -44,12 +44,12 @@ class OrganizerForm(ParticipantForm):
             'facebook_page': PrefixLabelTextInput('facebook.com/'),
         }
 
-    def save(self, force_insert=False, force_update=False, commit=True):
+    def save(self, **kwargs):
         is_creating = False
         if not self.instance.id:
             is_creating = True
 
-        organizer = super(self.__class__, self).save()
+        organizer = super(self.__class__, self).save(**kwargs)
         if is_creating:
             notify_organizers_and_watchers(organizer)
             notify_facilitators(organizer)

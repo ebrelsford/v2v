@@ -15,6 +15,7 @@ from generic.views import JSONResponseView
 from notes.forms import NoteForm
 from organize.forms import OrganizerForm, WatcherForm
 from organize.models import Organizer, Watcher
+from organize.notify import notify_organizers_and_watchers
 from organize.views import EditParticipantMixin
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation, ViolationLocation
@@ -235,6 +236,15 @@ class AddContentView(CreateView):
         return [
             'lots/content/add_%s.html' % self._get_content_name().lower(),
         ]
+
+    def form_valid(self, form):
+        """
+        Save the content and notify participants who are following the target
+        lot.
+        """
+        self.object = form.save()
+        notify_organizers_and_watchers(self.object)
+        return super(AddContentView, self).form_valid(form)
 
 
 class AddFileView(AddContentView):

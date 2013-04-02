@@ -13,7 +13,7 @@ def mass_mailing(subject, message, objects, template_name, **kwargs):
         # message gets sent once to each unique email address, thanks to dict
         messages[obj.email] = render_to_string(template_name, {
             'site': Site.objects.get_current(),
-            'target': obj.target,
+            'target': obj.content_object,
             'message': message,
             'obj': obj,
         })
@@ -47,101 +47,75 @@ def mass_mail_organizers(subject, message, organizers, **kwargs):
     )
 
 
-def mail_facilitators(target, subject, message, excluded_emails=[],
-                      is_note=False, url_suffix=''):
-    """
-    Sends a message to facilitators.
-    """
+def mail_facilitators(target, subject, excluded_emails=[],
+                      template='organize/notifications/facilitators_text.txt',
+                      **kwargs):
+    """Sends a message to facilitators."""
     facilitators = settings.FACILITATORS['global']
     facilitators = [f for f in facilitators if f not in excluded_emails]
 
-    messages = _get_facilitator_messages(
-        facilitators,
-        target,
-        message,
-        'organize/notifications/facilitators_text.txt',
-        url_suffix,
-        is_note=is_note,
-    )
+    messages = _get_facilitator_messages(facilitators, target, template,
+                                         **kwargs)
     _mail_multiple_personalized(subject, messages, fail_silently=False,
-                                **_get_message_options(target, is_note=is_note))
+                                **_get_message_options(target))
 
 
-def mail_target_organizers(target, subject, message, excluded_emails=[],
-                           is_note=False, url_suffix=''):
-    """
-    Sends a message to organizers of a given target.
-    """
+def mail_target_organizers(target, subject, excluded_emails=[],
+                           template='organize/notifications/organizers_text.txt',
+                           **kwargs):
+    """Send a message to organizers of a given target."""
     organizers = Organizer.objects.filter(
         content_type=ContentType.objects.get_for_model(target),
         object_id=target.pk,
     )
     organizers = [o for o in organizers if o.email not in excluded_emails]
-    messages = _get_messages(
-        organizers,
-        message,
-        'organize/notifications/organizers_text.txt',
-        url_suffix,
-        is_note=is_note,
-    )
+    messages = _get_messages(organizers, template, **kwargs)
     _mail_multiple_personalized(subject, messages,
-                                **_get_message_options(target, is_note=is_note))
+                                **_get_message_options(target))
 
 
-def mail_target_watchers(target, subject, message, excluded_emails=[],
-                         is_note=False, url_suffix=''):
-    """
-    Sends a message to watchers of a given target.
-    """
+def mail_target_watchers(target, subject, excluded_emails=[],
+                         template='organize/notifications/watchers_text.txt',
+                         **kwargs):
+    """Sends a message to watchers of a given target."""
     watchers = Watcher.objects.filter(
         content_type=ContentType.objects.get_for_model(target),
         object_id=target.pk,
     )
     watchers = [w for w in watchers if w.email not in excluded_emails]
-    messages = _get_messages(
-        watchers,
-        message,
-        'organize/notifications/watchers_text.txt',
-        url_suffix,
-        is_note=is_note,
-    )
+    messages = _get_messages(watchers, template, **kwargs)
     _mail_multiple_personalized(subject, messages,
-                                **_get_message_options(target, is_note=is_note))
+                                **_get_message_options(target))
 
 
-def _get_messages(participants, detail_message, template_name, obj_url_suffix,
-                  is_note=False):
+def _get_messages(participants, template_name, **kwargs):
     messages = {}
     for p in participants:
-        messages[p.email] = render_to_string(template_name, {
+        context = kwargs
+        context.update({
             'BASE_URL': Site.objects.get_current().domain,
             'MAILREADER_REPLY_PREFIX': settings.MAILREADER_REPLY_PREFIX,
-            'is_note': is_note,
-            'target': p.target,
-            'message': detail_message,
+            'target': p.content_object,
             'participant': p,
-            'obj_url_suffix': obj_url_suffix,
         })
+        messages[p.email] = render_to_string(template_name, context)
     return messages
 
 
-def _get_facilitator_messages(facilitators, target, detail_message, template_name,
-                              obj_url_suffix, is_note=False):
+def _get_facilitator_messages(facilitators, target, template_name, **kwargs):
     messages = {}
     for facilitator in facilitators:
-        messages[facilitator] = render_to_string(template_name, {
+        context = kwargs
+        context.update({
             'BASE_URL': Site.objects.get_current().domain,
             'MAILREADER_REPLY_PREFIX': settings.MAILREADER_REPLY_PREFIX,
-            'is_note': is_note,
             'target': target,
-            'message': detail_message,
-            'obj_url_suffix': obj_url_suffix,
         })
+        messages[facilitator] = render_to_string(template_name, context)
     return messages
 
 
-def _get_message_options(target, is_note=False):
-    if not is_note: return {}
+def _get_message_options(target):
     return {
         'from_email': _get_target_email_address(target),
         'cc': None,

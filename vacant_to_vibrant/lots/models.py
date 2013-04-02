@@ -1,4 +1,5 @@
 from django.contrib.contenttypes.generic import GenericRelation
+from django.contrib.gis.measure import D
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -17,7 +18,12 @@ from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
 
 
 class LotManager(InitialRevisionManagerMixin, PlaceManager):
-    pass
+
+    def find_nearby(self, lot):
+        """Find lots near the given lot."""
+        return self.get_query_set().filter(
+            centroid__distance_lte=(lot.centroid, D(mi=.5))
+        )
 
 
 class Lot(Place):
@@ -96,6 +102,9 @@ class Lot(Place):
     @models.permalink
     def get_absolute_url(self):
         return ('lots:lot_detail', (), { 'pk': self.pk, })
+
+    def find_nearby(self, count=5):
+        return self.objects.find_nearby(self)[:count]
 
 
 class Use(models.Model):

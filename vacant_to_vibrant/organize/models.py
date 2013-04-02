@@ -24,7 +24,7 @@ class Participant(models.Model):
 
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    target = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     class Meta:
         abstract = True
@@ -67,7 +67,7 @@ class Organizer(Participant):
         )
 
     def get_absolute_url(self):
-        return "%s#organizer-%d" % (self.target.get_absolute_url(), self.pk)
+        return "%s#organizer-%d" % (self.content_object.get_absolute_url(), self.pk)
 
 
 class Watcher(Participant):
@@ -131,8 +131,8 @@ def add_action(sender, created=False, instance=None, **kwargs):
         verb=_get_verb(instance),
         action_object=instance, # action object, what was created
         # TODO fix...
-        #place=instance.target.centroid, # where did it happen?
-        target=instance.target, # what did it happen to?
+        #place=instance.content_object.centroid, # where did it happen?
+        target=instance.content_object, # what did it happen to?
         data={},
     )
 

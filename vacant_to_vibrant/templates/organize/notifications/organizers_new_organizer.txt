@@ -1,0 +1,5 @@
+{% extends "organize/notifications/organizers_base.txt" %}
+
+{% block details %}Someone called {{ obj.name }} started organizing here, too!
+
+View details here: http://{{ BASE_URL }}{{ target.get_absolute_url }}#organizer-{{ obj.pk }} {% endblock %}

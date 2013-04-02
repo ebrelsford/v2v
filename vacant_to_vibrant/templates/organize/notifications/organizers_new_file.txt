@@ -1,0 +1,5 @@
+{% extends "organize/notifications/organizers_base.txt" %}
+
+{% block details %}A file {% if obj.title %}called "{{ obj.title }}"{% else %}with no name{% endif %} was added by {{ obj.your_name }}.
+
+View details here: http://{{ BASE_URL }}{{ target.get_absolute_url }}#file-{{ obj.pk }} {% endblock %}

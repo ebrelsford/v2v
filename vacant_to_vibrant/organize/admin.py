@@ -6,7 +6,7 @@ from .models import Organizer, OrganizerType, Watcher
 class OrganizerAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'phone', 'added',)
     list_filter = ('added',)
-    readonly_fields = ('target',)
+    readonly_fields = ('content_object',)
     search_fields = ('name', 'email',)
 
 

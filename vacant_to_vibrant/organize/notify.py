@@ -39,7 +39,8 @@ def notify_facilitators(obj):
 
     template = ('organize/notifications/facilitators/new_%s.txt' %
                 obj._meta.object_name.lower())
-    subject = 'Lot updated--new %s' % obj._meta.object_name
+    subject = '%s updated--new %s' % (obj.content_object._meta.object_name,
+                                      obj._meta.object_name)
     mail_facilitators(target, subject, template=template, **kwargs)
 
 

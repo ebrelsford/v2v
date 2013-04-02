@@ -89,6 +89,7 @@ class ParcelManager(models.GeoManager):
             if count == 1:
                 return parcels[0]
             if count > 1:
+                #nearest = self._find_nearest_parcel(centroid, parcels)
                 # TODO something to choose a parcel--compare distance from
                 # target centroid (and maybe area--make 'polygon' a parameter?)
                 logger.debug('Found too many parcels for centroid %s' %
@@ -106,6 +107,16 @@ class ParcelManager(models.GeoManager):
 
         raise self.model.DoesNotExist('Parcel matching query could not be '
                                       'found.')
+
+    def _find_nearest_parcel(self, centroid, parcels):
+        ps = []
+        for p in parcels.centroid():
+            ps.append({
+                'parcel': p,
+                'centroid': p.centroid,
+                'distance': centroid.distance(p.centroid),
+            })
+        return min(sorted(ps, key=lambda x: x['distance']))
 
 
 class Parcel(models.Model):

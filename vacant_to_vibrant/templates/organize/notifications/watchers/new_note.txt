@@ -1,0 +1,15 @@
+{% extends "organize/notifications/watchers/base.txt" %}
+
+{% block header %}{{ block.super }}{{ MAILREADER_REPLY_PREFIX }}
+
+{% endblock %}
+
+{% block details %}A note was added by {{ obj.author }}:
+
+{{ obj.text }}
+
+View details here: http://{{ BASE_URL }}{{ target.get_absolute_url }}#note-{{ obj.pk }} {% endblock %}
+
+{% block footer %}If you reply to this email it will be posted as a public note on the lot's page.
+
+{{ block.super }}{% endblock %}

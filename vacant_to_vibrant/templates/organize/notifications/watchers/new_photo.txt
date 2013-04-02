@@ -1,0 +1,5 @@
+{% extends "organize/notifications/watchers/base.txt" %}
+
+{% block details %}A photo {% if obj.name %}called "{{ obj.name }}"{% else %}with no name{% endif %} was added.
+
+View details here: http://{{ BASE_URL }}{{ target.get_absolute_url }}#photo-{{ obj.pk }} {% endblock %}

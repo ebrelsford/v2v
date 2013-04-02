@@ -65,7 +65,7 @@ def notify_organizers_and_watchers(obj):
     mail_target_organizers(target, organizers_subject,
                            template=organizers_template, **kwargs)
 
-    watchers_template = ('organize/notifications/watchers_new_%s.txt' %
+    watchers_template = ('organize/notifications/watchers/new_%s.txt' %
                            obj._meta.object_name.lower())
     watchers_subject = 'Watched %s updated!' % target._meta.object_name
     mail_target_watchers(target, watchers_subject,

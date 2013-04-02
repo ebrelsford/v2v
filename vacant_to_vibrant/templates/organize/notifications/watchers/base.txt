@@ -1,0 +1,6 @@
+{% autoescape off %}{% block header %}{% endblock %}Greetings. There has been a change to something you are watching.
+
+{% block details %}{% endblock %}
+
+--
+{% block footer %}You are receiving this email because you are watching {{ target }}.  Please go here to change this: http://{{ BASE_URL }}{% url "lots:edit_participant" hash=participant.email_hash %}{% endblock %}{% endautoescape %}

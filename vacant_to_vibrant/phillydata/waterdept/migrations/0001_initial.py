@@ -39,7 +39,7 @@ class Migration(SchemaMigration):
             ('meter_size', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('meter_size_abbreviation', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
             ('service_type', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
-            ('service_type_label', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('service_type_label', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
             ('stormwater_status', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
         ))
         db.send_create_signal(u'waterdept', ['WaterAccount'])
@@ -67,7 +67,7 @@ class Migration(SchemaMigration):
             'meter_size': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'meter_size_abbreviation': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'service_type': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'service_type_label': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'service_type_label': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'stormwater_status': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'water_parcel': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['waterdept.WaterParcel']"})
         },

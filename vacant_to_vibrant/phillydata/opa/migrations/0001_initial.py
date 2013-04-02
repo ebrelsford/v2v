@@ -12,20 +12,14 @@ class Migration(SchemaMigration):
         db.create_table(u'opa_accountowner', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=256)),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['owners.Owner'], null=True, blank=True)),
         ))
         db.send_create_signal(u'opa', ['AccountOwner'])
-
-        # Adding M2M table for field billing_accounts on 'AccountOwner'
-        db.create_table(u'opa_accountowner_billing_accounts', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('accountowner', models.ForeignKey(orm[u'opa.accountowner'], null=False)),
-            ('billingaccount', models.ForeignKey(orm[u'opa.billingaccount'], null=False))
-        ))
-        db.create_unique(u'opa_accountowner_billing_accounts', ['accountowner_id', 'billingaccount_id'])
 
         # Adding model 'BillingAccount'
         db.create_table(u'opa_billingaccount', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('account_owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['opa.AccountOwner'], null=True, blank=True)),
             ('external_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
             ('property_address', self.gf('django.db.models.fields.CharField')(max_length=300, null=True, blank=True)),
             ('improvement_description', self.gf('django.db.models.fields.CharField')(max_length=300, null=True, blank=True)),
@@ -48,9 +42,6 @@ class Migration(SchemaMigration):
         # Deleting model 'AccountOwner'
         db.delete_table(u'opa_accountowner')
 
-        # Removing M2M table for field billing_accounts on 'AccountOwner'
-        db.delete_table('opa_accountowner_billing_accounts')
-
         # Deleting model 'BillingAccount'
         db.delete_table(u'opa_billingaccount')
 
@@ -58,12 +49,13 @@ class Migration(SchemaMigration):
     models = {
         u'opa.accountowner': {
             'Meta': {'object_name': 'AccountOwner'},
-            'billing_accounts': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['opa.BillingAccount']", 'symmetrical': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '256'})
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '256'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['owners.Owner']", 'null': 'True', 'blank': 'True'})
         },
         u'opa.billingaccount': {
             'Meta': {'object_name': 'BillingAccount'},
+            'account_owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['opa.AccountOwner']", 'null': 'True', 'blank': 'True'}),
             'assessment': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '20', 'decimal_places': '2', 'blank': 'True'}),
             'external_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -79,6 +71,24 @@ class Migration(SchemaMigration):
             'mailing_state_province': ('django.db.models.fields.CharField', [], {'max_length': '40', 'null': 'True', 'blank': 'True'}),
             'property_address': ('django.db.models.fields.CharField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
             'sale_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'})
+        },
+        u'owners.agencycode': {
+            'Meta': {'object_name': 'AgencyCode'},
+            'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '256'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
+        u'owners.alias': {
+            'Meta': {'object_name': 'Alias'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '256'})
+        },
+        u'owners.owner': {
+            'Meta': {'object_name': 'Owner'},
+            'agency_codes': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['owners.AgencyCode']", 'null': 'True', 'blank': 'True'}),
+            'aliases': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['owners.Alias']", 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '256'}),
+            'owner_type': ('django.db.models.fields.CharField', [], {'default': "'unknown'", 'max_length': '20'})
         }
     }
 

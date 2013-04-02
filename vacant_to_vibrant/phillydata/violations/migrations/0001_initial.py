@@ -13,17 +13,17 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('violation_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['violations.ViolationType'])),
             ('violation_location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['violations.ViolationLocation'])),
-            ('datetime', self.gf('django.db.models.fields.DateTimeField')()),
-            ('external_id', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('violation_datetime', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('external_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=30)),
         ))
         db.send_create_signal(u'violations', ['Violation'])
 
         # Adding model 'ViolationType'
         db.create_table(u'violations_violationtype', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('code', self.gf('django.db.models.fields.CharField')(max_length=32)),
+            ('code', self.gf('django.db.models.fields.CharField')(unique=True, max_length=32)),
             ('li_description', self.gf('django.db.models.fields.TextField')()),
-            ('full_description', self.gf('django.db.models.fields.TextField')()),
+            ('full_description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
         ))
         db.send_create_signal(u'violations', ['ViolationType'])
 
@@ -33,7 +33,7 @@ class Migration(SchemaMigration):
             ('point', self.gf('django.contrib.gis.db.models.fields.PointField')()),
             ('address', self.gf('django.db.models.fields.CharField')(max_length=300, null=True, blank=True)),
             ('zip_code', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
-            ('external_id', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('external_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=30)),
         ))
         db.send_create_signal(u'violations', ['ViolationLocation'])
 
@@ -52,24 +52,24 @@ class Migration(SchemaMigration):
     models = {
         u'violations.violation': {
             'Meta': {'object_name': 'Violation'},
-            'datetime': ('django.db.models.fields.DateTimeField', [], {}),
-            'external_id': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'external_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'violation_datetime': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'violation_location': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['violations.ViolationLocation']"}),
             'violation_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['violations.ViolationType']"})
         },
         u'violations.violationlocation': {
             'Meta': {'object_name': 'ViolationLocation'},
             'address': ('django.db.models.fields.CharField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
-            'external_id': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'external_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'point': ('django.contrib.gis.db.models.fields.PointField', [], {}),
             'zip_code': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'})
         },
         u'violations.violationtype': {
             'Meta': {'object_name': 'ViolationType'},
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
-            'full_description': ('django.db.models.fields.TextField', [], {}),
+            'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32'}),
+            'full_description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'li_description': ('django.db.models.fields.TextField', [], {})
         }

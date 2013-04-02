@@ -12,11 +12,13 @@ class Migration(SchemaMigration):
         db.create_table(u'landuse_landusearea', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('geometry', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')()),
-            ('object_id', self.gf('django.db.models.fields.CharField')(max_length=15)),
+            ('object_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=15)),
             ('category', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('subcategory', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
-            ('vacant_building', self.gf('django.db.models.fields.CharField')(max_length=10)),
+            ('vacant_building', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
+            ('area', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=15, decimal_places=2, blank=True)),
+            ('added', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'landuse', ['LandUseArea'])
 
@@ -29,13 +31,15 @@ class Migration(SchemaMigration):
     models = {
         u'landuse.landusearea': {
             'Meta': {'object_name': 'LandUseArea'},
+            'added': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'area': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '15', 'decimal_places': '2', 'blank': 'True'}),
             'category': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'geometry': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'object_id': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
+            'object_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '15'}),
             'subcategory': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'vacant_building': ('django.db.models.fields.CharField', [], {'max_length': '10'})
+            'vacant_building': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'})
         }
     }
 

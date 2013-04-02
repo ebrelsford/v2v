@@ -69,4 +69,4 @@ class LandUseArea(models.Model):
     )
 
     def __unicode__(self):
-        return self.object_id
+        return str(self.object_id)

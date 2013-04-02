@@ -37,7 +37,7 @@ def notify_facilitators(obj):
     except Exception:
         kwargs['excluded_emails'] = []
 
-    template = ('organize/notifications/facilitators_new_%s.txt' %
+    template = ('organize/notifications/facilitators/new_%s.txt' %
                 obj._meta.object_name.lower())
     subject = 'Lot updated--new %s' % obj._meta.object_name
     mail_facilitators(target, subject, template=template, **kwargs)
@@ -59,7 +59,7 @@ def notify_organizers_and_watchers(obj):
     except Exception:
         kwargs['excluded_emails'] = []
 
-    organizers_template = ('organize/notifications/organizers_new_%s.txt' %
+    organizers_template = ('organize/notifications/organizers/new_%s.txt' %
                            obj._meta.object_name.lower())
     organizers_subject = 'Organized %s updated!' % target._meta.object_name
     mail_target_organizers(target, organizers_subject,

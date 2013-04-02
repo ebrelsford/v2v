@@ -1,4 +1,4 @@
-{% extends "organize/notifications/organizers_base.txt" %}
+{% extends "organize/notifications/organizers/base.txt" %}
 
 {% block details %}A file {% if obj.title %}called "{{ obj.title }}"{% else %}with no name{% endif %} was added by {{ obj.your_name }}.
 

@@ -1,4 +1,4 @@
-{% extends "organize/notifications/organizers_base.txt" %}
+{% extends "organize/notifications/organizers/base.txt" %}
 
 {% block header %}{{ block.super }}{{ MAILREADER_REPLY_PREFIX }}
 

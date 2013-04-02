@@ -1,4 +1,4 @@
-{% extends "organize/notifications/organizers_base.txt" %}
+{% extends "organize/notifications/organizers/base.txt" %}
 
 {% block details %}A photo {% if obj.name %}called "{{ obj.name }}"{% else %}with no name{% endif %} was added.
 

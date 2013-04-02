@@ -138,8 +138,7 @@ def add_action(sender, created=False, instance=None, **kwargs):
         _get_actor(instance, instance.added_by),
         verb=_get_verb(instance),
         action_object=instance, # action object, what was created
-        # TODO fix...
-        #place=instance.content_object.centroid, # where did it happen?
+        place=instance.content_object.centroid, # where did it happen?
         target=instance.content_object, # what did it happen to?
         data={},
     )

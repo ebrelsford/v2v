@@ -89,6 +89,8 @@ class ParcelManager(models.GeoManager):
             if count == 1:
                 return parcels[0]
             if count > 1:
+                # TODO something to choose a parcel--compare distance from
+                # target centroid (and maybe area--make 'polygon' a parameter?)
                 logger.debug('Found too many parcels for centroid %s' %
                              str(centroid))
                 self._debug_too_many_parcels(parcels)

@@ -233,7 +233,7 @@ class AddContentView(CreateView):
 
     def get_template_names(self):
         return [
-            'lots/content/add_%s.html' % self._get_content_name(),
+            'lots/content/add_%s.html' % self._get_content_name().lower(),
         ]
 
 

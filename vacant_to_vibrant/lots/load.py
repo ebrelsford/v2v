@@ -74,6 +74,7 @@ def load_lots_available(added_after=None):
         except Exception:
             logger.exception(('Exception while finding parcel for available '
                               'property: %s') % str(available_property))
+            continue
 
         with reversion.create_revision():
             lot = get_or_create_lot(parcel, address,
@@ -93,14 +94,18 @@ def load_lots_land_use_vacant(added_after=None):
     for area in areas:
         try:
             parcel = Parcel.objects.get_fuzzy(centroid=area.geometry.centroid)
+        except (Parcel.MultipleObjectsReturned, Parcel.DoesNotExist):
+            logger.warn('Could not find parcel for LandUseArea: %s' %
+                        str(area))
         except Exception:
-            logger.exception('No parcel found for LandUseArea %s' % str(area))
-            logger.debug('Adding lot with just LandUseArea')
+            logger.exception(('Unexpected exception finding parcel for '
+                              'LandUseArea %s') % str(area))
+            continue
+
         lot, created = Lot.objects.get_or_create(
             defaults=_get_lot_defaults(land_use_area=area, parcel=parcel),
             **_get_lot_kwargs(land_use_area=area, parcel=parcel)
         )
-
         lot.land_use_area = area
         lot.save()
 
@@ -111,9 +116,13 @@ def load_lots_by_tax_account():
         address = tax_account.property_address
         try:
             parcel = Parcel.objects.get_fuzzy(address=address)
+        except (Parcel.MultipleObjectsReturned, Parcel.DoesNotExist):
+            logger.warn('Could not find parcel for tax account: %s' %
+                        str(tax_account))
         except Exception:
-            logger.exception('No parcel found for tax account %s' %
-                             str(tax_account))
+            logger.exception(('Unexpected exception finding parcel for tax '
+                              'account %s') % str(tax_account))
+            continue
 
         lot = get_or_create_lot(parcel, address)
         lot.tax_account = tax_account

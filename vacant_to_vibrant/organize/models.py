@@ -69,6 +69,10 @@ class Organizer(Participant):
     def get_absolute_url(self):
         return "%s#organizer-%d" % (self.content_object.get_absolute_url(), self.pk)
 
+    @classmethod
+    def participation_adjective(cls):
+        return 'Organized'
+
 
 class Watcher(Participant):
     """
@@ -79,6 +83,10 @@ class Watcher(Participant):
 
     def recent_change_label(self):
         return 'new watcher'
+
+    @classmethod
+    def participation_adjective(cls):
+        return 'Watched'
 
 
 class OrganizerType(models.Model):

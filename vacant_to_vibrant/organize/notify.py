@@ -2,8 +2,8 @@ from django.conf import settings
 from django.core.mail import mail_managers
 from django.template.loader import render_to_string
 
-from .mail import (mail_target_organizers, mail_target_watchers,
-                   mail_facilitators)
+from .mail import mail_target_participants, mail_facilitators
+from .models import Participant
 
 
 def notify_managers(obj):
@@ -44,11 +44,7 @@ def notify_facilitators(obj):
     mail_facilitators(target, subject, template=template, **kwargs)
 
 
-def notify_organizers_and_watchers(obj):
-    """
-    Send Organizers and Watchers a notification that the given obj was added
-    to its target.
-    """
+def notify_participant_type_new_obj(participant_class, obj):
     target = obj.content_object
     if not target: return
 
@@ -60,14 +56,16 @@ def notify_organizers_and_watchers(obj):
     except Exception:
         kwargs['excluded_emails'] = []
 
-    organizers_template = ('organize/notifications/organizers/new_%s.txt' %
-                           obj._meta.object_name.lower())
-    organizers_subject = 'Organized %s updated!' % target._meta.object_name
-    mail_target_organizers(target, organizers_subject,
-                           template=organizers_template, **kwargs)
+    template = 'organize/notifications/%ss/new_%s.txt' % (
+        participant_class.__name__.lower(),
+        obj._meta.object_name.lower()
+    )
+    subject = '%s %s updated!' % (participant_class.participation_adjective(),
+                                  target._meta.object_name.lower(),)
+    mail_target_participants(participant_class, target, subject,
+                             template=template, **kwargs)
 
-    watchers_template = ('organize/notifications/watchers/new_%s.txt' %
-                           obj._meta.object_name.lower())
-    watchers_subject = 'Watched %s updated!' % target._meta.object_name
-    mail_target_watchers(target, watchers_subject,
-                         template=watchers_template, **kwargs)
+
+def notify_participants_new_obj(obj):
+    for participant_cls in Participant.__subclasses__():
+        notify_participant_type_new_obj(participant_cls, obj)

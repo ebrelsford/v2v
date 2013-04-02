@@ -15,7 +15,7 @@ from generic.views import JSONResponseView
 from notes.forms import NoteForm
 from organize.forms import OrganizerForm, WatcherForm
 from organize.models import Organizer, Watcher
-from organize.notify import notify_organizers_and_watchers
+from organize.notify import notify_participants_new_obj
 from organize.views import EditParticipantMixin
 from phillydata.parcels.models import Parcel
 from phillydata.violations.models import Violation, ViolationLocation
@@ -243,7 +243,7 @@ class AddContentView(CreateView):
         lot.
         """
         self.object = form.save()
-        notify_organizers_and_watchers(self.object)
+        notify_participants_new_obj(self.object)
         return super(AddContentView, self).form_valid(form)
 
 

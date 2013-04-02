@@ -4,8 +4,6 @@ from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from organize.models import Organizer, Watcher
-
 
 def mass_mailing(subject, message, objects, template_name, **kwargs):
     messages = {}
@@ -60,30 +58,15 @@ def mail_facilitators(target, subject, excluded_emails=[],
                                 **_get_message_options(target))
 
 
-def mail_target_organizers(target, subject, excluded_emails=[],
-                           template='organize/notifications/organizers_text.txt',
-                           **kwargs):
-    """Send a message to organizers of a given target."""
-    organizers = Organizer.objects.filter(
+def mail_target_participants(participant_cls, target, subject,
+                             excluded_emails=[], template=None, **kwargs):
+    """Send a message to participants of a given target."""
+    participants = participant_cls.objects.filter(
         content_type=ContentType.objects.get_for_model(target),
         object_id=target.pk,
     )
-    organizers = [o for o in organizers if o.email not in excluded_emails]
-    messages = _get_messages(organizers, template, **kwargs)
-    _mail_multiple_personalized(subject, messages,
-                                **_get_message_options(target))
-
-
-def mail_target_watchers(target, subject, excluded_emails=[],
-                         template='organize/notifications/watchers_text.txt',
-                         **kwargs):
-    """Sends a message to watchers of a given target."""
-    watchers = Watcher.objects.filter(
-        content_type=ContentType.objects.get_for_model(target),
-        object_id=target.pk,
-    )
-    watchers = [w for w in watchers if w.email not in excluded_emails]
-    messages = _get_messages(watchers, template, **kwargs)
+    participants = [p for p in participants if p.email not in excluded_emails]
+    messages = _get_messages(participants, template, **kwargs)
     _mail_multiple_personalized(subject, messages,
                                 **_get_message_options(target))
 

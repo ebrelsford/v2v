@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.forms import HiddenInput, IntegerField, ModelChoiceField
 
-from notify import notify_organizers_and_watchers, notify_facilitators
+from notify import notify_participants_new_obj, notify_facilitators
 from models import Organizer, Watcher
 from vacant_to_vibrant.forms import CaptchaForm
 from .widgets import PrefixLabelTextInput
@@ -51,7 +51,7 @@ class OrganizerForm(ParticipantForm):
 
         organizer = super(self.__class__, self).save(**kwargs)
         if is_creating:
-            notify_organizers_and_watchers(organizer)
+            notify_participants_new_obj(organizer)
             notify_facilitators(organizer)
         return organizer
 

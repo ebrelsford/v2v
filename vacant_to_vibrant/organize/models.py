@@ -71,7 +71,7 @@ class Organizer(Participant):
 
     @classmethod
     def participation_adjective(cls):
-        return 'Organized'
+        return 'organized'
 
 
 class Watcher(Participant):
@@ -86,7 +86,7 @@ class Watcher(Participant):
 
     @classmethod
     def participation_adjective(cls):
-        return 'Watched'
+        return 'watched'
 
 
 class OrganizerType(models.Model):

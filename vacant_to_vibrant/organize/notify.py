@@ -60,8 +60,10 @@ def notify_participant_type_new_obj(participant_class, obj):
         participant_class.__name__.lower(),
         obj._meta.object_name.lower()
     )
-    subject = '%s %s updated!' % (participant_class.participation_adjective(),
-                                  target._meta.object_name.lower(),)
+    subject = '%s %s updated!' % (
+        participant_class.participation_adjective().title(),
+        target._meta.object_name.lower(),
+    )
     mail_target_participants(participant_class, target, subject,
                              template=template, **kwargs)
 

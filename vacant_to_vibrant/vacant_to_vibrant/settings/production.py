@@ -32,7 +32,10 @@ JOHNNY_MIDDLEWARE_KEY_PREFIX = get_env_variable('PHILLY_CACHE_KEY_PREFIX')
 #
 # email
 #
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+INSTALLED_APPS += (
+    'mailer',
+)
+EMAIL_BACKEND = 'mailer.backend.DbBackend'
 EMAIL_HOST = get_env_variable('PHILLY_EMAIL_HOST')
 EMAIL_HOST_USER = get_env_variable('PHILLY_EMAIL_USER')
 EMAIL_HOST_PASSWORD = get_env_variable('PHILLY_EMAIL_PASSWORD')
@@ -83,4 +86,3 @@ LOGGING = {
         'level': 'WARNING',
     },
 }
-

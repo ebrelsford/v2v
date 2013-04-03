@@ -1,6 +1,7 @@
 from django.db.models import Q, Count
 
 from inplace.api.serializers import GeoJSONSerializer
+from inplace.boundaries.models import Boundary
 from tastypie import fields
 from tastypie.contrib.gis.resources import ModelResource
 from tastypie.resources import ALL, ALL_WITH_RELATIONS
@@ -65,8 +66,27 @@ class LotResource(ModelResource):
             if violations_count > 0:
                 lots = Lot.objects.all().annotate(violations_count=Count('violations'))
                 lots = lots.filter(violations_count=violations_count)
-                print 'violations_count', violations_count
-                orm_filters['pk__in'] = orm_filters.get('pk__in', []) + list(lots.values_list('pk', flat=True))
+                orm_filters['pk__in'] = (orm_filters.get('pk__in', []) +
+                                         list(lots.values_list('pk', flat=True)))
+
+        boundary_filters = None
+        for f in filters:
+            if not f.startswith('boundary_'): continue
+            layer = f.replace('boundary_', '').replace('_', ' ')
+            boundaries = Boundary.objects.filter(
+                layer__name__iexact=layer,
+                label__in=filters.getlist(f),
+            )
+            for boundary in boundaries:
+                boundary_filter = Q(centroid__within=boundary.geometry)
+                if boundary_filters:
+                    boundary_filters = boundary_filters | boundary_filter
+                else:
+                    boundary_filters = boundary_filter
+        if boundary_filters:
+            lots = Lot.objects.all().filter(boundary_filters)
+            orm_filters['pk__in'] = (orm_filters.get('pk__in', []) +
+                                     list(lots.values_list('pk', flat=True)))
 
         # TODO fix weird hybrid of API/Django form-processing
         # -> Make the form widgets perform more like an API?
@@ -79,8 +99,6 @@ class LotResource(ModelResource):
             filter_name = 'has_%s' % f
             if filter_name in cleaned_data and cleaned_data[filter_name] is not None:
                 orm_filters['%s__isnull' % f] = not cleaned_data[filter_name]
-
-        print orm_filters
 
         return orm_filters
 

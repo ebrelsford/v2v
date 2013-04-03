@@ -1,4 +1,7 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
+
+from inplace.boundaries.models import Boundary, Layer
 
 from .models import Use
 
@@ -48,6 +51,18 @@ class FiltersForm(forms.Form):
         super(FiltersForm, self).__init__(*args, **kwargs)
         self.fields['known_use__name__in'].choices = ([('None', 'None'),] +
                                                       self._get_uses())
+        for layer in Layer.objects.all():
+            self._add_boundary_layer_field(layer)
+
+    def _add_boundary_layer_field(self, layer):
+        field_name = 'boundary_%s' % layer.name.replace(' ', '_').lower()
+        boundaries = Boundary.objects.order_by_label_numeric(layer=layer)
+        self.fields[field_name] = forms.MultipleChoiceField(
+            choices=[(b.label, b.label) for b in boundaries],
+            initial=(),
+            label=_(layer.name),
+            widget=forms.CheckboxSelectMultiple(),
+        )
 
     def _get_uses(self):
         uses = []

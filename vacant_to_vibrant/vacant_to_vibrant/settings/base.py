@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'feincms.module.page',
     'imagekit',
     'inplace',
+    'inplace.boundaries',
     'jsonfield',
     'mptt',
     'reversion',

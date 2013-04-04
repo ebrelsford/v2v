@@ -3,10 +3,27 @@
 
 {% block content %}
 <div style="float: right;">
+
     {% with lot.get_geojson_url as places_url %}
-    {% place_map places_url 200px 200px %}
+    {% place_map places_url 300px 200px %}
     {% endwith %}
+
+    <div id="streetview-container" style="width: 300px; height: 200px;"></div>
+
+    <script>
+    $(document).ready(function() {
+        $('#streetview-container').streetview({
+            errorSelector: '#streetview-error',
+        });
+        $('#streetview-container').data('streetview').load_streetview(
+            {{ lot.centroid.x }},
+            {{ lot.centroid.y }}
+        );
+    });
+    </script>
+
 </div>
+
 <h2>
     <a href="{{ lot.get_absolute_url }}">
         {{ lot.address_line1 }}

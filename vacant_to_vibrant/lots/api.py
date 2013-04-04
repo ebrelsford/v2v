@@ -65,7 +65,6 @@ class LotResource(ModelResource):
             if violations_count > 0:
                 lots = Lot.objects.all().annotate(violations_count=Count('violations'))
                 lots = lots.filter(violations_count=violations_count)
-                print 'violations_count', violations_count
                 orm_filters['pk__in'] = orm_filters.get('pk__in', []) + list(lots.values_list('pk', flat=True))
 
         # TODO fix weird hybrid of API/Django form-processing
@@ -79,8 +78,6 @@ class LotResource(ModelResource):
             filter_name = 'has_%s' % f
             if filter_name in cleaned_data and cleaned_data[filter_name] is not None:
                 orm_filters['%s__isnull' % f] = not cleaned_data[filter_name]
-
-        print orm_filters
 
         return orm_filters
 

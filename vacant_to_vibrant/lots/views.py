@@ -228,8 +228,8 @@ class AddContentView(CreateView):
         return initial
 
     def get_success_url(self):
-        messages.info(self.request, '%s added successfully.' %
-                      self._get_content_name())
+        messages.success(self.request, '%s added successfully.' %
+                         self._get_content_name())
         return self._get_lot().get_absolute_url()
 
     def get_template_names(self):

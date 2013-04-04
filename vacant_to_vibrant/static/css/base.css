@@ -92,6 +92,20 @@ th {
  * _modules_
  */
 
+.errorlist {
+    color: red;
+}
+
+.messages {
+    border: 1px solid black;
+    margin: 10px 0;
+    padding: 15px;
+}
+
+.messages .success {
+    color: green;
+}
+
 #mainmenu {
     border-top: 1px solid black;
     border-bottom: 1px solid black;

@@ -46,15 +46,18 @@
         </tr>
     </table>
 </div>
+
 <div id="organizers" class="organize">
     <h3>Organize</h3>
     <a href="{% url "lots:add_organizer" pk=lot.pk %}">click to organize</a>
     {% render_organizer_list for lot %}
 </div>
+
 <div class="watch">
     <h3>Watch</h3>
     <a href="{% url "lots:add_watcher" pk=lot.pk %}">click to watch</a>
 </div>
+
 <div id="photos" class="photos">
     <h3>Photos</h3>
     <div>
@@ -62,14 +65,17 @@
     </div>
     {% render_photo_list for lot %}
 </div>
+
 <div id="notes" class="notes">
     <h3>Notes</h3>
     <a href="{% url "lots:add_note" pk=lot.pk %}">click to add a note</a>
     {% render_note_list for lot %}
 </div>
+
 <div id="files" class="files">
     <h3>Files</h3>
     <a href="{% url "lots:add_file" pk=lot.pk %}">click to add a file</a>
     {% render_file_list for lot %}
 </div>
+
 {% endblock %}

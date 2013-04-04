@@ -1,21 +1,31 @@
 {% extends "lots/map/cluster_main.html" %}
 
 {% block below_map %}
-<div class="filters" style="float: left;">
+<div class="filters left" style="float: left;">
     <form>
         {{ filters.as_p }}
     </form>
 </div>
-<div class="tally" style="float: left;">
-    You are looking at:
-    <ul>
-        <li><span class="lots-count">X</span> lots</li>
-        <li><span class="no-known-use-count">X</span> lots with no known use</li>
-        {% for use in uses %}
-        <li><span class="{{ use.slug }}-count">Y</span> lots being used as a {{ use.name }}</li>
-        {% endfor %}
-    </ul>
+<div class="right" style="float: left;">
+    {% comment %}
+    XXX stop-gap, would need a more robust solution if we planned on using this
+    {% endcomment %}
+    <div style="margin: 15px 0;">
+        <input type="checkbox" id="stop-loading" name="stop-loading" class="non-filter" />
+        <label for="stop-loading">enough! stop loading data</label>
+    </div>
+    <div class="tally">
+        You are looking at:
+        <ul>
+            <li><span class="lots-count">X</span> lots</li>
+            <li><span class="no-known-use-count">X</span> lots with no known use</li>
+            {% for use in uses %}
+            <li><span class="{{ use.slug }}-count">Y</span> lots being used as a {{ use.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
+<div class="clear"></div>
 
 <script>
     function update_counts() {
@@ -38,7 +48,8 @@
             update_counts();
         });
 
-        $(':input').change(function() {
+        $(':input:not(.non-filter)').change(function() {
+            $('#stop-loading').removeAttr('checked');
             update_counts();
             LOTS_MAP.reloadLotCentroidLayer($('form').serialize());
         });

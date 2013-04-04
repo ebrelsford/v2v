@@ -95,6 +95,7 @@ L.Map.include({
                     e.data = feature;
                     e.targetType = 'layer';
                     map.options.lotClickHandler(e);
+                    map.fire('lotclicked', feature);
                 });
             },   
         });

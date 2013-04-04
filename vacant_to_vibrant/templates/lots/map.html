@@ -89,6 +89,10 @@
                 e.geometry.coordinates[0], e.geometry.coordinates[1]);
         });
 
+        LOTS_MAP.on('popupclose', function(e) {
+            $('#streetview-container').hide();
+        });
+
         $(':input:not(.non-filter)').change(function() {
             $('#stop-loading').removeAttr('checked');
             update_counts();

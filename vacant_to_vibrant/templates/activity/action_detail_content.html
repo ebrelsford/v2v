@@ -1,0 +1,5 @@
+{% extends "activity/action_detail_base.html" %}
+
+{% block actor %}
+{{ action.action_object.added_by_name|default:"someone" }}
+{% endblock %}

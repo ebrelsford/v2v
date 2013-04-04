@@ -12,7 +12,7 @@ from lots.models import Lot
 
 class PlaceActivityListView(ListView):
     model = Action
-    paginate_by = 5
+    paginate_by = 15
     template_name = 'activity/action_list.html'
 
     def get_queryset(self):

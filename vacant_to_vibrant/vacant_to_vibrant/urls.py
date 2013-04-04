@@ -23,6 +23,9 @@ urlpatterns += patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
+    url('^activity/', include('actstream.urls')),
+    url('^activity-stream/', include('activity_stream.urls')),
+
     url(r'^api/', include(v1_api.urls)),
 
     url(r'', include('feincms.urls')),

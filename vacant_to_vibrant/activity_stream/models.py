@@ -51,3 +51,59 @@ action.connect(place_action_handler, dispatch_uid='activity_stream.models')
 
 # Make Action.place available
 PointField(blank=True, null=True).contribute_to_class(Action, 'place')
+
+
+# Add receivers for creating actions
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from files.models import File
+from notes.models import Note
+from organize.models import Organizer, Watcher
+from photos.models import Photo
+from .signals import action
+
+
+def _add_action(sender, verb, created=False, instance=None, **kwargs):
+    if not instance or not created: return
+    action.send(
+        sender,
+        verb=verb,
+        action_object=instance, # action object, what was created
+        place=instance.content_object.centroid, # where did it happen?
+        target=instance.content_object, # what did it happen to?
+        data={},
+    )
+
+
+@receiver(post_save, sender=Organizer, dispatch_uid='activity_stream.organizer')
+def add_organizer_action(sender, instance=None, **kwargs):
+    if not instance: return
+    _add_action(instance, 'started organizing', instance=instance, **kwargs)
+
+
+@receiver(post_save, sender=Watcher, dispatch_uid='activity_stream.watcher')
+def add_action(sender, instance=None, **kwargs):
+    if not instance: return
+    _add_action(instance, 'started watching', instance=instance, **kwargs)
+
+
+@receiver(post_save, sender=Note, dispatch_uid='activity_stream.note')
+def add_note_action(sender, instance=None, **kwargs):
+    print 'note added:', instance
+    if not instance: return
+    _add_action(instance.added_by, 'wrote', instance=instance, **kwargs)
+
+
+@receiver(post_save, sender=Photo, dispatch_uid='activity_stream.photo')
+def add_photo_action(sender, instance=None, **kwargs):
+    if not instance: return
+    _add_action(instance.added_by, 'posted a picture', instance=instance,
+                **kwargs)
+
+
+@receiver(post_save, sender=File, dispatch_uid='activity_stream.file')
+def add_file_action(sender, instance=None, **kwargs):
+    if not instance: return
+    _add_action(instance.added_by, 'posted a file', instance=instance,
+                **kwargs)

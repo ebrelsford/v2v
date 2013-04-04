@@ -12,12 +12,12 @@ class File(models.Model):
 
     document = models.FileField(_('document'), upload_to='files')
 
-    your_name = models.CharField(_('your name'), max_length=256, null=True,
-                                 blank=True)
     title = models.CharField(_('title'), max_length=256, null=True, blank=True)
     description = models.TextField(_('description'), null=True, blank=True)
     added = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, null=True, blank=True)
+    added_by_name = models.CharField(_('added by name'), max_length=256,
+                                     null=True, blank=True)
 
     def __unicode__(self):
         return self.title

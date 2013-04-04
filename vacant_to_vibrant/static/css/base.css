@@ -69,6 +69,10 @@ th {
 }
 
 @media (min-width: 768px) {
+    .grid-1-2 {
+        width: 50%;
+    }
+
     .grid-1-4 {
         width: 25%;
     }
@@ -122,4 +126,26 @@ th {
 .file-detail {
     border-bottom: 1px solid black;
     padding: 10px;
+}
+
+.activity-stream-container {
+    height: 150px;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.activity-stream-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.activity-stream-list-item {
+    border-bottom: 1px solid lightGray;
+    list-style: none;
+    padding: 10px;
+    padding-left: 0;
+}
+.activity-stream-list-item .meta {
+    font-size: 10px;
 }

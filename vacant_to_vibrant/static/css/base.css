@@ -128,6 +128,10 @@ th {
     padding: 10px;
 }
 
+.activity-stream-section {
+    margin: 25px 0;
+}
+
 .activity-stream-container {
     height: 150px;
     overflow-y: scroll;

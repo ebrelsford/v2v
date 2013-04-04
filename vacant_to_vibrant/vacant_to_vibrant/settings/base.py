@@ -213,8 +213,10 @@ ACTSTREAM_SETTINGS = {
     'MODELS': (
         'auth.user',
         'lots.lot',
+        'notes.note',
         'organize.organizer',
         'organize.watcher',
+        'photos.photo',
     ),
     'USE_JSONFIELD': True,
 }

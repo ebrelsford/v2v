@@ -68,7 +68,7 @@ def get_or_create_account_owner(data):
 
     account_owner, created = AccountOwner.objects.get_or_create(
         name=owner_name,
-        defaults={ 'owner': Owner.objects.get_or_create(owner_name), }
+        defaults={ 'owner': Owner.objects.get_or_create(owner_name)[0], }
     )
     return account_owner
 

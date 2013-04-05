@@ -16,6 +16,10 @@
         LOTS_MAP = L.map('map', {
             {% block options %}
             center: [39.952335, -75.163789],
+            maxBounds: [
+                [39.558, -75.758],
+                [40.371, -74.555],
+            ],
             zoom: 11,
             cloudmadeKey: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
             cloudmadeStyleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',

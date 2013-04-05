@@ -29,6 +29,18 @@
             <td>{{ lot.violations.count }}</td>
         </tr>
 
+        {% if lot.land_use_area %}
+        <tr>
+            <th>{% trans "land use" %}:</th>
+            <td>
+                According to the City Planning Commission:
+                {{ lot.land_use_area.category }}, 
+                {{ lot.land_use_area.subcategory }},
+                {{ lot.land_use_area.description }}
+            </td>
+        </tr>
+        {% endif %}
+
         {% if lot.available_property %}
         <tr>
             <th>{% trans "available" %}:</th>
@@ -47,10 +59,19 @@
             <th>{% trans "parcel" %}:</th>
             <td>{{ lot.parcel|default:"unknown" }}</td>
         </tr>
+
+        {% if lot.water_parcel %}
         <tr>
             <th>{% trans "water parcel" %}:</th>
-            <td>{{ lot.water_parcel|default:"unknown" }}</td>
+            <td>
+                gross area: {{ lot.water_parcel.gross_area }}<br />
+                impervious area: {{ lot.water_parcel.impervious_area }}<br />
+                owners: {{ lot.water_parcel.owner1 }},
+                {{lot.water_parcel.owner2}}
+            </td>
         </tr>
+        {% endif %}
+
     </table>
 </div>
 

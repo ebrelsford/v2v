@@ -166,4 +166,4 @@ class Parcel(models.Model):
     )
 
     def __unicode__(self):
-        return u'Parcel (%s)' % (self.address,)
+        return '%s, mapreg: %s' % (self.address or 'no address', self.mapreg)

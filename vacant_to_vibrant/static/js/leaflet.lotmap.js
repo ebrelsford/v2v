@@ -18,16 +18,21 @@ L.Map.include({
 
     _lotMapInitialize: function() {
         this._initLayers();
-        this.addBaseLayer();
-        this.addSatelliteLayer();
+
+        // Add base layers
+        this.addSatelliteLayer(false);
+        this.addStreetsLayer();
+
+        // Add overlays
         this.addLotTilesLayer();
         this.addLotGridLayer();
         this.addLotCentroidLayer();
 
+        // Add controls
         this.addLayersControl();
     },
 
-    addBaseLayer: function() {
+    addStreetsLayer: function() {
         this.streets = L.tileLayer(
             'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', 
             {
@@ -38,9 +43,9 @@ L.Map.include({
         ).addTo(this);
     },
 
-    addSatelliteLayer: function() {
+    addSatelliteLayer: function(add) {
         this.satellite = new L.BingLayer(this.options.bingKey)
-            .addTo(this);
+        if (add) this.satellite.addTo(this);
     },
 
     addLotTilesLayer: function() {
@@ -128,16 +133,16 @@ L.Map.include({
 
     addLayersControl: function() {
         if (!this.options.enableLayersControl) return;
-        var interactiveLayerGroup = L.layerGroup([this.lots, this.lotsUtfgrid]);
-        var layersControl = L.control.layers(
-            { 
-                'Satellte': this.satellite, 
-                'Streets': this.streets, 
-            }, 
-            { 
-                'lots': interactiveLayerGroup,
-            }
-        ).addTo(this);
+        var baseLayers = {
+            'Streets': this.streets, 
+            'Satellte': this.satellite, 
+        };
+        if (this.lotsUtfgrid && this.lots) {
+            var overlays = {
+                'lots': L.layerGroup([this.lots, this.lotsUtfgrid]),
+            };
+        }
+        var layersControl = L.control.layers(baseLayers, overlays).addTo(this);
     },
 
 });

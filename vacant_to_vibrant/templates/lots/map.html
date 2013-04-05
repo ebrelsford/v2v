@@ -91,7 +91,7 @@
             $('#streetview-container').hide();
         });
 
-        $(':input:not(.non-filter)').change(function() {
+        $('.filters :input:not(.non-filter)').change(function() {
             $('#stop-loading').removeAttr('checked');
             update_counts();
             LOTS_MAP.reloadLotCentroidLayer($('form').serialize());

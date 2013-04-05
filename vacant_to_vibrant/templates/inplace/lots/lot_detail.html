@@ -25,16 +25,23 @@
             <td>{{ lot.billing_account|default:"unknown" }}</td>
         </tr>
         <tr>
-            <th>{% trans "tax account" %}:</th>
-            <td>{{ lot.tax_account|default:"unknown" }}</td>
-        </tr>
-        <tr>
             <th>{% trans "violations" %}:</th>
             <td>{{ lot.violations.count }}</td>
         </tr>
+
+        {% if lot.available_property %}
         <tr>
             <th>{% trans "available" %}:</th>
-            <td>{{ lot.available_property|default:"unknown" }}</td>
+            <td>
+                Available for purchase from {{ lot.available_property.agency }}
+                price: {{ lot.available_property.price_str }}
+            </td>
+        </tr>
+        {% endif %}
+
+        <tr>
+            <th>{% trans "tax account" %}:</th>
+            <td>{{ lot.tax_account|default:"unknown" }}</td>
         </tr>
         <tr>
             <th>{% trans "parcel" %}:</th>

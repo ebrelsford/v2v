@@ -5,7 +5,7 @@
 <div class="grid grid-3-4">
     <h2>
         <a href="{{ lot.get_absolute_url }}">
-            {{ lot.address_line1 }}
+            {{ lot.address_line1|default:"(no address)" }}
         </a>
     </h2>
 

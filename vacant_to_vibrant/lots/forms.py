@@ -5,8 +5,15 @@ from .models import Use
 
 
 class FiltersForm(forms.Form):
-    centroid__within = forms.CharField(widget=forms.HiddenInput)
-    limit = forms.CharField(widget=forms.HiddenInput, initial='1000')
+    centroid__within = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput,
+    )
+    limit = forms.CharField(
+        initial='1000',
+        required=False,
+        widget=forms.HiddenInput,
+    )
 
     participant_types = forms.MultipleChoiceField(
         choices=(
@@ -14,6 +21,7 @@ class FiltersForm(forms.Form):
             ('watchers', 'watchers'),
         ),
         initial=(),
+        required=False,
         widget=forms.CheckboxSelectMultiple(attrs={ 'class': 'filter', }),
     )
 

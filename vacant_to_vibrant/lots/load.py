@@ -83,12 +83,15 @@ def load_lots_available(added_after=None):
             lot.save()
 
 
-def load_lots_land_use_vacant(added_after=None):
+def load_lots_land_use_vacant(added_after=None, force=False):
     """
     Find Parcels and add Lots for LandUseAreas added after the given datetime.
 
     """
     areas = LandUseArea.objects.all()
+    if not force:
+        # don't try every LandUseArea unless we're asked to
+        areas = LandUseArea.objects.filter(lot=None)
     if added_after:
         areas = areas.filter(added__gte=added_after)
     for area in areas:

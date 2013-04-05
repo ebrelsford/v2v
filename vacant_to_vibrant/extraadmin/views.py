@@ -33,19 +33,24 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
         if 'organizers' in participant_types:
             organizers = Organizer.objects.filter(
                 content_type=ContentType.objects.get_for_model(Lot),
-                object_id=lot_pks,
+                object_id__in=lot_pks,
             ).distinct()
             organizers = organizers.exclude(email='')
             mass_mail_organizers(subject, message, organizers)
         if 'watchers' in participant_types:
             watchers = Watcher.objects.filter(
                 content_type=ContentType.objects.get_for_model(Lot),
-                object_id=lot_pks,
+                object_id__in=lot_pks,
             )
             watchers = watchers.exclude(email='')
             mass_mail_watchers(subject, message, watchers)
 
         return super(MailParticipantsView, self).form_valid(form)
+
+    def get_initial(self):
+        initial = super(MailParticipantsView, self).get_initial()
+        initial['participant_types'] = ('organizers', 'watchers',)
+        return initial
 
     def get_success_url(self):
         return app_reverse('mail_participants_success', 'extraadmin.urls')

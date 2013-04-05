@@ -24,10 +24,19 @@
             <th>{% trans "billing account" %}:</th>
             <td>{{ lot.billing_account|default:"unknown" }}</td>
         </tr>
+
+        {% if lot.violations %}
         <tr>
             <th>{% trans "violations" %}:</th>
-            <td>{{ lot.violations.count }}</td>
+            <td>
+                {{ lot.violations.count }}:
+                {% for violation in lot.violations.all %}
+                {{ violation.violation_datetime|date:"SHORT_DATE_FORMAT" }}
+                {{ violation.violation_type }}
+                {% endfor %}
+            </td>
         </tr>
+        {% endif %}
 
         {% if lot.land_use_area %}
         <tr>

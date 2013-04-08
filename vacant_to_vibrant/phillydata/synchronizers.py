@@ -38,8 +38,8 @@ class OPASynchronizer(Synchronizer):
                 lot.owner = lot.billing_account.account_owner.owner
                 lot.save()
             except Exception:
-                logger.exception('Caught exception while getting OPA data for '
-                                 'lot %s' % lot)
+                logger.warn('Caught exception while getting OPA data for lot '
+                            '%s' % lot)
 
 
 class WaterDeptSynchronizer(Synchronizer):

@@ -21,8 +21,8 @@
             <ul>
                 {% for organizer in organizers %}
                 <li>
-                    <a href="{{ organizer.target.get_absolute_url }}">
-                        {{ organizer.target.address_line1 }}
+                    <a href="{{ organizer.content_object.get_absolute_url }}">
+                        {{ organizer.content_object.address_line1|default:"no address" }}
                     </a>
                     (<a href="{% url "organize:delete_organizer" pk=organizer.pk %}?next_url={{ request.path }}">{% trans "stop organizing" %}</a>)
                 </li>
@@ -35,8 +35,8 @@
             <ul>
                 {% for watcher in watchers %}
                 <li>
-                    <a href="{{ watcher.target.get_absolute_url }}">
-                        {{ watcher.target.address_line1 }}
+                    <a href="{{ watcher.content_object.get_absolute_url }}">
+                        {{ watcher.content_object.address_line1|default:"no address" }}
                     </a>
                     (<a href="{% url "organize:delete_watcher" pk=watcher.pk %}?next_url={{ request.path }}">
                         {% trans "stop watching" %}

@@ -18,6 +18,7 @@ class OrganizerTypeAdmin(admin.ModelAdmin):
 class WatcherAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'phone', 'added',)
     list_filter = ('added',)
+    readonly_fields = ('content_object',)
     search_fields = ('name', 'email',)
 
 

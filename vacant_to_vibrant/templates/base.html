@@ -37,6 +37,9 @@
             {% for page in mainmenu %}
                 <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
             {% endfor %}
+            {% if user.is_superuser %}
+                <a href="/extra-admin/">Extra Admin</a>
+            {% endif %}
             </nav>
         </header>
         <div class="content-wrapper">

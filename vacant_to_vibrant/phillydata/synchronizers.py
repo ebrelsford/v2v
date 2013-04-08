@@ -22,13 +22,17 @@ class OPASynchronizer(Synchronizer):
     """
     def sync(self, data_source):
         logger.info('Starting to synchronize OPA data.')
-        self.update_owner_data()
+        self.update_owner_data(count=data_source.batch_size or 1000)
         logger.info('Finished synchronizing OPA data.')
 
-    def update_owner_data(self):
+    def update_owner_data(self, count=1000):
         # TODO also lots where the owner has not been touched in a while?
         # eg, last_seen for BillingAccount?
-        for lot in Lot.objects.filter(owner__isnull=True):
+
+        # grab a random set of lots to update
+        lots = Lot.objects.filter(owner__isnull=True).order_by('?')[:count]
+        for lot in lots:
+            logger.debug('Updating OPA data for lot %s' % lot)
             try:
                 lot.billing_account = find_opa_details(lot.address_line1)
                 lot.owner = lot.billing_account.account_owner.owner

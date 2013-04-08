@@ -2,14 +2,36 @@
 {% load i18n inplace_tags %}
 
 {% block content %}
-<div style="float: right;">
-    {% with lot.get_geojson_url as places_url %}
-    {% place_map places_url 200px 200px %}
-    {% endwith %}
+<div class="grid grid-3-4">
+    <h2>
+        <a href="{{ lot.get_absolute_url }}">
+            {{ lot.address_line1|default:"(no address)" }}
+        </a>
+    </h2>
+
+    {% block lot_content %}{% endblock %}
+
 </div>
-<h2>
-    <a href="{{ lot.get_absolute_url }}">
-        {{ lot.address_line1 }}
-    </a>
-</h2>
+
+<div class="grid grid-1-4">
+
+    {% with lot.get_geojson_url as places_url %}
+    {% place_map places_url 100% 200px %}
+    {% endwith %}
+
+    <div id="streetview-container" style="width: 100%; height: 200px;"></div>
+
+    <script>
+    $(document).ready(function() {
+        $('#streetview-container').streetview({
+            errorSelector: '#streetview-error',
+        });
+        $('#streetview-container').data('streetview').load_streetview(
+            {{ lot.centroid.x }},
+            {{ lot.centroid.y }}
+        );
+    });
+    </script>
+
+</div>
 {% endblock %}

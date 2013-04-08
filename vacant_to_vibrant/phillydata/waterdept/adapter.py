@@ -18,7 +18,7 @@ def find_water_dept_details(lon, lat):
     if not data:
         raise Exception('Could not find Water Department data for %f, %f' %
                         (lon, lat))
-    print 'Found data', data
+    logger.debug('Found data %s' % str(data))
 
     water_parcel = _get_or_create_water_parcel(data)
     _get_or_create_water_accounts(data, water_parcel)

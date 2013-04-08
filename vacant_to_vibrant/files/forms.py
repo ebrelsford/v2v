@@ -1,39 +1,10 @@
-from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
-from django.forms import HiddenInput, IntegerField, ModelChoiceField
-
-from vacant_to_vibrant.forms import CaptchaForm
+from content.forms import ContentForm
 from .models import File
 
 
-class FileForm(CaptchaForm):
-    content_type = ModelChoiceField(
-        label='content type',
-        queryset=ContentType.objects.all(),
-        widget=HiddenInput()
-    )
-
-    object_id = IntegerField(
-        label='object id',
-        widget=HiddenInput()
-    )
-
-    added_by = ModelChoiceField(
-        label='added_by',
-        queryset=User.objects.all(),
-        required=False,
-        widget=HiddenInput()
-    )
-
-    def __init__(self, *args, **kwargs):
-        # add initial value for added_by based on the user kwarg
-        kwargs['initial'] = kwargs.get('initial', {})
-        user = kwargs.get('user', None)
-        if not user or user.is_anonymous(): user = None
-        kwargs['initial']['added_by'] = user
-
-        super(FileForm, self).__init__(*args, **kwargs)
+class FileForm(ContentForm):
 
     class Meta:
-        exclude = ('added',)
+        fields = ('added_by_name', 'document', 'title', 'description',
+                  'content_type', 'object_id',)
         model = File

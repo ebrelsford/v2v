@@ -1,5 +1,3 @@
-import json
-
 from django.test import TestCase
 
 from .api import get_point_data

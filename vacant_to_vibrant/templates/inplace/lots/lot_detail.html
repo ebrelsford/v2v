@@ -3,73 +3,116 @@
 
 {% block title %}{{ block.super }} | {{ lot.address_line1 }}{% endblock %}
 
-{% block content %}
+{% block lot_content %}
 {{ block.super }}
 <div class="details">
     <h3>Details</h3>
     <table>
         <tr>
             <th>{% trans "address line 1" %}:</th>
-            <td>{{ lot.address_line1 }}</td>
+            <td>{{ lot.address_line1|default:"unknown" }}</td>
         </tr>
         <tr>
-            <th>{% trans "postal code" %}:</th>
-            <td>{{ lot.postal_code }}</td>
+            <th>{% trans "zipcode" %}:</th>
+            <td>{{ lot.postal_code|default:"unknown" }}</td>
         </tr>
         <tr>
             <th>{% trans "owner" %}:</th>
-            <td>{{ lot.owner }}</td>
+            <td>{{ lot.owner|default:"unknown" }}</td>
         </tr>
         <tr>
             <th>{% trans "billing account" %}:</th>
-            <td>{{ lot.billing_account }}</td>
+            <td>{{ lot.billing_account|default:"unknown" }}</td>
         </tr>
-        <tr>
-            <th>{% trans "tax account" %}:</th>
-            <td>{{ lot.tax_account }}</td>
-        </tr>
+
+        {% if lot.violations %}
         <tr>
             <th>{% trans "violations" %}:</th>
-            <td>{{ lot.violations.count }}</td>
+            <td>
+                {{ lot.violations.count }}:
+                {% for violation in lot.violations.all %}
+                {{ violation.violation_datetime|date:"SHORT_DATE_FORMAT" }}
+                {{ violation.violation_type }}
+                {% endfor %}
+            </td>
         </tr>
+        {% endif %}
+
+        {% if lot.land_use_area %}
+        <tr>
+            <th>{% trans "land use" %}:</th>
+            <td>
+                According to the City Planning Commission:
+                {{ lot.land_use_area.category }}, 
+                {{ lot.land_use_area.subcategory }},
+                {{ lot.land_use_area.description }}
+            </td>
+        </tr>
+        {% endif %}
+
+        {% if lot.available_property %}
         <tr>
             <th>{% trans "available" %}:</th>
-            <td>{{ lot.available_property }}</td>
+            <td>
+                Available for purchase from {{ lot.available_property.agency }}
+                price: {{ lot.available_property.price_str }}
+            </td>
+        </tr>
+        {% endif %}
+
+        <tr>
+            <th>{% trans "tax account" %}:</th>
+            <td>{{ lot.tax_account|default:"unknown" }}</td>
         </tr>
         <tr>
             <th>{% trans "parcel" %}:</th>
-            <td>{{ lot.parcel }}</td>
+            <td>{{ lot.parcel|default:"unknown" }}</td>
         </tr>
+
+        {% if lot.water_parcel %}
         <tr>
             <th>{% trans "water parcel" %}:</th>
-            <td>{{ lot.water_parcel }}</td>
+            <td>
+                gross area: {{ lot.water_parcel.gross_area }}<br />
+                impervious area: {{ lot.water_parcel.impervious_area }}<br />
+                owners: {{ lot.water_parcel.owner1 }},
+                {{lot.water_parcel.owner2}}
+            </td>
         </tr>
+        {% endif %}
+
     </table>
 </div>
-<div class="organize">
+
+<div id="organizers" class="organize">
     <h3>Organize</h3>
     <a href="{% url "lots:add_organizer" pk=lot.pk %}">click to organize</a>
     {% render_organizer_list for lot %}
 </div>
+
 <div class="watch">
     <h3>Watch</h3>
     <a href="{% url "lots:add_watcher" pk=lot.pk %}">click to watch</a>
 </div>
-<div class="photos">
+
+<div id="photos" class="photos">
     <h3>Photos</h3>
     <div>
         <a href="{% url "lots:add_photo" pk=lot.pk %}">click to add a photo</a>
     </div>
     {% render_photo_list for lot %}
 </div>
-<div class="notes">
+
+<div id="notes" class="notes">
     <h3>Notes</h3>
     <a href="{% url "lots:add_note" pk=lot.pk %}">click to add a note</a>
     {% render_note_list for lot %}
 </div>
-<div class="files">
+
+<div id="files" class="files">
     <h3>Files</h3>
     <a href="{% url "lots:add_file" pk=lot.pk %}">click to add a file</a>
     {% render_file_list for lot %}
 </div>
+
 {% endblock %}

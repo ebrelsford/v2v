@@ -24,6 +24,8 @@ class Photo(models.Model):
     description = models.TextField(_('description'), null=True, blank=True)
     added = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, null=True, blank=True)
+    added_by_name = models.CharField(_('added by name'), max_length=256,
+                                     null=True, blank=True)
 
     def __unicode__(self):
         return self.name

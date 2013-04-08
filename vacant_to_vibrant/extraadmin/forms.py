@@ -1,20 +1,12 @@
-from django.forms import (Form, CharField, Textarea, MultipleChoiceField,
-                          HiddenInput, CheckboxSelectMultiple)
+from django import forms
+
+from lots.forms import FiltersForm
 
 
-class MailParticipantsForm(Form):
-    subject = CharField()
-    message = CharField(widget=Textarea)
+class MailForm(forms.Form):
+    subject = forms.CharField()
+    message = forms.CharField(widget=forms.Textarea)
 
-    centroid__within = CharField(required=False, widget=HiddenInput)
 
-    participant_types = MultipleChoiceField(
-        choices=(
-            ('organizers', 'organizers'),
-            ('watchers', 'watchers'),
-        ),
-        initial=('organizers', 'watchers'),
-        widget=CheckboxSelectMultiple(attrs={ 'class': 'filter', }),
-    )
-
-    # TODO lot filters! Dynamically add to form?
+class MailParticipantsForm(MailForm, FiltersForm):
+    pass

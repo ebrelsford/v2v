@@ -1,5 +1,3 @@
-
-
 /*
  * A mixin for MarkerClusterGroup that adds paginated layers. In the options
  * for the MarkerClusterGroup, two functions should be added:
@@ -35,6 +33,10 @@ L.MarkerClusterGroup.include({
             if (!paginated) return;
             var next_url = instance.options.getNextPageUrlFromData(data);
             if (!next_url) return;
+
+            // XXX stop-gap, would need a more robust solution if we planned on
+            // using this
+            if ($('#stop-loading:checked').length > 0) return;
 
             // Get more data!
             instance.addDataByUrl(next_url, geoJsonOptions, paginated);

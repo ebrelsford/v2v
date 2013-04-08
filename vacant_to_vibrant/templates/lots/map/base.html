@@ -1,6 +1,5 @@
 {% load inplace_tags %}
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
 <!--[if lte IE 8]>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
@@ -17,6 +16,10 @@
         LOTS_MAP = L.map('map', {
             {% block options %}
             center: [39.952335, -75.163789],
+            maxBounds: [
+                [39.147, -76.358],
+                [40.772, -73.952],
+            ],
             zoom: 11,
             cloudmadeKey: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
             cloudmadeStyleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
@@ -27,9 +30,7 @@
                     minWidth: 300,
                 }
                 var popupContent = '<div id="popup-content"></div>';
-                console.log(e);
                 if (e.targetType == 'utfgrid') {
-                    console.log('utfgrid');
                     var popup = L.popup(popupOptions)
                         .setContent(popupContent)
                         .setLatLng(e.latlng)

@@ -66,8 +66,6 @@ class LotResource(ModelResource):
             if violations_count > 0:
                 lots = Lot.objects.all().annotate(violations_count=Count('violations'))
                 lots = lots.filter(violations_count=violations_count)
-                orm_filters['pk__in'] = (orm_filters.get('pk__in', []) +
-                                         list(lots.values_list('pk', flat=True)))
 
         boundary_filters = None
         for f in filters:

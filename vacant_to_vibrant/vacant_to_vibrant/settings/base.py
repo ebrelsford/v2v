@@ -213,9 +213,12 @@ ACTSTREAM_SETTINGS = {
     'MANAGER': 'activity_stream.managers.PlaceActionManager',
     'MODELS': (
         'auth.user',
+        'files.file',
         'lots.lot',
+        'notes.note',
         'organize.organizer',
         'organize.watcher',
+        'photos.photo',
     ),
     'USE_JSONFIELD': True,
 }

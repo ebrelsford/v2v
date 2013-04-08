@@ -97,7 +97,7 @@ class Lot(Place):
     # zoning
 
     def __unicode__(self):
-        return u'Lot (%s)' % (self.address_line1,)
+        return u'%s' % (self.address_line1,)
 
     @models.permalink
     def get_absolute_url(self):

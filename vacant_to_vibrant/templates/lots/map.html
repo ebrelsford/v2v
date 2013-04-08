@@ -1,29 +1,96 @@
 {% extends "lots/map/cluster_main.html" %}
+{% load i18n %}
+
+{% block includes %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}js/lib/jquery.infinitescroll.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/jquery.activitystream.js"></script>
+<script src="{{ STATIC_URL }}js/geocode.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.searchbar.js"></script>
+{% endblock %}
 
 {% block below_map %}
-<div class="filters" style="float: left;">
-    <form>
-        {{ filters.as_p }}
-    </form>
-</div>
-<div class="tally" style="float: left;">
-    You are looking at:
-    <ul>
-        <li><span class="lots-count">X</span> lots</li>
-        <li><span class="no-known-use-count">X</span> lots with no known use</li>
-        {% for use in uses %}
-        <li><span class="{{ use.slug }}-count">Y</span> lots being used as a {{ use.name }}</li>
-        {% endfor %}
-    </ul>
+
+<div id="streetview-container" style="padding: 25px; display: none;">
+    <div id="streetview" style="height: 300px; width: 100%;">
+    </div>
+    <div id="streetview-error" class="streetview">
+        {% trans "Sorry, we couldn't find streetview imagery for this lot." %}
+    </div>
 </div>
 
+<div class="grid grid-1-2">
+    <div class="searchbar">
+        <form class="search">
+            search: <input id="search" name="search" type="text" />
+            <input type="submit" />
+            <span class="loading" style="display: none;">loading</span>
+            <div class="warning" style="display: none;">warning</div>
+        </form>
+    </div>
+
+    <div class="filters">
+        <form>
+            {{ filters.as_p }}
+        </form>
+    </div>
+</div>
+
+<div class="grid grid-1-2">
+
+    {% comment %}
+    XXX stop-gap, would need a more robust solution if we planned on using this
+    {% endcomment %}
+    <div style="margin: 15px 0;">
+        <input type="checkbox" id="stop-loading" name="stop-loading" class="non-filter" />
+        <label for="stop-loading">enough! stop loading data</label>
+    </div>
+
+    <div class="tally">
+        You are looking at:
+        <ul>
+            <li><span class="lots-count">X</span> lots</li>
+            <li><span class="no-known-use-count">X</span> lots with no known use</li>
+            {% for use in uses %}
+            <li><span class="{{ use.slug }}-count">Y</span> lots being used as a {{ use.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="activity-stream-section">
+        <div>Recent Activities</div>
+        <div class="activity-stream">
+            <div class="activity-stream-container"></div>
+            <div class="activity-stream-nav" style="display: none;">
+                <a href="/activity-stream/">next page</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="clear"></div>
+
 <script>
+
     function update_counts() {
         $.getJSON('/lots/count/?' + $('form').serialize(), function(data) {
             $.each(data, function(label, count) {
                 $('.' + label).text(count);
             });
         });
+    }
+
+    function get_bounds(map) {
+        var bounds = map.options.maxBounds;
+        var seBounds = bounds.getSouthEast();
+        var nwBounds = bounds.getNorthWest();
+
+        return [
+            seBounds.lng,
+            seBounds.lat,
+            nwBounds.lng,
+            nwBounds.lat
+        ];
     }
 
     $(document).ready(function() {
@@ -38,10 +105,40 @@
             update_counts();
         });
 
-        $(':input').change(function() {
+        $('#streetview-container').streetview({
+            errorSelector: '#streetview-error',
+        });
+
+        LOTS_MAP.on('lotclicked', function(e) {
+            $('#streetview-container').data('streetview').load_streetview(
+                e.geometry.coordinates[0], e.geometry.coordinates[1]);
+        });
+
+        LOTS_MAP.on('popupclose', function(e) {
+            $('#streetview-container').hide();
+        });
+
+        $('.filters :input:not(.non-filter)').change(function() {
+            $('#stop-loading').removeAttr('checked');
             update_counts();
             LOTS_MAP.reloadLotCentroidLayer($('form').serialize());
         });
+
+        $('.activity-stream-container').activitystream();
+
+        $('.searchbar')
+            .searchbar({
+                bounds: get_bounds(LOTS_MAP),
+                city: 'Philadelphia',
+                state: 'PA',
+                errorMessage: "Sorry, it doesn't seem that the address you " +
+                    "entered is in Philadelphia. Try again?",
+                loadingSelector: '.loading',
+                warningSelector: '.warning',
+            })
+            .on('searchresultfound', function(e, data) {
+                LOTS_MAP.setView([data.latitude, data.longitude], 15);
+            });
 
     });
 </script>

@@ -1,0 +1,124 @@
+{% extends "admin/change_form.html" %}
+{% load inplace_tags %}
+
+{% block extrahead %}{{ block.super }}
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
+<![endif]-->
+<script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+
+<style>
+    .loading {
+        background: url(/static/img/loading.gif);
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+    }
+</style>
+
+<script>
+
+    django.jQuery(document).ready(function() {
+        var $ = django.jQuery;
+
+        var parcelMap = L.map('parcelmap', {
+            center: [39.952335, -75.163789],
+            zoom: 12,
+
+            layers: [
+                L.tileLayer(
+                    'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', 
+                    {
+                        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://www.openstreetmap.org/copyright">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                        key: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
+                        styleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
+                    }
+                ),
+            ],
+        });       
+
+        var parcelLayer = null;
+
+        function findParcel(params) {
+            // Clear any existing parcels
+            if (parcelLayer !== null) {
+                parcelLayer.clearLayers();
+            }
+            $('#parcelmessage').text('Finding a matching parcel...');
+            $('.loading').show();
+
+            // Try to display new parcels, by address
+            var url = '{% url "parcels:find_parcel" %}?' + $.param(params);
+            $.getJSON(url, function(data) {
+                $('.loading').hide();
+                if (data.features.length === 0) {
+                    $('#id_parcel_pk').val(null);
+                    $('#parcelmessage').text("Couldn't find a parcel!");
+                    return;
+                }
+
+                // TODO what if there are multiple matches?
+                var feature = data.features[0];
+                $('#id_parcel_pk').val(feature.id);
+                $('#id_address_line1').val(feature.properties.address);
+                var msg = 'This is the parcel we found.';
+
+                var zipcode = feature.properties.zipcode;
+                if (zipcode !== null && zipcode !== '') {
+                    $('#id_postal_code').val(zipcode);
+                }
+                else {
+                    msg += ' Could not find a zipcode for the parcel--if you add a <a href="{% url "admin:boundaries_layer_changelist" %}">boundary layer</a> named "zipcodes" we would find one automatically.';
+                }
+
+                parcelLayer = L.geoJson(data).addTo(parcelMap);
+                parcelMap.setView(parcelLayer.getBounds().getCenter(), 16);
+
+                if (feature.properties.lot_count <= 1) {
+                    $('#parcelmessage').text(msg);
+                }
+                else {
+                    $('#parcelmessage').html('There are <a href="{% url "admin:lots_lot_changelist" %}?parcel=' + feature.id + '" target="_blank">multiple lots</a> using this parcel. Check those first to make sure you\'re not adding a duplicate.'); 
+                }
+            });
+            
+        }
+
+        // Load the parcel if this lot already has one
+        if ($('#id_parcel_pk').val() !== '') {
+            findParcel({'pk': $('#id_parcel_pk').val()});
+        }
+
+        $('#id_address_line1').change(function() {
+            var address = $(this).val();
+            if (address !== null && address !== '') {
+                findParcel({'address': address});
+            }
+        });
+
+        if ($('#id_city').val() === '') {
+            $('#id_city').val('Philadelphia');
+        }
+        if ($('#id_state_province').val() === '') {
+            $('#id_state_province').val('PA');
+        }
+    });
+
+</script>
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+{% endblock %}
+
+{% block field_sets %}
+<div style="float: right;">
+    <div id="parcelmap" style="width: 600px; height: 250px;"></div>
+    <span id="parcelmessage" style="padding: 5px; font-weight: bold;">
+        Parcel for this lot: enter an address to find a parcel
+    </span>
+    <div class="loading" style="display: none;"></div>
+</div>
+{{ block.super }}
+{% endblock %}

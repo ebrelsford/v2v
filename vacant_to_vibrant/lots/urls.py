@@ -5,16 +5,12 @@ from recaptcha_works.decorators import fix_recaptcha_remote_ip
 
 from organize.models import Organizer, Watcher
 from .models import Lot
-from .views import (EditLotParicipantView, PlacesWithViolationsView,
-                    PlacesWithViolationsMap, AddParticipantView, LotsGeoJSON,
+from .views import (EditLotParicipantView, AddParticipantView, LotsGeoJSON,
                     AddParticipantSuccessView, AddPhotoView,
                     AddNoteView, AddFileView, LotsCountView)
 
 
 urlpatterns = patterns('',
-    url(r'^violations/geojson/$', PlacesWithViolationsView.as_view()),
-    url(r'^violations/map/$', PlacesWithViolationsMap.as_view()),
-
     url(r'^geojson/', LotsGeoJSON.as_view()),
     url(r'^count/', LotsCountView.as_view()),
 

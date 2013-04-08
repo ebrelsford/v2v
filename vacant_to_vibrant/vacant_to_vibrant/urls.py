@@ -19,6 +19,7 @@ urlpatterns += patterns('',
     url(r'^lots/', include('lots.urls', 'lots')),
     url(r'^organize/', include('organize.urls', 'organize')),
     url(r'^places/', include('inplace.urls', 'inplace')),
+    url(r'^parcels/', include('phillydata.parcels.urls', 'parcels')),
 
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),

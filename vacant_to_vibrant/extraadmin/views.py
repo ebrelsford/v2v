@@ -84,3 +84,11 @@ class MailParticipantsSuccessView(LoginRequiredMixin, PermissionRequiredMixin,
                                   TemplateView):
     permission_required = ('organize.email_participants')
     template_name = 'extraadmin/mail_participants_success.html'
+
+
+class ExtraAdminIndex(LoginRequiredMixin, PermissionRequiredMixin,
+                      TemplateView):
+    # Either require ALL permissions required to perform actions on this page
+    # or require ONE of them, filter template accordingly
+    permission_required = ('organize.email_participants',)
+    template_name = 'extraadmin/index.html'

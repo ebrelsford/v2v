@@ -1,0 +1,38 @@
+{% load applicationcontent_tags compress i18n inplace_tags %}
+
+{% block content_main %}
+<div>
+    <h1>{% trans "Admin" %}</h1>
+    <ul>
+
+        {% if user.is_staff %}
+        <li class="admin-action">
+            <a href="{% url "admin:index" %}">Backend</a>
+            <div class="admin-action-description">
+                Change most settings for the site.
+            </div>
+        </li>
+        {% endif %}
+
+        {% if "organize.email_participants" in perms %}
+        <li class="admin-action">
+            <a href="{% app_reverse "mail_participants" "extraadmin.urls" %}">Mail Participants</a>
+            <div class="admin-action-description">
+                Send mass emails to organizers and watchers.
+            </div>
+        </li>
+        {% endif %}
+
+        {% if "boundaries.add_layer" in perms %}
+        <li class="admin-action">
+            <a href="{% url "inplace:layer_upload" %}">Add boundary layers</a>
+            <div class="admin-action-description">
+                Add boundaries (such as zip codes) to filter lots by.
+            </div>
+        </li>
+        {% endif %}
+
+    </ul>
+</div>
+{% endblock %}
+

@@ -17,6 +17,18 @@
             <td>{{ lot.postal_code|default:"unknown" }}</td>
         </tr>
         <tr>
+            <th>{% trans "area" %}:</th>
+            <td>
+                {% if lot.billing_account %}
+                according to the lot's billing account, this lot has an area of {{ lot.billing_account.land_area|floatformat:"-1"|default:"unknown" }} square feet
+                {% elif lot.water_parcel %}
+                according to the Water Department, this lot has an area of {{ lot.water_parcel.gross_area|floatformat:"-1"|default:"unknown" }} square feet
+                {% else %}
+                this lot has an area of {{ lot.parcel_area|floatformat:"-1"|default:"unknown" }} square feet
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
             <th>{% trans "owner" %}:</th>
             <td>{{ lot.owner|default:"unknown" }}</td>
         </tr>

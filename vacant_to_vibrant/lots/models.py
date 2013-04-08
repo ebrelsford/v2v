@@ -106,6 +106,14 @@ class Lot(Place):
     def find_nearby(self, count=5):
         return self.objects.find_nearby(self)[:count]
 
+    def parcel_area(self):
+        """Find the area of this lot in square feet using its polygon."""
+        try:
+            # tranform to an area-preserving projection for south PA
+            return self.polygon.transform(102729, clone=True).area
+        except Exception:
+            return None
+
 
 class Use(models.Model):
     name = models.CharField(_('name'), max_length=200)

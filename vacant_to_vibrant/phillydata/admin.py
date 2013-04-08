@@ -15,8 +15,11 @@ class PhillyDataSourceAdmin(admin.ModelAdmin):
             'fields': (('synchronize_in_progress', 'healthy', 'enabled',),),
         }),
         ('Synchronization', {
-            'fields': (('last_synchronized', 'next_synchronize',
-                        'synchronize_frequency',),),
+            'fields': (
+                ('last_synchronized', 'next_synchronize',
+                 'synchronize_frequency',),
+                'batch_size',
+            ),
         }),
     )
 

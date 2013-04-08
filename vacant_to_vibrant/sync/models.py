@@ -62,6 +62,13 @@ class DataSource(models.Model):
         help_text=_('The last time this data source was synchronized'),
     )
 
+    batch_size = models.IntegerField(_('batch size'),
+        blank=True,
+        null=True,
+        help_text=_('The batch size that should be updated each time this '
+                    'source is synchronized'),
+    )
+
     def synchronize(self):
         do_synchronize(self)
 

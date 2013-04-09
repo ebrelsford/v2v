@@ -166,6 +166,7 @@ INSTALLED_APPS = (
     'phillydata.taxaccounts',
     'phillydata.violations',
     'phillydata.waterdept',
+    'phillydata.zoning',
     'photos',
     'sync',
     'twitter',

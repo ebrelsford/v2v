@@ -10,6 +10,7 @@ from .landuse.adapter import find_land_use_areas
 from .opa.adapter import find_opa_details
 from .violations.adapter import find_violations
 from .waterdept.adapter import find_water_dept_details
+from .zoning.models import BaseDistrict
 
 
 logger = logging.getLogger(__name__)
@@ -128,3 +129,24 @@ class LIViolationsSynchronizer(Synchronizer):
     def update_violation_data(self):
         for code in self.codes:
             find_violations(code, self.data_source.last_synchronized)
+
+
+class ZoningSynchronizer(Synchronizer):
+    """A Synchronizer that updates zoning for lots."""
+
+    def sync(self, data_source):
+        logger.info('Starting to synchronize zoning.')
+        self.update_zoning(count=data_source.batch_size or 1000)
+        logger.info('Finished synchronizing zoning.')
+
+    def update_zoning(self, count=1000):
+        lots = Lot.objects.filter(zoning_district__isnull=True).order_by('?')
+        for lot in lots[:count]:
+            try:
+                lot.zoning_district = BaseDistrict.objects.get(
+                    geometry__contains=lot.centroid,
+                )
+                lot.save()
+            except Exception:
+                logger.warn('Caught exception while updating zoning for lot '
+                            '%s' % lot)

@@ -52,19 +52,20 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
     list_filter = ('known_use',)
     readonly_fields = ('added', 'available_property_link', 'billing_account',
                        'land_use_area', 'owner', 'parcel_link', 'tax_account',
-                       'violations', 'water_parcel',)
+                       'violations', 'water_parcel', 'zoning_district',)
     search_fields = ('address_line1',)
 
     fieldsets = (
         (None, {
             'fields': ('name', 'address_line1', 'address_line2', 'city',
-                       'state_province', 'postal_code', 'known_use',),
+                       'state_province', 'postal_code', 'known_use', 'added',),
         }),
         ('Other data', {
             'classes': ('collapse',),
             'fields': ('owner', 'billing_account', 'tax_account',
                        'parcel_pk', 'parcel_link', 'land_use_area', 'violations',
-                       'available_property_link', 'water_parcel', 'added',),
+                       'available_property_link', 'water_parcel',
+                       'zoning_district'),
         }),
         ('Geography', {
             'classes': ('collapse',),

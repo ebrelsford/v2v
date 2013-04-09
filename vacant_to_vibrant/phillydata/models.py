@@ -16,6 +16,7 @@ class PhillyDataSource(DataSource):
         ('opa', 'OPA API'),
         ('praavailableproperties', 'PRA Available Properties'),
         ('waterdept', 'Water Department data'),
+        ('zoning', 'Zoning'),
     )
     name = models.CharField(_('name'),
         max_length=50,

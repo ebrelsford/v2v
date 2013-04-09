@@ -84,6 +84,11 @@ class Lot(Place):
         blank=True,
         null=True,
     )
+    zoning_district = models.ForeignKey('zoning.BaseDistrict',
+        blank=True,
+        null=True,
+        verbose_name=_('zoning district'),
+    )
 
     added = models.DateTimeField(_('date added'),
         auto_now_add=True,
@@ -92,9 +97,6 @@ class Lot(Place):
 
     organizers = GenericRelation(Organizer)
     watchers = GenericRelation(Watcher)
-
-    # TODO
-    # zoning
 
     def __unicode__(self):
         return u'%s' % (self.address_line1,)

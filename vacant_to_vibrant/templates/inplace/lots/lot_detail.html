@@ -62,6 +62,18 @@
         </tr>
         {% endif %}
 
+        {% if lot.city_council_district %}
+        <tr>
+            <th>{% trans "city council district" %}:</th>
+            <td>
+                {{ lot.city_council_district.label }}
+                {% with member=lot.city_council_district.citycouncilmember_set.all.0 %}
+                <a href="{{ member.url }}">{{ member.name }}</a>
+                {% endwith %}
+            </td>
+        </tr>
+        {% endif %}
+
         {% if lot.zoning_district %}
         <tr>
             <th>{% trans "zoning district" %}:</th>

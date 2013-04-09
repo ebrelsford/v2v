@@ -51,8 +51,9 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
                     'billing_account',)
     list_filter = ('known_use',)
     readonly_fields = ('added', 'available_property_link', 'billing_account',
-                       'land_use_area', 'owner', 'parcel_link', 'tax_account',
-                       'violations', 'water_parcel', 'zoning_district',)
+                       'city_council_district', 'land_use_area', 'owner',
+                       'parcel_link', 'tax_account', 'violations',
+                       'water_parcel', 'zoning_district',)
     search_fields = ('address_line1',)
 
     fieldsets = (
@@ -65,7 +66,7 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
             'fields': ('owner', 'billing_account', 'tax_account',
                        'parcel_pk', 'parcel_link', 'land_use_area', 'violations',
                        'available_property_link', 'water_parcel',
-                       'zoning_district'),
+                       'city_council_district', 'zoning_district'),
         }),
         ('Geography', {
             'classes': ('collapse',),

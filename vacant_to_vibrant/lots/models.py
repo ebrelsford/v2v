@@ -89,6 +89,11 @@ class Lot(Place):
         null=True,
         verbose_name=_('zoning district'),
     )
+    city_council_district = models.ForeignKey('boundaries.Boundary',
+        blank=True,
+        null=True,
+        verbose_name=_('city council district'),
+    )
 
     added = models.DateTimeField(_('date added'),
         auto_now_add=True,

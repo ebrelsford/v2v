@@ -1,5 +1,7 @@
 import logging
 
+from inplace.boundaries.models import Boundary
+
 from lots.load import (load_lots_available, load_lots_with_violations,
                        load_lots_land_use_vacant)
 from lots.models import Lot
@@ -145,6 +147,30 @@ class ZoningSynchronizer(Synchronizer):
             try:
                 lot.zoning_district = BaseDistrict.objects.get(
                     geometry__contains=lot.centroid,
+                )
+                lot.save()
+            except Exception:
+                logger.warn('Caught exception while updating zoning for lot '
+                            '%s' % lot)
+
+
+class CityCouncilSynchronizer(Synchronizer):
+    """A Synchronizer that updates city council districts for lots."""
+
+    def sync(self, data_source):
+        logger.info('Starting to synchronize city council districts.')
+        self.update_city_council_districts(count=data_source.batch_size or 1000)
+        logger.info('Finished synchronizing city council districts.')
+
+    def update_city_council_districts(self, count=1000):
+        lots = Lot.objects.filter(
+            city_council_district__isnull=True
+        ).order_by('?')
+        for lot in lots[:count]:
+            try:
+                lot.city_council_district = Boundary.objects.get(
+                    geometry__contains=lot.centroid,
+                    layer__name='City Council Districts',
                 )
                 lot.save()
             except Exception:

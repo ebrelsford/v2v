@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     'pathways',
     'phillydata',
     'phillydata.availableproperties',
+    'phillydata.citycouncil',
     'phillydata.landuse',
     'phillydata.opa',
     'phillydata.owners',

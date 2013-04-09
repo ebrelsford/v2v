@@ -52,16 +52,19 @@ class WaterDeptSynchronizer(Synchronizer):
     """
     def sync(self, data_source):
         logger.info('Starting to synchronize Water Department data.')
-        self.update_water_dept_data()
+        self.update_water_dept_data(count=data_source.batch_size)
         logger.info('Finished synchronizing Water Department data.')
 
-    def update_water_dept_data(self):
-        # TODO also lots where the water dept data has not been touched in a while?
-        for lot in Lot.objects.filter(water_parcel__isnull=True):
+    def update_water_dept_data(self, count=1000):
+        # TODO also lots where the water dept data has not been touched in a
+        # while
+        lots = Lot.objects.filter(water_parcel__isnull=True).order_by('?')
+        for lot in lots[:count]:
             logger.debug('Updating Water Department data for lot %s' % lot)
             try:
-                lot.water_parcel = find_water_dept_details(lot.polygon.centroid.x,
-                                                           lot.polygon.centroid.y)
+                lot.water_parcel = find_water_dept_details(
+                    *lot.polygon.centroid.coords
+                )
                 lot.save()
             except Exception:
                 logger.exception('Exception while updating Water Department '

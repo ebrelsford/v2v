@@ -92,6 +92,10 @@ class WaterParcel(models.Model):
         null=True,
     )
 
+    def _percent_permeable(self):
+        return (1 - (self.impervious_area / self.gross_area )) * 100
+    percent_permeable = property(_percent_permeable)
+
     def __unicode__(self):
         return '%s at %s, owned by %s, %s' % (self.parcel_id, self.address,
                                               self.owner1, self.owner2 or '')

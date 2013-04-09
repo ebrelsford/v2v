@@ -106,8 +106,9 @@
         <tr>
             <th>{% trans "water parcel" %}:</th>
             <td>
-                gross area: {{ lot.water_parcel.gross_area }}<br />
-                impervious area: {{ lot.water_parcel.impervious_area }}<br />
+                gross area: {{ lot.water_parcel.gross_area|floatformat }} square feet<br />
+                impervious area: {{ lot.water_parcel.impervious_area|floatformat }} square feet<br />
+                permeable area: {{ lot.water_parcel.percent_permeable|floatformat }}%<br />
                 owners: {{ lot.water_parcel.owner1 }},
                 {{lot.water_parcel.owner2}}
             </td>

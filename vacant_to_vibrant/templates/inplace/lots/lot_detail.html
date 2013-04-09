@@ -37,7 +37,7 @@
             <td>{{ lot.billing_account|default:"unknown" }}</td>
         </tr>
 
-        {% if lot.violations %}
+        {% if lot.violations.count > 0 %}
         <tr>
             <th>{% trans "violations" %}:</th>
             <td>

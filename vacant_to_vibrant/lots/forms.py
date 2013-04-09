@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from inplace.boundaries.models import Boundary, Layer
 
+from phillydata.zoning.models import ZoningType
 from .models import Use
 
 
@@ -54,6 +55,11 @@ class FiltersForm(forms.Form):
 
     violations_count = forms.IntegerField(
         required=False,
+    )
+
+    zoning_district__zoning_type__in = forms.ModelMultipleChoiceField(
+        queryset=ZoningType.objects.all(),
+        widget=forms.CheckboxSelectMultiple(),
     )
 
     known_use__name__in = forms.MultipleChoiceField(

@@ -98,6 +98,10 @@ class LotResource(ModelResource):
             if filter_name in cleaned_data and cleaned_data[filter_name] is not None:
                 orm_filters['%s__isnull' % f] = not cleaned_data[filter_name]
 
+        for filter_name, value in cleaned_data.items():
+            if filter_name in ('zoning_district__zoning_type__in',) and value:
+                orm_filters[filter_name] = value
+
         return orm_filters
 
     class Meta:
@@ -106,9 +110,9 @@ class LotResource(ModelResource):
         queryset = Lot.objects.all()
         filtering = {
             'centroid': ALL,
-            'polygon': ALL,
-            'owner': ALL_WITH_RELATIONS,
             'known_use': ALL_WITH_RELATIONS,
+            'owner': ALL_WITH_RELATIONS,
+            'polygon': ALL,
         }
 
 

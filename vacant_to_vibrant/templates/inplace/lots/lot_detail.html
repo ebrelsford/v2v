@@ -62,6 +62,15 @@
         </tr>
         {% endif %}
 
+        {% if lot.zoning_district %}
+        <tr>
+            <th>{% trans "zoning district" %}:</th>
+            <td>
+                {{ lot.zoning_district.zoning_type.code }}
+            </td>
+        </tr>
+        {% endif %}
+
         {% if lot.available_property %}
         <tr>
             <th>{% trans "available" %}:</th>

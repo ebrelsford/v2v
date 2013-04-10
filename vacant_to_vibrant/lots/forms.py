@@ -8,6 +8,10 @@ from .models import Use
 
 
 class FiltersForm(forms.Form):
+
+    #
+    # Hidden filters
+    #
     centroid__within = forms.CharField(
         required=False,
         widget=forms.HiddenInput,
@@ -16,6 +20,10 @@ class FiltersForm(forms.Form):
         initial='1000',
         required=False,
         widget=forms.HiddenInput,
+    )
+    parents_only = forms.BooleanField(
+        initial=True,
+        widget=forms.HiddenInput
     )
 
     participant_types = forms.MultipleChoiceField(

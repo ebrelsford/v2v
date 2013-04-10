@@ -1,4 +1,5 @@
 from django.contrib.contenttypes.generic import GenericRelation
+from django.contrib.gis.geos import MultiPolygon
 from django.contrib.gis.measure import D
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -103,6 +104,12 @@ class Lot(Place):
     organizers = GenericRelation(Organizer)
     watchers = GenericRelation(Watcher)
 
+    group = models.ForeignKey('LotGroup',
+        blank=True,
+        null=True,
+        verbose_name=_('group'),
+    )
+
     def __unicode__(self):
         return u'%s' % (self.address_line1,)
 
@@ -122,9 +129,91 @@ class Lot(Place):
             return None
 
 
+class LotGroup(Lot):
+    """A group of lots."""
+
+    def add(self, lot):
+        """Add a lot to this group."""
+        lots = set(list(self.lot_set.all()))
+        lots.add(lot)
+        self.update(lots=lots)
+
+    def remove(self, lot):
+        """Remove a lot from this group."""
+        lots = list(self.lot_set.all())
+        lots.remove(lot)
+        self.update(lots=lots)
+
+    def update(self, lots=None):
+        """
+        Update this group with the given lots. Allow lots to be passed
+        manually since this might be called on a lot's pre_save signal.
+        """
+
+        if not lots:
+            lots = self.lot_set.all()
+
+        # Update polygon
+        self.polygon = None
+        for lot in lots:
+            if not lot.polygon: continue
+            if not self.polygon:
+                self.polygon = lot.polygon
+            else:
+                union = self.polygon.union(lot.polygon)
+                if not isinstance(union, MultiPolygon):
+                    union = MultiPolygon([union])
+                self.polygon = union
+
+        # Update centroid
+        self.centroid = self.polygon.centroid
+
+        # Could update other things here, but maybe we should just proxy them
+        # on the fly?
+
+        self.save()
+
+    def __unicode__(self):
+        return self.name
+
+
 class Use(models.Model):
     name = models.CharField(_('name'), max_length=200)
     slug = models.SlugField(_('slug'), max_length=200)
 
     def __unicode__(self):
         return self.name
+
+
+from django.db.models.signals import post_delete, pre_save
+from django.dispatch import receiver
+
+
+@receiver(pre_save, sender=Lot)
+def save_lot_update_group(sender, instance=None, **kwargs):
+    """Update the group that this member is part of."""
+    if not instance: return
+
+    # Try to get the group this instance was part of, if any
+    try:
+        previous_group = Lot.objects.get(pk=instance.pk).group
+    except Exception:
+        previous_group = None
+
+    # Get the group this instance will be part of, if any
+    next_group = instance.group
+
+    # If instance was in a group before but no longer will be, update that
+    # group accordingly
+    if previous_group and previous_group != next_group:
+        previous_group.remove(instance)
+
+    # If instance was not in a group before but will be, update that group
+    if next_group and next_group != previous_group:
+        next_group.add(instance)
+
+
+@receiver(post_delete, sender=Lot)
+def delete_lot_update_group(sender, instance=None, **kwargs):
+    if instance.group:
+        instance.group.update()

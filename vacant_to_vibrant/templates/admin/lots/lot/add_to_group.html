@@ -1,0 +1,62 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static admin_modify %}
+{% load admin_urls %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}admin/js/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}admin/js/jquery.init.js"></script>
+<script src="{{ STATIC_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+<script>
+    function updateChosen() {
+        django.jQuery('#id_group').trigger('liszt:updated');
+    }
+
+    django.jQuery(document).ready(function() {
+        var $ = django.jQuery;
+        $('#id_group').bind('DOMNodeInserted', function() {
+            window.setTimeout(updateChosen, 10);
+        });
+    });
+
+</script>
+{% endblock %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> &rsaquo; 
+    <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_label|capfirst|escape }}</a> &rsaquo; 
+    {% if has_change_permission %}
+        <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    {% else %}
+        {{ opts.verbose_name_plural|capfirst }}
+    {% endif %} &rsaquo; {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div>
+    You are about to add
+    <ul>
+        {% for lot in lots %}
+        <li>{{ lot.address_line1 }}</li>
+        {% endfor %} 
+    </ul>
+    to:
+</div>
+
+{{ form.media }}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div>
+        <p>
+            Are you sure you want to do this?    
+        </p>
+    </div>
+    <input type="submit" value="{% trans "Yes, I'm sure" %}" />
+</form>
+
+{% endblock %}

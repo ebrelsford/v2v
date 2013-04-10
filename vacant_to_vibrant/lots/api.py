@@ -37,8 +37,8 @@ class OwnerResource(ModelResource):
 
 
 class LotResource(ModelResource):
-    owner = fields.ForeignKey(OwnerResource, 'owner', null=True, blank=True)
     known_use = fields.ForeignKey(UseResource, 'known_use', null=True, blank=True)
+    owner = fields.ForeignKey(OwnerResource, 'owner', null=True, blank=True)
 
     def build_filters(self, filters={}):
         orm_filters = super(LotResource, self).build_filters(filters=filters)
@@ -83,6 +83,10 @@ class LotResource(ModelResource):
                     boundary_filters = boundary_filter
         if boundary_filters:
             lots = Lot.objects.all().filter(boundary_filters)
+
+            # TODO override apply_filters rather than use pk__in
+            # like here:
+                # http://stackoverflow.com/questions/10021749/django-tastypie-advanced-filtering-how-to-do-complex-lookups-with-q-objects
             orm_filters['pk__in'] = (orm_filters.get('pk__in', []) +
                                      list(lots.values_list('pk', flat=True)))
 
@@ -91,6 +95,9 @@ class LotResource(ModelResource):
         form = FiltersForm(filters)
         form.is_valid()
         cleaned_data = form.cleaned_data
+
+        if cleaned_data.get('parents_only', False):
+            orm_filters['group__isnull'] = True
 
         for f in ('available_property', 'billing_account', 'tax_account',
                   'parcel', 'land_use_area', 'violations',):

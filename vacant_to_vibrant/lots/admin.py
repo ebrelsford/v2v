@@ -1,13 +1,16 @@
 from django import forms
+from django.conf.urls.defaults import patterns, url
 from django.contrib import admin
 from django.contrib.gis.admin import OSMGeoAdmin
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 
 from reversion_compare.admin import CompareVersionAdmin
 
 from phillydata.parcels.models import Parcel
-from .models import Lot, Use
+from .admin_views import AddToGroupView
+from .models import Lot, LotGroup, Use
 
 
 class LotAdminForm(forms.ModelForm):
@@ -34,10 +37,12 @@ class LotAdminForm(forms.ModelForm):
             lot.parcel = Parcel.objects.get(pk=parcel_pk)
             lot.centroid = lot.parcel.geometry.centroid
             lot.polygon = lot.parcel.geometry
-            lot.save()
         except Exception:
-            raise
+            # It's okay to have lots without parcels sometimes (eg, with
+            # LotGroup instances).
+            pass
 
+        lot.save()
         return lot
 
     class Meta:
@@ -45,6 +50,7 @@ class LotAdminForm(forms.ModelForm):
 
 
 class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
+    actions = ('add_to_group',)
     exclude = ('available_property', 'parcel',)
     form = LotAdminForm
     list_display = ('address_line1', 'city', 'owner', 'known_use',
@@ -59,7 +65,8 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
     fieldsets = (
         (None, {
             'fields': ('name', 'address_line1', 'address_line2', 'city',
-                       'state_province', 'postal_code', 'known_use', 'added',),
+                       'state_province', 'postal_code', 'known_use', 'group',
+                       'added',),
         }),
         ('Other data', {
             'classes': ('collapse',),
@@ -91,6 +98,31 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
         return mark_safe('<a href="%s">%s</a>' % (change_url, str(obj.parcel)))
     parcel_link.short_description = 'parcel'
 
+    def add_to_group(self, request, queryset):
+        ids = queryset.values_list('pk', flat=True)
+        ids = [str(id) for id in ids]
+        return HttpResponseRedirect(reverse('admin:lots_lot_add_to_group') +
+                                    '?ids=%s' % (','.join(ids)))
+
+    def get_urls(self):
+        opts = self.model._meta
+        app_label, object_name = (opts.app_label, opts.object_name.lower())
+        prefix = "%s_%s" % (app_label, object_name)
+
+        urls = super(LotAdmin, self).get_urls()
+        my_urls = patterns('',
+            url(r'^add-to-group/', AddToGroupView.as_view(),
+                name='%s_add_to_group' % prefix),
+        )
+        return my_urls + urls
+
+
+class LotGroupAdmin(LotAdmin):
+    list_display = ('pk', 'name', 'address_line1', 'city', 'known_use',)
+
+    # TODO list the lots within the group (inline formset?)
+    # TODO hide the parcel map
+
 
 class UseAdmin(admin.ModelAdmin):
     list_display = ('name',)
@@ -98,4 +130,5 @@ class UseAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Lot, LotAdmin)
+admin.site.register(LotGroup, LotGroupAdmin)
 admin.site.register(Use, UseAdmin)

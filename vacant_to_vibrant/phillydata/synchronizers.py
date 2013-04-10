@@ -10,6 +10,7 @@ from .availableproperties.adapter import (find_available_properties,
                                           find_no_longer_available_properties)
 from .landuse.adapter import find_land_use_areas
 from .opa.adapter import find_opa_details
+from .taxaccounts.models import TaxAccount
 from .violations.adapter import find_violations
 from .waterdept.adapter import find_water_dept_details
 from .zoning.models import BaseDistrict
@@ -179,3 +180,26 @@ class CityCouncilSynchronizer(Synchronizer):
             except Exception:
                 logger.warn('Caught exception while updating zoning for lot '
                             '%s' % lot)
+
+
+class TaxAccountSynchronizer(Synchronizer):
+    """A Synchronizer that updates tax account data for lots."""
+
+    def sync(self, data_source):
+        logger.info('Starting to synchronize tax account data.')
+        self.update_tax_accounts(count=data_source.batch_size)
+        logger.info('Finished synchronizing tax account data.')
+
+    def update_tax_accounts(self, count=1000):
+        lots = Lot.objects.filter(tax_account__isnull=True).order_by('?')
+        for lot in lots[:count]:
+            try:
+                lot.tax_account = TaxAccount.objects.get(
+                    property_address__icontains=lot.address_line1,
+                )
+                lot.save()
+            except TaxAccount.DoesNotExist:
+                logger.debug('Could not find tax account for lot %s' % lot)
+            except Exception:
+                logger.warn('Caught exception while getting tax account for '
+                            'lot %s' % lot)

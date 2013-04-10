@@ -3,16 +3,15 @@ Utilities for loading tax data.
 
 """
 import csv
+import logging
 import os
-import traceback
 
 from django.conf import settings
 
 from .adapter import create_or_update_tax_account
 
 
-#TAX_DELINQUENCY_DATA_FILE = os.path.join(settings.DATA_ROOT,
-                                         #'201206_delinquencies_vacantLand.csv')
+logger = logging.getLogger(__name__)
 
 TAX_DELINQUENCY_DATA_FILE = os.path.join(settings.DATA_ROOT,
                                          '201206_delinquencies.csv')
@@ -32,5 +31,4 @@ def load_tax_data(source=TAX_DELINQUENCY_DATA_FILE):
         try:
             _save_entry(entry)
         except Exception:
-            print 'Could not save tax entry %s. Skipping.' % entry
-            traceback.print_exc()
+            logger.exception('Could not save tax entry %s.' % entry)

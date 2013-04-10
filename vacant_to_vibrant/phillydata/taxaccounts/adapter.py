@@ -2,18 +2,19 @@ from datetime import datetime
 
 import reversion
 
-from .models import TaxAccount
 from phillydata.opa.models import BillingAccount
+from ..utils import fix_address
+from .models import TaxAccount
 
 
 @reversion.create_revision()
 def create_or_update_tax_account(data, override={}):
-    defaults = _defaults(data, override={})
-    water_parcel, created = TaxAccount.objects.get_or_create(
+    defaults = _defaults(data, override=override)
+    tax_account, created = TaxAccount.objects.get_or_create(
         defaults=defaults, **_kwargs(data))
     if not created:
-        TaxAccount.objects.filter(pk=water_parcel.pk).update(**defaults)
-    return water_parcel
+        TaxAccount.objects.filter(pk=tax_account.pk).update(**defaults)
+    return tax_account
 
 
 def _get_float(value, default=None):
@@ -38,7 +39,7 @@ def _defaults(data, override={}):
     defaults =  {
         'owner_name': data['LEGAL NAME'],
         'owner_name2': data['OWNER2 NAME'],
-        'property_address': data['Property Address'],
+        'property_address': fix_address(data['Property Address']),
         'property_city': data['CITY'],
         'property_state_province': data['ST'],
         'property_postal_code': data['ZIP5'],

@@ -93,10 +93,17 @@
         </tr>
         {% endif %}
 
+        {% if lot.tax_account %}
         <tr>
             <th>{% trans "tax account" %}:</th>
-            <td>{{ lot.tax_account|default:"unknown" }}</td>
+            <td>
+                {{ lot.tax_account|default:"unknown" }}<br />
+                {{ lot.tax_account.years_delinquent }} years delinquent<br />
+                ${{ lot.tax_account.amount_delinquent }} delinquent
+            </td>
         </tr>
+        {% endif %}
+
         <tr>
             <th>{% trans "parcel" %}:</th>
             <td>{{ lot.parcel|default:"unknown" }}</td>

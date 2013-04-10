@@ -16,6 +16,7 @@ class PhillyDataSource(DataSource):
         ('landusearea', 'Land Use Areas'),
         ('opa', 'OPA API'),
         ('praavailableproperties', 'PRA Available Properties'),
+        ('taxaccount', 'Tax Accounts'),
         ('waterdept', 'Water Department data'),
         ('zoning', 'Zoning'),
     )

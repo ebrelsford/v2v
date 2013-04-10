@@ -11,9 +11,7 @@ from django.views.generic import FormView
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from chosen.forms import ChosenSelect
 
-from lots.models import Lot
-from ..opa.models import AccountOwner
-from .models import Alias, Owner
+from .models import Owner
 
 class AddAnotherWidgetWrapper(forms.Widget):
     """

@@ -1,14 +1,12 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
-
 from django.contrib import admin
-admin.autodiscover()
-
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from api.api import v1_api
 
+admin.autodiscover()
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,
                      show_indexes=True)

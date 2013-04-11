@@ -123,6 +123,7 @@ class LotInlineAdmin(admin.TabularInline):
     extra = 0
     fields = ('address_line1', 'name',)
     readonly_fields = ('address_line1', 'name',)
+    template = 'admin/lots/lot/edit_inline/tabular.html'
 
 
 class LotGroupAdmin(LotAdmin):

@@ -117,11 +117,16 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
         return my_urls + urls
 
 
-class LotGroupAdmin(LotAdmin):
-    list_display = ('pk', 'name', 'address_line1', 'city', 'known_use',)
+class LotInlineAdmin(admin.TabularInline):
+    model = Lot
 
-    # TODO list the lots within the group (inline formset?)
-    # TODO hide the parcel map
+    extra = 0
+    fields = ('address_line1', 'name',)
+    readonly_fields = ('address_line1', 'name',)
+
+
+class LotGroupAdmin(LotAdmin):
+    inlines = (LotInlineAdmin,)
 
 
 class UseAdmin(admin.ModelAdmin):

@@ -156,4 +156,13 @@
     {% render_file_list for lot %}
 </div>
 
+<div id="survey" class="survey">
+    <h3>Survey</h3>
+    <form action="{% url "survey_submit" pk=form.form.pk %}" class="survey-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Update" />
+    </form>
+</div>
+
 {% endblock %}

@@ -1,14 +1,17 @@
 import geojson
 import json
 
-from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.template import RequestContext
 from django.views.generic import CreateView, TemplateView
 
-from inplace.views import GeoJSONListView
+from forms_builder.forms.models import Form
+from inplace.views import GeoJSONListView, PlacesDetailView
 
 from files.forms import FileForm
 from generic.views import JSONResponseView
@@ -18,6 +21,8 @@ from organize.models import Organizer, Watcher
 from organize.notify import notify_participants_new_obj
 from organize.views import EditParticipantMixin
 from photos.forms import PhotoForm
+from survey.forms import SurveyFormForForm
+from survey.models import SurveyFormEntry
 from .api import LotResource
 from .forms import FiltersForm
 from .models import Lot, Use
@@ -26,7 +31,6 @@ from .models import Lot, Use
 class LotsGeoJSON(GeoJSONListView):
 
     def _get_filters(self):
-        print self.request.GET
         return {}
 
     def get_feature(self, lot):
@@ -68,6 +72,39 @@ class LotsMap(TemplateView):
         context.update({
             'filters': FiltersForm(),
             'uses': Use.objects.all().order_by('name'),
+        })
+        return context
+
+
+class LotDetailView(PlacesDetailView):
+    model = Lot
+
+    def get_context_data(self, **kwargs):
+        form = Form.objects.get(pk=settings.LOT_SURVEY_FORM_PK)
+        form_context = RequestContext(self.request, {
+            'form': form,
+        })
+
+        initial = {
+            'content_object': self.object,
+        }
+        form_kwargs = {}
+        form_kwargs['initial'] = initial
+
+        # Get the existing SurveyFormEntry for this lot, if any
+        try:
+            form_kwargs['instance'] = SurveyFormEntry.objects.get(
+                content_type =ContentType.objects.get_for_model(self.object),
+                object_id=self.object.pk,
+            )
+        except SurveyFormEntry.DoesNotExist:
+            pass
+
+        form_for_form = SurveyFormForForm(form, form_context, **form_kwargs)
+
+        context = super(LotDetailView, self).get_context_data(**kwargs)
+        context.update({
+            'form': form_for_form,
         })
         return context
 

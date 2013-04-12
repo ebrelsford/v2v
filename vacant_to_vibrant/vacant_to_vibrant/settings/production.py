@@ -86,3 +86,5 @@ LOGGING = {
         'level': 'WARNING',
     },
 }
+
+LOT_SURVEY_FORM_PK = 1

@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'feincms',
     'feincms.module.medialibrary',
     'feincms.module.page',
+    'forms_builder.forms',
     'imagekit',
     'inplace',
     'inplace.boundaries',
@@ -169,6 +170,7 @@ INSTALLED_APPS = (
     'phillydata.waterdept',
     'phillydata.zoning',
     'photos',
+    'survey',
     'sync',
     'twitter',
 )

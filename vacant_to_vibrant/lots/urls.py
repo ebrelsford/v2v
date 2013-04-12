@@ -1,12 +1,10 @@
 from django.conf.urls.defaults import patterns, url
 
-from inplace.views import PlacesDetailView
 from recaptcha_works.decorators import fix_recaptcha_remote_ip
 
 from organize.models import Organizer, Watcher
-from .models import Lot
-from .views import (EditLotParicipantView, AddParticipantView, LotsGeoJSON,
-                    AddParticipantSuccessView, AddPhotoView,
+from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
+                    LotsGeoJSON, AddParticipantSuccessView, AddPhotoView,
                     AddNoteView, AddFileView, LotsCountView)
 
 
@@ -14,11 +12,7 @@ urlpatterns = patterns('',
     url(r'^geojson/', LotsGeoJSON.as_view()),
     url(r'^count/', LotsCountView.as_view()),
 
-    url(r'^(?P<pk>\d+)/$',
-        PlacesDetailView.as_view(
-            model=Lot,
-        ),
-        name='lot_detail'),
+    url(r'^(?P<pk>\d+)/$', LotDetailView.as_view(), name='lot_detail'),
 
     url(r'^(?P<pk>\d+)/organize/$',
         fix_recaptcha_remote_ip(AddParticipantView.as_view(

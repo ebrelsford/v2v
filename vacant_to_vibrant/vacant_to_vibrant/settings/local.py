@@ -64,3 +64,5 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LOT_SURVEY_FORM_PK = 1

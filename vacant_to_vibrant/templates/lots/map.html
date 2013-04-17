@@ -19,46 +19,102 @@
     </div>
 </div>
 
-<div class="grid grid-1-2">
-    <div class="searchbar">
-        <form class="search">
-            search: <input id="search" name="search" type="text" />
-            <input type="submit" />
-            <span class="loading" style="display: none;">loading</span>
-            <div class="warning" style="display: none;">warning</div>
-        </form>
+<div class="home-map-filters grid grid-3-4">
+
+    <div class="grid grid-1-3">
+        <h2>{% trans "Find a lot" %}</h2>
+        <div class="searchbar">
+            <form class="search">
+                search: <input id="search" name="search" type="text" />
+                <input type="submit" />
+                <span class="loading" style="display: none;">loading</span>
+                <div class="warning" style="display: none;">warning</div>
+            </form>
+        </div>
+
+        {% comment %}
+        XXX stop-gap, would need a more robust solution if we planned on using this
+        {% endcomment %}
+        <div style="margin: 15px 0;">
+            <input type="checkbox" id="stop-loading" name="stop-loading" class="non-filter" />
+            <label for="stop-loading">enough! stop loading data</label>
+        </div>
     </div>
 
-    <div class="filters">
-        <form>
-            {{ filters.as_p }}
-        </form>
+    <div class="grid grid-1-3">
+        <h2>{% trans "Filters" %}</h2>
+        <div class="filters">
+            <form>
+                {{ filters.as_p }}
+            </form>
+        </div>
     </div>
+
+    <div class="grid grid-1-3">
+        <h2>{% trans "Who owns it" %}</h2>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="grid">
+        <div class="grid grid-2-3">
+            <h2>{% trans "You are currently looking at" %}</h2>
+            <div class="tally">
+                <ul>
+                    <li><span class="lots-count">X</span> lots</li>
+                    <li><span class="no-known-use-count">X</span> lots with no known use</li>
+                    {% for use in uses %}
+                    <li><span class="{{ use.slug }}-count">Y</span> lots being used as a {{ use.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid grid-1-3">
+            <h2>{% trans "Private" %}</h2>
+        </div>
+    </div>
+
 </div>
 
-<div class="grid grid-1-2">
+<div class="grid grid-1-4">
 
-    {% comment %}
-    XXX stop-gap, would need a more robust solution if we planned on using this
-    {% endcomment %}
-    <div style="margin: 15px 0;">
-        <input type="checkbox" id="stop-loading" name="stop-loading" class="non-filter" />
-        <label for="stop-loading">enough! stop loading data</label>
+    <div>
+        <h2>{% trans "Recent News" %}</h2>
+        <div>
+            Fusce rutrum dui ornare erat bibendum venenatis. Maecenas blandit
+            velit at eros tristique vitae auctor nibh tincidunt. Etiam et ante
+            at lectus malesuada lobortis vel vel purus. Mauris sit amet nulla
+            nisi, ac aliquam arcu. Mauris dapibus venenatis nisi et vestibulum.
+            Mauris sed sapien orci. Class aptent taciti sociosqu ad litora
+            torquent per conubia nostra, per inceptos himenaeos. Fusce mi
+            sapien, consequat non vulputate ut, cursus sit amet arcu. Aliquam
+            lectus eros, congue at mollis id, faucibus a ipsum. Morbi placerat
+            aliquam rutrum. Nullam rhoncus turpis ipsum, sed sodales urna. Nunc
+            ac neque dui, id blandit turpis. Integer id quam eu lacus imperdiet
+            luctus.
+        </div>
     </div>
 
-    <div class="tally">
-        You are looking at:
-        <ul>
-            <li><span class="lots-count">X</span> lots</li>
-            <li><span class="no-known-use-count">X</span> lots with no known use</li>
-            {% for use in uses %}
-            <li><span class="{{ use.slug }}-count">Y</span> lots being used as a {{ use.name }}</li>
-            {% endfor %}
-        </ul>
+    <div>
+        <h2>{% trans "Upcoming Events" %}</h2>
+        <div>
+            Fusce rutrum dui ornare erat bibendum venenatis. Maecenas blandit
+            velit at eros tristique vitae auctor nibh tincidunt. Etiam et ante
+            at lectus malesuada lobortis vel vel purus. Mauris sit amet nulla
+            nisi, ac aliquam arcu. Mauris dapibus venenatis nisi et vestibulum.
+            Mauris sed sapien orci. Class aptent taciti sociosqu ad litora
+            torquent per conubia nostra, per inceptos himenaeos. Fusce mi
+            sapien, consequat non vulputate ut, cursus sit amet arcu. Aliquam
+            lectus eros, congue at mollis id, faucibus a ipsum. Morbi placerat
+            aliquam rutrum. Nullam rhoncus turpis ipsum, sed sodales urna. Nunc
+            ac neque dui, id blandit turpis. Integer id quam eu lacus imperdiet
+            luctus.
+        </div>
     </div>
 
     <div class="activity-stream-section">
-        <div>Recent Activities</div>
+        <h2>{% trans "Recent Activities" %}</h2>
         <div class="activity-stream">
             <div class="activity-stream-container"></div>
             <div class="activity-stream-nav" style="display: none;">
@@ -67,6 +123,7 @@
         </div>
     </div>
 
+    <div class="clear"></div>
 </div>
 <div class="clear"></div>
 

@@ -7,6 +7,12 @@
 {{ block.super }}
 <h1>{{ lot.address_line1|default:"unknown" }}</h1>
 
+{% if "lots.change_lot" in perms %}
+<div class="lot-detail-auth grid">
+    <a href="{% url "admin:lots_lot_change" lot.pk %}">{% trans "Edit this lot" %}</a>
+</div>
+{% endif %}
+
 <div class="lot-detail-get-involved grid">
     <a href="{% url "lots:add_watcher" pk=lot.pk %}">{% trans "Watch this lot" %}</a>
     <a href="{% url "lots:add_organizer" pk=lot.pk %}">{% trans "Become an organizer" %}</a>

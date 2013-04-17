@@ -128,6 +128,18 @@ class Lot(Place):
         except Exception:
             return None
 
+    def _get_area(self):
+        if self.billing_account:
+            return self.billing_account.land_area
+        if self.water_parcel:
+            return self.water_parcel.gross_area
+        return self.parcel_area()
+    area = property(_get_area)
+
+    def _get_number_of_lots(self):
+        return 1
+    number_of_lots = property(_get_number_of_lots)
+
 
 class LotGroup(Lot):
     """A group of lots."""
@@ -175,6 +187,10 @@ class LotGroup(Lot):
 
     def __unicode__(self):
         return self.name
+
+    def _get_number_of_lots(self):
+        return sum([l.number_of_lots for l in self.lot_set.all()])
+    number_of_lots = property(_get_number_of_lots)
 
 
 class Use(models.Model):

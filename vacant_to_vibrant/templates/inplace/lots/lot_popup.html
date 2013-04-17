@@ -1,37 +1,36 @@
 {% load i18n %}
 
-<div>
-    <table>
-        <tr>
-            <th>{% trans "address line 1" %}:</th>
-            <td>{{ object.address_line1 }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "postal code" %}:</th>
-            <td>{{ object.postal_code }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "owner" %}:</th>
-            <td>{{ object.owner }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "billing account" %}:</th>
-            <td>{{ object.billing_account }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "tax account" %}:</th>
-            <td>{{ object.tax_account }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "violations" %}:</th>
-            <td>{{ object.violations.count }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "available" %}:</th>
-            <td>{{ object.available_property }}</td>
-        </tr>
-    </table>
+<h1 class="lot-popup-display-name">
+    {{ object.address_line1|default:"unknown address" }}
+</h1>
+
+<div class="lot-popup-get-involved">
+    <a href="{% url "lots:add_watcher" pk=object.pk %}" target="_blank">{% trans "Watch this lot" %}</a>
+    <a href="{% url "lots:add_organizer" pk=object.pk %}" target="_blank">{% trans "Become an organizer" %}</a>
 </div>
-<a href="{{ object.get_absolute_url }}">
-    {% trans "permalink" %}
-</a>
+
+<div class="lot-popup-size">
+    <div class="grid grid-1-2">
+        {% trans "Number of lots" %}: {{ object.number_of_lots }}
+    </div>
+    <div class="grid grid-1-2">
+        {% trans "Size" %}: {{ object.area|floatformat:"-1" }} {% trans "square feet" %}
+    </div>
+</div>
+
+<div class="lot-popup-owner">
+    {% trans "Owner" %}: {{ object.owner|default:"unknown" }}
+</div>
+
+<div class="lot-popup-known-use">
+    {% trans "Known use" %}: {{ object.known_use|default:"None" }}
+</div>
+
+<div class="lot-popup-council-district">
+    {% trans "Council District" %}: 
+    {{ object.city_council_district|default:"unknown" }}
+</div>
+
+<div class="lot-popup-permalink">
+    <a href="{{ object.get_absolute_url }}" target="_blank">{% trans "Learn more about this lot" %}</a>
+</div>

@@ -40,13 +40,55 @@
     <div class="lot-detail-details">
         <table>
             <tr>
-                <th>{% trans "address line 1" %}:</th>
-                <td>{{ lot.address_line1|default:"unknown" }}</td>
+                <th>{% trans "address" %}:</th>
+                <td>
+                    {{ lot.address_line1|default:"unknown" }}
+                    {% if lot.postal_code %}
+                    , {{ lot.postal_code }}
+                    {% endif %}
+                </td>
             </tr>
+
             <tr>
-                <th>{% trans "zipcode" %}:</th>
-                <td>{{ lot.postal_code|default:"unknown" }}</td>
+                <th>{% trans "number of lots" %}:</th>
+                <td>{{ lot.number_of_lots }}</td>
             </tr>
+
+            <tr>
+                <th>{% trans "owner" %}:</th>
+                <td>{{ lot.owner|default:"unknown" }}</td>
+            </tr>
+
+            <tr>
+                <th>{% trans "known use" %}:</th>
+                <td>{{ lot.known_use|default:"none" }}</td>
+            </tr>
+
+            <tr>
+                <th>{% trans "Council District" %}:</th>
+                <td>
+                    {% if lot.city_council_district %}
+                        {{ lot.city_council_district.label }}
+                        {% with member=lot.city_council_district.citycouncilmember_set.all.0 %}
+                        <a href="{{ member.url }}">{{ member.name }}</a>
+                        {% endwith %}
+                    {% else %}
+                        {% trans "unknown" %}
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <th>{% trans "zoning" %}:</th>
+                <td>
+                    {% if lot.zoning_district %}
+                        {{ lot.zoning_district.label }}
+                    {% else %}
+                        {% trans "unknown" %}
+                    {% endif %}
+                </td>
+            </tr>
+
             <tr>
                 <th>{% trans "area" %}:</th>
                 <td>
@@ -59,10 +101,7 @@
                     {% endif %}
                 </td>
             </tr>
-            <tr>
-                <th>{% trans "owner" %}:</th>
-                <td>{{ lot.owner|default:"unknown" }}</td>
-            </tr>
+
             <tr>
                 <th>{% trans "billing account" %}:</th>
                 <td>{{ lot.billing_account|default:"unknown" }}</td>
@@ -89,18 +128,6 @@
                     {{ lot.land_use_area.category }}, 
                     {{ lot.land_use_area.subcategory }},
                     {{ lot.land_use_area.description }}
-                </td>
-            </tr>
-            {% endif %}
-
-            {% if lot.city_council_district %}
-            <tr>
-                <th>{% trans "city council district" %}:</th>
-                <td>
-                    {{ lot.city_council_district.label }}
-                    {% with member=lot.city_council_district.citycouncilmember_set.all.0 %}
-                    <a href="{{ member.url }}">{{ member.name }}</a>
-                    {% endwith %}
                 </td>
             </tr>
             {% endif %}
@@ -196,6 +223,14 @@
             <a href="{% url "lots:add_photo" pk=lot.pk %}">{% trans "Submit a photo" %}</a>
         </div>
         {% render_photo_list for lot %}
+    </div>
+
+    <div>
+        <a href="#">{% trans "Find nearby lots" %}</a>
+    </div>
+
+    <div>
+        <a href="#">{% trans "Request a cleanup" %}</a>
     </div>
 
     <div id="organizers" class="organize">

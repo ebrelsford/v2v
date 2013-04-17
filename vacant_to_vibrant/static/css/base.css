@@ -184,3 +184,11 @@ th {
 .admin-action-description {
     font-size: 18px;
 }
+
+
+/* Lot detail page */
+
+.lot-detail-main,
+.lot-detail-side {
+    padding: 10px;
+}

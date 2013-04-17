@@ -1,168 +1,226 @@
-{% extends "lots/base.html" %}
+{% extends "base.html" %}
 {% load files_tags i18n inplace_tags notes_tags organize_tags photos_tags %}
 
 {% block title %}{{ block.super }} | {{ lot.address_line1 }}{% endblock %}
 
-{% block lot_content %}
+{% block content %}
 {{ block.super }}
-<div class="details">
-    <h3>Details</h3>
-    <table>
-        <tr>
-            <th>{% trans "address line 1" %}:</th>
-            <td>{{ lot.address_line1|default:"unknown" }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "zipcode" %}:</th>
-            <td>{{ lot.postal_code|default:"unknown" }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "area" %}:</th>
-            <td>
-                {% if lot.billing_account %}
-                according to the lot's billing account, this lot has an area of {{ lot.billing_account.land_area|floatformat:"-1"|default:"unknown" }} square feet
-                {% elif lot.water_parcel %}
-                according to the Water Department, this lot has an area of {{ lot.water_parcel.gross_area|floatformat:"-1"|default:"unknown" }} square feet
-                {% else %}
-                this lot has an area of {{ lot.parcel_area|floatformat:"-1"|default:"unknown" }} square feet
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>{% trans "owner" %}:</th>
-            <td>{{ lot.owner|default:"unknown" }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "billing account" %}:</th>
-            <td>{{ lot.billing_account|default:"unknown" }}</td>
-        </tr>
+<h1>{{ lot.address_line1|default:"unknown" }}</h1>
 
-        {% if lot.violations.count > 0 %}
-        <tr>
-            <th>{% trans "violations" %}:</th>
-            <td>
-                {{ lot.violations.count }}:
-                {% for violation in lot.violations.all %}
-                {{ violation.violation_datetime|date:"SHORT_DATE_FORMAT" }}
-                {{ violation.violation_type }}
-                {% endfor %}
-            </td>
-        </tr>
-        {% endif %}
+<div class="lot-detail-get-involved grid">
+    <a href="{% url "lots:add_watcher" pk=lot.pk %}">{% trans "Watch this lot" %}</a>
+    <a href="{% url "lots:add_organizer" pk=lot.pk %}">{% trans "Become an organizer" %}</a>
 
-        {% if lot.land_use_area %}
-        <tr>
-            <th>{% trans "land use" %}:</th>
-            <td>
-                According to the City Planning Commission:
-                {{ lot.land_use_area.category }}, 
-                {{ lot.land_use_area.subcategory }},
-                {{ lot.land_use_area.description }}
-            </td>
-        </tr>
-        {% endif %}
-
-        {% if lot.city_council_district %}
-        <tr>
-            <th>{% trans "city council district" %}:</th>
-            <td>
-                {{ lot.city_council_district.label }}
-                {% with member=lot.city_council_district.citycouncilmember_set.all.0 %}
-                <a href="{{ member.url }}">{{ member.name }}</a>
-                {% endwith %}
-            </td>
-        </tr>
-        {% endif %}
-
-        {% if lot.zoning_district %}
-        <tr>
-            <th>{% trans "zoning district" %}:</th>
-            <td>
-                {{ lot.zoning_district.zoning_type.code }}
-            </td>
-        </tr>
-        {% endif %}
-
-        {% if lot.available_property %}
-        <tr>
-            <th>{% trans "available" %}:</th>
-            <td>
-                Available for purchase from {{ lot.available_property.agency }}
-                price: {{ lot.available_property.price_str }}
-            </td>
-        </tr>
-        {% endif %}
-
-        {% if lot.tax_account %}
-        <tr>
-            <th>{% trans "tax account" %}:</th>
-            <td>
-                {{ lot.tax_account|default:"unknown" }}<br />
-                {{ lot.tax_account.years_delinquent }} years delinquent<br />
-                ${{ lot.tax_account.amount_delinquent }} delinquent
-            </td>
-        </tr>
-        {% endif %}
-
-        <tr>
-            <th>{% trans "parcel" %}:</th>
-            <td>{{ lot.parcel|default:"unknown" }}</td>
-        </tr>
-
-        {% if lot.water_parcel %}
-        <tr>
-            <th>{% trans "water parcel" %}:</th>
-            <td>
-                gross area: {{ lot.water_parcel.gross_area|floatformat }} square feet<br />
-                impervious area: {{ lot.water_parcel.impervious_area|floatformat }} square feet<br />
-                permeable area: {{ lot.water_parcel.percent_permeable|floatformat }}%<br />
-                owners: {{ lot.water_parcel.owner1 }},
-                {{lot.water_parcel.owner2}}
-            </td>
-        </tr>
-        {% endif %}
-
-    </table>
+    <a href=""lots:add_organizer" pk=lot.pk %}" style="float: right;">{% trans "Already using this lot? Let us know!" %}</a>
 </div>
 
-<div id="organizers" class="organize">
-    <h3>Organize</h3>
-    <a href="{% url "lots:add_organizer" pk=lot.pk %}">click to organize</a>
-    {% render_organizer_list for lot %}
-</div>
+<div class="clear"></div>
 
-<div class="watch">
-    <h3>Watch</h3>
-    <a href="{% url "lots:add_watcher" pk=lot.pk %}">click to watch</a>
-</div>
+<div class="lot-detail-main grid grid-2-3">
 
-<div id="photos" class="photos">
-    <h3>Photos</h3>
-    <div>
-        <a href="{% url "lots:add_photo" pk=lot.pk %}">click to add a photo</a>
+    <div id="streetview-container">
+        <div id="streetview" style="height: 200px; width: 100%;"></div>
     </div>
-    {% render_photo_list for lot %}
+    <div id="streetview-error" class="streetview">
+        {% trans "Sorry, we couldn't find streetview imagery for this lot." %}
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        $('#streetview-container').streetview({
+            errorSelector: '#streetview-error',
+        });
+        $('#streetview-container').data('streetview').load_streetview(
+            {{ lot.centroid.x }},
+            {{ lot.centroid.y }}
+        );
+    });
+    </script>
+
+    <div class="lot-detail-details">
+        <table>
+            <tr>
+                <th>{% trans "address line 1" %}:</th>
+                <td>{{ lot.address_line1|default:"unknown" }}</td>
+            </tr>
+            <tr>
+                <th>{% trans "zipcode" %}:</th>
+                <td>{{ lot.postal_code|default:"unknown" }}</td>
+            </tr>
+            <tr>
+                <th>{% trans "area" %}:</th>
+                <td>
+                    {% if lot.billing_account %}
+                    according to the lot's billing account, this lot has an area of {{ lot.billing_account.land_area|floatformat:"-1"|default:"unknown" }} square feet
+                    {% elif lot.water_parcel %}
+                    according to the Water Department, this lot has an area of {{ lot.water_parcel.gross_area|floatformat:"-1"|default:"unknown" }} square feet
+                    {% else %}
+                    this lot has an area of {{ lot.parcel_area|floatformat:"-1"|default:"unknown" }} square feet
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans "owner" %}:</th>
+                <td>{{ lot.owner|default:"unknown" }}</td>
+            </tr>
+            <tr>
+                <th>{% trans "billing account" %}:</th>
+                <td>{{ lot.billing_account|default:"unknown" }}</td>
+            </tr>
+
+            {% if lot.violations.count > 0 %}
+            <tr>
+                <th>{% trans "violations" %}:</th>
+                <td>
+                    {{ lot.violations.count }}:
+                    {% for violation in lot.violations.all %}
+                    {{ violation.violation_datetime|date:"SHORT_DATE_FORMAT" }}
+                    {{ violation.violation_type }}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if lot.land_use_area %}
+            <tr>
+                <th>{% trans "land use" %}:</th>
+                <td>
+                    According to the City Planning Commission:
+                    {{ lot.land_use_area.category }}, 
+                    {{ lot.land_use_area.subcategory }},
+                    {{ lot.land_use_area.description }}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if lot.city_council_district %}
+            <tr>
+                <th>{% trans "city council district" %}:</th>
+                <td>
+                    {{ lot.city_council_district.label }}
+                    {% with member=lot.city_council_district.citycouncilmember_set.all.0 %}
+                    <a href="{{ member.url }}">{{ member.name }}</a>
+                    {% endwith %}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if lot.zoning_district %}
+            <tr>
+                <th>{% trans "zoning district" %}:</th>
+                <td>
+                    {{ lot.zoning_district.zoning_type.code }}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if lot.available_property %}
+            <tr>
+                <th>{% trans "available" %}:</th>
+                <td>
+                    Available for purchase from {{ lot.available_property.agency }}
+                    price: {{ lot.available_property.price_str }}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if lot.tax_account %}
+            <tr>
+                <th>{% trans "tax account" %}:</th>
+                <td>
+                    {{ lot.tax_account|default:"unknown" }}<br />
+                    {{ lot.tax_account.years_delinquent }} years delinquent<br />
+                    ${{ lot.tax_account.amount_delinquent }} delinquent
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <th>{% trans "parcel" %}:</th>
+                <td>{{ lot.parcel|default:"unknown" }}</td>
+            </tr>
+
+            {% if lot.water_parcel %}
+            <tr>
+                <th>{% trans "water parcel" %}:</th>
+                <td>
+                    gross area: {{ lot.water_parcel.gross_area|floatformat }} square feet<br />
+                    impervious area: {{ lot.water_parcel.impervious_area|floatformat }} square feet<br />
+                    permeable area: {{ lot.water_parcel.percent_permeable|floatformat }}%<br />
+                    owners: {{ lot.water_parcel.owner1 }},
+                    {{lot.water_parcel.owner2}}
+                </td>
+            </tr>
+            {% endif %}
+
+        </table>
+    </div>
+
+    <div class="watch">
+        <h2>{% trans "Watch" %}</h2>
+        <a href="{% url "lots:add_watcher" pk=lot.pk %}">{% trans "Watch this lot" %}</a>
+    </div>
+
+    <div id="notes" class="notes">
+        <h2>{% trans "Notes" %}</h2>
+        <a href="{% url "lots:add_note" pk=lot.pk %}">{% trans "Add a note" %}</a>
+        {% render_note_list for lot %}
+    </div>
+
+    <div id="files" class="files">
+        <h2>{% trans "Files" %}</h2>
+        <a href="{% url "lots:add_file" pk=lot.pk %}">{% trans "Add a file" %}</a>
+        {% render_file_list for lot %}
+    </div>
+
+    <div id="survey" class="survey">
+        <h2>{% trans "Survey" %}</h2>
+        <form action="{% url "survey_submit" pk=form.form.pk %}" class="survey-form" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="{% trans "Update" %}" />
+        </form>
+    </div>
+
 </div>
 
-<div id="notes" class="notes">
-    <h3>Notes</h3>
-    <a href="{% url "lots:add_note" pk=lot.pk %}">click to add a note</a>
-    {% render_note_list for lot %}
-</div>
+<div class="lot-detail-side grid grid-1-3">
 
-<div id="files" class="files">
-    <h3>Files</h3>
-    <a href="{% url "lots:add_file" pk=lot.pk %}">click to add a file</a>
-    {% render_file_list for lot %}
-</div>
+    {% with lot.get_geojson_url as places_url %}
+    {% place_map places_url 100% 200px %}
+    {% endwith %}
 
-<div id="survey" class="survey">
-    <h3>Survey</h3>
-    <form action="{% url "survey_submit" pk=form.form.pk %}" class="survey-form" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Update" />
-    </form>
+    <div id="photos" class="photos">
+        <h2>{% trans "Photos" %}</h2>
+        <div>
+            <a href="{% url "lots:add_photo" pk=lot.pk %}">{% trans "Submit a photo" %}</a>
+        </div>
+        {% render_photo_list for lot %}
+    </div>
+
+    <div id="organizers" class="organize">
+        <h2>{% trans "Organize" %}</h2>
+        <a href="{% url "lots:add_organizer" pk=lot.pk %}">{% trans "Become an organizer" %}</a>
+        {% render_organizer_list for lot %}
+    </div>
+
+    <div id="pathways" class="pathways">
+        <h2>{% trans "Pathways" %}</h2>
+        <div>
+            Fusce rutrum dui ornare erat bibendum venenatis. Maecenas blandit
+            velit at eros tristique vitae auctor nibh tincidunt. Etiam et ante
+            at lectus malesuada lobortis vel vel purus. Mauris sit amet nulla
+            nisi, ac aliquam arcu. Mauris dapibus venenatis nisi et vestibulum.
+            Mauris sed sapien orci. Class aptent taciti sociosqu ad litora
+            torquent per conubia nostra, per inceptos himenaeos. Fusce mi
+            sapien, consequat non vulputate ut, cursus sit amet arcu. Aliquam
+            lectus eros, congue at mollis id, faucibus a ipsum. Morbi placerat
+            aliquam rutrum. Nullam rhoncus turpis ipsum, sed sodales urna. Nunc
+            ac neque dui, id blandit turpis. Integer id quam eu lacus imperdiet
+            luctus.
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}

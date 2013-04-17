@@ -28,7 +28,7 @@
             </nav>
         </header>
         <div class="content-wrapper">
-            <section id="main" class="grid grid-3-4">
+            <section id="main">
                 <nav id="breadcrumbs" class="clearfix"></nav>
 
                 {% include "_messages.html" %}
@@ -39,9 +39,6 @@
                     {% endblock %}
                 </article>
             </section>
-            <aside id="aside-right" class="grid grid-1-4">
-                {% feincms_render_region feincms_page "sidebar" request %}
-            </aside>
         </div>
         <div class="clear"></div>
         <div id="footer">

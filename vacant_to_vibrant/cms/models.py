@@ -23,6 +23,16 @@ Page.register_templates({
     ),
 })
 
+Page.register_templates({
+    'title': _('Home map template'),
+    'path': 'home_map.html',
+    'regions': (
+        ('main', _('Main content area')),
+        ('sidebar', _('Sidebar'), 'inherited'),
+        ('footer', _('Footer'), 'inherited'),
+    ),
+})
+
 Page.create_content_type(RichTextContent)
 
 Page.create_content_type(MediaFileContent, TYPE_CHOICES=(

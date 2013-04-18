@@ -23,6 +23,21 @@
                 </tr>
             </tbody>
         </table>
+
+        {% if "organize" in perms %}
+        <div class="admin-only">
+
+            {% if "organize.change_organizer" in perms %}
+            <a href="{% url "admin:organize_organizer_change" organizer.pk %}">{% trans "Edit this organizer" %}</a>
+            {% endif %}
+
+            {% if "organize.delete_organizer" in perms %}
+            <a href="{% url "admin:organize_organizer_delete" organizer.pk %}">{% trans "Delete this organizer" %}</a>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
     </li>
     {% endfor %}
 </ul>

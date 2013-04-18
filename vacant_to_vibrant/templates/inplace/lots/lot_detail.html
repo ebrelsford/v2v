@@ -8,7 +8,7 @@
 <h1>{{ lot.address_line1|default:"unknown" }}</h1>
 
 {% if "lots.change_lot" in perms %}
-<div class="lot-detail-auth grid">
+<div class="lot-detail-admin admin-only grid">
     <a href="{% url "admin:lots_lot_change" lot.pk %}">{% trans "Edit this lot" %}</a>
 </div>
 {% endif %}

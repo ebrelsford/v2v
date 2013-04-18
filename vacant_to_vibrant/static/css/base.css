@@ -185,6 +185,10 @@ th {
     font-size: 18px;
 }
 
+.admin-only {
+    font-family: Courier, monospace;
+}
+
 
 /* Lot detail page */
 

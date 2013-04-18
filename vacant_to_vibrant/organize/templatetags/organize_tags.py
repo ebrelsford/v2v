@@ -32,9 +32,10 @@ class RenderOrganizerList(OrganizersMixin, InclusionTag):
     template = 'organize/organizer_list.html'
 
     def get_context(self, context, target):
-        return {
+        context.update({
             'organizers': self.get_organizers(target),
-        }
+        })
+        return context
 
 register.tag(RenderOrganizerList)
 

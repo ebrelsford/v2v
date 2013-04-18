@@ -28,9 +28,10 @@ class RenderGenericRelationList(GenericRelationMixin, InclusionTag):
     template = ''
 
     def get_context(self, context, target):
-        return {
+        context.update({
             self.get_model_plural_name(): self.get_objects(target),
-        }
+        })
+        return context
 
     def get_template(self, context, **kwargs):
         return '%s/%s_list.html' % (

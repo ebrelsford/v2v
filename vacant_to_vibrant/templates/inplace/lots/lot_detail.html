@@ -191,6 +191,8 @@
 
     <div class="watch lot-detail-main-section">
         <h2>{% trans "Watch" %}</h2>
+        {% get_watcher_count for lot as watcher_count %}
+        <div>There {{ watcher_count|pluralize:"is,are" }} {{ watcher_count }} watcher{{ watcher_count|pluralize }} on this lot.</div>
         <a href="{% url "lots:add_watcher" pk=lot.pk %}">{% trans "Watch this lot" %}</a>
     </div>
 
@@ -247,6 +249,8 @@
 
     <div id="organizers" class="organize lot-detail-side-section">
         <h2>{% trans "Organize" %}</h2>
+        {% get_organizer_count for lot as organizer_count %}
+        <div>There {{ organizer_count|pluralize:"is,are" }} {{ organizer_count }} organizer{{ organizer_count|pluralize }} on this lot.</div>
         <a href="{% url "lots:add_organizer" pk=lot.pk %}">{% trans "Become an organizer" %}</a>
         {% render_organizer_list for lot %}
     </div>

@@ -53,3 +53,15 @@ class GetGenericRelationList(GenericRelationMixin, AsTag):
 
     def get_value(self, context, target):
         return self.get_objects(target)
+
+
+class GetGenericRelationCount(GenericRelationMixin, AsTag):
+    options = Options(
+        'for',
+        Argument('target', required=True, resolve=True),
+        'as',
+        Argument('varname', required=True, resolve=False),
+    )
+
+    def get_value(self, context, target):
+        return self.get_objects(target).count()

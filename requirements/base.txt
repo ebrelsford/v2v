@@ -16,7 +16,7 @@ django-compressor==1.2
 django-contact-form-gv==0.4.1
 django-debug-toolbar==0.9.4
 django-extensions==1.1.1
--e git://github.com/ebrelsford/django-forms-builder.git@6a6e4d048adab6eb54d2d81b26126bedc7c97ada#egg=django-forms-builder
+django-forms-builder==0.8.2
 -e git://github.com/jdriscoll/django-imagekit.git@261f16412763c69fba64f130c521192ad726d2c1#egg=django_imagekit-dev
 -e git://github.com/ebrelsford/django-inplace.git@850e7eb9db38350d265ca775714799c6a43de3c2#egg=django_inplace-dev
 django-jsonfield==0.9.2

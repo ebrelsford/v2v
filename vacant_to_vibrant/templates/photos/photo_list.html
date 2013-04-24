@@ -1,7 +1,7 @@
-{% load i18n %}
+{% load i18n imagekit %}
 
 {% for photo in photos %}
-    <img src="{{ photo.thumbnail.url }}" />
+    {% generateimage "lots:detail_page_thumbnail" source=photo.original_image %}
 
     {% if "photos" in perms %}
     <div class="admin-only">

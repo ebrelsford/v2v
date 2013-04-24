@@ -65,14 +65,17 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
     fieldsets = (
         (None, {
             'fields': ('name', 'address_line1', 'address_line2', 'city',
-                       'state_province', 'postal_code', 'known_use', 'group',
-                       'added',),
+                       'state_province', 'postal_code', 'group', 'added',),
+        }),
+        ('Known use', {
+            'fields': ('known_use', 'known_use_certainty',
+                       'known_use_locked',),
         }),
         ('Other data', {
             'classes': ('collapse',),
             'fields': ('owner', 'billing_account', 'tax_account',
-                       'parcel_pk', 'parcel_link', 'land_use_area', 'violations',
-                       'available_property_link', 'water_parcel',
+                       'parcel_pk', 'parcel_link', 'land_use_area',
+                       'violations', 'available_property_link', 'water_parcel',
                        'city_council_district', 'zoning_district'),
         }),
         ('Geography', {

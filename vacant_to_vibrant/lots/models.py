@@ -85,6 +85,17 @@ class Lot(Place):
         blank=True,
         null=True,
     )
+    known_use_certainty = models.PositiveIntegerField(_('known use certainty'),
+        default=0,
+        help_text=_('On a scale of 0 to 10, how certain are we that the known '
+                    'use is correct?'),
+    )
+    known_use_locked = models.BooleanField(_('known use locked'),
+        default=False,
+        help_text=_('Is the known use field locked? If it is not, the site '
+                    'will make a guess using available data. If you are '
+                    'certain that the known use is correct, lock it.'),
+    )
     zoning_district = models.ForeignKey('zoning.BaseDistrict',
         blank=True,
         null=True,

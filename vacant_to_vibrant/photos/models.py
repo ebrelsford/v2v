@@ -14,11 +14,17 @@ class Photo(models.Model):
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     original_image = models.ImageField(_('original image'), upload_to='photos')
-    formatted_image = ImageSpecField(image_field='original_image',
-                                     format='JPEG', options={'quality': 90})
-    thumbnail = ImageSpecField([SmartResize(200, 200)],
-                               image_field='original_image', format='JPEG',
-                               options={'quality': 90})
+    formatted_image = ImageSpecField(
+        format='JPEG',
+        options={'quality': 90},
+        source='original_image',
+    )
+    thumbnail = ImageSpecField(
+        [SmartResize(200, 200)],
+        format='JPEG',
+        options={'quality': 90},
+        source='original_image',
+    )
 
     name = models.CharField(_('name'), max_length=256, null=True, blank=True)
     description = models.TextField(_('description'), null=True, blank=True)

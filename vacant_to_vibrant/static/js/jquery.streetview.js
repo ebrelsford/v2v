@@ -28,7 +28,6 @@ var StreetView = {
             if (status == google.maps.StreetViewStatus.OK) {
                 instance.$elem.show();
                 new google.maps.StreetViewPanorama(instance.elem, {
-                    addressControl: false,
                     pano: result.location.pano,
                 });
             }

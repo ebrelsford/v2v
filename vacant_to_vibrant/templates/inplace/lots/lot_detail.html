@@ -209,7 +209,10 @@
     </div>
 
     <div id="survey" class="survey lot-detail-main-section">
-        <h2>{% trans "Survey" %}</h2>
+        <h2>{% trans "Land Characteristics" %}</h2>
+        <p>
+            What is this lot like?
+        </p>
         <form action="{% url "survey_submit" pk=form.form.pk %}" class="survey-form" method="post">
             {% csrf_token %}
             {{ form.as_p }}

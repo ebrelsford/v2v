@@ -43,7 +43,7 @@
     });
     </script>
 
-    <div class="lot-detail-details">
+    <div class="lot-detail-details lot-detail-main-section">
         <table>
             <tr>
                 <th>{% trans "address" %}:</th>
@@ -189,24 +189,24 @@
         </table>
     </div>
 
-    <div class="watch">
+    <div class="watch lot-detail-main-section">
         <h2>{% trans "Watch" %}</h2>
         <a href="{% url "lots:add_watcher" pk=lot.pk %}">{% trans "Watch this lot" %}</a>
     </div>
 
-    <div id="notes" class="notes">
+    <div id="notes" class="notes lot-detail-main-section">
         <h2>{% trans "Notes" %}</h2>
         <a href="{% url "lots:add_note" pk=lot.pk %}">{% trans "Add a note" %}</a>
         {% render_note_list for lot %}
     </div>
 
-    <div id="files" class="files">
+    <div id="files" class="files lot-detail-main-section">
         <h2>{% trans "Files" %}</h2>
         <a href="{% url "lots:add_file" pk=lot.pk %}">{% trans "Add a file" %}</a>
         {% render_file_list for lot %}
     </div>
 
-    <div id="survey" class="survey">
+    <div id="survey" class="survey lot-detail-main-section">
         <h2>{% trans "Survey" %}</h2>
         <form action="{% url "survey_submit" pk=form.form.pk %}" class="survey-form" method="post">
             {% csrf_token %}

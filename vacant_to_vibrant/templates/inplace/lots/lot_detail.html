@@ -238,9 +238,13 @@
 
     <div class="lot-detail-side-section">
         <h2>{% trans "Nearby Lots" %}</h2>
-        <div>
-            (coming soon)
-        </div>
+        <ul>
+            {% for nearby in lot.nearby %}
+            <li>
+                <a href="{{ nearby.get_absolute_url }}">{{ nearby.address_line1 }}</a>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 
     <div class="lot-detail-side-section">

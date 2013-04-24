@@ -151,6 +151,15 @@ class Lot(Place):
         return 1
     number_of_lots = property(_get_number_of_lots)
 
+    def _get_nearby_lots(self):
+        nearby = Lot.objects.filter(
+            centroid__distance_lte=(self.centroid, D(mi=.1))
+        )
+        nearby = nearby.exclude(pk=self.pk)
+        nearby = nearby.distance(self.centroid).order_by('distance')
+        return nearby[:5]
+    nearby = property(_get_nearby_lots)
+
 
 class LotGroup(Lot):
     """A group of lots."""

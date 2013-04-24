@@ -130,7 +130,6 @@ class Parcel(models.Model):
         http://opendataphilly.org/opendata/resource/28/property-parcels/
 
     """
-    #objects = models.GeoManager()
     objects = ParcelManager()
 
     geometry = models.MultiPolygonField(_('geometry'))

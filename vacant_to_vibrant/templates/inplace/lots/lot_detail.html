@@ -223,7 +223,7 @@
     {% place_map places_url 100% 200px %}
     {% endwith %}
 
-    <div id="photos" class="photos">
+    <div id="photos" class="lot-detail-side-section photos">
         <h2>{% trans "Photos" %}</h2>
         <div>
             <a href="{% url "lots:add_photo" pk=lot.pk %}">{% trans "Submit a photo" %}</a>
@@ -231,21 +231,27 @@
         {% render_photo_list for lot %}
     </div>
 
-    <div>
-        <a href="#">{% trans "Find nearby lots" %}</a>
+    <div class="lot-detail-side-section">
+        <h2>{% trans "Nearby Lots" %}</h2>
+        <div>
+            (coming soon)
+        </div>
     </div>
 
-    <div>
-        <a href="#">{% trans "Request a cleanup" %}</a>
+    <div class="lot-detail-side-section">
+        <h2>{% trans "Request a cleanup" %}</h2>
+        You can 
+        <a href="http://www.phila.gov/qualityoflife/Vacant_Lot_Criteria_.html" target="_blank">{% trans "request a cleanup" %}</a>
+        of this lot through the city's Vacant Lot Program
     </div>
 
-    <div id="organizers" class="organize">
+    <div id="organizers" class="organize lot-detail-side-section">
         <h2>{% trans "Organize" %}</h2>
         <a href="{% url "lots:add_organizer" pk=lot.pk %}">{% trans "Become an organizer" %}</a>
         {% render_organizer_list for lot %}
     </div>
 
-    <div id="pathways" class="pathways">
+    <div id="pathways" class="pathways lot-detail-side-section">
         <h2>{% trans "Pathways" %}</h2>
         <div>
             Fusce rutrum dui ornare erat bibendum venenatis. Maecenas blandit

@@ -196,3 +196,11 @@ th {
 .lot-detail-side {
     padding: 10px;
 }
+
+.lot-detail-side-section {
+    margin-bottom: 25px;
+}
+
+.lot-detail-side-section:last-child {
+    margin-bottom: 0;
+}

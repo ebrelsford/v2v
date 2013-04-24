@@ -212,3 +212,12 @@ th {
 .lot-detail-side-section:last-child {
     margin-bottom: 0;
 }
+
+.lot-detail-details th {
+    width: 30%;
+}
+
+.lot-detail-details th {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}

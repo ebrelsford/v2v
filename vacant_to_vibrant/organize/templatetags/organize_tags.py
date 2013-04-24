@@ -50,7 +50,6 @@ class GetOrganizerList(OrganizersMixin, AsTag):
     )
 
     def get_value(self, context, target):
-        print 'get_value', target
         return self.get_organizers(target)
 
 register.tag(GetOrganizerList)

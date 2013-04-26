@@ -1,4 +1,7 @@
+{% extends "lots/map/choro.html" %}
+{% comment %}
 {% extends "lots/map/cluster_main.html" %}
+{% endcomment %}
 {% load i18n %}
 
 {% block includes %}
@@ -7,6 +10,7 @@
 <script src="{{ STATIC_URL }}js/jquery.activitystream.js"></script>
 <script src="{{ STATIC_URL }}js/geocode.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.searchbar.js"></script>
+<script src="{{ STATIC_URL }}js/lib/jquery.serializeobject.min.js"></script>
 {% endblock %}
 
 {% block below_map %}
@@ -166,9 +170,10 @@
             errorSelector: '#streetview-error',
         });
 
-        LOTS_MAP.on('lotclicked', function(e) {
+        LOTS_MAP.on('lotclicked', function(data) {
+            var event = data.event;
             $('#streetview-container').data('streetview').load_streetview(
-                e.geometry.coordinates[0], e.geometry.coordinates[1]);
+                event.latlng.lng, event.latlng.lat);
         });
 
         LOTS_MAP.on('popupclose', function(e) {
@@ -179,6 +184,8 @@
             $('#stop-loading').removeAttr('checked');
             update_counts();
             LOTS_MAP.reloadLotCentroidLayer($('form').serialize());
+            LOTS_MAP.reloadLotChoroplethLayer($('form').serialize());
+            LOTS_MAP.updateFilters($('form').serializeObject());
         });
 
         $('.activity-stream-container').activitystream();

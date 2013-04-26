@@ -4,13 +4,18 @@ from recaptcha_works.decorators import fix_recaptcha_remote_ip
 
 from organize.models import Organizer, Watcher
 from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
-                    LotsGeoJSON, AddParticipantSuccessView, AddPhotoView,
-                    AddNoteView, AddFileView, LotsCountView)
+                    LotsGeoJSON, LotsGeoJSONPolygon, AddParticipantSuccessView,
+                    AddPhotoView, AddNoteView, AddFileView, LotsCountView,
+                    LotsCountBoundaryView)
 
 
 urlpatterns = patterns('',
     url(r'^geojson/', LotsGeoJSON.as_view()),
+    url(r'^geojson-polygon/', LotsGeoJSONPolygon.as_view(),
+        name='lot_geojson_polygon'),
     url(r'^count/', LotsCountView.as_view()),
+    url(r'^count-by-boundary/', LotsCountBoundaryView.as_view(),
+        name='lot_count_by_boundary'),
 
     url(r'^(?P<pk>\d+)/$', LotDetailView.as_view(), name='lot_detail'),
 

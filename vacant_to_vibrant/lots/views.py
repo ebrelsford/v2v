@@ -11,7 +11,9 @@ from django.template import RequestContext
 from django.views.generic import CreateView, TemplateView
 
 from forms_builder.forms.models import Form
-from inplace.views import GeoJSONListView, PlacesDetailView
+from inplace.boundaries.models import Boundary
+from inplace.views import (GeoJSONListView, GeoJSONResponseMixin,
+                           PlacesDetailView)
 
 from files.forms import FileForm
 from generic.views import JSONResponseView
@@ -45,6 +47,24 @@ class LotsGeoJSON(GeoJSONListView):
         return Lot.objects.all(**self._get_filters())
 
 
+class LotsGeoJSONPolygon(GeoJSONListView):
+
+    def _get_filters(self):
+        return LotResource().build_filters(filters=self.request.GET)
+
+    def get_feature(self, lot):
+        return geojson.Feature(
+            lot.pk,
+            geometry=json.loads(lot.polygon.geojson),
+            properties={
+                'pk': lot.pk,
+            },
+        )
+
+    def get_queryset(self):
+        return Lot.objects.filter(polygon__isnull=False, **self._get_filters())
+
+
 class LotsCountView(JSONResponseView):
 
     def get_context_data(self, **kwargs):
@@ -57,6 +77,45 @@ class LotsCountView(JSONResponseView):
         for use in Use.objects.all():
             context['%s-count' % use.slug] = lots.filter(known_use=use).count()
         return context
+
+
+class LotsCountBoundaryView(GeoJSONResponseMixin, JSONResponseView):
+
+    def get_context_data(self, **kwargs):
+        return self.get_features()
+
+    def get_features(self):
+        filters = LotResource().build_filters(filters=self.request.GET)
+
+        try:
+            # Ignore bbox
+            del filters['centroid__within']
+        except Exception:
+            pass
+
+        lots = Lot.objects.filter(**filters)
+
+        # Get city council districts
+        # TODO or use city_council_district field instead
+        # TODO do this via a parameter
+        boundaries = Boundary.objects.filter(
+            layer__name='City Council Districts'
+        )
+
+        features = []
+        for boundary in boundaries:
+            features.append(geojson.Feature(
+                boundary.pk,
+                # TODO compress/simplify
+                geometry=json.loads(boundary.geometry.geojson),
+                properties={
+                    'boundary_label': boundary.label,
+                    'count': lots.filter(
+                        centroid__within=boundary.geometry
+                    ).count(),
+                }
+            ))
+        return features
 
 
 class LotsMap(TemplateView):

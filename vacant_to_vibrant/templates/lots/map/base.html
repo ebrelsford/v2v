@@ -24,8 +24,7 @@
             cloudmadeKey: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
             cloudmadeStyleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
             bingKey: 'ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr',
-            lotClickHandler: function(e) {
-                if (!e.data) { return false; }
+            lotClickHandler: function(e, feature) {
                 var popupOptions = {
                     minWidth: 300,
                 }
@@ -39,7 +38,7 @@
                 else {
                     e.target.bindPopup(popupContent, popupOptions).openPopup();
                 }
-                $.get('/places/lots/lot/' + e.data.id + '/popup/', function(response) {
+                $.get('/places/lots/lot/' + feature.id + '/popup/', function(response) {
                     $('#popup-content').html(response);
                 });
             },

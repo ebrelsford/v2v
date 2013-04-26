@@ -31,6 +31,7 @@ from .models import Lot, Use
 class LotsGeoJSON(GeoJSONListView):
 
     def _get_filters(self):
+        # TODO actually filter
         return {}
 
     def get_feature(self, lot):
@@ -41,13 +42,7 @@ class LotsGeoJSON(GeoJSONListView):
         )
 
     def get_queryset(self):
-        #organized_lot_pks = Organizer.objects.all().values_list('object_id', flat=True)
-        #return Lot.objects.filter(pk__in=organized_lot_pks)
-
-        self._get_filters()
-        return Lot.objects.all()
-        #return Lot.objects.filter(pk=65667)
-        #return Lot.objects.all().select_related('owner', 'available_property')
+        return Lot.objects.all(**self._get_filters())
 
 
 class LotsCountView(JSONResponseView):

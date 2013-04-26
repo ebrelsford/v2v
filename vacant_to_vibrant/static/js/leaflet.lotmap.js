@@ -122,7 +122,7 @@ L.Map.include({
         }
         this._loadLotCentroidLayer(queryString, true);
     },
-    
+
     addToLotCentroidLayer: function(queryString) {
         this._loadLotCentroidLayer(queryString, false);
     },

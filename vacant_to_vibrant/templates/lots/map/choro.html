@@ -9,11 +9,15 @@
 
 <script src="{{ STATIC_URL }}js/lib/leaflet.lvector.js"></script>
 
+<script src="{{ STATIC_URL }}js/leaflet.message.js"></script>
 <script src="{{ STATIC_URL }}js/leaflet.lotlayer.js"></script>
 {% endblock %}
 
 {% block options %}
 {{ block.super }}
+    messageControl: true,
+    messageDefault: 'Zoom in for details',
+
     enableLayersControl: true,
 
     enableLotChoropleth: true,

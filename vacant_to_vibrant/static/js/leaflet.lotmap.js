@@ -17,6 +17,8 @@ L.Map.include({
         lotCentroidBaseUrl: String,
         lotPolygonBaseUrl: String,
         lotPolygonInitialFilters: Object,
+        messageControl: Boolean,
+        messageDefault: String,
     },
     */
 
@@ -302,6 +304,12 @@ L.Map.include({
                     $.each(instance.lotsChoroplethLabels, function(i, label) {
                         instance.removeLayer(label);
                     });
+
+                    // Hide message
+                    if (instance.messageControl._map) {
+                        instance.messageControl.removeFrom(instance);
+                    }
+
                     instance.removeLayer(instance.lotsChoropleth);
                 }
                 // Polygon visibility is controlled by vector layers
@@ -313,6 +321,11 @@ L.Map.include({
                     $.each(instance.lotsChoroplethLabels, function(i, label) {
                         label.addTo(instance);
                     });
+                    // Show message
+                    if (!instance.messageControl._map) {
+                        instance.messageControl.addTo(instance);
+                    }
+
                     instance.addLayer(instance.lotsChoropleth);
                 }
             }

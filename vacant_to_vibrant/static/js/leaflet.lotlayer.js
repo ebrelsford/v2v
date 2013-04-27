@@ -19,6 +19,9 @@ lvector.LotLayer = lvector.GeoJSONLayer.extend({
             if (this.options.scaleRange && this.options.scaleRange instanceof Array && this.options.scaleRange.length === 2) {
                 var z = this.options.map.getZoom();
                 var sr = this.options.scaleRange;
+                // TODO make sure features being loaded when zoom changes get
+                // hidden if they are fully loaded after zooming and we are out
+                // of range
                 this.options.visibleAtScale = (z >= sr[0] && z <= sr[1]);
             }
             this._show();

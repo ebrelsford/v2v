@@ -11,6 +11,7 @@
 <script src="{{ STATIC_URL }}js/geocode.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.searchbar.js"></script>
 <script src="{{ STATIC_URL }}js/lib/jquery.serializeobject.min.js"></script>
+{{ filters.media }}
 {% endblock %}
 
 {% block below_map %}
@@ -36,19 +37,66 @@
             </form>
         </div>
 
+        <h2>{% trans "Known use" %}</h2>
+        <div class="filters filters-known-use">
+            <form>
+                {{ filters.known_use__name__in }}
+            </form>
+        </div>
+
+        <h2>{% trans "Admin filters" %}</h2>
+        <div class="filters filters-admin">
+            <form>
+                {% for field in filters.admin_filters %}
+                <div>
+                    {{ field.label }}: {{ field }}
+                </div>
+                {% endfor %}
+            </form>
+        </div>
+
     </div>
 
     <div class="grid grid-1-3">
-        <h2>{% trans "Filters" %}</h2>
-        <div class="filters">
+        <h2>{% trans "View" %}</h2>
+        <div class="filters-view">
+            (show other boundaries)
+        </div>
+
+        <h2>{% trans "Other filters" %}</h2>
+        <div class="filters filters-other">
             <form>
-                {{ filters.as_p }}
+                {% for field in filters.other_filters %}
+                <div>
+                    {{ field.label }}: {{ field }}
+                </div>
+                {% endfor %}
             </form>
         </div>
     </div>
 
     <div class="grid grid-1-3">
         <h2>{% trans "Who owns it" %}</h2>
+        <div class="filters filters-owners">
+            <form>
+                {% for field in filters.owners_filters %}
+                <div>
+                    {{ field.label }}: {{ field }}
+                </div>
+                {% endfor %}
+            </form>
+        </div>
+
+        <h2>{% trans "Private" %}</h2>
+        <div class="filters filters-private">
+            <form>
+                {% for field in filters.private_filters %}
+                <div>
+                    {{ field.label }}: {{ field }}
+                </div>
+                {% endfor %}
+            </form>
+        </div>
     </div>
 
     <div class="clear"></div>
@@ -65,10 +113,6 @@
                     {% endfor %}
                 </ul>
             </div>
-        </div>
-
-        <div class="grid grid-1-3">
-            <h2>{% trans "Private" %}</h2>
         </div>
     </div>
 

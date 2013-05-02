@@ -121,6 +121,11 @@ class Lot(Place):
         verbose_name=_('group'),
     )
 
+    class Meta:
+        permissions = (
+            ('view_all_filters', 'Can view all map filters for lots'),
+        )
+
     def __unicode__(self):
         return u'%s' % (self.address_line1,)
 

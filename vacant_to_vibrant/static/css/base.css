@@ -114,6 +114,15 @@ th {
     color: green;
 }
 
+.help-text {
+    font-size: 10px;
+}
+
+.filter {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 #mainmenu {
     border-top: 1px solid black;
     border-bottom: 1px solid black;

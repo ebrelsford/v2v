@@ -48,8 +48,9 @@
         <div class="filters filters-admin">
             <form>
                 {% for field in filters.admin_filters %}
-                <div>
+                <div class="filter">
                     {{ field.label }}: {{ field }}
+                    <div class="help-text">{{ field.help_text|safe }}</div>
                 </div>
                 {% endfor %}
             </form>

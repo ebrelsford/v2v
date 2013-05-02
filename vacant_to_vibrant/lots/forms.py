@@ -55,11 +55,23 @@ class FiltersForm(forms.Form):
 
     has_available_property = forms.NullBooleanField(
         label=_('Is available property'),
+        help_text=_("Is on the PRA's list of available property"),
     )
-    has_billing_account = forms.NullBooleanField()
-    has_tax_account = forms.NullBooleanField()
-    has_parcel = forms.NullBooleanField()
-    has_land_use_area = forms.NullBooleanField()
+    has_billing_account = forms.NullBooleanField(
+        help_text=_('Have we found an OPA billing account for this property?'),
+    )
+    has_tax_account = forms.NullBooleanField(
+        help_text=_('Have we found a (delinquent) tax account for this '
+                    'property?'),
+    )
+    has_parcel = forms.NullBooleanField(
+        help_text=_('Did we find a parcel for this property in the Records '
+                    'Department\'s <a href="http://opendataphilly.org/opendata/resource/28/property-parcels/" target="_blank">file</a>?'),
+    )
+    has_land_use_area = forms.NullBooleanField(
+        help_text=_('Did we find a land use area for this property in the '
+                    'Planning Commission\'s <a href="http://opendataphilly.org/opendata/resource/170/land-use/" target="_blank">land use file</a>?'),
+    )
     has_violations = forms.NullBooleanField()
 
     violations_count = forms.IntegerField(

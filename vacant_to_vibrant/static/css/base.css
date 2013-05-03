@@ -250,3 +250,18 @@ th {
     padding: 10px;
     text-align: center;
 }
+
+/* Touch styles */
+#map .leaflet-touch .leaflet-control-zoom a {
+    height: 25px;
+    width: 25px;
+}
+
+#map .leaflet-touch .leaflet-bar-part {
+    border: 0;
+}
+
+#map .leaflet-touch .leaflet-control-layers,
+#map .leaflet-touch .leaflet-control-zoom {
+    border: 0;
+}

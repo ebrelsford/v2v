@@ -8,6 +8,8 @@ class CityCouncilMember(models.Model):
         max_length=256,
     )
     district = models.ForeignKey('boundaries.Boundary',
+        null=True,
+        on_delete=models.SET_NULL,
         verbose_name=_('district'),
     )
     url = models.URLField(_('url'),

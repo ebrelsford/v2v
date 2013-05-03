@@ -75,15 +75,18 @@ class Lot(Place):
     available_property = models.ForeignKey(AvailableProperty,
         blank=True,
         null=True,
+        on_delete=models.SET_NULL,
     )
     water_parcel = models.ForeignKey(WaterParcel,
         blank=True,
         null=True,
+        on_delete=models.SET_NULL,
         help_text=_('The parcel the Water Department defines for this lot')
     )
     known_use = models.ForeignKey('Use',
         blank=True,
         null=True,
+        on_delete=models.SET_NULL,
     )
     known_use_certainty = models.PositiveIntegerField(_('known use certainty'),
         default=0,
@@ -99,11 +102,13 @@ class Lot(Place):
     zoning_district = models.ForeignKey('zoning.BaseDistrict',
         blank=True,
         null=True,
+        on_delete=models.SET_NULL,
         verbose_name=_('zoning district'),
     )
     city_council_district = models.ForeignKey('boundaries.Boundary',
         blank=True,
         null=True,
+        on_delete=models.SET_NULL,
         verbose_name=_('city council district'),
     )
 
@@ -118,6 +123,7 @@ class Lot(Place):
     group = models.ForeignKey('LotGroup',
         blank=True,
         null=True,
+        on_delete=models.SET_NULL,
         verbose_name=_('group'),
     )
 

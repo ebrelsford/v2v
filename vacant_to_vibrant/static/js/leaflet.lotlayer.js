@@ -39,6 +39,11 @@ lvector.LotLayer = lvector.GeoJSONLayer.extend({
     _requiredParams: ["url",],
 
     _getFeatures: function() {        
+        // Only load when map at a visible zoom
+        if (!this.options.visibleAtScale) {
+            return;
+        }
+
         // Add bounds to filters
         this.options.filters.centroid__within = JSON.stringify(
                 LOTS_MAP.getBounds().toGeoJson());

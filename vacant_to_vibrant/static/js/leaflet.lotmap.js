@@ -249,47 +249,51 @@ L.Map.include({
         // could be smoother
         instance.clearLotChoroplethLayer();
 
-        $.getJSON(instance.options.lotChoroplethBaseUrl + '?' + queryString, function(data) {
+        var url = instance.options.lotChoroplethBaseUrl + '?' + queryString;
+        $('#map').singleminded({
+            name: 'lotChoroplethRequest',
+            jqxhr: $.getJSON(url, function(data) {
 
-            var _getColor = function(count) {
-                // TODO make dynamic base on count range
-                //  Use colorbrewer: colorbrewer2.org
-                var color = 
-                    count > 5000 ? '#238443' :
-                    count > 1000 ? '#78C679' :
-                    count > 100 ? '#C2E699' :
-                        '#FFFFCC';
-                return color;
-            };
+                var _getColor = function(count) {
+                    // TODO make dynamic base on count range
+                    //  Use colorbrewer: colorbrewer2.org
+                    var color = 
+                        count > 5000 ? '#238443' :
+                        count > 1000 ? '#78C679' :
+                        count > 100 ? '#C2E699' :
+                            '#FFFFCC';
+                    return color;
+                };
 
-            instance.lotsChoroplethLabels = [];
-            instance.lotsChoropleth = L.geoJson(data, {
-                style: function(feature) {
-                    return {
-                        fillColor: _getColor(feature.properties.count),
-                        fillOpacity: .7,
-                        color: 'white',
-                        opacity: .8,
-                        weight: 2,
-                    };
-                },   
+                instance.lotsChoroplethLabels = [];
+                instance.lotsChoropleth = L.geoJson(data, {
+                    style: function(feature) {
+                        return {
+                            fillColor: _getColor(feature.properties.count),
+                            fillOpacity: .7,
+                            color: 'white',
+                            opacity: .8,
+                            weight: 2,
+                        };
+                    },   
 
-                onEachFeature: function(feature, layer) {
-                    label = new L.Label();
-                    label.setContent('City Council District ' + feature.properties.boundary_label + '<br/ >' +
-                        feature.properties.count);
+                    onEachFeature: function(feature, layer) {
+                        label = new L.Label();
+                        label.setContent('City Council District ' + feature.properties.boundary_label + '<br/ >' +
+                            feature.properties.count);
 
-                    // TODO we might want to set centroids manually for weirder
-                    // polygons like city council districts
+                        // TODO we might want to set centroids manually for weirder
+                        // polygons like city council districts
 
-                    label.setLatLng(layer.getBounds().getCenter());
-                    instance.lotsChoroplethLabels.push(label);
-                    instance.showLabel(label);
-                },
-            });
-            if (instance.getZoom() < 15) {
-                instance.lotsChoropleth.addTo(instance);
-            }
+                        label.setLatLng(layer.getBounds().getCenter());
+                        instance.lotsChoroplethLabels.push(label);
+                        instance.showLabel(label);
+                    },
+                });
+                if (instance.getZoom() < 15) {
+                    instance.lotsChoropleth.addTo(instance);
+                }
+            }),
         });
     },
 

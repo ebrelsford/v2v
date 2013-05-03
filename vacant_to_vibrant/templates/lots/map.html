@@ -10,6 +10,7 @@
 <script src="{{ STATIC_URL }}js/jquery.activitystream.js"></script>
 <script src="{{ STATIC_URL }}js/geocode.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.searchbar.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.singleminded.js"></script>
 <script src="{{ STATIC_URL }}js/lib/jquery.serializeobject.min.js"></script>
 {{ filters.media }}
 {% endblock %}
@@ -116,6 +117,11 @@
                     {% endfor %}
                 </ul>
             </div>
+
+            <h2>{% trans "Export" %}</h2>
+            <div class="export">
+                <a href="#" class="export-link">Link to this view</a>
+            </div>
         </div>
     </div>
 
@@ -173,15 +179,33 @@
 
 <script>
 
-    function update_counts() {
-        $.getJSON('/lots/count/?' + $('form').serialize(), function(data) {
-            $.each(data, function(label, count) {
-                $('.' + label).text(count);
-            });
+    function updateCounts() {
+        $('#map').singleminded({
+            name: 'counts',
+            jqxhr: $.getJSON('/lots/count/?' + $('form').serialize(), function(data) {
+                $.each(data, function(label, count) {
+                    $('.' + label).text(count);
+                });
+            }),
         });
     }
 
-    function get_bounds(map) {
+    function serializeFilters() {
+        return $('form').serialize();
+    }
+
+    function deserializeFilters() {
+        // Get filters from url query string
+        var filters = window.location.search.slice(1);
+
+        // Drop filters into the form (which is spread over multiple forms)
+        $('form').deserialize(filters);
+
+        // Trigger Chosen to update selects
+        $('select').trigger('liszt:updated');
+    }
+
+    function getBounds(map) {
         var bounds = map.options.maxBounds;
         var seBounds = bounds.getSouthEast();
         var nwBounds = bounds.getNorthWest();
@@ -195,15 +219,21 @@
     }
 
     $(document).ready(function() {
+        deserializeFilters();
 
-        update_counts();
+        updateCounts();
+
+        // TODO keep map from reloading itself after this happens 
+        LOTS_MAP.updateFilters($('form').serializeObject());
+        LOTS_MAP.reloadLotCentroidLayer(serializeFilters());
+        LOTS_MAP.reloadLotChoroplethLayer(serializeFilters());
 
         LOTS_MAP.on('moveend', function(e) {
             var g = JSON.stringify(LOTS_MAP.getBounds().toGeoJson())
             $(':input[name="centroid__within"]').val(
                 JSON.stringify(LOTS_MAP.getBounds().toGeoJson())
             );
-            update_counts();
+            updateCounts();
         });
 
         $('#streetview-container').streetview({
@@ -221,10 +251,9 @@
         });
 
         $('.filters :input:not(.non-filter)').change(function() {
-            $('#stop-loading').removeAttr('checked');
-            update_counts();
-            LOTS_MAP.reloadLotCentroidLayer($('form').serialize());
-            LOTS_MAP.reloadLotChoroplethLayer($('form').serialize());
+            updateCounts();
+            LOTS_MAP.reloadLotCentroidLayer(serializeFilters());
+            LOTS_MAP.reloadLotChoroplethLayer(serializeFilters());
             LOTS_MAP.updateFilters($('form').serializeObject());
         });
 
@@ -232,7 +261,7 @@
 
         $('.searchbar')
             .searchbar({
-                bounds: get_bounds(LOTS_MAP),
+                bounds: getBounds(LOTS_MAP),
                 city: 'Philadelphia',
                 state: 'PA',
                 errorMessage: "Sorry, it doesn't seem that the address you " +
@@ -244,6 +273,9 @@
                 LOTS_MAP.setView([data.latitude, data.longitude], 15);
             });
 
+        $('.export-link').click(function() {
+            window.location.search = serializeFilters();
+        });
     });
 </script>
 {% endblock %}

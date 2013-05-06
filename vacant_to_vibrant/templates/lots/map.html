@@ -28,6 +28,15 @@
 
 <div class="home-map-filters grid grid-3-4">
 
+    {% comment %}
+    Render form fields
+    {% endcomment %}
+    <form>
+        {% for hidden_field in filters.hidden_fields %}
+        {{ hidden_field }}
+        {% endfor %}
+    </form>
+
     <div class="grid grid-1-3">
         <h2>{% trans "Find a lot" %}</h2>
         <div class="searchbar">
@@ -121,7 +130,18 @@
 
             <h2>{% trans "Export" %}</h2>
             <div class="export">
-                <a href="#" class="export-link">Link to this view</a>
+                <ul>
+                    <li>
+                        <a href="#" class="export-link">
+                            {% trans "Link to this view" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="export-csv">
+                            {% trans "Download a spreadsheet of this view" %}
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -279,6 +299,11 @@
         $('.export-link').click(function() {
             // TODO make shorter urls
             window.location.search = serializeFilters();
+        });
+
+        $('.export-csv').click(function() {
+            window.location = '{% url "lots:csv" %}?' + serializeFilters();
+            return false;
         });
     });
 </script>

@@ -171,6 +171,20 @@ class Lot(Place):
         return nearby[:5]
     nearby = property(_get_nearby_lots)
 
+    def _get_latitude(self):
+        try:
+            return self.centroid.y
+        except Exception:
+            return None
+    latitude = property(_get_latitude)
+
+    def _get_longitude(self):
+        try:
+            return self.centroid.x
+        except Exception:
+            return None
+    longitude = property(_get_longitude)
+
 
 class LotGroup(Lot):
     """A group of lots."""

@@ -1,3 +1,4 @@
+from datetime import date
 import geojson
 import json
 
@@ -16,7 +17,7 @@ from inplace.views import (GeoJSONListView, GeoJSONResponseMixin,
                            PlacesDetailView)
 
 from files.forms import FileForm
-from generic.views import JSONResponseView
+from generic.views import CSVView, JSONResponseView
 from notes.forms import NoteForm
 from organize.forms import OrganizerForm, WatcherForm
 from organize.models import Organizer, Watcher
@@ -28,6 +29,49 @@ from survey.models import SurveyFormEntry
 from .api import LotResource
 from .forms import FiltersForm
 from .models import Lot, Use
+
+
+class FilteredLotsMixin(object):
+    """A mixin that makes it easy to filter on Lots using a LotResource."""
+
+    def get_lots(self):
+        orm_filters = LotResource().build_filters(filters=self.request.GET)
+        return Lot.objects.filter(**orm_filters)
+
+
+class LotsCSV(FilteredLotsMixin, CSVView):
+    fields = ('address_line1', 'city', 'state_province', 'postal_code',
+              'latitude', 'longitude', 'known_use', 'owner', 'owner_type',)
+
+    def get_fields(self):
+        return self.fields
+
+    def get_field_owner(self, lot):
+        return lot.owner.name
+
+    def get_field_owner_type(self, lot):
+        return lot.owner.get_owner_type_display()
+
+    def get_filename(self):
+        return 'Grounded lots %s' % date.today().strftime('%Y-%m-%d')
+
+    def _field_value(self, lot, field):
+        try:
+            # Call get_field_<field>()
+            return getattr(self, 'get_field_%s' % field)(lot)
+        except AttributeError:
+            try:
+                # Else try to get the property from the model instance
+                return getattr(lot, field)
+            except AttributeError:
+                return None
+
+    def _as_dict(self, lot):
+        return dict([(f, self._field_value(lot, f)) for f in self.fields])
+
+    def get_rows(self):
+        for lot in self.get_lots():
+            yield self._as_dict(lot)
 
 
 class LotsGeoJSON(GeoJSONListView):
@@ -65,11 +109,10 @@ class LotsGeoJSONPolygon(GeoJSONListView):
         return Lot.objects.filter(polygon__isnull=False, **self._get_filters())
 
 
-class LotsCountView(JSONResponseView):
+class LotsCountView(FilteredLotsMixin, JSONResponseView):
 
     def get_context_data(self, **kwargs):
-        orm_filters = LotResource().build_filters(filters=self.request.GET)
-        lots = Lot.objects.filter(**orm_filters)
+        lots = self.get_lots()
         context = {
             'lots-count': lots.count(),
             'no-known-use-count': lots.filter(known_use=None).count()

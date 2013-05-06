@@ -199,6 +199,16 @@ th {
 }
 
 
+/* Map */
+
+#popup-content {
+    height: 200px;
+}
+#popup-content.loading {
+    background: url(/static/img/loading.gif) no-repeat center;
+}
+
+
 /* Lot detail page */
 
 .lot-detail-main,

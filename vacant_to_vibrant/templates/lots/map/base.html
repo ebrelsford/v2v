@@ -29,7 +29,7 @@
                     minHeight: 250,
                     minWidth: 300,
                 }
-                var popupContent = '<div id="popup-content" style="height: 200px;"></div>';
+                var popupContent = '<div id="popup-content" class="loading"></div>';
                 if (e.targetType == 'utfgrid') {
                     var popup = L.popup(popupOptions)
                         .setContent(popupContent)
@@ -40,7 +40,9 @@
                     e.target.bindPopup(popupContent, popupOptions).openPopup();
                 }
                 $.get('/places/lots/lot/' + feature.id + '/popup/', function(response) {
-                    $('#popup-content').html(response);
+                    $('#popup-content')
+                        .html(response)
+                        .removeClass('loading');
                 });
             },
             {% endblock %}

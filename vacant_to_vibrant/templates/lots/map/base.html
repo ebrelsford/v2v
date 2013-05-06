@@ -26,9 +26,10 @@
             bingKey: 'ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr',
             lotClickHandler: function(e, feature) {
                 var popupOptions = {
+                    minHeight: 250,
                     minWidth: 300,
                 }
-                var popupContent = '<div id="popup-content"></div>';
+                var popupContent = '<div id="popup-content" style="height: 200px;"></div>';
                 if (e.targetType == 'utfgrid') {
                     var popup = L.popup(popupOptions)
                         .setContent(popupContent)

@@ -225,7 +225,8 @@
         // Trigger Chosen to update selects
         $('select').trigger('liszt:updated');
 
-        // TODO also update map viewport
+        // Update map viewport
+        LOTS_MAP.fitBounds(L.geoJsonLatLngBounds($('#id_centroid__within').val()));
     }
 
     function getBounds(map) {

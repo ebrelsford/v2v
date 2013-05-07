@@ -39,10 +39,10 @@ class FilteredLotsMixin(object):
         return Lot.objects.filter(**orm_filters)
 
 
-class LotsCSV(FilteredLotsMixin, CSVView):
-    fields = ('address_line1', 'city', 'state_province', 'postal_code',
-              'latitude', 'longitude', 'known_use', 'owner', 'owner_type',)
-
+class LotFieldsMixin(object):
+    """
+    A mixin that makes it easier to add a lot's fields to the view's output.
+    """
     def get_fields(self):
         return self.fields
 
@@ -51,9 +51,6 @@ class LotsCSV(FilteredLotsMixin, CSVView):
 
     def get_field_owner_type(self, lot):
         return lot.owner.get_owner_type_display()
-
-    def get_filename(self):
-        return 'Grounded lots %s' % date.today().strftime('%Y-%m-%d')
 
     def _field_value(self, lot, field):
         try:
@@ -69,26 +66,46 @@ class LotsCSV(FilteredLotsMixin, CSVView):
     def _as_dict(self, lot):
         return dict([(f, self._field_value(lot, f)) for f in self.fields])
 
+
+class LotsCSV(LotFieldsMixin, FilteredLotsMixin, CSVView):
+    fields = ('address_line1', 'city', 'state_province', 'postal_code',
+              'latitude', 'longitude', 'known_use', 'owner', 'owner_type',)
+
+    def get_filename(self):
+        return 'Grounded lots %s' % date.today().strftime('%Y-%m-%d')
+
     def get_rows(self):
         for lot in self.get_lots():
             yield self._as_dict(lot)
 
 
-class LotsGeoJSON(GeoJSONListView):
+class LotsGeoJSON(LotFieldsMixin, FilteredLotsMixin, GeoJSONResponseMixin,
+                  JSONResponseView):
+    fields = ('address_line1', 'city', 'state_province', 'postal_code',
+              'known_use', 'owner', 'owner_type',)
 
-    def _get_filters(self):
-        # TODO actually filter
-        return {}
+    def get_context_data(self, **kwargs):
+        return self.get_feature_collection()
 
     def get_feature(self, lot):
         return geojson.Feature(
             lot.pk,
             geometry=json.loads(lot.centroid.geojson),
-            properties={},
+            properties=self._as_dict(lot),
         )
 
+    def get_filename(self):
+        return 'Grounded lots %s' % date.today().strftime('%Y-%m-%d')
+
     def get_queryset(self):
-        return Lot.objects.all(**self._get_filters())
+        return self.get_lots()
+
+    def render_to_response(self, context):
+        response = super(LotsGeoJSON, self).render_to_response(context)
+        if self.request.GET.get('download', 'no') == 'yes':
+            response['Content-Disposition'] = ('attachment; filename="%s.json"' %
+                                               self.get_filename())
+        return response
 
 
 class LotsGeoJSONPolygon(GeoJSONListView):

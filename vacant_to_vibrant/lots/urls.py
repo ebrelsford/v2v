@@ -11,7 +11,7 @@ from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
 
 urlpatterns = patterns('',
     url(r'^csv/', LotsCSV.as_view(), name='csv'),
-    url(r'^geojson/', LotsGeoJSON.as_view()),
+    url(r'^geojson/', LotsGeoJSON.as_view(), name='geojson'),
     url(r'^geojson-polygon/', LotsGeoJSONPolygon.as_view(),
         name='lot_geojson_polygon'),
     url(r'^count/', LotsCountView.as_view()),

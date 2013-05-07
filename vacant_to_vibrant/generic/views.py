@@ -13,9 +13,7 @@ class JSONResponseView(View):
         return self.render_to_response(context)
 
     def render_to_response(self, context, **response_kwargs):
-        """
-        Simple render to GeoJSON.
-        """
+        """Simple render to JSON"""
         return self.response_class(
             json.json.dumps(self.get_context_data(**self.kwargs),
                             cls=json.DjangoJSONEncoder, ensure_ascii=False),

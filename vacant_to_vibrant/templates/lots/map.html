@@ -141,6 +141,11 @@
                             {% trans "Download a spreadsheet of this view" %}
                         </a>
                     </li>
+                    <li>
+                        <a href="#" class="export-geojson">
+                            {% trans "Download a GeoJSON file of this view" %}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -226,7 +231,10 @@
         $('select').trigger('liszt:updated');
 
         // Update map viewport
-        LOTS_MAP.fitBounds(L.geoJsonLatLngBounds($('#id_centroid__within').val()));
+        var bboxString = $('#id_centroid__within').val();
+        if (bboxString) {
+            LOTS_MAP.fitBounds(L.geoJsonLatLngBounds(bboxString));
+        }
     }
 
     function getBounds(map) {
@@ -304,6 +312,11 @@
 
         $('.export-csv').click(function() {
             window.location = '{% url "lots:csv" %}?' + serializeFilters();
+            return false;
+        });
+
+        $('.export-geojson').click(function() {
+            window.location = '{% url "lots:geojson" %}?download=yes&' + serializeFilters();
             return false;
         });
     });

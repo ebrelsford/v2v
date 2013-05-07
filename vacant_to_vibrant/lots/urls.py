@@ -6,12 +6,13 @@ from organize.models import Organizer, Watcher
 from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
                     LotsGeoJSON, LotsGeoJSONPolygon, AddParticipantSuccessView,
                     AddPhotoView, AddNoteView, AddFileView, LotsCountView,
-                    LotsCountBoundaryView, LotsCSV)
+                    LotsCountBoundaryView, LotsCSV, LotsKML)
 
 
 urlpatterns = patterns('',
     url(r'^csv/', LotsCSV.as_view(), name='csv'),
     url(r'^geojson/', LotsGeoJSON.as_view(), name='geojson'),
+    url(r'^kml/', LotsKML.as_view(), name='kml'),
     url(r'^geojson-polygon/', LotsGeoJSONPolygon.as_view(),
         name='lot_geojson_polygon'),
     url(r'^count/', LotsCountView.as_view()),

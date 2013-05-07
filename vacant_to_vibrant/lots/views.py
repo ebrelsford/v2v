@@ -13,7 +13,7 @@ from django.views.generic import CreateView, TemplateView
 
 from forms_builder.forms.models import Form
 from inplace.boundaries.models import Boundary
-from inplace.views import (GeoJSONListView, GeoJSONResponseMixin,
+from inplace.views import (GeoJSONListView, KMLView, GeoJSONResponseMixin,
                            PlacesDetailView)
 
 from files.forms import FileForm
@@ -77,6 +77,24 @@ class LotsCSV(LotFieldsMixin, FilteredLotsMixin, CSVView):
     def get_rows(self):
         for lot in self.get_lots():
             yield self._as_dict(lot)
+
+
+class LotsKML(LotFieldsMixin, FilteredLotsMixin, KMLView):
+    fields = ('address_line1', 'city', 'state_province', 'postal_code',
+              'known_use', 'owner', 'owner_type',)
+
+    def get_filename(self):
+        return 'Grounded lots %s' % date.today().strftime('%Y-%m-%d')
+
+    def get_context_data(self, **kwargs):
+        return {
+            'places': self.get_lots().kml(),
+            'download': True,
+            'filename': self.get_filename(),
+        }
+
+    def render_to_response(self, context):
+        return super(LotsKML, self).render_to_response(context)
 
 
 class LotsGeoJSON(LotFieldsMixin, FilteredLotsMixin, GeoJSONResponseMixin,

@@ -18,7 +18,7 @@ django-debug-toolbar==0.9.4
 django-extensions==1.1.1
 -e git://github.com/stephenmcd/django-forms-builder.git@08f3fd5de9cd48a6fb181f7db844db63d4b0b1e5#egg=django_forms_builder-dev
 -e git://github.com/jdriscoll/django-imagekit.git@261f16412763c69fba64f130c521192ad726d2c1#egg=django_imagekit-dev
--e git://github.com/ebrelsford/django-inplace.git@850e7eb9db38350d265ca775714799c6a43de3c2#egg=django_inplace-dev
+-e git://github.com/ebrelsford/django-inplace.git@cafab2106f55c3b0854d3dd24e54cb7425d43309#egg=django_inplace-dev
 django-jsonfield==0.9.2
 django-mptt==0.5.5
 django-recaptcha-works==0.3.4

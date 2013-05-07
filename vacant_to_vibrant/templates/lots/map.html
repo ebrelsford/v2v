@@ -146,6 +146,11 @@
                             {% trans "Download a GeoJSON file of this view" %}
                         </a>
                     </li>
+                    <li>
+                        <a href="#" class="export-kml">
+                            {% trans "Download a KML file of this view" %}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -317,6 +322,11 @@
 
         $('.export-geojson').click(function() {
             window.location = '{% url "lots:geojson" %}?download=yes&' + serializeFilters();
+            return false;
+        });
+
+        $('.export-kml').click(function() {
+            window.location = '{% url "lots:kml" %}?' + serializeFilters();
             return false;
         });
     });

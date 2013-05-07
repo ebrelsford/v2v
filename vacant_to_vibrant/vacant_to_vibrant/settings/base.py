@@ -162,6 +162,8 @@ INSTALLED_APPS = (
     'phillydata.availableproperties',
     'phillydata.citycouncil',
     'phillydata.landuse',
+    'phillydata.li',
+    'phillydata.licenses',
     'phillydata.opa',
     'phillydata.owners',
     'phillydata.parcels',

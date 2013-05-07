@@ -6,7 +6,7 @@ import adapter
 class AdapterTest(TestCase):
 
     record = {
-        u'violation_location': u'5109 W. STILES ST.\r\n5111-13 W. STILES ST.',
+        u'location': u'5109 W. STILES ST.\r\n5111-13 W. STILES ST.',
         u'violation_code': u'CP-802',
         u'violation_details_id': 2729519,
         u'__metadata': {

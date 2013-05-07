@@ -27,8 +27,8 @@ def load_lots_with_violations():
     for violation in Violation.objects.filter(lot=None):
         try:
             parcel = Parcel.objects.get_fuzzy(
-                address=violation.violation_location.address,
-                centroid=violation.violation_location.point
+                address=violation.location.address,
+                centroid=violation.location.point
             )
         except (Parcel.MultipleObjectsReturned, Parcel.DoesNotExist):
             logger.warn('Could not find parcel for violation: %s' %
@@ -42,9 +42,9 @@ def load_lots_with_violations():
         # TODO account for violations that don't agree with each other
         with reversion.create_revision():
             lot = get_or_create_lot(
-                parcel, violation.violation_location.address,
-                centroid=violation.violation_location.point,
-                zipcode=violation.violation_location.zip_code
+                parcel, violation.location.address,
+                centroid=violation.location.point,
+                zipcode=violation.location.zip_code
             )
         if not lot.violations.filter(pk=violation.pk):
             lot.violations.add(violation)

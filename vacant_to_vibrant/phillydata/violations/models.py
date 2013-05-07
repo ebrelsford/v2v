@@ -15,7 +15,7 @@ class Violation(models.Model):
     """
     objects = ViolationManager()
     violation_type = models.ForeignKey('ViolationType')
-    violation_location = models.ForeignKey('ViolationLocation')
+    location = models.ForeignKey('li.Location')
 
     violation_datetime = models.DateTimeField(_('date/time'),
         blank=True,
@@ -33,7 +33,7 @@ class Violation(models.Model):
     def __unicode__(self):
         return u'Violation (%s): %s at %s' % (self.external_id,
                                               self.violation_type.li_description,
-                                              self.violation_location.address)
+                                              self.location.address)
 
 
 class ViolationType(models.Model):

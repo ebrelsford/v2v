@@ -1,20 +1,14 @@
 from django.contrib import admin
-from django.contrib.gis.admin import OSMGeoAdmin
 
 from reversion_compare.admin import CompareVersionAdmin
 
-from .models import Violation, ViolationLocation, ViolationType
+from .models import Violation, ViolationType
 
 
 class ViolationAdmin(CompareVersionAdmin):
     list_display = ('external_id', 'violation_datetime',)
-    readonly_fields = ('violation_location', 'violation_type',)
-    search_fields = ('violation_location__address',)
-
-
-class ViolationLocationAdmin(OSMGeoAdmin, admin.ModelAdmin):
-    list_display = ('address', 'zip_code', 'external_id',)
-    search_fields = ('address', 'zip_code', 'external_id',)
+    readonly_fields = ('location', 'violation_type',)
+    search_fields = ('location__address',)
 
 
 class ViolationTypeAdmin(admin.ModelAdmin):
@@ -22,5 +16,4 @@ class ViolationTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Violation, ViolationAdmin)
-admin.site.register(ViolationLocation, ViolationLocationAdmin)
 admin.site.register(ViolationType, ViolationTypeAdmin)

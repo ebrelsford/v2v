@@ -72,6 +72,9 @@ class FiltersForm(forms.Form):
         help_text=_('Did we find a land use area for this property in the '
                     'Planning Commission\'s <a href="http://opendataphilly.org/opendata/resource/170/land-use/" target="_blank">land use file</a>?'),
     )
+    has_licenses = forms.NullBooleanField(
+        label=_('Is licensed as vacant'),
+    )
     has_violations = forms.NullBooleanField()
 
     violations_count = forms.IntegerField(
@@ -137,5 +140,5 @@ class FiltersForm(forms.Form):
             yield self[field]
 
     def private_filters(self):
-        for field in ('has_violations', 'violations_count',):
+        for field in ('has_licenses', 'has_violations', 'violations_count',):
             yield self[field]

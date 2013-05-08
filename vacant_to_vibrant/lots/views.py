@@ -182,12 +182,11 @@ class LotsCountBoundaryView(GeoJSONResponseMixin, JSONResponseView):
         for boundary in boundaries:
             features.append(geojson.Feature(
                 boundary.pk,
-                # TODO compress/simplify
-                geometry=json.loads(boundary.geometry.geojson),
+                geometry=json.loads(boundary.simplified_geometry.geojson),
                 properties={
                     'boundary_label': boundary.label,
                     'count': lots.filter(
-                        centroid__within=boundary.geometry
+                        centroid__within=boundary.simplified_geometry
                     ).count(),
                 }
             ))

@@ -113,6 +113,22 @@
                 <td>{{ lot.billing_account|default:"unknown" }}</td>
             </tr>
 
+            {% if lot.licenses.count > 0 %}
+            <tr>
+                <th>{% trans "licenses" %}:</th>
+                <td>
+                    {{ lot.licenses.count }}:
+                    {% for license in lot.licenses.all %}
+                    {{ license.status }},
+                    {% trans "issued on" %}
+                    {{ license.issued_datetime|date:"SHORT_DATE_FORMAT" }},
+                    {{ license.license_type.name }}
+                    <br />
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endif %}
+
             {% if lot.violations.count > 0 %}
             <tr>
                 <th>{% trans "violations" %}:</th>

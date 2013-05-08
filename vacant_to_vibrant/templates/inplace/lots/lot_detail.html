@@ -55,10 +55,12 @@
                 </td>
             </tr>
 
+            {% if lot.number_of_lots > 1 %}
             <tr>
                 <th>{% trans "number of lots" %}:</th>
                 <td>{{ lot.number_of_lots }}</td>
             </tr>
+            {% endif %}
 
             <tr>
                 <th>{% trans "owner" %}:</th>
@@ -245,6 +247,7 @@
         {% render_photo_list for lot %}
     </div>
 
+    {% if lot.nearby %}
     <div class="lot-detail-side-section">
         <h2>{% trans "Nearby Lots" %}</h2>
         <ul>
@@ -255,6 +258,7 @@
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
 
     <div class="lot-detail-side-section">
         <h2>{% trans "Request a cleanup" %}</h2>

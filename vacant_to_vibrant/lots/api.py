@@ -56,6 +56,7 @@ class LotResource(ModelResource):
                 })
                 participant_type_filters = participant_type_filters | f
             lots = Lot.objects.filter(participant_type_filters)
+            # TODO use apply_filters
             orm_filters['pk__in'] = lots.values_list('pk', flat=True)
 
         if 'violations_count' in filters:
@@ -65,7 +66,7 @@ class LotResource(ModelResource):
                 violations_count = 0
             if violations_count > 0:
                 lots = Lot.objects.all().annotate(violations_count=Count('violations'))
-                # TODO make this actually do something
+                # TODO make this actually do something using apply_filters
                 lots = lots.filter(violations_count=violations_count)
 
         try:
@@ -74,28 +75,9 @@ class LotResource(ModelResource):
         except Exception:
             pass
 
-        boundary_filters = None
         for f in filters:
             if not f.startswith('boundary_'): continue
-            layer = f.replace('boundary_', '').replace('_', ' ')
-            boundaries = Boundary.objects.filter(
-                layer__name__iexact=layer,
-                label__in=filters.getlist(f),
-            )
-            for boundary in boundaries:
-                boundary_filter = Q(centroid__within=boundary.geometry)
-                if boundary_filters:
-                    boundary_filters = boundary_filters | boundary_filter
-                else:
-                    boundary_filters = boundary_filter
-        if boundary_filters:
-            lots = Lot.objects.all().filter(boundary_filters)
-
-            # TODO override apply_filters rather than use pk__in
-            # like here:
-                # http://stackoverflow.com/questions/10021749/django-tastypie-advanced-filtering-how-to-do-complex-lookups-with-q-objects
-            orm_filters['pk__in'] = (orm_filters.get('pk__in', []) +
-                                     list(lots.values_list('pk', flat=True)))
+            orm_filters[f] = filters.getlist(f)
 
         # TODO fix weird hybrid of API/Django form-processing
         # -> Make the form widgets perform more like an API?
@@ -117,6 +99,47 @@ class LotResource(ModelResource):
                 orm_filters[filter_name] = value
 
         return orm_filters
+
+    def apply_filters(self, request, applicable_filters):
+
+        # Pop custom filters
+        cleaned_filters = applicable_filters.copy()
+
+        # Pop boundary filters for once we have a queryset
+        cleaned_boundary_filters = {}
+        for f in applicable_filters:
+            if not f.startswith('boundary_'): continue
+
+            # Convert to layer name
+            layer = f.replace('boundary_', '').replace('_', ' ')
+
+            # Save for later
+            cleaned_boundary_filters[layer] = cleaned_filters.pop(f)
+
+
+        # Get queryset using the orm filters
+        qs = super(LotResource, self).apply_filters(request, cleaned_filters)
+
+
+        # Apply custom filters
+
+        # Apply boundary filters
+        boundary_filters = None
+        for layer, boundary_pks in cleaned_boundary_filters.items():
+            boundaries = Boundary.objects.filter(
+                layer__name__iexact=layer,
+                label__in=boundary_pks,
+            )
+
+            for boundary in boundaries:
+                boundary_filter = Q(centroid__within=boundary.geometry)
+                if boundary_filters:
+                    boundary_filters = boundary_filters | boundary_filter
+                else:
+                    boundary_filters = boundary_filter
+        if boundary_filters: qs = qs.filter(boundary_filters)
+
+        return qs
 
     class Meta:
         allowed_methods = ('get',)

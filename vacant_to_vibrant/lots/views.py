@@ -35,8 +35,9 @@ class FilteredLotsMixin(object):
     """A mixin that makes it easy to filter on Lots using a LotResource."""
 
     def get_lots(self):
-        orm_filters = LotResource().build_filters(filters=self.request.GET)
-        return Lot.objects.filter(**orm_filters)
+        resource = LotResource()
+        orm_filters = resource.build_filters(filters=self.request.GET)
+        return resource.apply_filters(self.request, orm_filters)
 
 
 class LotFieldsMixin(object):
@@ -126,10 +127,7 @@ class LotsGeoJSON(LotFieldsMixin, FilteredLotsMixin, GeoJSONResponseMixin,
         return response
 
 
-class LotsGeoJSONPolygon(GeoJSONListView):
-
-    def _get_filters(self):
-        return LotResource().build_filters(filters=self.request.GET)
+class LotsGeoJSONPolygon(FilteredLotsMixin, GeoJSONListView):
 
     def get_feature(self, lot):
         return geojson.Feature(
@@ -141,7 +139,7 @@ class LotsGeoJSONPolygon(GeoJSONListView):
         )
 
     def get_queryset(self):
-        return Lot.objects.filter(polygon__isnull=False, **self._get_filters())
+        return self.get_lots.filter(polygon__isnull=False)
 
 
 class LotsCountView(FilteredLotsMixin, JSONResponseView):
@@ -171,7 +169,7 @@ class LotsCountBoundaryView(GeoJSONResponseMixin, JSONResponseView):
         except Exception:
             pass
 
-        lots = Lot.objects.filter(**filters)
+        lots = LotResource().apply_filters(self.request, filters)
 
         # Get city council districts
         # TODO or use city_council_district field instead

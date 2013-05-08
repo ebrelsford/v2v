@@ -132,15 +132,17 @@ class LotsGeoJSONPolygon(FilteredLotsMixin, GeoJSONListView):
     def get_feature(self, lot):
         return geojson.Feature(
             lot.pk,
-            # TODO explore simplifying geometry
-            geometry=json.loads(lot.polygon.geojson),
+            geometry=json.loads(lot.geojson),
             properties={
                 'pk': lot.pk,
             },
         )
 
     def get_queryset(self):
-        return self.get_lots().filter(polygon__isnull=False)
+        return self.get_lots().filter(polygon__isnull=False).geojson(
+            field_name='polygon',
+            precision=5,
+        )
 
 
 class LotsCountView(FilteredLotsMixin, JSONResponseView):

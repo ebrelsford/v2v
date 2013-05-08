@@ -59,16 +59,6 @@ class LotResource(ModelResource):
             # TODO use apply_filters
             orm_filters['pk__in'] = lots.values_list('pk', flat=True)
 
-        if 'violations_count' in filters:
-            try:
-                violations_count = int(filters['violations_count'])
-            except Exception:
-                violations_count = 0
-            if violations_count > 0:
-                lots = Lot.objects.all().annotate(violations_count=Count('violations'))
-                # TODO make this actually do something using apply_filters
-                lots = lots.filter(violations_count=violations_count)
-
         try:
             impervious_area = int(filters['water_parcel__impervious_area__lt'])
             orm_filters['water_parcel__impervious_area__lt'] = impervious_area
@@ -84,6 +74,8 @@ class LotResource(ModelResource):
         form = FiltersForm(filters)
         form.is_valid()
         cleaned_data = form.cleaned_data
+
+        orm_filters['violations_count'] = cleaned_data.get('violations_count', 0)
 
         if cleaned_data.get('parents_only', False):
             orm_filters['group__isnull'] = True
@@ -116,6 +108,9 @@ class LotResource(ModelResource):
             # Save for later
             cleaned_boundary_filters[layer] = cleaned_filters.pop(f)
 
+        # Pop violations_count
+        violations_count = cleaned_filters.pop('violations_count', 0)
+
 
         # Get queryset using the orm filters
         qs = super(LotResource, self).apply_filters(request, cleaned_filters)
@@ -138,6 +133,11 @@ class LotResource(ModelResource):
                 else:
                     boundary_filters = boundary_filter
         if boundary_filters: qs = qs.filter(boundary_filters)
+
+        # Apply violations_count
+        if violations_count > 0:
+            qs = qs.annotate(violations_count=Count('violations'))
+            qs = qs.filter(violations_count=violations_count)
 
         return qs
 

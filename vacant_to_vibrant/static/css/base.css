@@ -232,6 +232,10 @@ th {
     margin-bottom: 0;
 }
 
+.lot-detail-details table {
+    width: 100%;
+}
+
 .lot-detail-details th {
     width: 30%;
 }

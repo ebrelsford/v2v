@@ -110,11 +110,6 @@
                 </td>
             </tr>
 
-            <tr>
-                <th>{% trans "billing account" %}:</th>
-                <td>{{ lot.billing_account|default:"unknown" }}</td>
-            </tr>
-
             {% if lot.licenses.count > 0 %}
             <tr>
                 <th>{% trans "licenses" %}:</th>
@@ -144,18 +139,6 @@
             </tr>
             {% endif %}
 
-            {% if lot.land_use_area %}
-            <tr>
-                <th>{% trans "land use" %}:</th>
-                <td>
-                    According to the City Planning Commission:
-                    {{ lot.land_use_area.category }}, 
-                    {{ lot.land_use_area.subcategory }},
-                    {{ lot.land_use_area.description }}
-                </td>
-            </tr>
-            {% endif %}
-
             {% if lot.zoning_district %}
             <tr>
                 <th>{% trans "zoning district" %}:</th>
@@ -175,6 +158,37 @@
             </tr>
             {% endif %}
 
+        </table>
+    </div>
+
+    {% if "lots.view_all_details" in perms %}
+    <div class="lot-detail-details lot-detail-main-section">
+        <h2>{% trans "Admin Details" %}</h2>
+        <div class="help-text">(This section is only visible to admins.)</div>
+        <table>
+
+            <tr>
+                <th>{% trans "billing account" %}:</th>
+                <td>{{ lot.billing_account|default:"unknown" }}</td>
+            </tr>
+
+            {% if lot.land_use_area %}
+            <tr>
+                <th>{% trans "land use" %}:</th>
+                <td>
+                    According to the City Planning Commission:
+                    {{ lot.land_use_area.category }}, 
+                    {{ lot.land_use_area.subcategory }},
+                    {{ lot.land_use_area.description }}
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <th>{% trans "parcel" %}:</th>
+                <td>{{ lot.parcel|default:"unknown" }}</td>
+            </tr>
+
             {% if lot.tax_account %}
             <tr>
                 <th>{% trans "tax account" %}:</th>
@@ -187,25 +201,22 @@
             {% endif %}
 
             <tr>
-                <th>{% trans "parcel" %}:</th>
-                <td>{{ lot.parcel|default:"unknown" }}</td>
-            </tr>
-
-            {% if lot.water_parcel %}
-            <tr>
                 <th>{% trans "water parcel" %}:</th>
                 <td>
-                    gross area: {{ lot.water_parcel.gross_area|floatformat }} square feet<br />
-                    impervious area: {{ lot.water_parcel.impervious_area|floatformat }} square feet<br />
-                    permeable area: {{ lot.water_parcel.percent_permeable|floatformat }}%<br />
-                    owners: {{ lot.water_parcel.owner1 }},
-                    {{lot.water_parcel.owner2}}
+                    {% if lot.water_parcel %}
+                        gross area: {{ lot.water_parcel.gross_area|floatformat }} square feet<br />
+                        impervious area: {{ lot.water_parcel.impervious_area|floatformat }} square feet<br />
+                        permeable area: {{ lot.water_parcel.percent_permeable|floatformat }}%<br />
+                        owners: {{ lot.water_parcel.owner1 }},
+                        {{lot.water_parcel.owner2}}
+                    {% else %}
+                        none
+                    {% endif %}
                 </td>
             </tr>
-            {% endif %}
-
         </table>
     </div>
+    {% endif %}
 
     <div id="notes" class="notes lot-detail-main-section">
         <h2>{% trans "Notes" %}</h2>

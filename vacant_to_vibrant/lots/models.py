@@ -135,6 +135,7 @@ class Lot(Place):
 
     class Meta:
         permissions = (
+            ('view_all_details', 'Can view all details for lots'),
             ('view_all_filters', 'Can view all map filters for lots'),
         )
 

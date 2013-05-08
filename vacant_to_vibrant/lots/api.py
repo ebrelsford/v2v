@@ -65,7 +65,14 @@ class LotResource(ModelResource):
                 violations_count = 0
             if violations_count > 0:
                 lots = Lot.objects.all().annotate(violations_count=Count('violations'))
+                # TODO make this actually do something
                 lots = lots.filter(violations_count=violations_count)
+
+        try:
+            impervious_area = int(filters['water_parcel__impervious_area__lt'])
+            orm_filters['water_parcel__impervious_area__lt'] = impervious_area
+        except Exception:
+            pass
 
         boundary_filters = None
         for f in filters:

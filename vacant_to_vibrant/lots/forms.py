@@ -90,6 +90,11 @@ class FiltersForm(forms.Form):
         widget=forms.CheckboxSelectMultiple(attrs={ 'class': 'filter', }),
     )
 
+    water_parcel__impervious_area__lt = forms.IntegerField(
+        label=_('% impervious'),
+        required=False,
+    )
+
     # TODO lot filters! Dynamically add to form?
 
     def __init__(self, *args, **kwargs):
@@ -118,7 +123,8 @@ class FiltersForm(forms.Form):
     def admin_filters(self):
         for field in ('participant_types', 'has_available_property',
                       'has_billing_account', 'has_tax_account', 'has_parcel',
-                      'has_land_use_area'):
+                      'has_land_use_area',
+                      'water_parcel__impervious_area__lt',):
             yield self[field]
 
     def other_filters(self):

@@ -48,16 +48,7 @@ class LotResource(ModelResource):
         if 'owner__name__icontains' in orm_filters and orm_filters['owner__name__icontains'] == '':
             del orm_filters['owner__name__icontains']
 
-        if 'participant_types' in filters:
-            participant_type_filters = Q()
-            for participant_type in filters.getlist('participant_types', []):
-                f = Q(**{
-                    '%s__isnull' % participant_type: False,
-                })
-                participant_type_filters = participant_type_filters | f
-            lots = Lot.objects.filter(participant_type_filters)
-            # TODO use apply_filters
-            orm_filters['pk__in'] = lots.values_list('pk', flat=True)
+        orm_filters['participant_types'] = filters.getlist('participant_types', [])
 
         try:
             impervious_area = int(filters['water_parcel__impervious_area__lt'])
@@ -111,6 +102,9 @@ class LotResource(ModelResource):
         # Pop violations_count
         violations_count = cleaned_filters.pop('violations_count', 0)
 
+        # Pop participant_types
+        participant_types = cleaned_filters.pop('participant_types', [])
+
 
         # Get queryset using the orm filters
         qs = super(LotResource, self).apply_filters(request, cleaned_filters)
@@ -138,6 +132,16 @@ class LotResource(ModelResource):
         if violations_count > 0:
             qs = qs.annotate(violations_count=Count('violations'))
             qs = qs.filter(violations_count=violations_count)
+
+        # Apply participant_types
+        if participant_types:
+            participant_type_filters = Q()
+            for participant_type in participant_types:
+                f = Q(**{
+                    '%s__isnull' % participant_type: False,
+                })
+                participant_type_filters = participant_type_filters | f
+            qs = qs.filter(participant_type_filters)
 
         return qs
 

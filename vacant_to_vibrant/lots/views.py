@@ -132,6 +132,7 @@ class LotsGeoJSONPolygon(FilteredLotsMixin, GeoJSONListView):
     def get_feature(self, lot):
         return geojson.Feature(
             lot.pk,
+            # TODO explore simplifying geometry
             geometry=json.loads(lot.polygon.geojson),
             properties={
                 'pk': lot.pk,

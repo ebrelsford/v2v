@@ -72,6 +72,12 @@ class Lot(Place):
         help_text=_('The violations associated with this lot.'),
         verbose_name=_('violations'),
     )
+    licenses = models.ManyToManyField('licenses.License',
+        blank=True,
+        null=True,
+        help_text=_('The licenses associated with this lot.'),
+        verbose_name=_('licenses'),
+    )
     available_property = models.ForeignKey(AvailableProperty,
         blank=True,
         null=True,

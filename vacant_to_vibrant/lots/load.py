@@ -8,6 +8,7 @@ import reversion
 
 from phillydata.availableproperties.models import AvailableProperty
 from phillydata.landuse.models import LandUseArea
+from phillydata.licenses.models import License
 from phillydata.parcels.models import Parcel
 from phillydata.taxaccounts.models import TaxAccount
 from phillydata.violations.models import Violation
@@ -18,9 +19,35 @@ logger = logging.getLogger(__name__)
 
 
 def load_lots():
+    load_lots_with_licenses()
     load_lots_with_violations()
     load_lots_available()
     load_lots_by_tax_account()
+
+
+def load_lots_with_licenses():
+    for license in License.objects.filter(lot=None):
+        try:
+            parcel = Parcel.objects.get_fuzzy(
+                address=license.location.address,
+                centroid=license.location.point
+            )
+        except (Parcel.MultipleObjectsReturned, Parcel.DoesNotExist):
+            logger.warn('Could not find parcel for license: %s' % str(license))
+            continue
+        except Exception:
+            logger.exception('Exception while finding Parcel for license: %s' %
+                             str(license))
+            continue
+
+        with reversion.create_revision():
+            lot = get_or_create_lot(
+                parcel, license.location.address,
+                centroid=license.location.point,
+                zipcode=license.location.zip_code
+            )
+        if not lot.licenses.filter(pk=license.pk):
+            lot.licenses.add(license)
 
 
 def load_lots_with_violations():

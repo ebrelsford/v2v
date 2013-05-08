@@ -12,6 +12,7 @@ class PhillyDataSource(DataSource):
     """
     NAME_CHOICES = (
         ('citycouncil', 'City Council'),
+        ('lilicenses', 'L&I Licenses'),
         ('liviolations', 'L&I Violations'),
         ('landusearea', 'Land Use Areas'),
         ('opa', 'OPA API'),

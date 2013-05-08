@@ -2,13 +2,14 @@ import logging
 
 from inplace.boundaries.models import Boundary
 
-from lots.load import (load_lots_available, load_lots_with_violations,
-                       load_lots_land_use_vacant)
+from lots.load import (load_lots_available, load_lots_with_licenses,
+                       load_lots_with_violations, load_lots_land_use_vacant)
 from lots.models import Lot
 from sync.synchronizers import Synchronizer
 from .availableproperties.adapter import (find_available_properties,
                                           find_no_longer_available_properties)
 from .landuse.adapter import find_land_use_areas
+from .licenses.adapter import find_licenses
 from .opa.adapter import find_opa_details
 from .taxaccounts.models import TaxAccount
 from .violations.adapter import find_violations
@@ -112,6 +113,30 @@ class PRAAvailablePropertiesSynchronizer(Synchronizer):
         logger.info('Adding lots with available properties.')
         load_lots_available(added_after=data_source.last_synchronized)
         logger.info('Done adding lots with available properties.')
+
+
+class LILicensesSynchronizer(Synchronizer):
+    """
+    A Synchronizer that updates L&I license data.
+
+    """
+    codes = (
+        '3219', # residential vacancy license
+        '3634', # commercial vacancy license
+    )
+
+    def sync(self, data_source):
+        logger.info('Starting to synchronize L&I license data.')
+        self.update_license_data()
+        logger.info('Finished synchronizing L&I license data.')
+
+        logger.info('Adding lots with licenses.')
+        load_lots_with_licenses()
+        logger.info('Done adding lots with licenses.')
+
+    def update_license_data(self):
+        for code in self.codes:
+            find_licenses(code, self.data_source.last_synchronized)
 
 
 class LIViolationsSynchronizer(Synchronizer):

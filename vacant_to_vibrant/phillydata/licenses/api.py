@@ -4,8 +4,6 @@ from phillydata.li.api import LIReader
 class LILicenseReader(LIReader):
     endpoint = 'licenses'
 
-    codes = ['3219', '3634',]
-
     def get(self, code, since=None, params={}):
         filters = [ "license_type_code eq '%s'" % code, ]
         if since:
@@ -18,4 +16,3 @@ class LILicenseReader(LIReader):
             'orderby': 'issued_datetime desc',
         })
         return super(LILicenseReader, self).get(self.endpoint, params)
-

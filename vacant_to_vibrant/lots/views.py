@@ -139,7 +139,7 @@ class LotsGeoJSONPolygon(FilteredLotsMixin, GeoJSONListView):
         )
 
     def get_queryset(self):
-        return self.get_lots.filter(polygon__isnull=False)
+        return self.get_lots().filter(polygon__isnull=False)
 
 
 class LotsCountView(FilteredLotsMixin, JSONResponseView):

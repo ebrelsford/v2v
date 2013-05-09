@@ -162,10 +162,6 @@
     </div>
 
     {% if "lots.view_all_details" in perms %}
-    {% comment %}
-    TODO link to admin for each of these? Or for everything, if the person has
-    permission
-    {% endcomment %}
     <div class="lot-detail-details lot-detail-main-section">
         <h2>{% trans "Admin Details" %}</h2>
         <div class="help-text">(This section is only visible to admins.)</div>
@@ -178,7 +174,16 @@
                         {% trans "The OPA billing account for this lot, if we found one" %}
                     </div>
                 </th>
-                <td>{{ lot.billing_account|default:"not found" }}</td>
+                <td>
+                    {% if lot.billing_account %}
+                        {{ lot.billing_account }}
+                        {% if "opa.change_billingaccount" in perms %}
+                        <a href="{% url "admin:opa_billingaccount_change" lot.billing_account.pk %}" target="_blank">view/change</a>
+                        {% endif %}
+                    {% else %}
+                        {% trans "not found" %}
+                    {% endif %}
+                </td>
             </tr>
 
             <tr>
@@ -193,6 +198,11 @@
                         {{ lot.land_use_area.category }}, 
                         {{ lot.land_use_area.subcategory }},
                         {{ lot.land_use_area.description }}
+                        {% if "landuse.change_landusearea" in perms %}
+                        <div class="admin-link">
+                            <a href="{% url "admin:landuse_landusearea_change" lot.land_use_area.pk %}" target="_blank">view/change</a>
+                        </div>
+                        {% endif %}
                     {% else %}
                     {% trans "not found" %}
                     {% endif %}
@@ -206,7 +216,18 @@
                         {% trans "The parcel we're using for this lot" %}
                     </div>
                 </th>
-                <td>{{ lot.parcel|default:"not found" }}</td>
+                <td>
+                    {% if lot.parcel %}
+                        {{ lot.parcel }}
+                        {% if "parcels.change_parcel" in perms %}
+                        <div class="admin-link">
+                            <a href="{% url "admin:parcels_parcel_change" lot.parcel.pk %}" target="_blank">view/change</a>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        {% trans "not found" %}
+                    {% endif %}
+                </td>
             </tr>
 
             <tr>
@@ -218,9 +239,14 @@
                 </th>
                 <td>
                     {% if lot.tax_account %}
-                        {{ lot.tax_account|default:"not found" }}<br />
+                        {{ lot.tax_account }}<br />
                         {{ lot.tax_account.years_delinquent }} years delinquent<br />
                         ${{ lot.tax_account.amount_delinquent }} delinquent
+                        {% if "taxaccounts.change_taxaccount" in perms %}
+                        <div class="admin-link">
+                            <a href="{% url "admin:taxaccounts_taxaccount_change" lot.taxaccount.pk %}" target="_blank">view/change</a>
+                        </div>
+                        {% endif %}
                     {% else %}
                     {% trans "not found" %}
                     {% endif %}
@@ -242,6 +268,11 @@
                         owners: {{ lot.water_parcel.owner1 }},
                         {{lot.water_parcel.owner2}}<br />
                         <a href="http://www.phila.gov/water/swmap/Parcel.aspx?parcel_id={{ lot.water_parcel.parcel_id }}" target="_blank">view on the Water Department's site</a>
+                        {% if "waterdept.change_waterparcel" in perms %}
+                        <div class="admin-link">
+                            <a href="{% url "admin:waterdept_waterparcel_change" lot.water_parcel.pk %}" target="_blank">view/change</a>
+                        </div>
+                        {% endif %}
                     {% else %}
                         none
                     {% endif %}

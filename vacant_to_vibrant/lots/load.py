@@ -191,7 +191,16 @@ def _get_lot_defaults(address=None, centroid=None, land_use_area=None,
                       parcel=None, polygon=None, zipcode=None):
     """Get a dictionary of default values to set for a Lot."""
     if not polygon:
-        if parcel:
+        if land_use_area and parcel:
+            # If we have a land use area and a parcel, try to pick the shape of
+            # the lot appropriately. If the land use area is significantly
+            # smaller, use the land use area.
+            parcel_area = parcel.geometry.transform(102729, clone=True).area
+            if float(land_use_area.area) / parcel_area < .5:
+                polygon = land_use_area.geometry
+            else:
+                polygon = parcel.geometry
+        elif parcel:
             polygon = parcel.geometry
         elif land_use_area:
             polygon = land_use_area.geometry

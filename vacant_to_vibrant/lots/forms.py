@@ -68,6 +68,10 @@ class FiltersForm(forms.Form):
         help_text=_('Did we find a parcel for this property in the Records '
                     'Department\'s <a href="http://opendataphilly.org/opendata/resource/28/property-parcels/" target="_blank">file</a>?'),
     )
+    has_water_parcel = forms.NullBooleanField(
+        help_text=_("Did we find a parcel for this property in the Water "
+                    "Department's records?"),
+    )
     has_land_use_area = forms.NullBooleanField(
         help_text=_('Did we find a land use area for this property in the '
                     'Planning Commission\'s <a href="http://opendataphilly.org/opendata/resource/170/land-use/" target="_blank">land use file</a>?'),
@@ -126,7 +130,7 @@ class FiltersForm(forms.Form):
     def admin_filters(self):
         for field in ('participant_types', 'has_available_property',
                       'has_billing_account', 'has_tax_account', 'has_parcel',
-                      'has_land_use_area',
+                      'has_land_use_area', 'has_water_parcel',
                       'water_parcel__impervious_area__lt',):
             yield self[field]
 

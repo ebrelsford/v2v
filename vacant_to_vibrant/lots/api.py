@@ -81,7 +81,8 @@ class LotResource(ModelResource):
 
         # Add has_* filters (checking for null on foreign key fields)
         for f in ('available_property', 'billing_account', 'tax_account',
-                  'parcel', 'land_use_area', 'licenses', 'violations',):
+                  'parcel', 'water_parcel', 'land_use_area', 'licenses',
+                  'violations',):
             filter_name = 'has_%s' % f
             if filter_name in cleaned_data and cleaned_data[filter_name] is not None:
                 orm_filters['%s__isnull' % f] = not cleaned_data[filter_name]

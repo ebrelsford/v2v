@@ -244,7 +244,7 @@
                         ${{ lot.tax_account.amount_delinquent }} delinquent
                         {% if "taxaccounts.change_taxaccount" in perms %}
                         <div class="admin-link">
-                            <a href="{% url "admin:taxaccounts_taxaccount_change" lot.taxaccount.pk %}" target="_blank">view/change</a>
+                            <a href="{% url "admin:taxaccounts_taxaccount_change" lot.tax_account.pk %}" target="_blank">view/change</a>
                         </div>
                         {% endif %}
                     {% else %}

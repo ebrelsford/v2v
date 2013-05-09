@@ -162,53 +162,86 @@
     </div>
 
     {% if "lots.view_all_details" in perms %}
+    {% comment %}
+    TODO link to admin for each of these? Or for everything, if the person has
+    permission
+    {% endcomment %}
     <div class="lot-detail-details lot-detail-main-section">
         <h2>{% trans "Admin Details" %}</h2>
         <div class="help-text">(This section is only visible to admins.)</div>
         <table>
 
             <tr>
-                <th>{% trans "billing account" %}:</th>
-                <td>{{ lot.billing_account|default:"unknown" }}</td>
+                <th>
+                    {% trans "billing account" %}:
+                    <div class="help-text">
+                        {% trans "The OPA billing account for this lot, if we found one" %}
+                    </div>
+                </th>
+                <td>{{ lot.billing_account|default:"not found" }}</td>
             </tr>
 
-            {% if lot.land_use_area %}
             <tr>
-                <th>{% trans "land use" %}:</th>
+                <th>
+                    {% trans "land use" %}:
+                    <div class="help-text">
+                        {% trans "The land use according to the City Planning Commissiond, if we found a record for this lot" %}
+                    </div>
+                </th>
                 <td>
-                    According to the City Planning Commission:
-                    {{ lot.land_use_area.category }}, 
-                    {{ lot.land_use_area.subcategory }},
-                    {{ lot.land_use_area.description }}
+                    {% if lot.land_use_area %}
+                        {{ lot.land_use_area.category }}, 
+                        {{ lot.land_use_area.subcategory }},
+                        {{ lot.land_use_area.description }}
+                    {% else %}
+                    {% trans "not found" %}
+                    {% endif %}
                 </td>
             </tr>
-            {% endif %}
 
             <tr>
-                <th>{% trans "parcel" %}:</th>
-                <td>{{ lot.parcel|default:"unknown" }}</td>
+                <th>
+                    {% trans "parcel" %}:
+                    <div class="help-text">
+                        {% trans "The parcel we're using for this lot" %}
+                    </div>
+                </th>
+                <td>{{ lot.parcel|default:"not found" }}</td>
             </tr>
 
-            {% if lot.tax_account %}
             <tr>
-                <th>{% trans "tax account" %}:</th>
+                <th>
+                    {% trans "tax account" %}:
+                    <div class="help-text">
+                        {% trans "The tax account for this lot. Will likely only exist if the account was in delinquent as of June 2012." %}
+                    </div>
+                </th>
                 <td>
-                    {{ lot.tax_account|default:"unknown" }}<br />
-                    {{ lot.tax_account.years_delinquent }} years delinquent<br />
-                    ${{ lot.tax_account.amount_delinquent }} delinquent
+                    {% if lot.tax_account %}
+                        {{ lot.tax_account|default:"not found" }}<br />
+                        {{ lot.tax_account.years_delinquent }} years delinquent<br />
+                        ${{ lot.tax_account.amount_delinquent }} delinquent
+                    {% else %}
+                    {% trans "not found" %}
+                    {% endif %}
                 </td>
             </tr>
-            {% endif %}
 
             <tr>
-                <th>{% trans "water parcel" %}:</th>
+                <th>
+                    {% trans "water parcel" %}:
+                    <div class="help-text">
+                        {% trans "The Water Department's parcel for this lot" %}
+                    </div>
+                </th>
                 <td>
                     {% if lot.water_parcel %}
                         gross area: {{ lot.water_parcel.gross_area|floatformat }} square feet<br />
                         impervious area: {{ lot.water_parcel.impervious_area|floatformat }} square feet<br />
                         permeable area: {{ lot.water_parcel.percent_permeable|floatformat }}%<br />
                         owners: {{ lot.water_parcel.owner1 }},
-                        {{lot.water_parcel.owner2}}
+                        {{lot.water_parcel.owner2}}<br />
+                        <a href="http://www.phila.gov/water/swmap/Parcel.aspx?parcel_id={{ lot.water_parcel.parcel_id }}" target="_blank">view on the Water Department's site</a>
                     {% else %}
                         none
                     {% endif %}

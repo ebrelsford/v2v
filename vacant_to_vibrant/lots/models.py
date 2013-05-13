@@ -172,6 +172,38 @@ class Lot(Place):
         except Exception:
             return None
 
+    def calculate_polygon_width(self):
+        """
+        Approximate the width (narrowest side) of this lot in feet using its
+        polygon.
+        """
+        from django.contrib.gis.geos import LineString
+
+        # Get the convex hull for the polygon
+        convex_hull = self.polygon.convex_hull.transform(102729, clone=True)
+
+        # Find the longest side of the convex hull
+        sides = []
+        longest = None
+        for i in range(0, convex_hull.num_points - 1):
+            side = LineString((convex_hull[0][i], convex_hull[0][i+1]),
+                              srid=convex_hull.srid)
+            sides.append(side)
+            if not longest or side.length > longest.length:
+                longest = side
+
+        # Find the side that is closest to making the area with the longest
+        # side
+        closest = longest
+        target_area = self.polygon.transform(102729, clone=True).area
+        for side in sides:
+            test_area = side.length * longest.length
+            closest_area = closest.length * longest.length
+            if abs(target_area - test_area) < abs(target_area - closest_area):
+                closest = side
+
+        return closest.length
+
     def _get_area(self):
         if self.billing_account:
             return self.billing_account.land_area

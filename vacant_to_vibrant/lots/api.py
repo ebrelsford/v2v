@@ -1,3 +1,5 @@
+from inspect import getmembers
+
 from django.db.models import Q, Count
 
 from inplace.api.serializers import GeoJSONSerializer
@@ -99,14 +101,38 @@ class LotResource(ModelResource):
 
         return orm_filters
 
-    def _pop_custom_filters(self, filters):
-        custom_filters = {}
+    def apply_filters(self, request, applicable_filters):
+        cleaned_filters = applicable_filters.copy()
+        custom_filters = self._pop_custom_filters(cleaned_filters)
+        qs = super(LotResource, self).apply_filters(request, cleaned_filters)
+        return self._apply_custom_filters(qs, custom_filters)
 
+    def _pop_custom_filters(self, filters):
+        """
+        Pop the custom filters from the given filters--modifying the given
+        filters dict--and return a dict of custom filters.
+        """
+        custom_filters = {}
+        for attr, value in getmembers(self):
+            if not attr.startswith('pop_custom_filter_'): continue
+            filter_name = attr.replace('pop_custom_filter_', '')
+            custom_filters[filter_name] = getattr(self, attr)(filters)
+        return custom_filters
+
+    def _apply_custom_filters(self, qs, custom_filters):
+        """Apply the custom filters that were popped."""
+        for attr, value in getmembers(self):
+            if not attr.startswith('apply_custom_filter_'): continue
+            filter_name = attr.replace('apply_custom_filter_', '')
+            qs = getattr(self, attr)(qs, custom_filters[filter_name])
+        return qs
+
+    def pop_custom_filter_boundary(self, filters):
         # Hold on to all filters while popping
         filters_copy = filters.copy()
 
         # Pop boundary filters for once we have a queryset
-        custom_filters['boundary'] = {}
+        boundary = {}
         for f in filters_copy:
             if not f.startswith('boundary_'): continue
 
@@ -114,32 +140,31 @@ class LotResource(ModelResource):
             layer = f.replace('boundary_', '').replace('_', ' ')
 
             # Save for later
-            custom_filters['boundary'][layer] = filters.pop(f)
+            boundary[layer] = filters.pop(f)
+        return boundary
 
-        # Pop violations_count
-        custom_filters['violations_count'] = filters.pop('violations_count', 0)
+    # Custom filters
+    def pop_custom_filter_violations_count(self, filters):
+        return filters.pop('violations_count', 0)
 
-        # Pop participant_types
-        custom_filters['participant_types'] = filters.pop('participant_types', [])
+    def pop_custom_filter_participant_types(self, filters):
+        return filters.pop('participant_types', [])
 
-        # Pop area__gt
+    def pop_custom_filter_area__gt(self, filters):
         try:
-            custom_filters['area__gt'] = int(filters.pop('area__gt'))
+            return int(filters.pop('area__gt'))
         except Exception:
-            custom_filters['area__gt'] = 0
+            return 0
 
-        # Pop width__gt
+    def pop_custom_filter_width__gt(self, filters):
         try:
-            custom_filters['width__gt'] = int(filters.pop('width__gt'))
+            return int(filters.pop('width__gt'))
         except Exception:
-            custom_filters['width__gt'] = 0
+            return 0
 
-        return custom_filters
-
-    def _apply_custom_filters(self, qs, custom_filters):
-        # Apply boundary filters
+    def apply_custom_filter_boundary(self, qs, value):
         boundary_filters = None
-        for layer, boundary_pks in custom_filters['boundary'].items():
+        for layer, boundary_pks in value.items():
             boundaries = Boundary.objects.filter(
                 layer__name__iexact=layer,
                 label__in=boundary_pks,
@@ -152,42 +177,40 @@ class LotResource(ModelResource):
                 else:
                     boundary_filters = boundary_filter
         if boundary_filters: qs = qs.filter(boundary_filters)
+        return qs
 
-        # Apply violations_count
-        if custom_filters['violations_count'] > 0:
+    def apply_custom_filter_violations_count(self, qs, value):
+        if value > 0:
             qs = qs.annotate(violations_count=Count('violations'))
-            qs = qs.filter(violations_count=custom_filters['violations_count'])
+            qs = qs.filter(violations_count=value)
+        return qs
 
-        # Apply participant_types
-        if custom_filters['participant_types']:
+    def apply_custom_filter_participant_types(self, qs, value):
+        if value:
             participant_type_filters = Q()
-            for participant_type in custom_filters['participant_types']:
+            for participant_type in value:
                 f = Q(**{
                     '%s__isnull' % participant_type: False,
                 })
                 participant_type_filters = participant_type_filters | f
             qs = qs.filter(participant_type_filters)
+        return qs
 
-        # Apply area__gt
-        if custom_filters['area__gt'] > 0:
+    def apply_custom_filter_area__gt(self, qs, value):
+        if value > 0:
             qs = qs.filter(
                 polygon_area__isnull=False,
-                polygon_area__gt=custom_filters['area__gt'],
-            )
-
-        # Apply width__gt
-        if custom_filters['width__gt'] > 0:
-            qs = qs.filter(
-                polygon_width__isnull=False,
-                polygon_width__gt=custom_filters['width__gt'],
+                polygon_area__gt=value,
             )
         return qs
 
-    def apply_filters(self, request, applicable_filters):
-        cleaned_filters = applicable_filters.copy()
-        custom_filters = self._pop_custom_filters(cleaned_filters)
-        qs = super(LotResource, self).apply_filters(request, cleaned_filters)
-        return self._apply_custom_filters(qs, custom_filters)
+    def apply_custom_filter_width__gt(self, qs, value):
+        if value > 0:
+            qs = qs.filter(
+                polygon_width__isnull=False,
+                polygon_width__gt=value,
+            )
+        return qs
 
     class Meta:
         allowed_methods = ('get',)

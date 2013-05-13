@@ -133,6 +133,21 @@ class Lot(Place):
         verbose_name=_('group'),
     )
 
+    polygon_area = models.DecimalField(_('polygon area'),
+        max_digits=15,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text=_('The area of the polygon in square feet'),
+    )
+    polygon_width = models.DecimalField(_('polygon width'),
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text=_('The width of the polygon in feet'),
+    )
+
     class Meta:
         permissions = (
             ('view_all_details', 'Can view all details for lots'),
@@ -149,7 +164,7 @@ class Lot(Place):
     def find_nearby(self, count=5):
         return self.objects.find_nearby(self)[:count]
 
-    def parcel_area(self):
+    def calculate_polygon_area(self):
         """Find the area of this lot in square feet using its polygon."""
         try:
             # tranform to an area-preserving projection for south PA
@@ -162,7 +177,7 @@ class Lot(Place):
             return self.billing_account.land_area
         if self.water_parcel:
             return self.water_parcel.gross_area
-        return self.parcel_area()
+        return self.calculate_polygon_area()
     area = property(_get_area)
 
     def _get_number_of_lots(self):

@@ -105,7 +105,7 @@
                     {% elif lot.water_parcel %}
                     according to the Water Department, this lot has an area of {{ lot.water_parcel.gross_area|floatformat:"-1"|default:"unknown" }} square feet
                     {% else %}
-                    this lot has an area of {{ lot.parcel_area|floatformat:"-1"|default:"unknown" }} square feet
+                    this lot has an area of {{ lot.polygon_area|floatformat:"-1"|default:"unknown" }} square feet
                     {% endif %}
                 </td>
             </tr>

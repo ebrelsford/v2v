@@ -76,7 +76,8 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
             'fields': ('owner', 'billing_account', 'tax_account',
                        'parcel_pk', 'parcel_link', 'land_use_area',
                        'violations', 'available_property_link', 'water_parcel',
-                       'city_council_district', 'zoning_district'),
+                       'city_council_district', 'zoning_district',
+                       'polygon_area', 'polygon_width',),
         }),
         ('Geography', {
             'classes': ('collapse',),

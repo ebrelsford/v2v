@@ -107,6 +107,7 @@ class LotResource(ModelResource):
         qs = super(LotResource, self).apply_filters(request, cleaned_filters)
         return self._apply_custom_filters(qs, custom_filters)
 
+    # Custom filters
     def _pop_custom_filters(self, filters):
         """
         Pop the custom filters from the given filters--modifying the given
@@ -143,7 +144,6 @@ class LotResource(ModelResource):
             boundary[layer] = filters.pop(f)
         return boundary
 
-    # Custom filters
     def pop_custom_filter_violations_count(self, filters):
         return filters.pop('violations_count', 0)
 

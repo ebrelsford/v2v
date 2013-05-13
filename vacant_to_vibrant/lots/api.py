@@ -99,54 +99,47 @@ class LotResource(ModelResource):
 
         return orm_filters
 
-    def apply_filters(self, request, applicable_filters):
+    def _pop_custom_filters(self, filters):
+        custom_filters = {}
 
-        #
-        # Pop custom filters
-        #
-        cleaned_filters = applicable_filters.copy()
+        # Hold on to all filters while popping
+        filters_copy = filters.copy()
 
         # Pop boundary filters for once we have a queryset
-        cleaned_boundary_filters = {}
-        for f in applicable_filters:
+        custom_filters['boundary'] = {}
+        for f in filters_copy:
             if not f.startswith('boundary_'): continue
 
             # Convert to layer name
             layer = f.replace('boundary_', '').replace('_', ' ')
 
             # Save for later
-            cleaned_boundary_filters[layer] = cleaned_filters.pop(f)
+            custom_filters['boundary'][layer] = filters.pop(f)
 
         # Pop violations_count
-        violations_count = cleaned_filters.pop('violations_count', 0)
+        custom_filters['violations_count'] = filters.pop('violations_count', 0)
 
         # Pop participant_types
-        participant_types = cleaned_filters.pop('participant_types', [])
+        custom_filters['participant_types'] = filters.pop('participant_types', [])
 
         # Pop area__gt
         try:
-            area__gt = int(cleaned_filters.pop('area__gt'))
+            custom_filters['area__gt'] = int(filters.pop('area__gt'))
         except Exception:
-            area__gt = 0
+            custom_filters['area__gt'] = 0
 
         # Pop width__gt
         try:
-            width__gt = int(cleaned_filters.pop('width__gt'))
+            custom_filters['width__gt'] = int(filters.pop('width__gt'))
         except Exception:
-            width__gt = 0
+            custom_filters['width__gt'] = 0
 
-        #
-        # Get queryset using the orm filters
-        #
-        qs = super(LotResource, self).apply_filters(request, cleaned_filters)
+        return custom_filters
 
-        #
-        # Apply custom filters
-        #
-
+    def _apply_custom_filters(self, qs, custom_filters):
         # Apply boundary filters
         boundary_filters = None
-        for layer, boundary_pks in cleaned_boundary_filters.items():
+        for layer, boundary_pks in custom_filters['boundary'].items():
             boundaries = Boundary.objects.filter(
                 layer__name__iexact=layer,
                 label__in=boundary_pks,
@@ -161,14 +154,14 @@ class LotResource(ModelResource):
         if boundary_filters: qs = qs.filter(boundary_filters)
 
         # Apply violations_count
-        if violations_count > 0:
+        if custom_filters['violations_count'] > 0:
             qs = qs.annotate(violations_count=Count('violations'))
-            qs = qs.filter(violations_count=violations_count)
+            qs = qs.filter(violations_count=custom_filters['violations_count'])
 
         # Apply participant_types
-        if participant_types:
+        if custom_filters['participant_types']:
             participant_type_filters = Q()
-            for participant_type in participant_types:
+            for participant_type in custom_filters['participant_types']:
                 f = Q(**{
                     '%s__isnull' % participant_type: False,
                 })
@@ -176,20 +169,25 @@ class LotResource(ModelResource):
             qs = qs.filter(participant_type_filters)
 
         # Apply area__gt
-        if area__gt > 0:
+        if custom_filters['area__gt'] > 0:
             qs = qs.filter(
                 polygon_area__isnull=False,
-                polygon_area__gt=area__gt,
+                polygon_area__gt=custom_filters['area__gt'],
             )
 
         # Apply width__gt
-        if width__gt > 0:
+        if custom_filters['width__gt'] > 0:
             qs = qs.filter(
                 polygon_width__isnull=False,
-                polygon_width__gt=width__gt,
+                polygon_width__gt=custom_filters['width__gt'],
             )
-
         return qs
+
+    def apply_filters(self, request, applicable_filters):
+        cleaned_filters = applicable_filters.copy()
+        custom_filters = self._pop_custom_filters(cleaned_filters)
+        qs = super(LotResource, self).apply_filters(request, cleaned_filters)
+        return self._apply_custom_filters(qs, custom_filters)
 
     class Meta:
         allowed_methods = ('get',)

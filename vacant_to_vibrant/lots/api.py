@@ -54,6 +54,12 @@ class LotResource(ModelResource):
         # Add participant types
         orm_filters['participant_types'] = filters.getlist('participant_types', [])
 
+        # Add area gt
+        orm_filters['area__gt'] = filters.get('area__gt', 0)
+
+        # Add width gt
+        orm_filters['width__gt'] = filters.get('width__gt', 0)
+
         # Add impervious area filters
         try:
             impervious_area = int(filters['water_parcel__impervious_area__lt'])
@@ -100,6 +106,8 @@ class LotResource(ModelResource):
         #
         cleaned_filters = applicable_filters.copy()
 
+        print cleaned_filters
+
         # Pop boundary filters for once we have a queryset
         cleaned_boundary_filters = {}
         for f in applicable_filters:
@@ -116,6 +124,18 @@ class LotResource(ModelResource):
 
         # Pop participant_types
         participant_types = cleaned_filters.pop('participant_types', [])
+
+        # Pop area__gt
+        try:
+            area__gt = int(cleaned_filters.pop('area__gt'))
+        except Exception:
+            area__gt = 0
+
+        # Pop width__gt
+        try:
+            width__gt = int(cleaned_filters.pop('width__gt'))
+        except Exception:
+            width__gt = 0
 
         #
         # Get queryset using the orm filters
@@ -156,6 +176,20 @@ class LotResource(ModelResource):
                 })
                 participant_type_filters = participant_type_filters | f
             qs = qs.filter(participant_type_filters)
+
+        # Apply area__gt
+        if area__gt > 0:
+            qs = qs.filter(
+                polygon_area__isnull=False,
+                polygon_area__gt=area__gt,
+            )
+
+        # Apply width__gt
+        if width__gt > 0:
+            qs = qs.filter(
+                polygon_width__isnull=False,
+                polygon_width__gt=width__gt,
+            )
 
         return qs
 

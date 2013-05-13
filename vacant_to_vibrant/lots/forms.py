@@ -24,7 +24,15 @@ class FiltersForm(forms.Form):
     )
     parents_only = forms.BooleanField(
         initial=True,
-        widget=forms.HiddenInput
+        widget=forms.HiddenInput,
+    )
+    area__gt = forms.IntegerField(
+        required=False,
+        widget=forms.HiddenInput,
+    )
+    width__gt = forms.IntegerField(
+        required=False,
+        widget=forms.HiddenInput,
     )
 
     participant_types = forms.MultipleChoiceField(

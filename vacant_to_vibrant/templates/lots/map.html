@@ -54,6 +54,22 @@
                 {{ filters.known_use__name__in }}
             </form>
         </div>
+        
+        <div class="filters-default-wrapper {% if "lots.view_all_filters" in perms %}visible{% endif %}">
+            <h2>{% trans "Default filters" %}
+                <div class="help-text">These are not usually visible to users</div>
+            </h2>
+            <div class="filters filters-default">
+                <form>
+                    {% for field in filters.default_filters %}
+                    <div class="filter">
+                        {{ field.label }}: {{ field }}
+                        <div class="help-text">{{ field.help_text|safe }}</div>
+                    </div>
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
 
         {% if "lots.view_all_filters" in perms %}
         <h2>{% trans "Admin filters" %}</h2>

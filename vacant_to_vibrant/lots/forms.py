@@ -26,13 +26,14 @@ class FiltersForm(forms.Form):
         initial=True,
         widget=forms.HiddenInput,
     )
+
     area__gt = forms.IntegerField(
+        label=_('Area (sq ft) greater than'),
         required=False,
-        widget=forms.HiddenInput,
     )
     width__gt = forms.IntegerField(
+        label=_('Width (ft) greater than'),
         required=False,
-        widget=forms.HiddenInput,
     )
 
     participant_types = forms.MultipleChoiceField(
@@ -140,6 +141,10 @@ class FiltersForm(forms.Form):
                       'has_billing_account', 'has_tax_account', 'has_parcel',
                       'has_land_use_area', 'has_water_parcel',
                       'water_parcel__impervious_area__lt',):
+            yield self[field]
+
+    def default_filters(self):
+        for field in ('area__gt', 'width__gt',):
             yield self[field]
 
     def other_filters(self):

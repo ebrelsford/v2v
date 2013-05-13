@@ -123,6 +123,13 @@ th {
     margin-top: 10px;
 }
 
+.filters-default-wrapper {
+    display: none;
+}
+.filters-default-wrapper.visible {
+    display: block;
+}
+
 #mainmenu {
     border-top: 1px solid black;
     border-bottom: 1px solid black;

@@ -106,8 +106,6 @@ class LotResource(ModelResource):
         #
         cleaned_filters = applicable_filters.copy()
 
-        print cleaned_filters
-
         # Pop boundary filters for once we have a queryset
         cleaned_boundary_filters = {}
         for f in applicable_filters:

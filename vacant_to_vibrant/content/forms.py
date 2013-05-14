@@ -3,10 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
-from vacant_to_vibrant.forms import CaptchaForm
 
-
-class ContentForm(CaptchaForm):
+class ContentForm(forms.ModelForm):
     content_type = forms.ModelChoiceField(
         label='content type',
         queryset=ContentType.objects.all(),

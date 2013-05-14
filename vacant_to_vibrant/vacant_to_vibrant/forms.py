@@ -6,8 +6,6 @@ from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 
-from recaptcha_works.fields import RecaptchaField
-
 
 class AddAnotherWidgetWrapper(forms.Widget):
     """
@@ -60,13 +58,3 @@ class AddAnotherWidgetWrapper(forms.Widget):
 
     def id_for_label(self, id_):
         return self.widget.id_for_label(id_)
-
-
-class CaptchaForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super(CaptchaForm, self).__init__(*args, **kwargs)
-
-        # if not logged in, add recaptcha. else, do nothing.
-        if not user or user.is_anonymous():
-            self.fields['recaptcha'] = RecaptchaField(label="Prove you're human")

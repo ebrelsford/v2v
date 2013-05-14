@@ -1,14 +1,13 @@
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.forms import HiddenInput, IntegerField, ModelChoiceField
+from django.forms import HiddenInput, IntegerField, ModelChoiceField, ModelForm
 
 from notify import notify_participants_new_obj, notify_facilitators
 from models import Organizer, Watcher
-from vacant_to_vibrant.forms import CaptchaForm
 from .widgets import PrefixLabelTextInput
 
 
-class ParticipantForm(CaptchaForm):
+class ParticipantForm(ModelForm):
     content_type = ModelChoiceField(
         label='target type',
         queryset=ContentType.objects.all(),

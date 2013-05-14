@@ -17,8 +17,6 @@ from django.views.generic import TemplateView
 from django.views.generic.base import ContextMixin
 from django.views.generic.edit import DeleteView
 
-from recaptcha_works.decorators import fix_recaptcha_remote_ip
-
 from lots.models import Lot
 from .forms import OrganizerForm
 from .models import Organizer, Watcher
@@ -63,7 +61,6 @@ class AddParticipantSuccessView(TemplateView):
         return context
 
 
-@fix_recaptcha_remote_ip
 def edit_organizer(request, bbl=None, id=None):
     lot = get_object_or_404(Lot, bbl=bbl)
     organizer = get_object_or_404(Organizer, id=id)

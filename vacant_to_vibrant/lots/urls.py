@@ -1,7 +1,5 @@
 from django.conf.urls.defaults import patterns, url
 
-from recaptcha_works.decorators import fix_recaptcha_remote_ip
-
 from organize.models import Organizer, Watcher
 from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
                     LotsGeoJSON, LotsGeoJSONPolygon, AddParticipantSuccessView,
@@ -22,15 +20,15 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/$', LotDetailView.as_view(), name='lot_detail'),
 
     url(r'^(?P<pk>\d+)/organize/$',
-        fix_recaptcha_remote_ip(AddParticipantView.as_view(
+        AddParticipantView.as_view(
             model=Organizer,
-        )),
+        ),
         name='add_organizer'),
 
     url(r'^(?P<pk>\d+)/watch/$',
-        fix_recaptcha_remote_ip(AddParticipantView.as_view(
+        AddParticipantView.as_view(
             model=Watcher,
-        )),
+        ),
         name='add_watcher'),
 
     url(r'^(?P<pk>\d+)/organize/organizer/(?P<hash>[^/]{30,})/success/$',
@@ -50,14 +48,12 @@ urlpatterns = patterns('',
         name='edit_participant'),
 
     url(r'^(?P<pk>\d+)/photos/add/$',
-        fix_recaptcha_remote_ip(AddPhotoView.as_view()),
+        AddPhotoView.as_view(),
         name='add_photo'),
 
     url(r'^(?P<pk>\d+)/notes/add/$',
-        fix_recaptcha_remote_ip(AddNoteView.as_view()),
+        AddNoteView.as_view(),
         name='add_note'),
 
-    url(r'^(?P<pk>\d+)/files/add/$',
-        fix_recaptcha_remote_ip(AddFileView.as_view()),
-        name='add_file'),
+    url(r'^(?P<pk>\d+)/files/add/$', AddFileView.as_view(), name='add_file'),
 )

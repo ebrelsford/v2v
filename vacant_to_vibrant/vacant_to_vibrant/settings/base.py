@@ -87,6 +87,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'honeypot.middleware.HoneypotMiddleware',
     'reversion.middleware.RevisionMiddleware',
 )
 
@@ -135,6 +136,7 @@ INSTALLED_APPS = (
     'feincms.module.medialibrary',
     'feincms.module.page',
     'forms_builder.forms',
+    'honeypot',
     'imagekit',
     'inplace',
     'inplace.boundaries',
@@ -264,3 +266,6 @@ ABSOLUTE_URL_OVERRIDES = {
     'elephantblog.entry': elephantblog_entry_url_app,
     'elephantblog.categorytranslation': elephantblog_categorytranslation_url_app,
 }
+
+HONEYPOT_FIELD_NAME = 'officeaddress'
+HONEYPOT_VALUE = '123 Could Not Exist St'

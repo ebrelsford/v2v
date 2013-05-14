@@ -141,7 +141,7 @@ class LotsGeoJSONPolygon(FilteredLotsMixin, GeoJSONListView):
     def get_queryset(self):
         return self.get_lots().filter(polygon__isnull=False).geojson(
             field_name='polygon',
-            precision=5,
+            precision=8,
         )
 
 

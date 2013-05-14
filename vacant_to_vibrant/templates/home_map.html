@@ -1,54 +1,5 @@
-<!DOCTYPE html>
-{% load feincms_tags feincms_page_tags i18n %}
-<html>
-<head>
-	<meta charset="utf-8" />
-    <title>{% block title %}{% trans "Grounded" %}{% endblock %}</title>
+{% extends "base.html" %}
 
-    {% include "_includes.html" %}
+{% block mainclasses %}grid{% endblock %}
 
-    {% comment %}
-    TODO compressor
-    {% endcomment %}
-
-    {% block scripts %}{% endblock %}
-
-</head>
-<body>
-	<div id="page-wrapper">
-        <header>
-            <div id="logo">
-                <h1>
-                    <a href="/">{% trans "Grounded" %}</a>
-                </h1>
-            </div>
-            <nav id="mainmenu" class="clearfix">
-            {% feincms_nav feincms_page level=2 depth=1 as mainmenu %}
-            {% for page in mainmenu %}
-                <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
-            {% endfor %}
-            {% if user.is_superuser %}
-                <a href="/extra-admin/">Admin</a>
-            {% endif %}
-            </nav>
-        </header>
-        <div class="content-wrapper">
-            <section id="main">
-                <nav id="breadcrumbs" class="clearfix"></nav>
-
-                {% include "_messages.html" %}
-
-                <article>
-                    {% block content %}
-                    {% feincms_render_region feincms_page "main" request %}
-                    {% endblock %}
-                </article>
-            </section>
-        </div>
-        <div class="clear"></div>
-        <div id="footer">
-            {% feincms_render_region feincms_page "footer" request %}
-        </div>
-	</div>
-</body>
-</html>
+{% block sidebar %}{% endblock %}

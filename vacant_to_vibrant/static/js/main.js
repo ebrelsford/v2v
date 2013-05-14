@@ -13,4 +13,9 @@ $(document).ready(function() {
         $(this).find('input[type="submit"]').attr('disabled', 'disabled');
     });
 
+    /*
+     * Fancybox
+     */
+    $('.fancybox').fancybox();
+
 });

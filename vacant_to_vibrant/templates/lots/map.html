@@ -281,7 +281,6 @@
 
         updateCounts();
 
-        // TODO keep map from reloading itself after this happens 
         LOTS_MAP.updateFilters($('form').serializeObject());
         LOTS_MAP.reloadLotCentroidLayer(serializeFilters());
         LOTS_MAP.reloadLotChoroplethLayer(serializeFilters());

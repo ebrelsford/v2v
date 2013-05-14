@@ -158,12 +158,12 @@ class LotsCountView(FilteredLotsMixin, JSONResponseView):
         return context
 
 
-class LotsCountBoundaryView(GeoJSONResponseMixin, JSONResponseView):
+class LotsCountBoundaryView(JSONResponseView):
 
     def get_context_data(self, **kwargs):
-        return self.get_features()
+        return self.get_counts()
 
-    def get_features(self):
+    def get_counts(self):
         filters = LotResource().build_filters(filters=self.request.GET)
 
         try:
@@ -181,19 +181,12 @@ class LotsCountBoundaryView(GeoJSONResponseMixin, JSONResponseView):
             layer__name='City Council Districts'
         )
 
-        features = []
+        counts = {}
         for boundary in boundaries:
-            features.append(geojson.Feature(
-                boundary.pk,
-                geometry=json.loads(boundary.simplified_geometry.geojson),
-                properties={
-                    'boundary_label': boundary.label,
-                    'count': lots.filter(
-                        centroid__within=boundary.simplified_geometry
-                    ).count(),
-                }
-            ))
-        return features
+            counts[boundary.label] = lots.filter(
+                centroid__within=boundary.simplified_geometry
+            ).count()
+        return counts
 
 
 class LotsMap(TemplateView):

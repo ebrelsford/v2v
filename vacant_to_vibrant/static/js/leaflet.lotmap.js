@@ -226,68 +226,16 @@ L.Map.include({
         this.addLotChoroplethLayer(queryString);
     },
 
-    clearLotChoroplethLayer: function() {
+    addLotChoroplethBoundaries: function(layer_name) {
         var instance = this;
-        if (instance.lotsChoropleth) {
-            instance.lotsChoropleth.clearLayers();
-        }
-        if (instance.lotsChoroplethLabels) {
-            // TODO actually destroy each label?
-            $.each(instance.lotsChoroplethLabels, function(i, label) {
-                label.close();
-            });
-            instance.lotsChoroplethLabels = [];
-        }
-    },
-
-    addLotChoroplethLayer: function(queryString) {
-        var instance = this;
-        if (!instance.options.enableLotChoropleth) return;
-        if (!queryString) queryString = instance.options.lotChoroplethQueryString;
-
-        // TODO instead of clearing the layer, update colors and labels?
-        // could be smoother
-        instance.clearLotChoroplethLayer();
-
-        var url = instance.options.lotChoroplethBaseUrl + '?' + queryString;
+        var url = '/places/boundaries/layers/' + layer_name + '/';
+        instance.lotsChoroplethLayers = {};
         $('#map').singleminded({
-            name: 'lotChoroplethRequest',
+            name: 'addLotChoroplethBoundaries',
             jqxhr: $.getJSON(url, function(data) {
-
-                var _getColor = function(count) {
-                    // TODO make dynamic base on count range
-                    //  Use colorbrewer: colorbrewer2.org
-                    var color = 
-                        count > 5000 ? '#238443' :
-                        count > 1000 ? '#78C679' :
-                        count > 100 ? '#C2E699' :
-                            '#FFFFCC';
-                    return color;
-                };
-
-                instance.lotsChoroplethLabels = [];
                 instance.lotsChoropleth = L.geoJson(data, {
-                    style: function(feature) {
-                        return {
-                            fillColor: _getColor(feature.properties.count),
-                            fillOpacity: .7,
-                            color: 'white',
-                            opacity: .8,
-                            weight: 2,
-                        };
-                    },   
-
                     onEachFeature: function(feature, layer) {
-                        label = new L.Label();
-                        label.setContent('City Council District ' + feature.properties.boundary_label + '<br/ >' +
-                            feature.properties.count);
-
-                        // TODO we might want to set centroids manually for weirder
-                        // polygons like city council districts
-
-                        label.setLatLng(layer.getBounds().getCenter());
-                        instance.lotsChoroplethLabels.push(label);
-                        instance.showLabel(label);
+                        instance.lotsChoroplethLayers[feature.properties.boundary_label] = layer;
                     },
                 });
                 if (instance.getZoom() < 15) {
@@ -295,6 +243,76 @@ L.Map.include({
                 }
             }),
         });
+    },
+
+    updateLotChoroplethStyles: function(counts) {
+        var instance = this;
+        var maxCount = 0;
+
+        $.each(counts, function(layerLabel, count) {
+            maxCount = Math.max(maxCount, count);
+        });
+
+        var _getColor = function(count) {
+            var hue = 140,
+                saturation = 42,
+                lightness = 90;
+
+            if (maxCount > 0) {
+                // Keep lightness between 30 and 90
+                lightness -= (count / maxCount) * 60;
+            }
+            return 'hsl(' + hue + ', ' + saturation + '%, ' + lightness + '%)';
+        };
+
+        $.each(counts, function(layerLabel, count) {
+            instance.lotsChoroplethLayers[layerLabel].setStyle({
+                fillColor: _getColor(count),
+                fillOpacity: .7,
+                color: 'white',
+                opacity: .8,
+                weight: 2,
+            });
+        });
+    },
+
+    updateLotChoroplethLabels: function(counts) {
+        var instance = this;
+        if (instance.lotsChoroplethLabels === undefined) {
+            instance.lotsChoroplethLabels = {};
+        }
+
+        $.each(counts, function(layerLabel, count) {
+            var layer = instance.lotsChoroplethLayers[layerLabel];
+            var label = instance.lotsChoroplethLabels[layerLabel] || new L.Label();
+            label.setContent('Council District ' + layerLabel + '<br/ >' 
+                + count + ' lots');
+            label.setLatLng(layer.getBounds().getCenter());
+            instance.lotsChoroplethLabels[layerLabel] = label;
+            instance.showLabel(label);
+        });
+    },
+
+    addLotChoroplethLayer: function(queryString) {
+        var instance = this;
+        if (!instance.options.enableLotChoropleth) return;
+        if (!queryString) queryString = instance.options.lotChoroplethQueryString;
+
+        // If boundaries don't yet exist, load them
+        if (instance.lotsChoropleth === undefined) {
+            instance.addLotChoroplethBoundaries('City Council Districts');
+        }
+
+        // Update colors and labels
+        var url = instance.options.lotChoroplethBaseUrl + '?' + queryString;
+        $('#map').singleminded({
+            name: 'addLotChoroplethLayer',
+            jqxhr: $.getJSON(url, function(data) {
+                instance.updateLotChoroplethStyles(data);
+                instance.updateLotChoroplethLabels(data);
+            }),
+        });
+
     },
 
     addZoomEvents: function() {

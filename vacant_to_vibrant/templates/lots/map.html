@@ -245,6 +245,11 @@
         // Get filters from url query string
         var filters = window.location.search.slice(1);
 
+        // Clear the form of any defaults, first
+        if (filters.length > 1) {
+            $(':checkbox').prop('checked', false);
+        }
+
         // Drop filters into the form (which is spread over multiple forms)
         $('form').deserialize(filters);
 

@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from chosen.forms import ChosenSelectMultiple
 from inplace.boundaries.models import Boundary, Layer
 
+from phillydata.availableproperties.models import AvailableProperty
 from phillydata.zoning.models import ZoningType
 from .models import Use
 
@@ -27,6 +28,19 @@ class FiltersForm(forms.Form):
         widget=forms.HiddenInput,
     )
 
+
+    #
+    # Default filters
+    #
+    available_property__status__in = forms.MultipleChoiceField(
+        choices=AvailableProperty.STATUS_CHOICES,
+        initial=(
+            AvailableProperty.STATUS_AVAILABLE,
+            AvailableProperty.STATUS_NEW,
+        ),
+        required=False,
+        widget=forms.CheckboxSelectMultiple(),
+    )
     area__gt = forms.IntegerField(
         label=_('Area (sq ft) greater than'),
         required=False,
@@ -43,7 +57,7 @@ class FiltersForm(forms.Form):
         ),
         initial=(),
         required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={ 'class': 'filter', }),
+        widget=forms.CheckboxSelectMultiple(),
     )
 
     owner__name__icontains = forms.CharField(
@@ -59,7 +73,7 @@ class FiltersForm(forms.Form):
         ),
         initial=(),
         required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={ 'class': 'filter', }),
+        widget=forms.CheckboxSelectMultiple(),
     )
 
     has_available_property = forms.NullBooleanField(
@@ -103,7 +117,7 @@ class FiltersForm(forms.Form):
     known_use__name__in = forms.MultipleChoiceField(
         choices=(),
         required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={ 'class': 'filter', }),
+        widget=forms.CheckboxSelectMultiple(),
     )
 
     water_parcel__impervious_area__lt = forms.IntegerField(
@@ -144,7 +158,8 @@ class FiltersForm(forms.Form):
             yield self[field]
 
     def default_filters(self):
-        for field in ('area__gt', 'width__gt',):
+        for field in ('available_property__status__in', 'area__gt',
+                      'width__gt',):
             yield self[field]
 
     def other_filters(self):

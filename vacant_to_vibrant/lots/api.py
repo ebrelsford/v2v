@@ -56,6 +56,9 @@ class LotResource(ModelResource):
         # Add participant types
         orm_filters['participant_types'] = filters.getlist('participant_types', [])
 
+        # Add available property statuses
+        orm_filters['available_property__status__in'] = filters.getlist('available_property__status__in', [])
+
         # Add area gt
         orm_filters['area__gt'] = filters.get('area__gt', 0)
 
@@ -144,6 +147,9 @@ class LotResource(ModelResource):
             boundary[layer] = filters.pop(f)
         return boundary
 
+    def pop_custom_filter_available_property__status__in(self, filters):
+        return filters.pop('available_property__status__in', [])
+
     def pop_custom_filter_violations_count(self, filters):
         return filters.pop('violations_count', 0)
 
@@ -177,6 +183,18 @@ class LotResource(ModelResource):
                 else:
                     boundary_filters = boundary_filter
         if boundary_filters: qs = qs.filter(boundary_filters)
+        return qs
+
+    def apply_custom_filter_available_property__status__in(self, qs, value):
+        """
+        If there are statuses, ensure those lots that are associated with
+        available property have one of those statuses.
+        """
+        if value:
+            qs = qs.filter(
+                Q(available_property__isnull=True) |
+                Q(available_property__status__in=value)
+            )
         return qs
 
     def apply_custom_filter_violations_count(self, qs, value):

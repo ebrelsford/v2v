@@ -61,9 +61,11 @@ class LotResource(ModelResource):
 
         # Add area gt
         orm_filters['area__gt'] = filters.get('area__gt', 0)
+        orm_filters['area__lt'] = filters.get('area__lt', 0)
 
         # Add width gt
         orm_filters['width__gt'] = filters.get('width__gt', 0)
+        orm_filters['width__lt'] = filters.get('width__lt', 0)
 
         # Add impervious area filters
         try:
@@ -162,9 +164,21 @@ class LotResource(ModelResource):
         except Exception:
             return 0
 
+    def pop_custom_filter_area__lt(self, filters):
+        try:
+            return int(filters.pop('area__lt'))
+        except Exception:
+            return 0
+
     def pop_custom_filter_width__gt(self, filters):
         try:
             return int(filters.pop('width__gt'))
+        except Exception:
+            return 0
+
+    def pop_custom_filter_width__lt(self, filters):
+        try:
+            return int(filters.pop('width__lt'))
         except Exception:
             return 0
 
@@ -222,11 +236,27 @@ class LotResource(ModelResource):
             )
         return qs
 
+    def apply_custom_filter_area__lt(self, qs, value):
+        if value > 0:
+            qs = qs.filter(
+                polygon_area__isnull=False,
+                polygon_area__lt=value,
+            )
+        return qs
+
     def apply_custom_filter_width__gt(self, qs, value):
         if value > 0:
             qs = qs.filter(
                 polygon_width__isnull=False,
                 polygon_width__gt=value,
+            )
+        return qs
+
+    def apply_custom_filter_width__lt(self, qs, value):
+        if value > 0:
+            qs = qs.filter(
+                polygon_width__isnull=False,
+                polygon_width__lt=value,
             )
         return qs
 

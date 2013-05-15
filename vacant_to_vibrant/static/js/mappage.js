@@ -17,6 +17,12 @@ define(
 
     ], function($, L) {
 
+    var LOTS_MAP;
+
+
+    /*
+     * Update counts
+     */
     function updateCounts() {
         var baseUrl = $('#map').data('mappagecountsbaseurl');
         $('#map').singleminded({
@@ -29,6 +35,10 @@ define(
         });
     }
 
+
+    /*
+     * Handle filter inputs
+     */
     function serializeFilters() {
         return $('form').serialize();
     }
@@ -55,11 +65,19 @@ define(
         }
     }
 
-    var LOTS_MAP;
+    function onFilterChange() {
+        updateCounts();
+        LOTS_MAP.updateFilters($('form').serializeObject());
+        LOTS_MAP.reloadLotCentroidLayer(serializeFilters());
+        LOTS_MAP.reloadLotChoroplethLayer(serializeFilters());
+    }
+
     $(document).ready(function() {
         var key = $('#map').data('cloudmadekey'),
             style = $('#map').data('cloudmadestyle');
 
+
+        // Prepare our map
         LOTS_MAP = L.map('map', {
             center: [39.952335, -75.163789],
             maxBounds: [
@@ -85,6 +103,7 @@ define(
                 else {
                     e.target.bindPopup(popupContent, popupOptions).openPopup();
                 }
+                // TODO get url dynamically
                 $.get('/places/lots/lot/' + feature.id + '/popup/', function(response) {
                     $('#popup-content')
                         .html(response)
@@ -108,24 +127,20 @@ define(
             },
         });
 
+        // Load filters from search string in URL, update map/counts accordingly
         deserializeFilters();
+        onFilterChange();
 
-        updateCounts();
 
-        LOTS_MAP.updateFilters($('form').serializeObject());
-        LOTS_MAP.reloadLotCentroidLayer(serializeFilters());
-        LOTS_MAP.reloadLotChoroplethLayer(serializeFilters());
-
+        /*
+         * Map events
+         */
         LOTS_MAP.on('moveend', function(e) {
             var g = JSON.stringify(LOTS_MAP.getBounds().toGeoJson())
             $(':input[name="centroid__within"]').val(
                 JSON.stringify(LOTS_MAP.getBounds().toGeoJson())
             );
             updateCounts();
-        });
-
-        $('#streetview-container').streetview({
-            errorSelector: '#streetview-error',
         });
 
         LOTS_MAP.on('lotclicked', function(data) {
@@ -138,13 +153,24 @@ define(
             $('#streetview-container').hide();
         });
 
-        $('.filters :input:not(.non-filter)').change(function() {
-            updateCounts();
-            LOTS_MAP.reloadLotCentroidLayer(serializeFilters());
-            LOTS_MAP.reloadLotChoroplethLayer(serializeFilters());
-            LOTS_MAP.updateFilters($('form').serializeObject());
+
+        /*
+         * Filters events
+         */
+        $('.filters :input:not(.non-filter)').change(onFilterChange);
+
+
+        /*
+         * Prepare streetview
+         */
+        $('#streetview-container').streetview({
+            errorSelector: '#streetview-error',
         });
 
+
+        /*
+         * Handle export actions
+         */
         $('.export-link').click(function() {
             // TODO make shorter urls
             window.location.search = serializeFilters();

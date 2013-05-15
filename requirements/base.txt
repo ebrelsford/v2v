@@ -12,7 +12,7 @@ django-appconf==0.6
 django-braces==1.0.0
 -e git://github.com/ebrelsford/django-chosen.git@28b2358d99f1d6620fdf8047d68eac52c7594e70#egg=django_chosen-dev
 django-classy-tags==0.4
-django-compressor==1.2
+django-compressor==1.3
 django-contact-form-gv==0.4.1
 django-debug-toolbar==0.9.4
 django-extensions==1.1.1

@@ -1,16 +1,20 @@
+{% load compress %}
+
+{% compress css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/lib/normalize.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/chosen.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}js/lib/fancybox/jquery.fancybox.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}js/lib/leaflet.label.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
-
-{% comment %}
-<script src="{{ STATIC_URL }}js/lib/json2.js"></script>
-{% endcomment %}
+{% endcompress %}
 
 <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
 <!--[if lte IE 8]>
     <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
 <![endif]-->
+
+{% comment %}
+<script src="{{ STATIC_URL }}js/lib/json2.js"></script>
+{% endcomment %}
 
 <script data-main="{{ STATIC_URL }}js/app" src="{{ STATIC_URL }}js/lib/require.js"></script>

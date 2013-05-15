@@ -19,7 +19,7 @@
     <a href="{% url "lots:add_watcher" pk=lot.pk %}">{% trans "Watch this lot" %}</a>
     <a href="{% url "lots:add_organizer" pk=lot.pk %}">{% trans "Become an organizer" %}</a>
 
-    <a href=""lots:add_organizer" pk=lot.pk %}" style="float: right;">{% trans "Already using this lot? Let us know!" %}</a>
+    <a href="{% "lots:add_organizer" pk=lot.pk %}" style="float: right;">{% trans "Already using this lot? Let us know!" %}</a>
 </div>
 
 <div class="clear"></div>
@@ -68,7 +68,7 @@
                     {% if lot.city_council_district %}
                         {{ lot.city_council_district.label }}
                         {% with member=lot.city_council_district.citycouncilmember_set.all.0 %}
-                        <a href="{{ member.url }}">{{ member.name }}</a>
+                        <a href="{{ member.url }}" target="_blank">{{ member.name }}</a>
                         {% endwith %}
                     {% else %}
                         {% trans "unknown" %}

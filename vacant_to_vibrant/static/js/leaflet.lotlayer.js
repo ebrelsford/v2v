@@ -1,3 +1,8 @@
+/*
+ * Extend Leaflet Vector Layer's GeoJSONLayer to intelligently display polygons
+ * of lots.
+ */
+
 define(['leaflet', 'lib/leaflet.lvector'], function(L, lvector) {
     lvector.LotLayer = lvector.GeoJSONLayer.extend({
 

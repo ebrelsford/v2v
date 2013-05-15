@@ -1,0 +1,7 @@
+{% load inplace_tags %}
+{% block pre_map_scripts %}{% endblock %}
+
+<div id="map" style="width: {{ width }}; height: {{ height }};" 
+    data-url="{{ places_url }}" 
+    data-cloudmadekey="{% inplace_setting PLACES_CLOUDMADE_KEY %}"
+    data-cloudmadestyle="{% inplace_setting PLACES_CLOUDMADE_STYLE %}"></div>

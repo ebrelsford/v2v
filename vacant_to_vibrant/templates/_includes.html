@@ -1,21 +1,16 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/lib/normalize.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/chosen.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}js/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}js/lib/leaflet.label.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+{% comment %}
 <script src="{{ STATIC_URL }}js/lib/json2.js"></script>
-<script src="{{ STATIC_URL }}js/jquery.plugin.js"></script>
+{% endcomment %}
 
 <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
 <!--[if lte IE 8]>
     <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
 <![endif]-->
-<script src="//cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
 
-<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
-<script src="{{ STATIC_URL }}js/jquery.streetview.js"></script>
-
-<script src="{{ STATIC_URL }}js/lib/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="{{ STATIC_URL }}js/main.js"></script>
+<script data-main="{{ STATIC_URL }}js/app" src="{{ STATIC_URL }}js/lib/require.js"></script>

@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^kml/', LotsKML.as_view(), name='kml'),
     url(r'^geojson-polygon/', LotsGeoJSONPolygon.as_view(),
         name='lot_geojson_polygon'),
-    url(r'^count/', LotsCountView.as_view()),
+    url(r'^count/', LotsCountView.as_view(), name='lot_count'),
     url(r'^count-by-boundary/', LotsCountBoundaryView.as_view(),
         name='lot_count_by_boundary'),
 

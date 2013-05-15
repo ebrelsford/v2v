@@ -11,46 +11,46 @@
         {% block scripts %}{% endblock %}
 
     </head>
-<body>
-	<div id="page-wrapper">
-        <header>
-            <div id="logo">
-                <h1>
-                    <a href="/">{% trans "Grounded" %}</a>
-                </h1>
+    <body class="{% block body_class %}{% endblock %}">
+        <div id="page-wrapper">
+            <header>
+                <div id="logo">
+                    <h1>
+                        <a href="/">{% trans "Grounded" %}</a>
+                    </h1>
+                </div>
+                <nav id="mainmenu" class="clearfix">
+                {% feincms_nav feincms_page level=2 depth=1 as mainmenu %}
+                {% for page in mainmenu %}
+                    <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+                {% endfor %}
+                {% if user.is_superuser %}
+                    <a href="/extra-admin/">Admin</a>
+                {% endif %}
+                </nav>
+            </header>
+            <div class="content-wrapper">
+                <section id="main" class="{% block mainclasses %}grid grid-3-4{% endblock %}">
+                    <nav id="breadcrumbs" class="clearfix"></nav>
+
+                    {% include "_messages.html" %}
+
+                    <article>
+                        {% block content %}
+                        {% feincms_render_region feincms_page "main" request %}
+                        {% endblock %}
+                    </article>
+                </section>
+                {% block sidebar %}
+                <aside id="aside-right" class="grid grid-1-4">
+                    {% feincms_render_region feincms_page "sidebar" request %}
+                </aside>
+                {% endblock %}
             </div>
-            <nav id="mainmenu" class="clearfix">
-            {% feincms_nav feincms_page level=2 depth=1 as mainmenu %}
-            {% for page in mainmenu %}
-                <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
-            {% endfor %}
-            {% if user.is_superuser %}
-                <a href="/extra-admin/">Admin</a>
-            {% endif %}
-            </nav>
-        </header>
-        <div class="content-wrapper">
-            <section id="main" class="{% block mainclasses %}grid grid-3-4{% endblock %}">
-                <nav id="breadcrumbs" class="clearfix"></nav>
-
-                {% include "_messages.html" %}
-
-                <article>
-                    {% block content %}
-                    {% feincms_render_region feincms_page "main" request %}
-                    {% endblock %}
-                </article>
-            </section>
-            {% block sidebar %}
-            <aside id="aside-right" class="grid grid-1-4">
-                {% feincms_render_region feincms_page "sidebar" request %}
-            </aside>
-            {% endblock %}
+            <div class="clear"></div>
+            <div id="footer">
+                {% feincms_render_region feincms_page "footer" request %}
+            </div>
         </div>
-        <div class="clear"></div>
-        <div id="footer">
-            {% feincms_render_region feincms_page "footer" request %}
-        </div>
-	</div>
-</body>
+    </body>
 </html>

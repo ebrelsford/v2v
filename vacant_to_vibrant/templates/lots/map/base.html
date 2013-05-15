@@ -1,59 +1,16 @@
 {% load inplace_tags %}
 
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
-<!--[if lte IE 8]>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
-<![endif]-->
-<script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
-<script src="{{ STATIC_URL }}js/leaflet.lotmap.js"></script>
-<script src="{{ STATIC_URL }}js/leaflet.geojsonbounds.js"></script>
-
 {% block includes %}{% endblock %}
-
-<script>
-    var LOTS_MAP;
-    $(document).ready(function() {
-        LOTS_MAP = L.map('map', {
-            {% block options %}
-            center: [39.952335, -75.163789],
-            maxBounds: [
-                [39.147, -76.358],
-                [40.772, -73.952],
-            ],
-            zoom: 11,
-            cloudmadeKey: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
-            cloudmadeStyleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
-            bingKey: 'ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr',
-            lotClickHandler: function(e, feature) {
-                var popupOptions = {
-                    minHeight: 250,
-                    minWidth: 300,
-                }
-                var popupContent = '<div id="popup-content" class="loading"></div>';
-                if (e.targetType == 'utfgrid') {
-                    var popup = L.popup(popupOptions)
-                        .setContent(popupContent)
-                        .setLatLng(e.latlng)
-                        .openOn(LOTS_MAP);
-                }
-                else {
-                    e.target.bindPopup(popupContent, popupOptions).openPopup();
-                }
-                $.get('/places/lots/lot/' + feature.id + '/popup/', function(response) {
-                    $('#popup-content')
-                        .html(response)
-                        .removeClass('loading');
-                });
-            },
-            {% endblock %}
-        });
-    });
-</script>
 
 {% block extra_scripts %}{% endblock %}
 
 {% block map_markup %}
-<div id="map" style="width: 100%; height: 400px;"></div>
+<div id="map" style="width: 100%; height: 400px;"
+    data-mappagecountsbaseurl="{% url "lots:lot_count" %}?"
+    data-mappagelotchoroplethbaseurl="{% url "lots:lot_count_by_boundary" %}" 
+    data-mappagelotpolygonbaseurl="{% url "lots:lot_geojson_polygon" %}"
+    data-cloudmadekey="{% inplace_setting PLACES_CLOUDMADE_KEY %}"
+    data-cloudmadestyle="{% inplace_setting PLACES_CLOUDMADE_STYLE %}"></div>
 {% endblock %}
 
 {% block below_map %}{% endblock %}

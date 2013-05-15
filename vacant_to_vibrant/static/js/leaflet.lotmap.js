@@ -42,6 +42,19 @@ define(
         },
         */
 
+        choroplethHsl: {
+            hue: 140,
+            saturation: 42,
+            lightness: 90,
+        },
+
+        choroplethStyle: {
+            fillOpacity: .7,
+            color: 'white',
+            opacity: .8,
+            weight: 2,
+        },
+
         _lotMapInitialize: function() {
             this._initLayers();
 
@@ -260,6 +273,7 @@ define(
                             instance.lotsChoroplethLayers[feature.properties.boundary_label] = layer;
                         },
                     });
+                    instance.updateLotChoroplethStyles(null);
                     if (instance.getZoom() < 15) {
                         instance.lotsChoropleth.addTo(instance);
                     }
@@ -267,35 +281,53 @@ define(
             });
         },
 
+        getLotChoroplethColor: function(count, maxCount) {
+            var instance = this;
+            var hue = instance.choroplethHsl.hue,
+                saturation = instance.choroplethHsl.saturation,
+                lightness = instance.choroplethHsl.lightness;
+
+            if (maxCount > 0) {
+                // Keep lightness between 30 and 90
+                lightness -= (count / maxCount) * 60;
+            }
+            return 'hsl(' + hue + ', ' + saturation + '%, ' + lightness + '%)';
+        },
+
+        getLotChoroplethStyle: function(count, maxCount) {
+            var instance = this;
+            var style = instance.choroplethStyle;
+            style.fillColor = instance.getLotChoroplethColor(count, maxCount);
+            return style;
+        },
+
         updateLotChoroplethStyles: function(counts) {
             var instance = this;
             var maxCount = 0;
 
-            $.each(counts, function(layerLabel, count) {
-                maxCount = Math.max(maxCount, count);
-            });
-
-            var _getColor = function(count) {
-                var hue = 140,
-                    saturation = 42,
-                    lightness = 90;
-
-                if (maxCount > 0) {
-                    // Keep lightness between 30 and 90
-                    lightness -= (count / maxCount) * 60;
-                }
-                return 'hsl(' + hue + ', ' + saturation + '%, ' + lightness + '%)';
-            };
-
-            $.each(counts, function(layerLabel, count) {
-                instance.lotsChoroplethLayers[layerLabel].setStyle({
-                    fillColor: _getColor(count),
-                    fillOpacity: .7,
-                    color: 'white',
-                    opacity: .8,
-                    weight: 2,
+            if (counts && counts !== null) {
+                $.each(counts, function(layerLabel, count) {
+                    maxCount = Math.max(maxCount, count);
                 });
+            }
+
+            $.each(instance.lotsChoroplethLayers, function(label, layer) {
+                var style = {};
+                if (counts && counts !== null) {
+                    style = instance.getLotChoroplethStyle(counts[label], maxCount);
+                }
+                else {
+                    style = instance.getLotChoroplethStyle(0, 0);
+                }
+                layer.setStyle(style);
             });
+
+            /*
+            $.each(counts, function(layerLabel, count) {
+                var style = instance.getLotChoroplethStyle(count, maxCount);
+                instance.lotsChoroplethLayers[layerLabel].setStyle(style);
+            });
+            */
         },
 
         updateLotChoroplethLabels: function(counts) {
@@ -334,7 +366,6 @@ define(
                     instance.updateLotChoroplethLabels(data);
                 }),
             });
-
         },
 
         addZoomEvents: function() {

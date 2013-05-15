@@ -78,17 +78,6 @@
             </tr>
 
             <tr>
-                <th>{% trans "zoning" %}:</th>
-                <td>
-                    {% if lot.zoning_district %}
-                        {{ lot.zoning_district.label }}
-                    {% else %}
-                        {% trans "unknown" %}
-                    {% endif %}
-                </td>
-            </tr>
-
-            <tr>
                 <th>{% trans "area" %}:</th>
                 <td>
                     {% if lot.billing_account %}

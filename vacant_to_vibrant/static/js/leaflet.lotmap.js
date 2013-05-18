@@ -8,10 +8,10 @@ define(
         'jquery',
         'leaflet',
         'lib/leaflet.lvector',
+        'django',
 
         // Leaflet plugins
         'lib/leaflet.label',
-        'lib/leaflet.lvector',
         'lib/leaflet.utfgrid',
         'Leaflet.Bing',
         'leaflet.geojsonbounds',
@@ -21,7 +21,7 @@ define(
         // Other plugins
         'jquery.singleminded',
 
-    ], function($, L, lvector) {
+    ], function($, L, lvector, Django) {
 
     L.Map.include({
 
@@ -279,8 +279,7 @@ define(
 
         addChoroplethBoundaries: function(layer_name) {
             var instance = this;
-            // TODO in a setting through data attributes
-            var url = '/places/boundaries/layers/' + layer_name + '/';
+            var url = Django.url('inplace:layer_view', { name: layer_name });
             instance.choroplethLayers = {};
             $('#map').singleminded({
                 name: 'addChoroplethBoundaries',

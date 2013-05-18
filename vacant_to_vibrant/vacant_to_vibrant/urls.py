@@ -30,5 +30,7 @@ urlpatterns += patterns('',
 
     url(r'^api/', include(v1_api.urls)),
 
+    url(r'^djangojs/', include('djangojs.urls')),
+
     url(r'', include('feincms.urls')),
 )

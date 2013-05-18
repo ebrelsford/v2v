@@ -1,6 +1,7 @@
 requirejs.config({
     baseUrl: '/static/js',
     paths: {
+        'django': 'djangojs/django',
         'jquery': '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min',
         'jquery.infinitescroll': 'lib/jquery.infinitescroll.min',
         'fancybox': 'lib/fancybox/jquery.fancybox.pack',
@@ -8,6 +9,10 @@ requirejs.config({
         'async': 'lib/async',
     },
     shim: {
+        'django': {
+            'deps': ['jquery'],
+            'exports': 'Django',
+        },
         'leaflet': {
             exports: 'L',
         },

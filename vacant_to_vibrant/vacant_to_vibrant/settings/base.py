@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'chosen',
     'compressor',
     'contact_form',
+    'djangojs',
     'elephantblog',
     'feincms',
     'feincms.module.medialibrary',

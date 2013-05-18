@@ -26,6 +26,7 @@ django-reversion==1.6.6
 django-reversion-compare==0.3.5
 django-require==1.0.3
 django-tastypie==0.9.14
+django.js==0.7.4
 djangorestframework==2.1.17
 docutils==0.10
 feincms-cleanse==2

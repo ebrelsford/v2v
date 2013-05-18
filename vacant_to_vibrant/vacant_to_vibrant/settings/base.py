@@ -104,6 +104,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
 
     'feincms.context_processors.add_page_if_missing',
+
+    'lots.context_processors.map_tile_urls',
 )
 
 ROOT_URLCONF = 'vacant_to_vibrant.urls'
@@ -276,3 +278,5 @@ ABSOLUTE_URL_OVERRIDES = {
 
 HONEYPOT_FIELD_NAME = 'officeaddress'
 HONEYPOT_VALUE = '123 Could Not Exist St'
+
+LOT_MAP_TILE_URLS = {}

@@ -66,3 +66,10 @@ DEBUG_TOOLBAR_CONFIG = {
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOT_SURVEY_FORM_PK = 1
+
+LOT_MAP_TILE_URLS = {
+    'private': 'http://127.0.0.1:8081/lot_points_private/',
+    'private_grid': 'http://127.0.0.1:8081/lot_points_private_grid/',
+    'public': 'http://127.0.0.1:8081/lot_points_public/',
+    'public_grid': 'http://127.0.0.1:8081/lot_points_public_grid/',
+}

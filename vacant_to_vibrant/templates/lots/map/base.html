@@ -10,11 +10,11 @@
     data-choroplethbaseurl="{% url "lots:lot_count_by_boundary" %}" 
     data-polygonbaseurl="{% url "lots:lot_geojson_polygon" %}"
 
-    data-pointprivatetilesbaseurl="http://127.0.0.1:8081/lot_points_private/"
-    data-pointprivategridbaseurl="http://127.0.0.1:8081/lot_points_private_grid/"
+    data-pointprivatetilesbaseurl="{{ lot_tile_urls.private }}"
+    data-pointprivategridbaseurl="{{ lot_tile_urls.private_grid }}"
 
-    data-pointpublictilesbaseurl="http://127.0.0.1:8081/lot_points_public/"
-    data-pointpublicgridbaseurl="http://127.0.0.1:8081/lot_points_public_grid/"
+    data-pointpublictilesbaseurl="{{ lot_tile_urls.public }}"
+    data-pointpublicgridbaseurl="{{ lot_tile_urls.public_grid }}"
 
     data-cloudmadekey="{% inplace_setting PLACES_CLOUDMADE_KEY %}"
     data-cloudmadestyle="{% inplace_setting PLACES_CLOUDMADE_STYLE %}"></div>

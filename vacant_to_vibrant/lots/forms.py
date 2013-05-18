@@ -58,6 +58,20 @@ class FiltersForm(forms.Form):
         required=False,
     )
 
+
+    #
+    # View types
+    #
+    view_type = forms.ChoiceField(
+        choices=(
+            ('tiles', _('points view')),
+            ('choropleth', _('summary view')),
+        ),
+        initial='tiles',
+        label=_('view type'),
+        required=False,
+    )
+
     participant_types = forms.MultipleChoiceField(
         choices=(
             ('organizers', 'organizers'),
@@ -163,6 +177,10 @@ class FiltersForm(forms.Form):
                       'has_billing_account', 'has_tax_account', 'has_parcel',
                       'has_land_use_area', 'has_water_parcel',
                       'water_parcel__impervious_area__lt',):
+            yield self[field]
+
+    def view_filters(self):
+        for field in ('view_type',):
             yield self[field]
 
     def default_filters(self):

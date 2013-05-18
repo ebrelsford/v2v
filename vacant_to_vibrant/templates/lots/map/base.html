@@ -7,8 +7,15 @@
 {% block map_markup %}
 <div id="map" style="width: 100%; height: 400px;"
     data-mappagecountsbaseurl="{% url "lots:lot_count" %}?"
-    data-mappagelotchoroplethbaseurl="{% url "lots:lot_count_by_boundary" %}" 
-    data-mappagelotpolygonbaseurl="{% url "lots:lot_geojson_polygon" %}"
+    data-mappagechoroplethbaseurl="{% url "lots:lot_count_by_boundary" %}" 
+    data-mappagepolygonbaseurl="{% url "lots:lot_geojson_polygon" %}"
+
+    data-mappagepointprivatetilesbaseurl="http://127.0.0.1:8081/lot_points_private/"
+    data-mappagepointprivategridbaseurl="http://127.0.0.1:8081/lot_points_private_grid/"
+
+    data-mappagepointpublictilesbaseurl="http://127.0.0.1:8081/lot_points_public/"
+    data-mappagepointpublicgridbaseurl="http://127.0.0.1:8081/lot_points_public_grid/"
+
     data-cloudmadekey="{% inplace_setting PLACES_CLOUDMADE_KEY %}"
     data-cloudmadestyle="{% inplace_setting PLACES_CLOUDMADE_STYLE %}"></div>
 {% endblock %}

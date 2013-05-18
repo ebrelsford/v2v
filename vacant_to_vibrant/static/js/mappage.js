@@ -17,7 +17,7 @@ define(
 
     ], function($, L) {
 
-    var LOTS_MAP;
+    var lotsMap;
 
 
     /*
@@ -61,15 +61,13 @@ define(
         // Update map viewport
         var bboxString = $('#id_centroid__within').val();
         if (bboxString) {
-            LOTS_MAP.fitBounds(L.geoJsonLatLngBounds(bboxString));
+            lotsMap.fitBounds(L.geoJsonLatLngBounds(bboxString));
         }
     }
 
     function onFilterChange() {
         updateCounts();
-        LOTS_MAP.updateFilters($('form').serializeObject());
-        LOTS_MAP.reloadLotCentroidLayer(serializeFilters());
-        LOTS_MAP.reloadLotChoroplethLayer(serializeFilters());
+        lotsMap.updateFilters($('form').serializeObject());
     }
 
     $(document).ready(function() {
@@ -78,7 +76,7 @@ define(
 
 
         // Prepare our map
-        LOTS_MAP = L.map('map', {
+        lotsMap = L.map('map', {
             center: [39.952335, -75.163789],
             maxBounds: [
                 [39.147, -76.358],
@@ -88,27 +86,38 @@ define(
             cloudmadeKey: key,
             cloudmadeStyleId: style,
             bingKey: 'ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr',
-            lotClickHandler: function(e, feature) {
+            clickHandler: function(e, feature) {
+                var featureId = null;
+                if (feature) featureId = feature.id;
                 var popupOptions = {
                     minHeight: 250,
                     minWidth: 300,
                 }
                 var popupContent = '<div id="popup-content" class="loading"></div>';
-                if (e.targetType == 'utfgrid') {
+                if (e.targetType === 'utfgrid' && e.data !== null) {
+                    featureId = e.data.id;
                     var popup = L.popup(popupOptions)
                         .setContent(popupContent)
                         .setLatLng(e.latlng)
-                        .openOn(LOTS_MAP);
+                        .openOn(lotsMap);
                 }
                 else {
-                    e.target.bindPopup(popupContent, popupOptions).openPopup();
+                    try {
+                        e.target.bindPopup(popupContent, popupOptions).openPopup();
+                    }
+                    catch (e) {}
                 }
                 // TODO get url dynamically
-                $.get('/places/lots/lot/' + feature.id + '/popup/', function(response) {
-                    $('#popup-content')
-                        .html(response)
-                        .removeClass('loading');
-                });
+                if (featureId !== null) {
+                    $('#map').singleminded({
+                        name: 'clickHandler',
+                        jqxhr: $.get('/places/lots/lot/' + featureId + '/popup/', function(response) {
+                            $('#popup-content')
+                                .html(response)
+                                .removeClass('loading');
+                        }),
+                    });
+                }
             },
 
             messageControl: true,
@@ -116,15 +125,26 @@ define(
 
             enableLayersControl: true,
 
-            enableLotChoropleth: true,
-            lotChoroplethBaseUrl: $('#map').data('mappagelotchoroplethbaseurl'),
-            lotChoroplethQueryString: 'parents_only=True',
+            enableChoropleth: true,
+            choroplethBaseUrl: $('#map').data('mappagechoroplethbaseurl'),
+            choroplethQueryString: 'parents_only=True',
 
-            enableLotPolygons: true,
-            lotPolygonBaseUrl: $('#map').data('mappagelotpolygonbaseurl'),
-            lotPolygonInitialFilters: { 
+            enablePolygons: true,
+            polygonBaseUrl: $('#map').data('mappagepolygonbaseurl'),
+            polygonInitialFilters: { 
                 parentsOnly: true,
             },
+
+            gridResolution: 8,
+
+            enablePointPrivateTiles: true,
+            pointPrivateTilesBaseUrl: $('#map').data('mappagepointprivatetilesbaseurl'),
+            pointPrivateGridBaseUrl: $('#map').data('mappagepointprivategridbaseurl'),
+
+            enablePointPublicTiles: true,
+            pointPublicTilesBaseUrl: $('#map').data('mappagepointpublictilesbaseurl'),
+            pointPublicGridBaseUrl: $('#map').data('mappagepointpublicgridbaseurl'),
+
         });
 
         // Load filters from search string in URL, update map/counts accordingly
@@ -135,21 +155,21 @@ define(
         /*
          * Map events
          */
-        LOTS_MAP.on('moveend', function(e) {
-            var g = JSON.stringify(LOTS_MAP.getBounds().toGeoJson())
+        lotsMap.on('moveend', function(e) {
+            var g = JSON.stringify(lotsMap.getBounds().toGeoJson())
             $(':input[name="centroid__within"]').val(
-                JSON.stringify(LOTS_MAP.getBounds().toGeoJson())
+                JSON.stringify(lotsMap.getBounds().toGeoJson())
             );
             updateCounts();
         });
 
-        LOTS_MAP.on('lotclicked', function(data) {
+        lotsMap.on('lotclicked', function(data) {
             var event = data.event;
             $('#streetview-container').data('streetview').load_streetview(
                 event.latlng.lng, event.latlng.lat);
         });
 
-        LOTS_MAP.on('popupclose', function(e) {
+        lotsMap.on('popupclose', function(e) {
             $('#streetview-container').hide();
         });
 
@@ -192,5 +212,5 @@ define(
         });
     });
 
-    return LOTS_MAP;
+    return lotsMap;
 });

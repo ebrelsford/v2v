@@ -12,6 +12,7 @@ define(
         // Leaflet plugins
         'lib/leaflet.label',
         'lib/leaflet.lvector',
+        'lib/leaflet.utfgrid',
         'Leaflet.Bing',
         'leaflet.geojsonbounds',
         'leaflet.lotlayer',
@@ -30,13 +31,11 @@ define(
             cloudmadeKey: String,
             cloudmadeStyleId: String,
             enableLayersControl: Boolean,
-            enableLotChoropleth: Boolean,
-            enableLotPolygons: Boolean,
-            lotTilesBaseUrl: String,
-            lotGridBaseUrl: String,
-            lotCentroidBaseUrl: String,
-            lotPolygonBaseUrl: String,
-            lotPolygonInitialFilters: Object,
+            enableChoropleth: Boolean,
+            enablePointTiles: Boolean,
+            enablePolygons: Boolean,
+            polygonBaseUrl: String,
+            polygonInitialFilters: Object,
             messageControl: Boolean,
             messageDefault: String,
         },
@@ -55,6 +54,11 @@ define(
             weight: 2,
         },
 
+
+        filters: {},
+        viewType: 'tiles',
+
+
         _lotMapInitialize: function() {
             this._initLayers();
 
@@ -63,11 +67,9 @@ define(
             this.addStreetsLayer();
 
             // Add overlays
-            this.addLotTilesLayer();
-            this.addLotGridLayer();
-            this.addLotCentroidLayer();
-            this.addLotChoroplethLayer();
-            this.addLotPolygonLayer();
+            this.addChoroplethLayer();
+            this.addPolygonLayer();
+            this.addTilesLayers();
 
             // Add controls
             this.addLayersControl();
@@ -75,6 +77,11 @@ define(
             // Add events
             this.addZoomEvents();
         },
+
+
+        /*
+         * Base layers
+         */
 
         addStreetsLayer: function() {
             this.streets = L.tileLayer(
@@ -92,77 +99,126 @@ define(
             if (add) this.satellite.addTo(this);
         },
 
-        addLotTilesLayer: function() {
-            if (!this.options.lotTilesBaseUrl) return;
-            var url = this.options.lotTilesBaseUrl + '{z}/{x}/{y}.png';
-            this.lots = L.tileLayer(url).addTo(this);
+
+        /*
+         * Overlay layers
+         */
+
+
+        /*
+         * Tiles layers
+         */
+
+        addTilesLayers: function() {
+            this.addPointPrivateTilesLayer();
+            this.addPointPrivateGridLayer();
+            this.addPointPublicTilesLayer();
+            this.addPointPublicGridLayer();
         },
 
-        addLotGridLayer: function() {
-            if (!this.options.lotGridBaseUrl) return;
-            var url = this.options.lotGridBaseUrl + '{z}/{x}/{y}.json?callback={cb}';
-            this.lotsUtfgrid = new L.UtfGrid(url, {
-                resolution: this.options.lotGridResolution,
+        addPointPrivateTilesLayer: function() {
+            if (!(this.options.enablePointPrivateTiles && this.viewType === 'tiles')) return;
+            if (!this.options.pointPrivateTilesBaseUrl) return;
+
+            var url = this.options.pointPrivateTilesBaseUrl + '{z}/{x}/{y}.png';
+            this.tilesPointPrivate = L.tileLayer(url).addTo(this);
+        },
+
+        addPointPrivateGridLayer: function() {
+            if (!(this.options.enablePointPrivateTiles && this.viewType === 'tiles')) return;
+            if (!this.options.pointPrivateGridBaseUrl) return;
+            var url = this.options.pointPrivateGridBaseUrl 
+                + '{z}/{x}/{y}.json?callback={cb}';
+            this.gridPointPrivate = new L.UtfGrid(url, {
+                resolution: this.options.gridResolution,
             });
-            if (this.options.lotClickHandler) {
+            if (this.options.clickHandler) {
                 var map = this;
-                map.lotsUtfgrid.on('click', function(e) {
+                map.gridPointPrivate.on('click', function(e) {
                     e.targetType = 'utfgrid';
-                    map.options.lotClickHandler(e);
+                    map.options.clickHandler(e);
                 });
             }
-            this.addLayer(this.lotsUtfgrid);
+            this.addLayer(this.gridPointPrivate);
         },
 
-        _getLotCentroidLayer: function() {
-            return new L.MarkerClusterGroup({
-                getGeoJsonFromData: function(data) {
-                    return data.objects;
-                },
-                getNextPageUrlFromData: function(data) {
-                    return data.meta.next;
-                },
+        addPointPublicTilesLayer: function() {
+            if (!(this.options.enablePointPublicTiles && this.viewType === 'tiles')) return;
+            if (!this.options.pointPublicTilesBaseUrl) return;
+
+            var url = this.options.pointPublicTilesBaseUrl + '{z}/{x}/{y}.png';
+            this.tilesPointPublic = L.tileLayer(url).addTo(this);
+        },
+
+        addPointPublicGridLayer: function() {
+            if (!(this.options.enablePointPublicTiles && this.viewType === 'tiles')) return;
+            if (!this.options.pointPublicGridBaseUrl) return;
+            var url = this.options.pointPublicGridBaseUrl 
+                + '{z}/{x}/{y}.json?callback={cb}';
+            this.gridPointPublic = new L.UtfGrid(url, {
+                resolution: this.options.gridResolution,
             });
+            if (this.options.clickHandler) {
+                var map = this;
+                map.gridPointPublic.on('click', function(e) {
+                    e.targetType = 'utfgrid';
+                    map.options.clickHandler(e);
+                });
+            }
+            this.addLayer(this.gridPointPublic);
         },
 
-        _loadLotCentroidLayer: function(queryString, clear) {
-            if (!this.options.lotCentroidBaseUrl) return;
-            var map = this;
-
-            if (!map.lotsCentroids) {
-                map.lotsCentroids = map._getLotCentroidLayer();
-            }
-            if (clear) {
-                map.clearLotCentroidLayer();
-            }
-
-            var url = this.options.lotCentroidBaseUrl + '?' + queryString;
-            map.lotsCentroids.addPaginatedLayer(url, {
-                onEachFeature: function(feature, layer) {
-                    if (!map.options.lotClickHandler) return;
-                    layer.on('click', function(e) {
-                        e.data = feature;
-                        e.targetType = 'layer';
-                        map.options.lotClickHandler(e);
-                        map.fire('lotclicked', feature);
-                    });
-                },   
-            });
-            map.addLayer(map.lotsCentroids);
+        showTiles: function() {
+            this.addLayer(this.tilesPointPublic);
+            this.addLayer(this.gridPointPublic);
+            this.addLayer(this.tilesPointPrivate);
+            this.addLayer(this.gridPointPrivate);
         },
 
-        _getLotPolygonLayer: function() {
+        hideTiles: function() {
+            var instance = this;
+            instance.removeLayer(instance.tilesPointPublic);
+            instance.removeLayer(instance.gridPointPublic);
+            instance.removeLayer(instance.tilesPointPrivate);
+            instance.removeLayer(instance.gridPointPrivate);
+        },
+
+
+        /*
+         * Polygons
+         */
+
+        addPolygonLayer: function(queryString) {
+            if (!queryString) {
+                queryString = this.options.polygonQueryString;
+            }
+            this._loadPolygonLayer(queryString, true);
+        },
+
+        addToPolygonLayer: function(queryString) {
+            this._loadPolygonLayer(queryString, false);
+        },
+
+        reloadPolygonLayer: function(filters) {
+            if (this.polygons === undefined) return;
+            this.polygons._clearFeatures();
+            this.polygons._lastQueriedBounds = null;
+            this.polygons.options.filters = filters;
+            this.polygons._getFeatures();
+        },
+
+        _getPolygonLayer: function() {
             var instance = this;
             return new lvector.LotLayer({
                 clickEvent: function(feature, event) {
-                    instance.options.lotClickHandler(event, feature);
+                    instance.options.clickHandler(event, feature);
                     instance.fire('lotclicked', {
                         event: event,
                         lot: feature,
                     });
                 },
-                filters: this.options.lotPolygonInitialFilters,
-                scaleRange: [15, 18],
+                filters: this.options.polygonInitialFilters,
+                scaleRange: [16, 18],
                 symbology: {
                     type: 'single',
                     vectorOptions: {
@@ -174,114 +230,75 @@ define(
                     },
                 },
                 uniqueField: 'pk',
-                url: this.options.lotPolygonBaseUrl,
+                url: this.options.polygonBaseUrl,
             });
         },
 
-        _loadLotPolygonLayer: function(queryString, clear) {
-            if (!this.options.enableLotPolygons) return;
-            if (!this.options.lotPolygonBaseUrl) return;
-            var map = this;
+        _loadPolygonLayer: function(queryString, clear) {
+            if (!this.options.enablePolygons) return;
+            if (!this.options.polygonBaseUrl) return;
+            var instance = this;
 
-            if (!map.lotPolygons) {
-                map.lotPolygons = map._getLotPolygonLayer();
+            if (!instance.polygons) {
+                instance.polygons = instance._getPolygonLayer();
             }
             if (clear) {
-                //map.clearLotPolygonLayer();
+                //instance.clearPolygonLayer();
             }
-            //map.addLayer(map.lotPolygons);
-            map.lotPolygons.setMap(map);
+            //instance.addLayer(instance.polygons);
+            instance.polygons.setMap(instance);
         },
 
-        clearLotCentroidLayer: function() {
-            if (this.lotsCentroids) {
-                this.lotsCentroids.clearLayers();
+
+        /*
+         * Choropleth
+         */
+
+        showChoropleth: function() {
+            var instance = this;
+            if (instance.choroplethLabels) {
+                $.each(instance.choroplethLabels, function(i, label) {
+                    label.addTo(instance);
+                });
             }
-            else {
-                this.lotsCentroids = new L.MarkerClusterGroup();
-            }
+            instance.addLayer(instance.choropleth);
         },
 
-        addLotCentroidLayer: function(queryString) {
-            if (!queryString) {
-                queryString = this.options.lotCentroidQueryString;
-            }
-            this._loadLotCentroidLayer(queryString, true);
+        hideChoropleth: function() {
+            var instance = this;
+            $.each(instance.choroplethLabels, function(i, label) {
+                instance.removeLayer(label);
+            });
+            instance.removeLayer(this.choropleth);
         },
 
-        addToLotCentroidLayer: function(queryString) {
-            this._loadLotCentroidLayer(queryString, false);
+        reloadChoropleth: function(filters) {
+            var queryString = $.param(filters);
+            this.addChoroplethLayer(queryString);
         },
 
-        reloadLotCentroidLayer: function(queryString) {
-            this._loadLotCentroidLayer(queryString, true);
-        },
-
-        updateFilters: function(filters) {
-            if (this.lotPolygons === undefined) return;
-            this.lotPolygons._clearFeatures();
-            this.lotPolygons._lastQueriedBounds = null;
-
-            this.lotPolygons.options.filters = filters;
-            this.lotPolygons._getFeatures();
-            this.fire('moveend').fire('zoomend');
-        },
-
-        addLotPolygonLayer: function(queryString) {
-            if (!queryString) {
-                queryString = this.options.lotPolygonQueryString;
-            }
-            this._loadLotPolygonLayer(queryString, true);
-        },
-
-        addToLotPolygonLayer: function(queryString) {
-            this._loadLotPolygonLayer(queryString, false);
-        },
-
-        reloadLotPolygonLayer: function(queryString) {
-            this._loadLotPolygonLayer(queryString, true);
-        },
-
-        addLayersControl: function() {
-            if (!this.options.enableLayersControl) return;
-            var baseLayers = {
-                'Streets': this.streets, 
-                'Satellte': this.satellite, 
-            };
-            if (this.lotsUtfgrid && this.lots) {
-                var overlays = {
-                    'lots': L.layerGroup([this.lots, this.lotsUtfgrid]),
-                };
-            }
-            var layersControl = L.control.layers(baseLayers, overlays).addTo(this);
-        },
-
-        reloadLotChoroplethLayer: function(queryString) {
-            this.addLotChoroplethLayer(queryString);
-        },
-
-        addLotChoroplethBoundaries: function(layer_name) {
+        addChoroplethBoundaries: function(layer_name) {
             var instance = this;
             // TODO in a setting through data attributes
             var url = '/places/boundaries/layers/' + layer_name + '/';
-            instance.lotsChoroplethLayers = {};
+            instance.choroplethLayers = {};
             $('#map').singleminded({
-                name: 'addLotChoroplethBoundaries',
+                name: 'addChoroplethBoundaries',
                 jqxhr: $.getJSON(url, function(data) {
-                    instance.lotsChoropleth = L.geoJson(data, {
+                    instance.choropleth = L.geoJson(data, {
                         onEachFeature: function(feature, layer) {
-                            instance.lotsChoroplethLayers[feature.properties.boundary_label] = layer;
+                            instance.choroplethLayers[feature.properties.boundary_label] = layer;
                         },
                     });
-                    instance.updateLotChoroplethStyles(null);
-                    if (instance.getZoom() < 15) {
-                        instance.lotsChoropleth.addTo(instance);
+                    instance.updateChoroplethStyles(null);
+                    if (instance.getZoom() < 16 && instance.viewType === 'choropleth') {
+                        instance.choropleth.addTo(instance);
                     }
                 }),
             });
         },
 
-        getLotChoroplethColor: function(count, maxCount) {
+        getChoroplethColor: function(count, maxCount) {
             var instance = this;
             var hue = instance.choroplethHsl.hue,
                 saturation = instance.choroplethHsl.saturation,
@@ -294,14 +311,14 @@ define(
             return 'hsl(' + hue + ', ' + saturation + '%, ' + lightness + '%)';
         },
 
-        getLotChoroplethStyle: function(count, maxCount) {
+        getChoroplethStyle: function(count, maxCount) {
             var instance = this;
             var style = instance.choroplethStyle;
-            style.fillColor = instance.getLotChoroplethColor(count, maxCount);
+            style.fillColor = instance.getChoroplethColor(count, maxCount);
             return style;
         },
 
-        updateLotChoroplethStyles: function(counts) {
+        updateChoroplethStyles: function(counts) {
             var instance = this;
             var maxCount = 0;
 
@@ -311,102 +328,153 @@ define(
                 });
             }
 
-            $.each(instance.lotsChoroplethLayers, function(label, layer) {
+            $.each(instance.choroplethLayers, function(label, layer) {
                 var style = {};
                 if (counts && counts !== null) {
-                    style = instance.getLotChoroplethStyle(counts[label], maxCount);
+                    style = instance.getChoroplethStyle(counts[label], maxCount);
                 }
                 else {
-                    style = instance.getLotChoroplethStyle(0, 0);
+                    style = instance.getChoroplethStyle(0, 0);
                 }
                 layer.setStyle(style);
             });
 
-            /*
-            $.each(counts, function(layerLabel, count) {
-                var style = instance.getLotChoroplethStyle(count, maxCount);
-                instance.lotsChoroplethLayers[layerLabel].setStyle(style);
-            });
-            */
         },
 
-        updateLotChoroplethLabels: function(counts) {
+        updateChoroplethLabels: function(counts) {
             var instance = this;
-            if (instance.lotsChoroplethLabels === undefined) {
-                instance.lotsChoroplethLabels = {};
+            if (instance.choroplethLabels === undefined) {
+                instance.choroplethLabels = {};
             }
 
             $.each(counts, function(layerLabel, count) {
-                var layer = instance.lotsChoroplethLayers[layerLabel];
-                var label = instance.lotsChoroplethLabels[layerLabel] || new L.Label();
+                var layer = instance.choroplethLayers[layerLabel];
+                var label = instance.choroplethLabels[layerLabel] || new L.Label();
                 label.setContent('Council District ' + layerLabel + '<br/ >' 
                     + count + ' lots');
                 label.setLatLng(layer.getBounds().getCenter());
-                instance.lotsChoroplethLabels[layerLabel] = label;
-                instance.showLabel(label);
+                instance.choroplethLabels[layerLabel] = label;
+
+                if (instance.viewType === 'choropleth') {
+                    instance.showLabel(label);
+                }
             });
         },
 
-        addLotChoroplethLayer: function(queryString) {
+        addChoroplethLayer: function(queryString) {
             var instance = this;
-            if (!instance.options.enableLotChoropleth) return;
-            if (!queryString) queryString = instance.options.lotChoroplethQueryString;
+            if (!instance.options.enableChoropleth) return;
+            if (!queryString) queryString = instance.options.choroplethQueryString;
 
             // If boundaries don't yet exist, load them
-            if (instance.lotsChoropleth === undefined) {
-                instance.addLotChoroplethBoundaries('City Council Districts');
+            if (instance.choropleth === undefined) {
+                instance.addChoroplethBoundaries('City Council Districts');
             }
 
             // Update colors and labels
-            var url = instance.options.lotChoroplethBaseUrl + '?' + queryString;
+            var url = instance.options.choroplethBaseUrl + '?' + queryString;
             $('#map').singleminded({
-                name: 'addLotChoroplethLayer',
+                name: 'addChoroplethLayer',
                 jqxhr: $.getJSON(url, function(data) {
-                    instance.updateLotChoroplethStyles(data);
-                    instance.updateLotChoroplethLabels(data);
+                    instance.updateChoroplethStyles(data);
+                    instance.updateChoroplethLabels(data);
                 }),
             });
         },
+
+
+        /*
+         * Controls
+         */
+
+        addLayersControl: function() {
+            if (!this.options.enableLayersControl) return;
+            var baseLayers = {
+                'Streets': this.streets, 
+                'Satellte': this.satellite, 
+            };
+            var overlays = {};
+            if (this.options.enablePointPrivateTiles) {
+                overlays['Lot Points (private)'] = L.layerGroup([
+                        this.tilesPointPrivate, this.gridPointPrivate]);
+            }
+            if (this.options.enablePointPublicTiles) {
+                overlays['Lot Points (public)'] = L.layerGroup([
+                        this.tilesPointPublic, this.gridPointPublic]);
+            }
+            var layersControl = L.control.layers(baseLayers, overlays).addTo(this);
+        },
+
+
+        /*
+         * Events
+         */
 
         addZoomEvents: function() {
             var instance = this;
             instance.on('zoomend', function() {
                 var zoom = instance.getZoom();
-                if (zoom >= 15) {
+                if (zoom >= 16) {
                     // Hide choropleth
-                    if (instance.lotsChoropleth) {
-                        // Hide labels
-                        $.each(instance.lotsChoroplethLabels, function(i, label) {
-                            instance.removeLayer(label);
-                        });
-
-                        // Hide message
-                        if (instance.messageControl._map) {
-                            instance.messageControl.removeFrom(instance);
-                        }
-
-                        instance.removeLayer(instance.lotsChoropleth);
+                    if (instance.choropleth) {
+                        instance.hideChoropleth();
                     }
                     // Polygon visibility is controlled by vector layers
+
                 }
                 else {
-                    // Show choropleth
-                    if (instance.lotsChoropleth) {
-                        // Show labels
-                        if (instance.lotsChoroplethLabels) {
-                            $.each(instance.lotsChoroplethLabels, function(i, label) {
-                                label.addTo(instance);
-                            });
-                        }
-                        // Show message
-                        if (!instance.messageControl._map) {
-                            instance.messageControl.addTo(instance);
-                        }
-
-                        instance.addLayer(instance.lotsChoropleth);
+                    if (instance.viewType === 'choropleth') {
+                        instance.showChoropleth();
                     }
                 }
+
+                if (zoom >= 17) {
+                    instance.hideTiles();
+                }
+                else {
+                    if (instance.viewType === 'tiles') {
+                        instance.showTiles();
+                    }
+                }
+
             });
+        },
+
+
+        /*
+         * Filters
+         */
+
+        updateFilters: function(filters) {
+            // If the view type is changing, let the map know
+            if (filters.view_type && filters.view_type !== this.viewType) {
+                this.viewType = filters.view_type;
+                this.changeView(this.viewType);
+            }
+            this.filters = filters;
+
+            // Now, reload everything
+            this.reloadChoropleth(filters);
+            this.reloadPolygonLayer(filters);
+
+            this.fire('moveend').fire('zoomend');
+        },
+
+        changeView: function(viewType) {
+            if (viewType === 'tiles') {
+                // Show tiles
+                this.showTiles();
+
+                // Hide everything else
+                this.hideChoropleth();
+            }
+            else if (viewType === 'choropleth') {
+                // Show choropleth
+                this.showChoropleth();
+
+                // Hide everything else
+                this.hideTiles();
+            }
         },
 
     });

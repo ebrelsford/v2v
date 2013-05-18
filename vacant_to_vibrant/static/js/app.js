@@ -17,6 +17,7 @@ requirejs.config({
         },
         'Leaflet.Bing': ['leaflet'],
         'lib/leaflet.label': ['leaflet'],
+        'lib/leaflet.utfgrid': ['leaflet'],
         'chosen.jquery.min': ['jquery'],
         'chosen.jquery_ready': ['jquery', 'chosen.jquery.min'],
     },

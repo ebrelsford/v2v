@@ -1,4 +1,4 @@
-{% load compress %}
+{% load compress require %}
 
 {% compress css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/lib/normalize.css">
@@ -17,4 +17,4 @@
 <script src="{{ STATIC_URL }}js/lib/json2.js"></script>
 {% endcomment %}
 
-<script data-main="{{ STATIC_URL }}js/app" src="{{ STATIC_URL }}js/lib/require.js"></script>
+{% require_module "app" %}

@@ -24,7 +24,7 @@ define(
      * Update counts
      */
     function updateCounts() {
-        var baseUrl = $('#map').data('mappagecountsbaseurl');
+        var baseUrl = $('#map').data('countsbaseurl');
         $('#map').singleminded({
             name: 'counts',
             jqxhr: $.getJSON(baseUrl + $('form').serialize(), function(data) {
@@ -126,11 +126,11 @@ define(
             enableLayersControl: true,
 
             enableChoropleth: true,
-            choroplethBaseUrl: $('#map').data('mappagechoroplethbaseurl'),
+            choroplethBaseUrl: $('#map').data('choroplethbaseurl'),
             choroplethQueryString: 'parents_only=True',
 
             enablePolygons: true,
-            polygonBaseUrl: $('#map').data('mappagepolygonbaseurl'),
+            polygonBaseUrl: $('#map').data('polygonbaseurl'),
             polygonInitialFilters: { 
                 parentsOnly: true,
             },
@@ -138,12 +138,12 @@ define(
             gridResolution: 8,
 
             enablePointPrivateTiles: true,
-            pointPrivateTilesBaseUrl: $('#map').data('mappagepointprivatetilesbaseurl'),
-            pointPrivateGridBaseUrl: $('#map').data('mappagepointprivategridbaseurl'),
+            pointPrivateTilesBaseUrl: $('#map').data('pointprivatetilesbaseurl'),
+            pointPrivateGridBaseUrl: $('#map').data('pointprivategridbaseurl'),
 
             enablePointPublicTiles: true,
-            pointPublicTilesBaseUrl: $('#map').data('mappagepointpublictilesbaseurl'),
-            pointPublicGridBaseUrl: $('#map').data('mappagepointpublicgridbaseurl'),
+            pointPublicTilesBaseUrl: $('#map').data('pointpublictilesbaseurl'),
+            pointPublicGridBaseUrl: $('#map').data('pointpublicgridbaseurl'),
 
         });
 

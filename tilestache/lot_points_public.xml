@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[
+    <!ENTITY db_settings SYSTEM "settings/dbauth">
+    <!ENTITY lots_query_fields SYSTEM "settings/lots_query_fields">
+    <!ENTITY map_attributes SYSTEM "settings/map_attributes">
+]>
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" maximum-extent="-20037508.34,-20037508.34,20037508.34,20037508.34">
+
+    <Style name="lot_points" filter-mode="first" >
+        <Rule>
+            <MarkersSymbolizer allow-overlap="true" fill="blue" opacity=".7" width="5" height="5" stroke="blue" stroke-width="2" stroke-opacity=".2" max-error="1" placement="point" marker-type="ellipse"/>
+        </Rule>
+    </Style>
+
+    <Layer name="lot_points" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+        <StyleName>lot_points</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="table">(
+                SELECT lots_lot.id, lots_lot.centroid
+                FROM lots_lot 
+                    LEFT OUTER JOIN lots_lotgroup ON (lots_lot.group_id = lots_lotgroup.lot_ptr_id) 
+                    LEFT OUTER JOIN owners_owner ON (lots_lot.owner_id = owners_owner.id) 
+                WHERE 
+                    centroid IS NOT NULL AND 
+                    lots_lotgroup.lot_ptr_id IS NULL AND
+                    owners_owner.owner_type = 'public'
+            ) as lots
+            </Parameter>
+            &lots_query_fields;
+            &db_settings;
+        </Datasource>
+    </Layer>
+
+</Map>

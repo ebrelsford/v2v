@@ -1,0 +1,4 @@
+<Parameter name="host">DB_HOST</Parameter>
+<Parameter name="user">DB_USER</Parameter>
+<Parameter name="password">DB_PASSWORD</Parameter>
+<Parameter name="dbname">DB_NAME</Parameter>

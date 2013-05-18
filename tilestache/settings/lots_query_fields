@@ -1,0 +1,4 @@
+<Parameter name="key_field">id</Parameter>
+<Parameter name="geometry_field">centroid</Parameter>
+<Parameter name="extent_cache">dynamic</Parameter>
+<Parameter name="extent"></Parameter>

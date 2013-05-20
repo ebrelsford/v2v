@@ -54,7 +54,7 @@ define(
             weight: 2,
         },
 
-
+        choroplethBoundaryLayerName: null,
         filters: {},
         viewType: 'tiles',
 
@@ -261,24 +261,42 @@ define(
                     label.addTo(instance);
                 });
             }
-            instance.addLayer(instance.choropleth);
+
+            if (!instance.choropleth) {
+                instance.addChoroplethBoundaries(instance.filters.boundary_layer);
+            }
+            else {
+                instance.addLayer(instance.choropleth);
+            }
         },
 
         hideChoropleth: function() {
             var instance = this;
-            $.each(instance.choroplethLabels, function(i, label) {
-                instance.removeLayer(label);
-            });
-            instance.removeLayer(this.choropleth);
+            if (instance.choroplethLabels) {
+                $.each(instance.choroplethLabels, function(i, label) {
+                    instance.removeLayer(label);
+                });
+            }
+            if (instance.choropleth) {
+                instance.removeLayer(instance.choropleth);
+            }
         },
 
         reloadChoropleth: function(filters) {
-            var queryString = $.param(filters);
-            this.addChoroplethLayer(queryString);
+            this.addChoroplethLayer(filters);
+        },
+
+        clearChoropleth: function() {
+            var instance = this;
+            instance.hideChoropleth();
+            instance.choropleth = null;
+            instance.choroplethLabels = {};
+            instance.choroplethLayers = {};
         },
 
         addChoroplethBoundaries: function(layer_name) {
             var instance = this;
+            instance.choroplethBoundaryLayerName = layer_name;
             var url = Django.url('inplace:layer_view', { name: layer_name });
             instance.choroplethLayers = {};
             $('#map').singleminded({
@@ -293,6 +311,8 @@ define(
                     if (instance.getZoom() < 16 && instance.viewType === 'choropleth') {
                         instance.choropleth.addTo(instance);
                     }
+
+                    instance.updateChoropleth($.param(instance.filters));
                 }),
             });
         },
@@ -319,6 +339,7 @@ define(
 
         updateChoroplethStyles: function(counts) {
             var instance = this;
+            if (!instance.choroplethLayers) return;
             var maxCount = 0;
 
             if (counts && counts !== null) {
@@ -342,6 +363,7 @@ define(
 
         updateChoroplethLabels: function(counts) {
             var instance = this;
+            if (!instance.choroplethLayers) return;
             if (instance.choroplethLabels === undefined) {
                 instance.choroplethLabels = {};
             }
@@ -349,6 +371,7 @@ define(
             $.each(counts, function(layerLabel, count) {
                 var layer = instance.choroplethLayers[layerLabel];
                 var label = instance.choroplethLabels[layerLabel] || new L.Label();
+                // TODO dynamic by layer name
                 label.setContent('Council District ' + layerLabel + '<br/ >' 
                     + count + ' lots');
                 label.setLatLng(layer.getBounds().getCenter());
@@ -360,15 +383,30 @@ define(
             });
         },
 
-        addChoroplethLayer: function(queryString) {
+        addChoroplethLayer: function(filters) {
             var instance = this;
             if (!instance.options.enableChoropleth) return;
-            if (!queryString) queryString = instance.options.choroplethQueryString;
 
-            // If boundaries don't yet exist, load them
-            if (instance.choropleth === undefined) {
-                instance.addChoroplethBoundaries('City Council Districts');
+            var newLabel;
+            var queryString = instance.options.choroplethQueryString;
+            if (filters) {
+                newLabel = filters.boundary_layer;
+                queryString = $.param(filters);
             }
+
+            // If boundaries don't yet exist or are new, load them
+            if ((!instance.choropleth && newLabel) || 
+                (newLabel && newLabel !== instance.choroplethBoundaryLayerName)) {
+                instance.clearChoropleth();
+                instance.addChoroplethBoundaries(newLabel);
+            }
+            else {
+                instance.updateChoropleth(queryString);
+            }
+        },
+
+        updateChoropleth: function(queryString) {
+            var instance = this;
 
             // Update colors and labels
             var url = instance.options.choroplethBaseUrl + '?' + queryString;
@@ -379,6 +417,7 @@ define(
                     instance.updateChoroplethLabels(data);
                 }),
             });
+
         },
 
 

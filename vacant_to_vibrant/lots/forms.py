@@ -71,6 +71,19 @@ class FiltersForm(forms.Form):
         label=_('view type'),
         required=False,
     )
+    boundary_layer = forms.ChoiceField(
+        choices=(
+            ('City Council Districts', _('city council districts')),
+            ('zipcodes', _('zipcodes')),
+        ),
+        initial='City Council Districts',
+        label=_('boundaries'),
+        required=False,
+
+        # TODO hide / disable .view-type-choropleth if view type is not
+        # choropleth
+        widget=forms.Select(attrs={ 'class': 'view-type-choropleth', })
+    )
 
     participant_types = forms.MultipleChoiceField(
         choices=(
@@ -180,7 +193,7 @@ class FiltersForm(forms.Form):
             yield self[field]
 
     def view_filters(self):
-        for field in ('view_type',):
+        for field in ('view_type', 'boundary_layer',):
             yield self[field]
 
     def default_filters(self):

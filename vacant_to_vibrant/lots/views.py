@@ -164,6 +164,7 @@ class LotsCountBoundaryView(JSONResponseView):
         return self.get_counts()
 
     def get_counts(self):
+        boundary_layer = self.request.GET.get('boundary_layer', '')
         filters = LotResource().build_filters(filters=self.request.GET)
 
         try:
@@ -174,11 +175,8 @@ class LotsCountBoundaryView(JSONResponseView):
 
         lots = LotResource().apply_filters(self.request, filters)
 
-        # Get city council districts
-        # TODO or use city_council_district field instead
-        # TODO do this via a parameter
         boundaries = Boundary.objects.filter(
-            layer__name='City Council Districts'
+            layer__name=boundary_layer,
         )
 
         counts = {}

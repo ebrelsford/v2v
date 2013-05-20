@@ -256,14 +256,8 @@ define(
 
         showChoropleth: function() {
             var instance = this;
-            if (instance.choroplethLabels) {
-                $.each(instance.choroplethLabels, function(i, label) {
-                    label.addTo(instance);
-                });
-            }
-
             if (!instance.choropleth) {
-                instance.addChoroplethBoundaries(instance.filters.boundary_layer);
+                instance.addChoroplethBoundaries(instance.filters['boundary_layer']);
             }
             else {
                 instance.addLayer(instance.choropleth);
@@ -272,11 +266,6 @@ define(
 
         hideChoropleth: function() {
             var instance = this;
-            if (instance.choroplethLabels) {
-                $.each(instance.choroplethLabels, function(i, label) {
-                    instance.removeLayer(label);
-                });
-            }
             if (instance.choropleth) {
                 instance.removeLayer(instance.choropleth);
             }
@@ -290,7 +279,6 @@ define(
             var instance = this;
             instance.hideChoropleth();
             instance.choropleth = null;
-            instance.choroplethLabels = {};
             instance.choroplethLayers = {};
         },
 
@@ -304,7 +292,17 @@ define(
                 jqxhr: $.getJSON(url, function(data) {
                     instance.choropleth = L.geoJson(data, {
                         onEachFeature: function(feature, layer) {
-                            instance.choroplethLayers[feature.properties.boundary_label] = layer;
+                            var boundaryLabel = feature.properties['boundary_label'];
+                            instance.choroplethLayers[boundaryLabel] = layer;
+
+                            layer.on({
+                                click: function() {
+                                    console.log('click');
+                                    // Zoom to this polygon? Maybe show other
+                                    // details besides count (breakdown, area,
+                                    // etc.)? TODO
+                                },
+                            });
                         },
                     });
                     instance.updateChoroplethStyles(null);
@@ -363,22 +361,17 @@ define(
 
         updateChoroplethLabels: function(counts) {
             var instance = this;
-            if (!instance.choroplethLayers) return;
-            if (instance.choroplethLabels === undefined) {
-                instance.choroplethLabels = {};
-            }
 
             $.each(counts, function(layerLabel, count) {
                 var layer = instance.choroplethLayers[layerLabel];
-                var label = instance.choroplethLabels[layerLabel] || new L.Label();
-                // TODO dynamic by layer name
-                label.setContent('Council District ' + layerLabel + '<br/ >' 
-                    + count + ' lots');
-                label.setLatLng(layer.getBounds().getCenter());
-                instance.choroplethLabels[layerLabel] = label;
-
-                if (instance.viewType === 'choropleth') {
-                    instance.showLabel(label);
+                var label = layer._label;
+                // TODO dynamic by layer name OR when we get counts?
+                var content = 'Council District ' + layerLabel + '<br/ >' + count + ' lots';
+                if (label) {
+                    layer.updateLabelContent(content);
+                }
+                else {
+                    layer.bindLabel(content);
                 }
             });
         },

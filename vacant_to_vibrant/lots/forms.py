@@ -104,7 +104,6 @@ class FiltersForm(forms.Form):
         choices=(
             ('private', 'private'),
             ('public', 'public'),
-            ('unknown', 'unknown'),
         ),
         initial=(),
         required=False,

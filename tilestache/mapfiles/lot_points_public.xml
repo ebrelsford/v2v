@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE Map[
-    <!ENTITY db_settings SYSTEM "settings/dbauth">
-    <!ENTITY lots_query_fields SYSTEM "settings/lots_query_fields">
-    <!ENTITY map_attributes SYSTEM "settings/map_attributes">
-    <!ENTITY map_maximum_extent "-20037508.34,-20037508.34,20037508.34,20037508.34">
-    <!ENTITY map_srs "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
-]>
-<Map srs="&map_srs;" maximum-extent="&map_maximum_extent;">
+<!DOCTYPE Map[]>
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" maximum-extent="-20037508.34,-20037508.34,20037508.34,20037508.34">
 
     <Style name="lot_points" filter-mode="first" >
         <Rule>
@@ -29,8 +23,16 @@
                     owners_owner.owner_type = 'public'
             ) as lots
             </Parameter>
-            &lots_query_fields;
-            &db_settings;
+            <Parameter name="key_field">id</Parameter>
+            <Parameter name="geometry_field">centroid</Parameter>
+            <Parameter name="extent_cache">dynamic</Parameter>
+            <Parameter name="extent"></Parameter>
+
+            <!-- Replace with settings for each environment -->
+            <Parameter name="host">DB_HOST</Parameter>
+            <Parameter name="user">DB_USER</Parameter>
+            <Parameter name="password">DB_PASSWORD</Parameter>
+            <Parameter name="dbname">DB_NAME</Parameter>
         </Datasource>
     </Layer>
 

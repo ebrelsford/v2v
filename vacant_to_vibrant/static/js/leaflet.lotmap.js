@@ -297,7 +297,6 @@ define(
 
                             layer.on({
                                 click: function() {
-                                    console.log('click');
                                     // Zoom to this polygon? Maybe show other
                                     // details besides count (breakdown, area,
                                     // etc.)? TODO

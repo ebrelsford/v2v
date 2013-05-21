@@ -90,8 +90,8 @@ LOGGING = {
 LOT_SURVEY_FORM_PK = 1
 
 LOT_MAP_TILE_URLS = {
-    'private': 'http://tiles.v2v.webfactional.com/lot_points_private/',
-    'private_grid': 'http://tiles.v2v.webfactional.com/lot_points_private_grid/',
-    'public': 'http://tiles.v2v.webfactional.com/lot_points_public/',
-    'public_grid': 'http://tiles.v2v.webfactional.com/lot_points_public_grid/',
+    'private': 'http://{s}.tiles.v2v.webfactional.com/lot_points_private/',
+    'private_grid': 'http://{s}.tiles.v2v.webfactional.com/lot_points_private_grid/',
+    'public': 'http://{s}.tiles.v2v.webfactional.com/lot_points_public/',
+    'public_grid': 'http://{s}.tiles.v2v.webfactional.com/lot_points_public_grid/',
 }

@@ -231,6 +231,7 @@ define(
         reloadTiles: function(filters) {
             var instance = this;
             instance.filters = filters;
+            if (instance.viewType !== 'tiles') return;
             instance.showTiles();
         },
 
@@ -531,6 +532,7 @@ define(
             if (filters.view_type && filters.view_type !== this.viewType) {
                 this.viewType = filters.view_type;
                 this.changeView(this.viewType);
+                this.fire('viewtypechange', { viewType: this.viewType });
             }
             this.filters = filters;
 

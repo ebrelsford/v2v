@@ -9,6 +9,7 @@ define(
         'leaflet',
         'lib/leaflet.lvector',
         'django',
+        'underscore',
 
         // Leaflet plugins
         'lib/leaflet.label',
@@ -21,7 +22,7 @@ define(
         // Other plugins
         'jquery.singleminded',
 
-    ], function($, L, lvector, Django) {
+    ], function($, L, lvector, Django, _) {
 
     L.Map.include({
 
@@ -169,10 +170,22 @@ define(
         },
 
         showTiles: function() {
-            this.addLayer(this.tilesPointPublic);
-            this.addLayer(this.gridPointPublic);
-            this.addLayer(this.tilesPointPrivate);
-            this.addLayer(this.gridPointPrivate);
+            var instance = this;
+            var filtered = _.size(instance.filters) > 0;
+            var activeOwnerTypes = instance.getActiveOwnerTypes(instance.filters);
+
+            _.each(['private', 'public'], function(ownerType) {
+                if (!filtered) {
+                    // Always show if there are no current filters
+                    instance.showOwnerTypeTiles(ownerType);
+                }
+                else if (activeOwnerTypes.indexOf(ownerType) >= 0) {
+                    instance.showOwnerTypeTiles(ownerType);
+                }
+                else {
+                    instance.hideOwnerTypeTiles(ownerType);
+                }
+            });
         },
 
         hideTiles: function() {
@@ -181,6 +194,66 @@ define(
             instance.removeLayer(instance.gridPointPublic);
             instance.removeLayer(instance.tilesPointPrivate);
             instance.removeLayer(instance.gridPointPrivate);
+        },
+
+        showOwnerTypeTiles: function(ownerType) {
+            var instance = this;
+            if (ownerType === 'private') {
+                if (instance.tilesPointPrivate) {
+                    instance.addLayer(instance.tilesPointPrivate);
+                }
+                if (instance.gridPointPrivate) {
+                    instance.addLayer(instance.gridPointPrivate);
+                }
+            }
+            else if (ownerType === 'public') {
+                if (instance.tilesPointPublic) {
+                    instance.addLayer(instance.tilesPointPublic);
+                }
+                if (instance.gridPointPublic) {
+                    instance.addLayer(instance.gridPointPublic);
+                }
+            }
+        },
+
+        hideOwnerTypeTiles: function(ownerType) {
+            var instance = this;
+            if (ownerType === 'private') {
+                if (instance.tilesPointPrivate) {
+                    instance.removeLayer(instance.tilesPointPrivate);
+                }
+                if (instance.gridPointPrivate) {
+                    instance.removeLayer(instance.gridPointPrivate);
+                }
+            }
+            else if (ownerType === 'public') {
+                if (instance.tilesPointPublic) {
+                    instance.removeLayer(instance.tilesPointPublic);
+                }
+                if (instance.gridPointPublic) {
+                    instance.removeLayer(instance.gridPointPublic);
+                }
+            }
+        },
+
+        getActiveOwnerTypes: function(filters) {
+            var activeOwnerTypes = filters['owner__owner_type__in'];
+            if (!activeOwnerTypes) {
+                return [];
+            }
+            else if (!_.isArray(activeOwnerTypes)) {
+                return [activeOwnerTypes,];
+            }
+            return activeOwnerTypes;
+        },
+
+        /*
+         * Update which tiles are shown by owner type
+         */
+        reloadTiles: function(filters) {
+            var instance = this;
+            instance.filters = filters;
+            instance.showTiles();
         },
 
 
@@ -486,6 +559,7 @@ define(
             // Now, reload everything
             this.reloadChoropleth(filters);
             this.reloadPolygonLayer(filters);
+            this.reloadTiles(filters);
 
             this.fire('moveend').fire('zoomend');
         },

@@ -6,6 +6,7 @@ requirejs.config({
         'jquery.infinitescroll': 'lib/jquery.infinitescroll.min',
         'fancybox': 'lib/fancybox/jquery.fancybox.pack',
         'leaflet': '//cdn.leafletjs.com/leaflet-0.5.1/leaflet',
+        'underscore': 'lib/underscore-min',
         'async': 'lib/async',
     },
     shim: {
@@ -15,6 +16,9 @@ requirejs.config({
         },
         'leaflet': {
             exports: 'L',
+        },
+        'underscore': {
+            exports: '_',
         },
         'lib/leaflet.lvector': {
             deps: ['leaflet'],

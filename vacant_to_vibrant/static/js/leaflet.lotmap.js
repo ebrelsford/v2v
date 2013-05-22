@@ -172,6 +172,7 @@ define(
 
         showTiles: function() {
             var instance = this;
+            if (instance.viewType !== 'tiles') return;
             var filtered = _.size(instance.filters) > 0;
             var activeOwnerTypes = instance.getActiveOwnerTypes(instance.filters);
 
@@ -231,7 +232,6 @@ define(
         reloadTiles: function(filters) {
             var instance = this;
             instance.filters = filters;
-            if (instance.viewType !== 'tiles') return;
             instance.showTiles();
         },
 
@@ -514,9 +514,7 @@ define(
                     instance.hideTiles();
                 }
                 else {
-                    if (instance.viewType === 'tiles') {
-                        instance.showTiles();
-                    }
+                    instance.showTiles();
                 }
 
             });

@@ -55,8 +55,14 @@ define(
             weight: 2,
         },
 
+        tileLayers: {
+            'public': [],
+            'private': [],
+        },
+
         choroplethBoundaryLayerName: null,
         filters: {},
+        ownerTypes: ['private', 'public'],
         viewType: 'tiles',
 
 
@@ -123,6 +129,7 @@ define(
 
             var url = this.options.pointPrivateTilesBaseUrl + '{z}/{x}/{y}.png';
             this.tilesPointPrivate = L.tileLayer(url).addTo(this);
+            this.tileLayers['private'].push(this.tilesPointPrivate);
         },
 
         addPointPrivateGridLayer: function() {
@@ -141,6 +148,7 @@ define(
                 });
             }
             this.addLayer(this.gridPointPrivate);
+            this.tileLayers['private'].push(this.gridPointPrivate);
         },
 
         addPointPublicTilesLayer: function() {
@@ -149,6 +157,7 @@ define(
 
             var url = this.options.pointPublicTilesBaseUrl + '{z}/{x}/{y}.png';
             this.tilesPointPublic = L.tileLayer(url).addTo(this);
+            this.tileLayers['public'].push(this.tilesPointPublic);
         },
 
         addPointPublicGridLayer: function() {
@@ -167,6 +176,7 @@ define(
                 });
             }
             this.addLayer(this.gridPointPublic);
+            this.tileLayers['public'].push(this.gridPointPublic);
         },
 
         showTiles: function() {
@@ -174,7 +184,7 @@ define(
             var filtered = _.size(instance.filters) > 0;
             var activeOwnerTypes = instance.getActiveOwnerTypes(instance.filters);
 
-            _.each(['private', 'public'], function(ownerType) {
+            _.each(instance.ownerTypes, function(ownerType) {
                 if (!filtered) {
                     // Always show if there are no current filters
                     instance.showOwnerTypeTiles(ownerType);
@@ -190,50 +200,27 @@ define(
 
         hideTiles: function() {
             var instance = this;
-            instance.removeLayer(instance.tilesPointPublic);
-            instance.removeLayer(instance.gridPointPublic);
-            instance.removeLayer(instance.tilesPointPrivate);
-            instance.removeLayer(instance.gridPointPrivate);
+            _.each(instance.ownerTypes, function(ownerType) {
+                instance.hideOwnerTypeTiles(ownerType);
+            });
         },
 
         showOwnerTypeTiles: function(ownerType) {
             var instance = this;
-            if (ownerType === 'private') {
-                if (instance.tilesPointPrivate) {
-                    instance.addLayer(instance.tilesPointPrivate);
+            _.each(instance.tileLayers[ownerType], function(layer) {
+                if (layer) {
+                    instance.addLayer(layer);
                 }
-                if (instance.gridPointPrivate) {
-                    instance.addLayer(instance.gridPointPrivate);
-                }
-            }
-            else if (ownerType === 'public') {
-                if (instance.tilesPointPublic) {
-                    instance.addLayer(instance.tilesPointPublic);
-                }
-                if (instance.gridPointPublic) {
-                    instance.addLayer(instance.gridPointPublic);
-                }
-            }
+            });
         },
 
         hideOwnerTypeTiles: function(ownerType) {
             var instance = this;
-            if (ownerType === 'private') {
-                if (instance.tilesPointPrivate) {
-                    instance.removeLayer(instance.tilesPointPrivate);
+            _.each(instance.tileLayers[ownerType], function(layer) {
+                if (layer) {
+                    instance.removeLayer(layer);
                 }
-                if (instance.gridPointPrivate) {
-                    instance.removeLayer(instance.gridPointPrivate);
-                }
-            }
-            else if (ownerType === 'public') {
-                if (instance.tilesPointPublic) {
-                    instance.removeLayer(instance.tilesPointPublic);
-                }
-                if (instance.gridPointPublic) {
-                    instance.removeLayer(instance.gridPointPublic);
-                }
-            }
+            });
         },
 
         getActiveOwnerTypes: function(filters) {

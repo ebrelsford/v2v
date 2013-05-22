@@ -41,19 +41,19 @@ class FiltersForm(forms.Form):
         required=False,
         widget=forms.CheckboxSelectMultiple(),
     )
-    area__gt = forms.IntegerField(
+    polygon_area__gt = forms.IntegerField(
         label=_('Area (sq ft) greater than'),
         required=False,
     )
-    area__lt = forms.IntegerField(
+    polygon_area__lt = forms.IntegerField(
         label=_('Area (sq ft) less than'),
         required=False,
     )
-    width__gt = forms.IntegerField(
+    polygon_width__gt = forms.IntegerField(
         label=_('Width (ft) greater than'),
         required=False,
     )
-    width__lt = forms.IntegerField(
+    polygon_width__lt = forms.IntegerField(
         label=_('Width (ft) less than'),
         required=False,
     )
@@ -196,8 +196,9 @@ class FiltersForm(forms.Form):
             yield self[field]
 
     def default_filters(self):
-        for field in ('available_property__status__in', 'area__gt', 'area__lt',
-                      'width__gt', 'width__lt',):
+        for field in ('available_property__status__in', 'polygon_area__gt',
+                      'polygon_area__lt', 'polygon_width__gt',
+                      'polygon_width__lt',):
             yield self[field]
 
     def other_filters(self):

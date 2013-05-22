@@ -34,7 +34,7 @@ class OwnerResource(ModelResource):
         fields = ('name', 'owner_type',)
         filtering = {
             'name': ALL,
-            'owner_type': ALL,
+            'owner_type': ALL_WITH_RELATIONS,
         }
 
 
@@ -43,7 +43,17 @@ class LotResource(ModelResource):
     owner = fields.ForeignKey(OwnerResource, 'owner', null=True, blank=True)
 
     def build_filters(self, filters={}):
-        orm_filters = super(LotResource, self).build_filters(filters=filters)
+        orm_filters_filters = filters.copy()
+
+        # Make owner__owner_type__in look the way tastypie wants it to
+        try:
+            owner_types = ','.join(orm_filters_filters.getlist('owner__owner_type__in[]'))
+            del orm_filters_filters['owner__owner_type__in[]']
+            orm_filters_filters['owner__owner_type__in'] = owner_types
+        except Exception:
+            pass
+
+        orm_filters = super(LotResource, self).build_filters(filters=orm_filters_filters)
 
         # Remove empty bbox filter
         if 'centroid__within' in orm_filters and orm_filters['centroid__within'] == '':

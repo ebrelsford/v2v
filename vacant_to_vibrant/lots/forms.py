@@ -105,7 +105,7 @@ class FiltersForm(forms.Form):
             ('private', 'private'),
             ('public', 'public'),
         ),
-        initial=(),
+        initial=('private', 'public',),
         required=False,
         widget=forms.CheckboxSelectMultiple(),
     )

@@ -123,6 +123,23 @@ define(
             this.addPointPublicGridLayer();
         },
 
+        addGridLayer: function(baseUrl) {
+            if (!baseUrl) return;
+            var instance = this;
+            var url = baseUrl + '{z}/{x}/{y}.json?callback={cb}';
+            var gridLayer = new L.UtfGrid(url, {
+                resolution: this.options.gridResolution,
+            });
+            if (instance.options.clickHandler) {
+                gridLayer.on('click', function(e) {
+                    e.targetType = 'utfgrid';
+                    instance.options.clickHandler(e);
+                });
+            }
+            instance.addLayer(gridLayer);
+            return gridLayer;
+        },
+
         addPointPrivateTilesLayer: function() {
             if (!(this.options.enablePointPrivateTiles && this.viewType === 'tiles')) return;
             if (!this.options.pointPrivateTilesBaseUrl) return;
@@ -134,20 +151,7 @@ define(
 
         addPointPrivateGridLayer: function() {
             if (!(this.options.enablePointPrivateTiles && this.viewType === 'tiles')) return;
-            if (!this.options.pointPrivateGridBaseUrl) return;
-            var url = this.options.pointPrivateGridBaseUrl 
-                + '{z}/{x}/{y}.json?callback={cb}';
-            this.gridPointPrivate = new L.UtfGrid(url, {
-                resolution: this.options.gridResolution,
-            });
-            if (this.options.clickHandler) {
-                var map = this;
-                map.gridPointPrivate.on('click', function(e) {
-                    e.targetType = 'utfgrid';
-                    map.options.clickHandler(e);
-                });
-            }
-            this.addLayer(this.gridPointPrivate);
+            this.gridPointPrivate = this.addGridLayer(this.options.pointPrivateGridBaseUrl);
             this.tileLayers['private'].push(this.gridPointPrivate);
         },
 
@@ -162,20 +166,7 @@ define(
 
         addPointPublicGridLayer: function() {
             if (!(this.options.enablePointPublicTiles && this.viewType === 'tiles')) return;
-            if (!this.options.pointPublicGridBaseUrl) return;
-            var url = this.options.pointPublicGridBaseUrl 
-                + '{z}/{x}/{y}.json?callback={cb}';
-            this.gridPointPublic = new L.UtfGrid(url, {
-                resolution: this.options.gridResolution,
-            });
-            if (this.options.clickHandler) {
-                var map = this;
-                map.gridPointPublic.on('click', function(e) {
-                    e.targetType = 'utfgrid';
-                    map.options.clickHandler(e);
-                });
-            }
-            this.addLayer(this.gridPointPublic);
+            this.gridPointPublic = this.addGridLayer(this.options.pointPublicGridBaseUrl);
             this.tileLayers['public'].push(this.gridPointPublic);
         },
 

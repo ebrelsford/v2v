@@ -280,3 +280,16 @@ th {
     padding: 10px;
     text-align: center;
 }
+
+.leaflet-control-loading {
+    background: url(/static/img/loading.gif);
+    display: none;
+}
+.leaflet-control-zoom a.leaflet-control-loading {
+    display: none;
+}
+
+.leaflet-control-loading.is-loading,
+.leaflet-control-zoom a.leaflet-control-loading.is-loading {
+    display: block;
+}

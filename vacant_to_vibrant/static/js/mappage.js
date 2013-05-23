@@ -24,6 +24,7 @@ define(
      * Update counts
      */
     function updateCounts() {
+        lotsMap.fire('dataloading');
         var baseUrl = $('#map').data('countsbaseurl');
         $('#map').singleminded({
             name: 'counts',
@@ -31,6 +32,9 @@ define(
                 $.each(data, function(label, count) {
                     $('.' + label).text(count);
                 });
+            })
+            .always(function() {
+                lotsMap.fire('dataload');
             }),
         });
     }
@@ -122,7 +126,7 @@ define(
                     }
                     catch (e) {}
                 }
-                // TODO get url dynamically
+                // TODO get url via Django.js
                 if (featureId !== null) {
                     $('#map').singleminded({
                         name: 'clickHandler',
@@ -137,6 +141,8 @@ define(
 
             messageControl: true,
             messageDefault: 'Zoom in for details',
+
+            loadingControl: true,
 
             enableLayersControl: true,
 

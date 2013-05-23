@@ -18,6 +18,7 @@ define(
         'leaflet.geojsonbounds',
         'leaflet.lotlayer',
         'leaflet.message',
+        'leaflet.loading',
 
         // Other plugins
         'jquery.singleminded',
@@ -339,6 +340,7 @@ define(
             instance.choroplethBoundaryLayerName = layer_name;
             var url = Django.url('inplace:layer_view', { name: layer_name });
             instance.choroplethLayers = {};
+            instance.fire('dataloading');
             $('#map').singleminded({
                 name: 'addChoroplethBoundaries',
                 jqxhr: $.getJSON(url, function(data) {
@@ -362,6 +364,9 @@ define(
                     }
 
                     instance.updateChoropleth($.param(instance.filters));
+                })
+                .always(function() {
+                    instance.fire('dataload');
                 }),
             });
         },
@@ -454,11 +459,15 @@ define(
 
             // Update colors and labels
             var url = instance.options.choroplethBaseUrl + '?' + queryString;
+            instance.fire('dataloading');
             $('#map').singleminded({
                 name: 'addChoroplethLayer',
                 jqxhr: $.getJSON(url, function(data) {
                     instance.updateChoroplethStyles(data);
                     instance.updateChoroplethLabels(data);
+                })
+                .always(function() {
+                    instance.fire('dataload');
                 }),
             });
 

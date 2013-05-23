@@ -1,7 +1,4 @@
 {% extends "lots/map/choro.html" %}
-{% comment %}
-{% extends "lots/map/cluster_main.html" %}
-{% endcomment %}
 {% load i18n %}
 
 {% block below_map %}
@@ -16,9 +13,6 @@
 
 <div class="home-map-filters grid grid-3-4">
 
-    {% comment %}
-    Render form fields
-    {% endcomment %}
     <form>
         {% for hidden_field in filters.hidden_fields %}
         {{ hidden_field }}
@@ -38,9 +32,9 @@
 
         <h2>{% trans "Known use" %}</h2>
         <div class="filters filters-known-use">
-            <form>
-                {{ filters.known_use__name__in }}
-            </form>
+            {% with filtergroup=filters.known_use_filters %}
+            {% include "lots/_filtergroup.html" %}
+            {% endwith %}
         </div>
         
         <div class="filters-default-wrapper {% if "lots.view_all_filters" in perms %}visible{% endif %}">
@@ -48,28 +42,18 @@
                 <div class="help-text">These are not usually visible to users</div>
             </h2>
             <div class="filters filters-default">
-                <form>
-                    {% for field in filters.default_filters %}
-                    <div class="filter">
-                        {{ field.label }}: {{ field }}
-                        <div class="help-text">{{ field.help_text|safe }}</div>
-                    </div>
-                    {% endfor %}
-                </form>
+                {% with filtergroup=filters.default_filters %}
+                {% include "lots/_filtergroup.html" %}
+                {% endwith %}
             </div>
         </div>
 
         {% if "lots.view_all_filters" in perms %}
         <h2>{% trans "Admin filters" %}</h2>
         <div class="filters filters-admin">
-            <form>
-                {% for field in filters.admin_filters %}
-                <div class="filter">
-                    {{ field.label }}: {{ field }}
-                    <div class="help-text">{{ field.help_text|safe }}</div>
-                </div>
-                {% endfor %}
-            </form>
+            {% with filtergroup=filters.admin_filters %}
+            {% include "lots/_filtergroup.html" %}
+            {% endwith %}
         </div>
         {% endif %}
 
@@ -78,49 +62,32 @@
     <div class="grid grid-1-3">
         <h2>{% trans "View" %}</h2>
         <div class="filters filters-view">
-            <form>
-                {% for field in filters.view_filters %}
-                <div class="filter">
-                    {{ field.label }}: {{ field }}
-                    <div class="help-text">{{ field.help_text|safe }}</div>
-                </div>
-                {% endfor %}
-            </form>
+            {% with filtergroup=filters.view_filters %}
+            {% include "lots/_filtergroup.html" %}
+            {% endwith %}
         </div>
 
         <h2>{% trans "Other filters" %}</h2>
         <div class="filters filters-other">
-            <form>
-                {% for field in filters.other_filters %}
-                <div>
-                    {{ field.label }}: {{ field }}
-                </div>
-                {% endfor %}
-            </form>
+            {% with filtergroup=filters.other_filters %}
+            {% include "lots/_filtergroup.html" %}
+            {% endwith %}
         </div>
     </div>
 
     <div class="grid grid-1-3">
         <h2>{% trans "Who owns it" %}</h2>
         <div class="filters filters-owners">
-            <form>
-                {% for field in filters.owners_filters %}
-                <div>
-                    {{ field.label }}: {{ field }}
-                </div>
-                {% endfor %}
-            </form>
+            {% with filtergroup=filters.owners_filters %}
+            {% include "lots/_filtergroup.html" %}
+            {% endwith %}
         </div>
 
         <h2>{% trans "Private" %}</h2>
         <div class="filters filters-private">
-            <form>
-                {% for field in filters.private_filters %}
-                <div>
-                    {{ field.label }}: {{ field }}
-                </div>
-                {% endfor %}
-            </form>
+            {% with filtergroup=filters.private_filters %}
+            {% include "lots/_filtergroup.html" %}
+            {% endwith %}
         </div>
     </div>
 

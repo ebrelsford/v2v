@@ -70,6 +70,8 @@ class FiltersForm(forms.Form):
         initial='tiles',
         label=_('view type'),
         required=False,
+        help_text=_('How the data is shown on the map. Select "summary view" '
+                    'to enable more filters.'),
     )
     boundary_layer = forms.ChoiceField(
         choices=(
@@ -79,10 +81,6 @@ class FiltersForm(forms.Form):
         initial='City Council Districts',
         label=_('boundaries'),
         required=False,
-
-        # TODO hide / disable .view-type-choropleth if view type is not
-        # choropleth
-        widget=forms.Select(attrs={ 'class': 'view-type-choropleth', })
     )
 
     participant_types = forms.MultipleChoiceField(
@@ -159,8 +157,6 @@ class FiltersForm(forms.Form):
         required=False,
     )
 
-    # TODO lot filters! Dynamically add to form?
-
     def __init__(self, *args, **kwargs):
         super(FiltersForm, self).__init__(*args, **kwargs)
         self.fields['known_use__name__in'].choices = ([('None', 'None'),] +
@@ -213,3 +209,27 @@ class FiltersForm(forms.Form):
     def private_filters(self):
         for field in ('has_licenses', 'has_violations', 'violations_count',):
             yield self[field]
+
+    def known_use_filters(self):
+        for field in ('known_use__name__in',):
+            yield self[field]
+
+    #
+    # Filters by view type
+    #
+    def choropleth_filters(self):
+        return (
+            'available_property__status__in', 'polygon_area__gt',
+            'polygon_area__lt', 'polygon_width__gt', 'polygon_width__lt',
+            'owner__owner_type__in', 'view_type', 'boundary_layer',
+            'participant_types', 'owner__name__icontains',
+            'has_available_property', 'has_billing_account', 'has_tax_account',
+            'has_parcel', 'has_water_parcel', 'has_land_use_area',
+            'has_licenses', 'has_violations', 'violations_count',
+            'zoning_district__zoning_type__in', 'known_use__name__in',
+            'water_parcel__impervious_area__lt', 'boundary_zipcodes',
+            'boundary_city_council_districts',
+        )
+
+    def tiles_filters(self):
+        return ('owner__owner_type__in', 'view_type',)

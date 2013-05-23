@@ -434,7 +434,7 @@ define(
             var newLabel;
             var queryString = instance.options.choroplethQueryString;
             if (filters) {
-                newLabel = filters.boundary_layer;
+                newLabel = filters['boundary_layer'];
                 queryString = $.param(filters);
             }
 
@@ -526,13 +526,12 @@ define(
          */
 
         updateFilters: function(filters) {
-            // If the view type is changing, let the map know
-            if (filters.view_type && filters.view_type !== this.viewType) {
-                this.viewType = filters.view_type;
-                this.changeView(this.viewType);
-                this.fire('viewtypechange', { viewType: this.viewType });
-            }
             this.filters = filters;
+
+            // If the view type is changing, let the map know
+            if (filters['view_type'] && filters['view_type'] !== this.viewType) {
+                this.changeView(filters['view_type']);
+            }
 
             // Now, reload everything
             this.reloadChoropleth(filters);
@@ -543,6 +542,8 @@ define(
         },
 
         changeView: function(viewType) {
+            this.viewType = viewType;
+            this.fire('viewtypechange', { viewType: viewType });
             if (viewType === 'tiles') {
                 // Show tiles
                 this.showTiles();

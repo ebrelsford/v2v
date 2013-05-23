@@ -65,7 +65,22 @@ define(
         }
     }
 
+    function updateViewType(viewType) {
+        var viewTypeFilterSelector = '.view-type-' + viewType;
+
+        // {En,Dis}able filters that should be {en,dis}abled for this view type
+        $('.filter :input').prop('disabled', function(i, value) {
+            return !$(this).parents('.filter').is(viewTypeFilterSelector);
+        });
+
+        // TODO for viewType===tiles, reset filters that are disabled 
+        //  (ensures sanity and that counts are appropriate)
+    }
+
     function onFilterChange() {
+        if ($(this).attr('name') === 'view_type') {
+            updateViewType($(this).val());
+        }
         updateCounts();
         lotsMap.updateFilters($('form').serializeObject());
     }
@@ -147,11 +162,6 @@ define(
 
         });
 
-        // Load filters from search string in URL, update map/counts accordingly
-        deserializeFilters();
-        onFilterChange();
-
-
         /*
          * Map events
          */
@@ -173,6 +183,14 @@ define(
             $('#streetview-container').hide();
         });
 
+        // Load filters from search string in URL, update map/counts accordingly
+        deserializeFilters();
+        onFilterChange();
+
+        // Update map and UI with the current view
+        var currentView = $(':input[name=view_type]').val();
+        updateViewType(currentView);
+        lotsMap.changeView(currentView);
 
         /*
          * Filters events

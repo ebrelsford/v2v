@@ -1,0 +1,8 @@
+<form>
+    {% for field in filtergroup %}
+    <div class="filter {% if field.name in filters.choropleth_filters %}view-type-choropleth{% endif %} {% if field.name in filters.tiles_filters %}view-type-tiles{% endif %}"> 
+        {{ field.label }}: {{ field }}
+        <div class="help-text">{{ field.help_text|safe }}</div>
+    </div>
+    {% endfor %}
+</form>

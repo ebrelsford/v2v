@@ -72,12 +72,6 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-STATICFILES_STORAGE = 'require.storage.OptimizedCachedStaticFilesStorage'
-
-REQUIRE_BASE_URL = STATIC_URL + 'js'
-REQUIRE_DEBUG = True
-REQUIRE_JS = 'lib/require.js'
-
 SECRET_KEY = get_env_variable('PHILLY_SECRET_KEY')
 
 TEMPLATE_LOADERS = (
@@ -151,7 +145,6 @@ INSTALLED_APPS = (
     'inplace.boundaries',
     'jsonfield',
     'mptt',
-    'require',
     'reversion',
     'reversion_compare',
     'south',

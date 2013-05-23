@@ -283,8 +283,9 @@ th {
 
 .leaflet-control-loading {
     background: url(/static/img/loading.gif);
-    display: none;
 }
+
+.leaflet-control-loading,
 .leaflet-control-zoom a.leaflet-control-loading {
     display: none;
 }

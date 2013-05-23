@@ -27,7 +27,6 @@ define(['leaflet'], function(L) {
         },
 
         addLoader: function() {
-                       console.log('add ' + this._dataLoaders);
             // Add to the loaders we are tracking
             this._dataLoaders++;
 
@@ -38,7 +37,6 @@ define(['leaflet'], function(L) {
         },
 
         removeLoader: function() {
-                       console.log('remove ' + this._dataLoaders);
             // Subtract from the loaders we are tracking
             this._dataLoaders--;
 

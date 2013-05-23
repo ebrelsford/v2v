@@ -506,18 +506,13 @@ define(
             instance.on('zoomend', function() {
                 var zoom = instance.getZoom();
                 if (zoom >= 16) {
-                    // Hide choropleth
-                    if (instance.choropleth) {
-                        instance.hideChoropleth();
-                        instance.messageControl.hide();
-                    }
-                    // Polygon visibility is controlled by vector layers
-
+                    instance.messageControl.hide();
+                    instance.hideChoropleth();
                 }
                 else {
+                    instance.messageControl.show();
                     if (instance.viewType === 'choropleth') {
                         instance.showChoropleth();
-                        instance.messageControl.show();
                     }
                 }
 

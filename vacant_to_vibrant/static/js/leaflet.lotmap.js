@@ -421,8 +421,8 @@ define(
             $.each(counts, function(layerLabel, count) {
                 var layer = instance.choroplethLayers[layerLabel];
                 var label = layer._label;
-                // TODO dynamic by layer name OR when we get counts?
-                var content = 'Council District ' + layerLabel + '<br/ >' + count + ' lots';
+                var content = instance.choroplethBoundaryLayerName.slice(0, -1);
+                content += ' ' + layerLabel + '<br/ >' + count + ' lots';
                 if (label) {
                     layer.updateLabelContent(content);
                 }

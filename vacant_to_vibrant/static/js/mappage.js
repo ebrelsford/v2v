@@ -3,6 +3,7 @@ define(
         // Dependencies we'll use the return values from
         'jquery',
         'leaflet',
+        'django',
 
         // Internal plugins
         'jquery.singleminded',
@@ -15,7 +16,7 @@ define(
         // Leaflet Map mixin
         'leaflet.lotmap',
 
-    ], function($, L) {
+    ], function($, L, Django) {
 
     var lotsMap;
 
@@ -126,11 +127,11 @@ define(
                     }
                     catch (e) {}
                 }
-                // TODO get url via Django.js
+                var url = Django.url('inplace:lots_lot_detail_popup', { pk: featureId });
                 if (featureId !== null) {
                     $('#map').singleminded({
                         name: 'clickHandler',
-                        jqxhr: $.get('/places/lots/lot/' + featureId + '/popup/', function(response) {
+                        jqxhr: $.get(url, function(response) {
                             $('#popup-content')
                                 .html(response)
                                 .removeClass('loading');

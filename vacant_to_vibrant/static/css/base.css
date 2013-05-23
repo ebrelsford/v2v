@@ -281,6 +281,10 @@ th {
     text-align: center;
 }
 
+.leaflet-control-message.is-hidden {
+    display: none;
+}
+
 .leaflet-control-loading {
     background: url(/static/img/loading.gif);
 }

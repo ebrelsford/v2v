@@ -18,6 +18,14 @@ define(['leaflet'], function(L) {
             return this._container;
         },
 
+        hide: function() {
+            L.DomUtil.addClass(this._container, 'is-hidden');
+        },
+
+        show: function() {
+            L.DomUtil.removeClass(this._container, 'is-hidden');
+        },
+
         setMessage: function(html) {
             this._update(html);
         },

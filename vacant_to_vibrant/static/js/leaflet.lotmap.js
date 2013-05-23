@@ -509,6 +509,7 @@ define(
                     // Hide choropleth
                     if (instance.choropleth) {
                         instance.hideChoropleth();
+                        instance.messageControl.hide();
                     }
                     // Polygon visibility is controlled by vector layers
 
@@ -516,6 +517,7 @@ define(
                 else {
                     if (instance.viewType === 'choropleth') {
                         instance.showChoropleth();
+                        instance.messageControl.show();
                     }
                 }
 

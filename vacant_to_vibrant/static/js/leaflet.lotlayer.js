@@ -3,7 +3,14 @@
  * of lots.
  */
 
-define(['leaflet', 'lib/leaflet.lvector'], function(L, lvector) {
+define(
+    [
+        'leaflet',
+        'lib/leaflet.lvector'
+        'json2',
+
+    ], function(L, lvector, JSON) {
+
     lvector.LotLayer = lvector.GeoJSONLayer.extend({
 
         initialize: function(options) {
@@ -61,10 +68,14 @@ define(['leaflet', 'lib/leaflet.lvector'], function(L, lvector) {
 
         _makeJsonRequest: function(url, callback) {
             var instance = this;
+            this.getMap().fire('dataloading');
             $.getJSON(url, function(data) {
                 // Ensure this is the layer
                 callback.apply(instance, [data,]);
-            });
+            })
+            .always(function() {
+                this.getMap().fire('dataload');
+            }),
         },
 
     });

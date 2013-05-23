@@ -8,6 +8,7 @@ requirejs.config({
         'leaflet': '//cdn.leafletjs.com/leaflet-0.5.1/leaflet',
         'underscore': 'lib/underscore-min',
         'async': 'lib/async',
+        'json2': 'lib/json2',
     },
     shim: {
         'django': {
@@ -19,6 +20,9 @@ requirejs.config({
         },
         'underscore': {
             exports: '_',
+        },
+        'json2': {
+            exports: 'JSON',
         },
         'lib/leaflet.lvector': {
             deps: ['leaflet'],

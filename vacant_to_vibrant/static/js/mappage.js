@@ -4,6 +4,7 @@ define(
         'jquery',
         'leaflet',
         'django',
+        'json2',
 
         // Internal plugins
         'jquery.singleminded',
@@ -16,7 +17,7 @@ define(
         // Leaflet Map mixin
         'leaflet.lotmap',
 
-    ], function($, L, Django) {
+    ], function($, L, Django, JSON) {
 
     var lotsMap;
 

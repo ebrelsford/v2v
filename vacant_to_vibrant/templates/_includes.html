@@ -13,9 +13,5 @@
     <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
 <![endif]-->
 
-{% comment %}
-<script src="{{ STATIC_URL }}js/lib/json2.js"></script>
-{% endcomment %}
-
 {% django_js_init jquery=false i18n=false csrf=false %}
 {% require_module "app" %}

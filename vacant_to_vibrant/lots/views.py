@@ -164,7 +164,7 @@ class LotsCountBoundaryView(JSONResponseView):
         return self.get_counts()
 
     def get_counts(self):
-        boundary_layer = self.request.GET.get('boundary_layer', '')
+        boundary_layer = self.request.GET.get('choropleth_boundary_layer', '')
         filters = LotResource().build_filters(filters=self.request.GET)
 
         try:

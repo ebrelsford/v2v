@@ -73,7 +73,7 @@ class FiltersForm(forms.Form):
         help_text=_('How the data is shown on the map. Select "summary view" '
                     'to enable more filters.'),
     )
-    boundary_layer = forms.ChoiceField(
+    choropleth_boundary_layer = forms.ChoiceField(
         choices=(
             ('City Council Districts', _('city council districts')),
             ('zipcodes', _('zipcodes')),
@@ -188,7 +188,7 @@ class FiltersForm(forms.Form):
             yield self[field]
 
     def view_filters(self):
-        for field in ('view_type', 'boundary_layer',):
+        for field in ('view_type', 'choropleth_boundary_layer',):
             yield self[field]
 
     def default_filters(self):
@@ -221,7 +221,7 @@ class FiltersForm(forms.Form):
         return (
             'available_property__status__in', 'polygon_area__gt',
             'polygon_area__lt', 'polygon_width__gt', 'polygon_width__lt',
-            'owner__owner_type__in', 'view_type', 'boundary_layer',
+            'owner__owner_type__in', 'view_type', 'choropleth_boundary_layer',
             'participant_types', 'owner__name__icontains',
             'has_available_property', 'has_billing_account', 'has_tax_account',
             'has_parcel', 'has_water_parcel', 'has_land_use_area',

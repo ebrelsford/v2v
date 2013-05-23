@@ -310,7 +310,7 @@ define(
         showChoropleth: function() {
             var instance = this;
             if (!instance.choropleth) {
-                instance.addChoroplethBoundaries(instance.filters['boundary_layer']);
+                instance.addChoroplethBoundaries(instance.filters['choropleth_boundary_layer']);
             }
             else {
                 instance.addLayer(instance.choropleth);
@@ -439,7 +439,7 @@ define(
             var newLabel;
             var queryString = instance.options.choroplethQueryString;
             if (filters) {
-                newLabel = filters['boundary_layer'];
+                newLabel = filters['choropleth_boundary_layer'];
                 queryString = $.param(filters);
             }
 

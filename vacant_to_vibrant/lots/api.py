@@ -87,6 +87,10 @@ class LotResource(ModelResource):
         # Add boundary filters
         for f in filters:
             if not f.startswith('boundary_'): continue
+
+            # Skip if we've already seen it
+            if f in orm_filters: continue
+
             orm_filters[f] = filters.getlist(f)
 
         # TODO fix weird hybrid of API/Django form-processing
@@ -153,7 +157,7 @@ class LotResource(ModelResource):
             if not f.startswith('boundary_'): continue
 
             # Convert to layer name
-            layer = f.replace('boundary_', '').replace('_', ' ')
+            layer = f.replace('boundary_', '').replace('_', ' ').replace('[]', '')
 
             # Save for later
             boundary[layer] = filters.pop(f)

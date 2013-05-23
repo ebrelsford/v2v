@@ -75,7 +75,7 @@ define(['leaflet'], function(L) {
         if (!this.options.loadingControl) return;
 
         // Create and add the control to the map
-        this.loadingControl = L.Control.loading();
+        var loadingControl = this.loadingControl = L.Control.loading();
         this.addControl(this.loadingControl);
 
         // When a layer is added to the map, add listeners for begin and end
@@ -83,10 +83,10 @@ define(['leaflet'], function(L) {
         this.on('layeradd', function(e) {
             e.layer.on({
                 loading: function(e) {
-                    this._map.loadingControl.addLoader();
+                    loadingControl.addLoader();
                 },
                 load: function(e) {
-                    this._map.loadingControl.removeLoader();
+                    loadingControl.removeLoader();
                 },
             });
         });
@@ -96,10 +96,10 @@ define(['leaflet'], function(L) {
         // reflected in the above layer events.
         this.on({
             dataloading: function(e) {
-                this.loadingControl.addLoader();
+                loadingControl.addLoader();
             },
             dataload: function(e) {
-                this.loadingControl.removeLoader();
+                loadingControl.removeLoader();
             },
         });
     });

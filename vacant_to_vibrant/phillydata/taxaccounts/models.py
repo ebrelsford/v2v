@@ -151,4 +151,4 @@ class TaxAccount(models.Model):
     )
 
     def __unicode__(self):
-        return '%s: %s' % (self.brt_number, self.property_address,)
+        return '%s: %s' % (self.brt_number, self.property_address or '',)

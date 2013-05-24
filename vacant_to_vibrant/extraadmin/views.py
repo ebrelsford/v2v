@@ -21,6 +21,8 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
 
     # TODO validation--there have to be watchers or organizers selected!
 
+    # TODO refactor into main map view as an Action
+
     def form_valid(self, form):
         subject = form.cleaned_data['subject']
         message = form.cleaned_data['message']

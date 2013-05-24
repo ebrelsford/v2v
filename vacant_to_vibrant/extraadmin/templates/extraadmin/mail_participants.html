@@ -1,21 +1,7 @@
 {% load applicationcontent_tags compress i18n inplace_tags %}
 
-{% block media %}
-<script>
-    function mail_participants_update_counts(with_bbox) {
-        var url = '{% app_reverse "mail_participants_count" "extraadmin.urls" %}?' 
-            + $('form').serialize();
-
-        $.getJSON(url, function(data) {
-            $('.organizer-count').text(data.organizers);
-            $('.watcher-count').text(data.watchers);
-        });
-    }
-</script>
-{% endblock %}
-
 {% block content_main %}
-<div>
+<div class="extraadmin-mail-participants-page">
     <h1>{% trans "Email Participants" %}</h1>
     <div>
         <span>{% trans "Please enter your email below." %}</span>
@@ -28,35 +14,6 @@
                 This email will be sent to <span class="organizer-count">X</span> organizers and <span class="watcher-count">Y</span> watchers in the following lots:
             </div>
             {% include "lots/map/mail_participants.html" %}
-            <script>
-                $(document).ready(function() {
-
-                    LOTS_MAP.on('moveend', function(e) {
-                        var g = JSON.stringify(LOTS_MAP.getBounds().toGeoJson())
-                        $(':input[name="centroid__within"]').val(
-                            JSON.stringify(LOTS_MAP.getBounds().toGeoJson())
-                        );
-                        mail_participants_update_counts(true);
-                    });
-
-                    // initialize counts
-                    mail_participants_update_counts(false);
-
-                    $(':input').change(function() {
-                        mail_participants_update_counts(true);
-
-                        if ($(':input[name="participant_types"]:checked').length > 0) {
-                            LOTS_MAP.reloadLotCentroidLayer($('form').serialize());
-                        }
-                        else {
-                            // if there aren't any participant types selected,
-                            // don't show anything--no emails will go out
-                            LOTS_MAP.clearLotCentroidLayer();
-                        }
-                    });
-
-                });
-            </script>
             <input type="submit" value="{% trans "submit" %}" />
         </form>
     </div>

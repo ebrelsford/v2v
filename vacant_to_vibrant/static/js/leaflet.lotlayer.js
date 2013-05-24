@@ -6,7 +6,7 @@
 define(
     [
         'leaflet',
-        'lib/leaflet.lvector'
+        'lib/leaflet.lvector',
         'json2',
 
     ], function(L, lvector, JSON) {
@@ -75,7 +75,7 @@ define(
             })
             .always(function() {
                 this.getMap().fire('dataload');
-            }),
+            });
         },
 
     });

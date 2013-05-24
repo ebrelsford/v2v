@@ -23,14 +23,46 @@ define(['jquery'], function($) {
 
     require(['chosen.jquery_ready']);
 
-    if ($('.lot-detail-page').length > 0) {
-        require(['lotdetailpage']);
+    /*
+     * TODO Split page-specific bits into their own build profiles or module
+     */
 
+    if ($('.lot-base-page').length > 0) {
+        require(['lotbasepage']);
+    }
+
+    if ($('.lot-detail-page').length > 0) {
         require(['fancybox'], function() {
             $(document).ready(function() {
                 $('.fancybox').fancybox();
             });
         });
+    }
+
+    if ($('.add-organizer-page').length > 0) {
+        function toggle_cbo_fields(show) {
+            var $cbo_fields = $(':input[name="facebook_page"],:input[name="url"]').parents('tr');
+            if (show) {
+                $cbo_fields.show();
+            }
+            else {
+                $cbo_fields.hide();
+            }
+        }
+
+        function is_cbo() {
+            return ($(':input[name="type"] :selected').text() 
+                === 'community based organization');
+        }
+
+        $(document).ready(function() {
+            toggle_cbo_fields(is_cbo());
+
+            $(':input[name="type"]').change(function() {
+                toggle_cbo_fields(is_cbo());
+            });
+        });
+        
     }
 
     if ($('.home-map-page').length > 0) {

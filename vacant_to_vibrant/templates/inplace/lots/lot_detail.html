@@ -3,7 +3,7 @@
 
 {% block title %}{{ block.super }} | {{ lot.address_line1 }}{% endblock %}
 
-{% block body_class %}lot-detail-page{% endblock %}
+{% block body_class %}{{ block.super }} lot-base-page lot-detail-page{% endblock %}
 
 {% block content %}
 {{ block.super }}

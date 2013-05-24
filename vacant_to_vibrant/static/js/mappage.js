@@ -7,6 +7,8 @@ define(
         'json2',
 
         // Internal plugins
+        'jquery.activitystream',
+        'jquery.searchbar',
         'jquery.singleminded',
         'jquery.streetview',
 
@@ -20,6 +22,23 @@ define(
     ], function($, L, Django, JSON) {
 
     var lotsMap;
+
+
+    /*
+     * Get bounds for searching
+     */
+    function getBounds(map) {
+        var bounds = map.options.maxBounds;
+        var seBounds = bounds.getSouthEast();
+        var nwBounds = bounds.getNorthWest();
+
+        return [
+            seBounds.lng,
+            seBounds.lat,
+            nwBounds.lng,
+            nwBounds.lat
+        ];
+    }
 
 
     /*
@@ -236,6 +255,27 @@ define(
             window.location = $(this).data('baseurl') + serializeFilters();
             return false;
         });
+
+
+        // Fire up the activitystream
+        $('.activity-stream-container').activitystream();
+
+
+        // Fire up searchbar
+        $('.searchbar')
+            .searchbar({
+                bounds: getBounds(lotsMap),
+                city: 'Philadelphia',
+                state: 'PA',
+                errorMessage: "Sorry, it doesn't seem that the address you " +
+                    "entered is in Philadelphia. Try again?",
+                loadingSelector: '.loading',
+                warningSelector: '.warning',
+            })
+            .on('searchresultfound', function(e, data) {
+                lotsMap.setView([data.latitude, data.longitude], 15);
+            });
+
     });
 
     return lotsMap;

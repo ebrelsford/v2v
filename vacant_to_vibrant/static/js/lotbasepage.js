@@ -1,3 +1,6 @@
+/*
+ * Module for all pages derived from the base lot page.
+ */
 define(['jquery', 'leaflet', 'jquery.streetview'], function($, L) {
 
     $(document).ready(function() {

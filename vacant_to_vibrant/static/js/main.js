@@ -6,18 +6,15 @@
 
 define(['jquery'], function($) {
 
+    /*
+     * Global form-related scripts
+     */
     $(document).ready(function() {
         /*
-        * Disable submit buttons on forms once they have been submitted once.
-        */
+         * Disable submit buttons on forms once they have been submitted once.
+         */
         $('form').submit(function() {
             $(this).find('input[type="submit"]').attr('disabled', 'disabled');
-        });
-    });
-
-    require(['jquery.activitystream'], function() {
-        $(document).ready(function() {
-            $('.activity-stream-container').activitystream();
         });
     });
 
@@ -32,11 +29,7 @@ define(['jquery'], function($) {
     }
 
     if ($('.lot-detail-page').length > 0) {
-        require(['fancybox'], function() {
-            $(document).ready(function() {
-                $('.fancybox').fancybox();
-            });
-        });
+        require(['lotdetailpage']);
     }
 
     if ($('.add-organizer-page').length > 0) {
@@ -66,6 +59,13 @@ define(['jquery'], function($) {
     }
 
     if ($('.home-map-page').length > 0) {
+
+        require(['jquery.activitystream'], function() {
+            $(document).ready(function() {
+                $('.activity-stream-container').activitystream();
+            });
+        });
+
         require(['mappage', 'jquery.searchbar',], function(LOTS_MAP) {
 
             function getBounds(map) {

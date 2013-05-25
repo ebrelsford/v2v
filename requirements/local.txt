@@ -1,0 +1,2 @@
+django-pdb==0.3.2
+ipdb==0.7

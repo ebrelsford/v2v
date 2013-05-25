@@ -153,6 +153,9 @@ INSTALLED_APPS = (
     # first-party, project-generic
     #
     'libapps.activity_stream',
+    'libapps.content.files',
+    'libapps.content.notes',
+    'libapps.content.photos',
     'libapps.facebook',
     'libapps.organize',
     'libapps.twitter',
@@ -164,9 +167,7 @@ INSTALLED_APPS = (
     'cms',
     'contact',
     'extraadmin',
-    'files',
     'lots',
-    'notes',
     'pathways',
     'phillydata',
     'phillydata.availableproperties',
@@ -181,7 +182,6 @@ INSTALLED_APPS = (
     'phillydata.violations',
     'phillydata.waterdept',
     'phillydata.zoning',
-    'photos',
     'survey',
     'sync',
 )

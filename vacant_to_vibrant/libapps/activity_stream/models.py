@@ -57,11 +57,11 @@ PointField(blank=True, null=True).contribute_to_class(Action, 'place')
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from libapps.content.files.models import File
+from libapps.content.notes.models import Note
+from libapps.content.photos.models import Photo
 from libapps.organize.models import Organizer, Watcher
 
-from files.models import File
-from notes.models import Note
-from photos.models import Photo
 from .signals import action
 
 

@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from content.forms import ContentForm
+from ..forms import ContentForm
 from .models import Photo
 
 

@@ -1,4 +1,4 @@
-from content.forms import ContentForm
+from ..forms import ContentForm
 from .models import Note
 
 

@@ -2,8 +2,9 @@ import re
 
 from django.conf import settings
 
+from libapps.content.notes.models import Note
+
 from lots.models import Lot
-from notes.models import Note
 
 
 class MailReader(object):

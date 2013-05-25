@@ -4,10 +4,11 @@ from django.views.generic import FormView, TemplateView
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from feincms.content.application.models import app_reverse
 
+from libapps.organize.mail import mass_mail_organizers, mass_mail_watchers
+from libapps.organize.models import Organizer, Watcher
+
 from forms import MailParticipantsForm
 from generic.views import JSONResponseView
-from organize.mail import mass_mail_organizers, mass_mail_watchers
-from organize.models import Organizer, Watcher
 from lots.api import LotResource
 from lots.models import Lot
 

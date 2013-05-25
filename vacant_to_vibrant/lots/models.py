@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from inplace.models import Place, PlaceManager
 
-from organize.models import Organizer, Watcher
+from libapps.organize.models import Organizer, Watcher
+
 from phillydata.availableproperties.models import AvailableProperty
 from phillydata.landuse.models import LandUseArea
 from phillydata.opa.models import BillingAccount

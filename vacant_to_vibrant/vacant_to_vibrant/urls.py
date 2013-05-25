@@ -15,7 +15,7 @@ urlpatterns += staticfiles_urlpatterns()
 
 urlpatterns += patterns('',
     url(r'^lots/', include('lots.urls', 'lots')),
-    url(r'^organize/', include('organize.urls', 'organize')),
+    url(r'^organize/', include('libapps.organize.urls', 'organize')),
     url(r'^places/', include('inplace.urls', 'inplace')),
     url(r'^parcels/', include('phillydata.parcels.urls', 'parcels')),
 

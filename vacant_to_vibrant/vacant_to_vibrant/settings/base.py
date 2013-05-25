@@ -150,7 +150,12 @@ INSTALLED_APPS = (
     'south',
 
     #
-    # first-party
+    # first-party, project-generic
+    #
+    'libapps.organize',
+
+    #
+    # first-party, project-specific
     #
     'activity_stream',
     'blog',
@@ -161,7 +166,6 @@ INSTALLED_APPS = (
     'files',
     'lots',
     'notes',
-    'organize',
     'pathways',
     'phillydata',
     'phillydata.availableproperties',

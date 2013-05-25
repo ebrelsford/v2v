@@ -16,13 +16,14 @@ from inplace.boundaries.models import Boundary
 from inplace.views import (GeoJSONListView, KMLView, GeoJSONResponseMixin,
                            PlacesDetailView)
 
+from libapps.organize.forms import OrganizerForm, WatcherForm
+from libapps.organize.models import Organizer, Watcher
+from libapps.organize.notify import notify_participants_new_obj
+from libapps.organize.views import EditParticipantMixin
+
 from files.forms import FileForm
 from generic.views import CSVView, JSONResponseView
 from notes.forms import NoteForm
-from organize.forms import OrganizerForm, WatcherForm
-from organize.models import Organizer, Watcher
-from organize.notify import notify_participants_new_obj
-from organize.views import EditParticipantMixin
 from photos.forms import PhotoForm
 from survey.forms import SurveyFormForForm
 from survey.models import SurveyFormEntry

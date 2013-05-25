@@ -152,12 +152,12 @@ INSTALLED_APPS = (
     #
     # first-party, project-generic
     #
+    'libapps.activity_stream',
     'libapps.organize',
 
     #
     # first-party, project-specific
     #
-    'activity_stream',
     'blog',
     'cms',
     'contact',
@@ -221,7 +221,7 @@ RECAPTCHA_PUBLIC_KEY = get_env_variable('PHILLY_RECAPTCHA_PUBLIC_KEY')
 ORGANIZE_PARTICIPANT_SALT = get_env_variable('PHILLY_ORGANIZE_PARTICIPANT_SALT')
 
 ACTSTREAM_SETTINGS = {
-    'MANAGER': 'activity_stream.managers.PlaceActionManager',
+    'MANAGER': 'libapps.activity_stream.managers.PlaceActionManager',
     'MODELS': (
         'auth.user',
         'files.file',

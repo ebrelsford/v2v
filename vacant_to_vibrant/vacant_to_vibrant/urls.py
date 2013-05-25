@@ -28,7 +28,7 @@ urlpatterns += patterns('',
     url(r'^survey/', include('survey.urls')),
 
     url('^activity/', include('actstream.urls')),
-    url('^activity-stream/', include('activity_stream.urls')),
+    url('^activity-stream/', include('libapps.activity_stream.urls')),
 
     url(r'^api/', include(v1_api.urls)),
 

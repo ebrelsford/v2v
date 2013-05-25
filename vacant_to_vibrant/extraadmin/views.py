@@ -1,5 +1,4 @@
 from django.contrib.contenttypes.models import ContentType
-from django.http import QueryDict
 from django.views.generic import FormView, TemplateView
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin

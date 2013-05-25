@@ -155,6 +155,7 @@ INSTALLED_APPS = (
     'libapps.activity_stream',
     'libapps.facebook',
     'libapps.organize',
+    'libapps.twitter',
 
     #
     # first-party, project-specific
@@ -183,7 +184,6 @@ INSTALLED_APPS = (
     'photos',
     'survey',
     'sync',
-    'twitter',
 )
 
 LOGGING = {

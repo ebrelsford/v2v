@@ -1,11 +1,7 @@
 from django.conf.urls.defaults import patterns, url
 
 from .views import (MailParticipantsView, MailParticipantsCountView,
-                    MailParticipantsSuccessView, ExtraAdminIndex)
-
-cms = patterns('',
-    url(r'^$', ExtraAdminIndex.as_view()),
-)
+                    MailParticipantsSuccessView)
 
 urlpatterns = patterns('',
     url(r'^participants/mail/$', MailParticipantsView.as_view(),

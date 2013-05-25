@@ -1,4 +1,4 @@
-{% load applicationcontent_tags compress i18n inplace_tags %}
+{% load i18n %}
 
 {% block content_main %}
 <div>
@@ -10,15 +10,6 @@
             <a href="{% url "admin:index" %}">Backend</a>
             <div class="admin-action-description">
                 Change most settings for the site.
-            </div>
-        </li>
-        {% endif %}
-
-        {% if "organize.email_participants" in perms %}
-        <li class="admin-action">
-            <a href="{% app_reverse "mail_participants" "extraadmin.urls" %}">Mail Participants</a>
-            <div class="admin-action-description">
-                Send mass emails to organizers and watchers.
             </div>
         </li>
         {% endif %}

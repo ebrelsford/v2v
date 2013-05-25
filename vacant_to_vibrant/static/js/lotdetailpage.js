@@ -7,4 +7,4 @@ define(['jquery', 'fancybox',], function($) {
         $('.fancybox').fancybox();
     });
 
-};
+});

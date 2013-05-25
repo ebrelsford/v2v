@@ -1,82 +1,13 @@
 """
-Abstraction of 596 Acres' organize.views.
+Generic views for editing participants.
+
 """
 
-#
-# TODO allow participant on any type using contenttypes
-# TODO remove all references to Lot and bbl
-#
-
-import json
-
 from django.contrib import messages
-from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, render_to_response, redirect
-from django.template import RequestContext
-from django.views.generic import TemplateView
 from django.views.generic.base import ContextMixin
 from django.views.generic.edit import DeleteView
 
-from lots.models import Lot
-from .forms import OrganizerForm
 from .models import Organizer, Watcher
-
-
-def details(request, bbl=None):
-    organizers = Organizer.objects.filter(lot__bbl=bbl)
-
-    details = []
-    for organizer in organizers:
-        details.append({
-            'name': organizer.name,
-            'phone': organizer.phone,
-            'email': organizer.email,
-            'url': organizer.url,
-            'type': organizer.type.name,
-            'lots': [organizer.lot.bbl],
-        })
-    return HttpResponse(json.dumps(details), mimetype='application/json')
-
-
-def details_tab(request, bbl=None):
-    lot = get_object_or_404(Lot, bbl=bbl)
-
-    return render_to_response('organize/tab.html', {
-        'organizers': lot.organizer_set.all()
-    }, context_instance=RequestContext(request))
-
-
-class AddParticipantSuccessView(TemplateView):
-    model = None
-
-    def get_context_data(self, **kwargs):
-        lot = get_object_or_404(Lot, bbl=kwargs['bbl'])
-
-        context = super(AddParticipantSuccessView, self).get_context_data(**kwargs)
-        context['lot'] = lot
-        try:
-            context['object'] = self.model.objects.filter(email_hash__istartswith=kwargs['email_hash'])[0]
-        except Exception:
-            raise Http404
-        return context
-
-
-def edit_organizer(request, bbl=None, id=None):
-    lot = get_object_or_404(Lot, bbl=bbl)
-    organizer = get_object_or_404(Organizer, id=id)
-
-    if request.method == 'POST':
-        form = OrganizerForm(request.POST, instance=organizer)
-        if form.is_valid():
-            organizer = form.save()
-            return redirect('lots.views.details', bbl=bbl)
-    else:
-        form = OrganizerForm(instance=organizer)
-
-    return render_to_response('organize/edit_organizer.html', {
-        'form': form,
-        'lot': lot,
-    }, context_instance=RequestContext(request))
 
 
 class EditParticipantMixin(ContextMixin):

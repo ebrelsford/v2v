@@ -1,4 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
+from django.http import QueryDict
 from django.views.generic import FormView, TemplateView
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
@@ -19,33 +20,21 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
     permission_required = ('organize.email_participants')
     template_name = 'extraadmin/mail_participants.html'
 
-    # TODO validation--there have to be watchers or organizers selected!
-
-    # TODO refactor into main map view as an Action
-
     def form_valid(self, form):
         subject = form.cleaned_data['subject']
         message = form.cleaned_data['message']
+        filters = form.cleaned_data['filters']
 
-        participant_types = form.cleaned_data['participant_types']
+        resource = LotResource()
+        orm_filters = resource.build_filters(filters=filters)
+        lot_pks = resource.apply_filters(self.request, orm_filters).values_list('pk', flat=True)
 
-        orm_filters = LotResource().build_filters(filters=self.request.POST)
-        lot_pks = Lot.objects.filter(**orm_filters).values_list('pk', flat=True)
+        participant_types = orm_filters.get('participant_types', [])
 
         if 'organizers' in participant_types:
-            organizers = Organizer.objects.filter(
-                content_type=ContentType.objects.get_for_model(Lot),
-                object_id__in=lot_pks,
-            ).distinct()
-            organizers = organizers.exclude(email='')
-            mass_mail_organizers(subject, message, organizers)
+            self._mail_organizers(lot_pks, subject, message)
         if 'watchers' in participant_types:
-            watchers = Watcher.objects.filter(
-                content_type=ContentType.objects.get_for_model(Lot),
-                object_id__in=lot_pks,
-            )
-            watchers = watchers.exclude(email='')
-            mass_mail_watchers(subject, message, watchers)
+            self._mail_watchers(lot_pks, subject, message)
 
         return super(MailParticipantsView, self).form_valid(form)
 
@@ -57,29 +46,58 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
     def get_success_url(self):
         return app_reverse('mail_participants_success', 'extraadmin.urls')
 
+    def _mail_organizers(self, lot_pks, subject, message):
+        organizers = Organizer.objects.filter(
+            content_type=ContentType.objects.get_for_model(Lot),
+            object_id__in=lot_pks,
+        ).distinct()
+        organizers = organizers.exclude(email='')
+        mass_mail_organizers(subject, message, organizers)
+
+    def _mail_watchers(self, lot_pks, subject, message):
+        watchers = Watcher.objects.filter(
+            content_type=ContentType.objects.get_for_model(Lot),
+            object_id__in=lot_pks,
+        )
+        watchers = watchers.exclude(email='')
+        mass_mail_watchers(subject, message, watchers)
+
 
 class MailParticipantsCountView(JSONResponseView):
 
     def get_context_data(self, **kwargs):
-        orm_filters = LotResource().build_filters(filters=self.request.GET)
-        lot_pks = Lot.objects.filter(**orm_filters).values_list('pk', flat=True)
+        participant_types = self._get_participant_types()
+        lot_pks = self.get_lots().values_list('pk', flat=True)
+        return {
+            'organizers': self._get_organizer_count(participant_types, lot_pks),
+            'watchers': self._get_watcher_count(participant_types, lot_pks),
+        }
+
+    def get_lots(self):
+        resource = LotResource()
+        orm_filters = resource.build_filters(filters=self.request.GET)
+        return resource.apply_filters(self.request, orm_filters)
+
+    def _get_participant_types(self):
+        return self.request.GET.getlist('participant_types', [])
+
+    def _get_watcher_count(self, participant_types, lot_pks):
         watcher_count = 0
-        organizer_count = 0
-        participant_types = self.request.GET.getlist('participant_types', [])
         if 'watchers' in participant_types:
             watcher_count = Watcher.objects.filter(
                 content_type=ContentType.objects.get_for_model(Lot),
                 object_id__in=lot_pks,
             ).distinct().count()
+        return watcher_count
+
+    def _get_organizer_count(self, participant_types, lot_pks):
+        organizer_count = 0
         if 'organizers' in participant_types:
             organizer_count = Organizer.objects.filter(
                 content_type=ContentType.objects.get_for_model(Lot),
                 object_id__in=lot_pks,
             ).distinct().count()
-        return {
-            'organizers': organizer_count,
-            'watchers': watcher_count,
-        }
+        return organizer_count
 
 
 class MailParticipantsSuccessView(LoginRequiredMixin, PermissionRequiredMixin,

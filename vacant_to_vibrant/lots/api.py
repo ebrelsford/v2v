@@ -47,8 +47,7 @@ class LotResource(ModelResource):
 
         # Make owner__owner_type__in look the way tastypie wants it to
         try:
-            owner_types = ','.join(orm_filters_filters.getlist('owner__owner_type__in[]'))
-            del orm_filters_filters['owner__owner_type__in[]']
+            owner_types = ','.join(orm_filters_filters.getlist('owner__owner_type__in'))
             orm_filters_filters['owner__owner_type__in'] = owner_types
         except Exception:
             pass
@@ -157,7 +156,7 @@ class LotResource(ModelResource):
             if not f.startswith('boundary_'): continue
 
             # Convert to layer name
-            layer = f.replace('boundary_', '').replace('_', ' ').replace('[]', '')
+            layer = f.replace('boundary_', '').replace('_', ' ')
 
             # Save for later
             boundary[layer] = filters.pop(f)

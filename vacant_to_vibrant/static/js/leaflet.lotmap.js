@@ -363,7 +363,7 @@ define(
                         instance.choropleth.addTo(instance);
                     }
 
-                    instance.updateChoropleth($.param(instance.filters));
+                    instance.updateChoropleth($.param(instance.filters, true));
                 })
                 .always(function() {
                     instance.fire('dataload');
@@ -440,7 +440,7 @@ define(
             var queryString = instance.options.choroplethQueryString;
             if (filters) {
                 newLabel = filters['choropleth_boundary_layer'];
-                queryString = $.param(filters);
+                queryString = $.param(filters, true);
             }
 
             // If boundaries don't yet exist or are new, load them

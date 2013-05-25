@@ -9,6 +9,7 @@ requirejs.config({
         'underscore': 'lib/underscore-min',
         'async': 'lib/async',
         'json2': 'lib/json2',
+        'spin': 'lib/spin.min',
     },
     shim: {
         'django': {

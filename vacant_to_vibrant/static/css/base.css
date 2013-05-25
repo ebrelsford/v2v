@@ -139,6 +139,18 @@ th {
     display: block;
 }
 
+.email-participants-container {
+    display: none;
+    min-height: 100px;
+    width: 100%;
+}
+
+.email-participants-container .spinner {
+    margin-left: auto;
+    margin-right: auto;
+    top: 50px !important;
+}
+
 #mainmenu {
     border-top: 1px solid black;
     border-bottom: 1px solid black;

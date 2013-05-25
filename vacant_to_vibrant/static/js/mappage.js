@@ -8,6 +8,7 @@ define(
 
         // Internal plugins
         'jquery.activitystream',
+        'jquery.emailparticipants',
         'jquery.searchbar',
         'jquery.singleminded',
         'jquery.streetview',
@@ -107,7 +108,9 @@ define(
             updateViewType($(this).val());
         }
         updateCounts();
-        lotsMap.updateFilters($('form').serializeObject());
+        var serializedFilters = $('.filters :input:not(.non-filter)').serializeObject();
+        lotsMap.updateFilters(serializedFilters);
+        lotsMap.fire('filterschange', { filters: serializedFilters, });
     }
 
     $(document).ready(function() {
@@ -198,6 +201,8 @@ define(
                 JSON.stringify(lotsMap.getBounds().toGeoJson())
             );
             updateCounts();
+            var serializedFilters = $('.filters :input:not(.non-filter)').serializeObject();
+            lotsMap.fire('filterschange', { filters: serializedFilters, });
         });
 
         lotsMap.on('lotclicked', function(data) {
@@ -259,6 +264,12 @@ define(
 
         // Fire up the activitystream
         $('.activity-stream-container').activitystream();
+
+
+        // Fire up the emailparticipants
+        $('.email-participants').emailparticipants({
+            filterContainer: lotsMap,   
+        });
 
 
         // Fire up searchbar

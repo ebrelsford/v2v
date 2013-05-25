@@ -153,6 +153,7 @@ INSTALLED_APPS = (
     # first-party, project-generic
     #
     'libapps.activity_stream',
+    'libapps.facebook',
     'libapps.organize',
 
     #
@@ -162,7 +163,6 @@ INSTALLED_APPS = (
     'cms',
     'contact',
     'extraadmin',
-    'facebook',
     'files',
     'lots',
     'notes',

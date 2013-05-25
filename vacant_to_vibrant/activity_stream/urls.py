@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-from activity_stream.views import PlaceActivityFeed, PlaceActivityListView
+from .views import PlaceActivityFeed, PlaceActivityListView
 
 
 urlpatterns = patterns('',

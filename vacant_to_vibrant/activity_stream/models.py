@@ -8,7 +8,7 @@ from actstream.actions import now
 from actstream.exceptions import check_actionable_model
 from actstream.models import Action
 
-from activity_stream.signals import action
+from .signals import action
 
 
 def place_action_handler(verb, **kwargs):

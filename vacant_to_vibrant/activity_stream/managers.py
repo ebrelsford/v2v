@@ -3,7 +3,7 @@ from django.contrib.gis.geos import Polygon
 
 from actstream.managers import ActionManager, stream
 
-from activity_stream.query import PlaceActivityQuerySet
+from .query import PlaceActivityQuerySet
 
 
 class PlaceActionManager(GeoManager, ActionManager):

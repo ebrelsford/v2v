@@ -4,6 +4,7 @@ from imapclient import IMAPClient
 
 from django.conf import settings
 
+
 def login():
     """
     Log in to the mailbox we will read from.
@@ -13,12 +14,14 @@ def login():
     imap.select_folder('INBOX')
     return imap
 
+
 def get_messages(imap):
     """
     Get messages from the given server.
     """
     messages = imap.search(['NOT SEEN'])
     return imap.fetch(messages, ['RFC822'])
+
 
 def consolidate_payloads(payload):
     """
@@ -30,6 +33,7 @@ def consolidate_payloads(payload):
         return filter(None, [consolidate_payloads(p) for p in payload])
     elif not payload.is_multipart() and payload.get_content_type() == 'text/plain':
         return payload.get_payload().strip()
+
 
 def get_mail():
     imap = login()
@@ -47,5 +51,4 @@ def get_mail():
 
     imap.close_folder()
     imap.logout()
-
     return mail

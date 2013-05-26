@@ -6,30 +6,30 @@ from django import template
 
 from generic.tags import (GetGenericRelationCount, GetGenericRelationList,
                           RenderGenericRelationList)
-from ..models import Organizer, Watcher
+from ..models import get_organizer_model, get_watcher_model
 
 register = template.Library()
 
 
 class RenderOrganizerList(RenderGenericRelationList):
-    model = Organizer
+    model = get_organizer_model()
 
 register.tag(RenderOrganizerList)
 
 
 class GetOrganizerList(GetGenericRelationList):
-    model = Organizer
+    model = get_organizer_model()
 
 register.tag(GetOrganizerList)
 
 
 class GetOrganizerCount(GetGenericRelationCount):
-    model = Organizer
+    model = get_organizer_model()
 
 register.tag(GetOrganizerCount)
 
 
 class GetWatcherCount(GetGenericRelationCount):
-    model = Watcher
+    model = get_watcher_model()
 
 register.tag(GetWatcherCount)

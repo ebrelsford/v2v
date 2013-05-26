@@ -19,12 +19,12 @@ from inplace.views import (GeoJSONListView, KMLView, GeoJSONResponseMixin,
 from libapps.content.files.forms import FileForm
 from libapps.content.notes.forms import NoteForm
 from libapps.content.photos.forms import PhotoForm
-from libapps.organize.forms import OrganizerForm, WatcherForm
-from libapps.organize.models import Organizer, Watcher
 from libapps.organize.notify import notify_participants_new_obj
 from libapps.organize.views import EditParticipantMixin
 
 from generic.views import CSVView, JSONResponseView
+from phillyorganize.forms import OrganizerForm, WatcherForm
+from phillyorganize.models import Organizer, Watcher
 from survey.forms import SurveyFormForForm
 from survey.models import SurveyFormEntry
 from .api import LotResource

@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.forms import HiddenInput, IntegerField, ModelChoiceField, ModelForm
 
 from notify import notify_participants_new_obj, notify_facilitators
-from models import Organizer, Watcher
+from models import get_organizer_model, get_watcher_model
 from .widgets import PrefixLabelTextInput
 
 
@@ -37,8 +37,7 @@ class ParticipantForm(ModelForm):
 
 class OrganizerForm(ParticipantForm):
     class Meta:
-        exclude = ('added', 'email_hash')
-        model = Organizer
+        model = get_organizer_model()
         widgets = {
             'facebook_page': PrefixLabelTextInput('facebook.com/'),
         }
@@ -48,7 +47,7 @@ class OrganizerForm(ParticipantForm):
         if not self.instance.id:
             is_creating = True
 
-        organizer = super(self.__class__, self).save(**kwargs)
+        organizer = super(OrganizerForm, self).save(**kwargs)
         if is_creating:
             notify_participants_new_obj(organizer)
             notify_facilitators(organizer)
@@ -57,5 +56,4 @@ class OrganizerForm(ParticipantForm):
 
 class WatcherForm(ParticipantForm):
     class Meta:
-        model = Watcher
-        exclude = ('added', 'email_hash')
+        model = get_watcher_model()

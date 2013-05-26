@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-from libapps.organize.models import Organizer, Watcher
+from phillyorganize.models import Organizer, Watcher
 
 from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
                     LotsGeoJSON, LotsGeoJSONPolygon, AddParticipantSuccessView,

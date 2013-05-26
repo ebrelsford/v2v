@@ -3,7 +3,7 @@ from django.core.mail import mail_managers
 from django.template.loader import render_to_string
 
 from .mail import mail_target_participants, mail_facilitators
-from .models import Participant
+from .models import get_participant_models
 
 
 def notify_managers(obj):
@@ -69,5 +69,5 @@ def notify_participant_type_new_obj(participant_class, obj):
 
 
 def notify_participants_new_obj(obj):
-    for participant_cls in Participant.__subclasses__():
+    for participant_cls in get_participant_models():
         notify_participant_type_new_obj(participant_cls, obj)

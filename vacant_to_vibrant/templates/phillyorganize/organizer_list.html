@@ -18,8 +18,8 @@
                     <td>{{ organizer.email }}</td>
                 </tr>
                 <tr>
-                    <th class="field-label">{% trans "notes" %}:</th>
-                    <td>{{ organizer.notes|urlize|linebreaks }}</td>
+                    <th class="field-label">{% trans "vision" %}:</th>
+                    <td>{{ organizer.vision|urlize|linebreaks }}</td>
                 </tr>
             </tbody>
         </table>
@@ -28,11 +28,11 @@
         <div class="admin-only">
 
             {% if "organize.change_organizer" in perms %}
-            <a href="{% url "admin:organize_organizer_change" organizer.pk %}">{% trans "Edit this organizer" %}</a>
+            <a href="{% url "admin:phillyorganize_organizer_change" organizer.pk %}">{% trans "Edit this organizer" %}</a>
             {% endif %}
 
             {% if "organize.delete_organizer" in perms %}
-            <a href="{% url "admin:organize_organizer_delete" organizer.pk %}">{% trans "Delete this organizer" %}</a>
+            <a href="{% url "admin:phillyorganize_organizer_delete" organizer.pk %}">{% trans "Delete this organizer" %}</a>
             {% endif %}
 
         </div>

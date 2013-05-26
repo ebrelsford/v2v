@@ -6,8 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from inplace.models import Place, PlaceManager
 
-from libapps.organize.models import Organizer, Watcher
-
 from phillydata.availableproperties.models import AvailableProperty
 from phillydata.landuse.models import LandUseArea
 from phillydata.opa.models import BillingAccount
@@ -16,6 +14,7 @@ from phillydata.parcels.models import Parcel
 from phillydata.taxaccounts.models import TaxAccount
 from phillydata.violations.models import Violation
 from phillydata.waterdept.models import WaterParcel
+from phillyorganize.models import Organizer, Watcher
 from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
 
 

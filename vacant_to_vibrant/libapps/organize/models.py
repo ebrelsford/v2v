@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.gis.db import models
+from django.core.exceptions import ImproperlyConfigured
+from django.db.models import get_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -18,8 +20,9 @@ class Participant(models.Model):
     name = models.CharField(_('name'), max_length=256)
     phone = models.CharField(_('phone'), max_length=32, null=True, blank=True)
     email = models.EmailField(_('email'))
-    email_hash = models.CharField(max_length=40, null=True, blank=True)
-    added = models.DateTimeField(auto_now_add=True)
+    email_hash = models.CharField(max_length=40, null=True, blank=True,
+                                  editable=False)
+    added = models.DateTimeField(auto_now_add=True, editable=False)
     added_by = models.ForeignKey(User, null=True, blank=True)
 
     content_type = models.ForeignKey(ContentType)
@@ -39,7 +42,7 @@ class Participant(models.Model):
         super(Participant, self).save(*args, **kwargs)
 
 
-class Organizer(Participant):
+class BaseOrganizer(Participant):
     """
     Someone publicly participating in something.
     """
@@ -61,11 +64,6 @@ class Organizer(Participant):
     def recent_change_label(self):
         return 'new organizer: %s' % self.name
 
-    class Meta:
-        permissions = (
-            ('email_organizers', 'Can send an email to all organizers'),
-        )
-
     def get_absolute_url(self):
         return "%s#organizer-%d" % (self.content_object.get_absolute_url(), self.pk)
 
@@ -73,8 +71,14 @@ class Organizer(Participant):
     def participation_adjective(cls):
         return 'organized'
 
+    class Meta:
+        abstract = True
+        permissions = (
+            ('email_organizers', 'Can send an email to all organizers'),
+        )
 
-class Watcher(Participant):
+
+class BaseWatcher(Participant):
     """
     Someone who is privately participating in something.
     """
@@ -88,6 +92,9 @@ class Watcher(Participant):
     def participation_adjective(cls):
         return 'watched'
 
+    class Meta:
+        abstract = True
+
 
 class OrganizerType(models.Model):
     """
@@ -100,13 +107,44 @@ class OrganizerType(models.Model):
         return self.name
 
 
+def get_organizer_model():
+    try:
+        organizer_model = settings.ORGANIZE['ORGANIZER_MODEL']
+        return get_model(*organizer_model.split('.'))
+    except Exception:
+        raise ImproperlyConfigured('Could not find a organizer model. Did you '
+                                   'set ORGANIZE.ORGANIZER_MODEL in your '
+                                   'settings.py?')
+
+def get_watcher_model():
+    try:
+        watcher_model = settings.ORGANIZE['WATCHER_MODEL']
+        return get_model(*watcher_model.split('.'))
+    except Exception:
+        raise ImproperlyConfigured('Could not find a watcher model. Did you '
+                                   'set ORGANIZE.WATCHER_MODEL in your '
+                                   'settings.py?')
+
+
+def get_participant_models():
+    def get_concrete_subclasses(model):
+        if model._meta.abstract:
+            parts = [get_concrete_subclasses(s) for s in model.__subclasses__()]
+            return reduce(lambda a, b: a + b, parts)
+        else:
+            return (model,)
+    return get_concrete_subclasses(Participant)
+
+
 #
 # Handle signals.
 #
 
 
-@receiver(post_save, sender=Organizer, dispatch_uid='organizer_subscribe_organizer_watcher')
-@receiver(post_save, sender=Watcher, dispatch_uid='watcher_subscribe_organizer_watcher')
+@receiver(post_save, sender=get_organizer_model(),
+          dispatch_uid='organizer_subscribe_organizer_watcher')
+@receiver(post_save, sender=get_watcher_model(),
+          dispatch_uid='watcher_subscribe_organizer_watcher')
 def subscribe_organizer_watcher(sender, created=False, instance=None, **kwargs):
     if created:
         # TODO subscribe Participant to mailing list

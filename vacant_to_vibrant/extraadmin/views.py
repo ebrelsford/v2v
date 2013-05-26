@@ -5,7 +5,7 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from feincms.content.application.models import app_reverse
 
 from libapps.organize.mail import mass_mail_organizers, mass_mail_watchers
-from libapps.organize.models import Organizer, Watcher
+from phillyorganize.models import Organizer, Watcher
 
 from forms import MailParticipantsForm
 from generic.views import JSONResponseView

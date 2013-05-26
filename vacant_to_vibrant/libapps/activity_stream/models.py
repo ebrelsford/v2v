@@ -60,7 +60,8 @@ from django.dispatch import receiver
 from libapps.content.files.models import File
 from libapps.content.notes.models import Note
 from libapps.content.photos.models import Photo
-from libapps.organize.models import Organizer, Watcher
+
+from phillyorganize.models import Organizer, Watcher
 
 from .signals import action
 

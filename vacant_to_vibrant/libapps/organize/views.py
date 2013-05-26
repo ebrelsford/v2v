@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.views.generic.base import ContextMixin
 from django.views.generic.edit import DeleteView
 
-from .models import Organizer, Watcher
+from .models import get_organizer_model, get_watcher_model
 
 
 class EditParticipantMixin(ContextMixin):
@@ -16,8 +16,8 @@ class EditParticipantMixin(ContextMixin):
         hash = self.get_participant_hash()
         context = super(EditParticipantMixin, self).get_context_data(**kwargs)
         context.update({
-            'organizers': Organizer.objects.filter(email_hash__istartswith=hash).order_by('added'),
-            'watchers': Watcher.objects.filter(email_hash__istartswith=hash).order_by('added'),
+            'organizers': get_organizer_model().objects.filter(email_hash__istartswith=hash).order_by('added'),
+            'watchers': get_watcher_model().objects.filter(email_hash__istartswith=hash).order_by('added'),
         })
         return context
 
@@ -43,16 +43,16 @@ class DeleteParticipantView(DeleteView):
 
     def _get_success_message(self):
         verb = 'working on'
-        if isinstance(self.object, Organizer):
+        if isinstance(self.object, get_organizer_model()):
             verb = 'organizing'
-        elif isinstance(self.object, Watcher):
+        elif isinstance(self.object, get_watcher_model()):
             verb = 'watching'
         return 'You are no longer %s %s.' % (verb, self.object.content_object)
 
 
 class DeleteOrganizerView(DeleteParticipantView):
-    model = Organizer
+    model = get_organizer_model()
 
 
 class DeleteWatcherView(DeleteParticipantView):
-    model = Watcher
+    model = get_watcher_model()

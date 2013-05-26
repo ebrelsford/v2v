@@ -1,13 +1,6 @@
 from django.contrib import admin
 
-from .models import Organizer, OrganizerType, Watcher
-
-
-class OrganizerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'phone', 'added',)
-    list_filter = ('added',)
-    readonly_fields = ('content_object',)
-    search_fields = ('name', 'email',)
+from .models import OrganizerType
 
 
 class OrganizerTypeAdmin(admin.ModelAdmin):
@@ -15,13 +8,4 @@ class OrganizerTypeAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class WatcherAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'phone', 'added',)
-    list_filter = ('added',)
-    readonly_fields = ('content_object',)
-    search_fields = ('name', 'email',)
-
-
-admin.site.register(Organizer, OrganizerAdmin)
 admin.site.register(OrganizerType, OrganizerTypeAdmin)
-admin.site.register(Watcher, WatcherAdmin)

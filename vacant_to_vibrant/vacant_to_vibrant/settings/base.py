@@ -182,6 +182,7 @@ INSTALLED_APPS = (
     'phillydata.violations',
     'phillydata.waterdept',
     'phillydata.zoning',
+    'phillyorganize',
     'survey',
     'sync',
 )
@@ -227,8 +228,8 @@ ACTSTREAM_SETTINGS = {
         'files.file',
         'lots.lot',
         'notes.note',
-        'organize.organizer',
-        'organize.watcher',
+        'phillyorganize.organizer',
+        'phillyorganize.watcher',
         'photos.photo',
     ),
     'USE_JSONFIELD': True,
@@ -278,3 +279,8 @@ HONEYPOT_FIELD_NAME = 'officeaddress'
 HONEYPOT_VALUE = '123 Could Not Exist St'
 
 LOT_MAP_TILE_URLS = {}
+
+ORGANIZE = {
+    'ORGANIZER_MODEL': 'phillyorganize.Organizer',
+    'WATCHER_MODEL': 'phillyorganize.Watcher',
+}

@@ -17,21 +17,19 @@
         organizers sign up on the lot and notes are added to it. If this was an
         accident or if you change your mind in the future, you can stop watching
         this lot at any time on <a href="{% url "lots:edit_participant" hash=participant.email_hash %}">this page</a>. You should receive an email with this link soon.</p>
-        {% if nearby_lots %}
+
+        {% if lot.nearby %}
         <p>Also, here are some lots near this one you might be interested in:
-        (TODO add back)
-        {% comment %}
             <ul class="nearby-lots">
-                {% for nearby in nearby_lots %}
+                {% for nearby in lot.nearby %}
                 <li>
-                    <a href="{{ nearby.get_absolute_url }}">{{ nearby|lotname:"group" }}</a>
-                    {{ nearby|lot_short_description }}
+                    <a href="{{ nearby.get_absolute_url }}">{{ nearby.address_line1 }}</a>
                 </li>
                 {% endfor %}
             </ul>
-        {% endcomment %}
         </p>
         {% endif %}
+
         <p>
             Let your friends know you're watching this lot! Share it on Twitter and Facebook:
             <div>

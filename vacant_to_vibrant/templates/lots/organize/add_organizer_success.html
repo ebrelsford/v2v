@@ -17,21 +17,18 @@
  
         <p>Be aware that your contact information is now posted publicly on the <a href="{{ lot.get_absolute_url }}">lot's page</a> so others who are interested in the site can get in touch with you.</p>
 
-        {% if nearby_lots %}
+        {% if lot.nearby %}
         <p>Also, here are some lots near this one you might be interested in:
-        (TODO add again)
-        {% comment %}
             <ul class="nearby-lots">
-                {% for nearby in nearby_lots %}
+                {% for nearby in lot.nearby %}
                 <li>
-                    <a href="{{ nearby.get_absolute_url }}">{{ nearby|lotname:"group" }}</a>
-                    {{ nearby|lot_short_description }}
+                    <a href="{{ nearby.get_absolute_url }}">{{ nearby.address_line1 }}</a>
                 </li>
                 {% endfor %}
             </ul>
-        {% endcomment %}
         </p>
         {% endif %}
+
         <p>
             Let your friends know you're organizing here! Share it on Twitter and Facebook:
             <div>

@@ -10,19 +10,15 @@
     <div>
         <p>Success! Your information has been added to the system and will appear once an administrator looks over it.</p>
 
-        {% if nearby_lots %}
-        <p>Also, here are some lots near this one you might be interested in:
-        (TODO add again)
-        {% comment %}
+        {% if lot.nearby %}
+        <p>Also, here are some lots near this one you might know something about or be interested in:
             <ul class="nearby-lots">
-                {% for nearby in nearby_lots %}
+                {% for nearby in lot.nearby %}
                 <li>
-                    <a href="{{ nearby.get_absolute_url }}">{{ nearby|lotname:"group" }}</a>
-                    {{ nearby|lot_short_description }}
+                    <a href="{{ nearby.get_absolute_url }}">{{ nearby.address_line1 }}</a>
                 </li>
                 {% endfor %}
             </ul>
-        {% endcomment %}
         </p>
         {% endif %}
     </div>

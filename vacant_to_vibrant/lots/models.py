@@ -125,6 +125,7 @@ class Lot(Place):
 
     organizers = GenericRelation(Organizer)
     watchers = GenericRelation(Watcher)
+    steward_projects = GenericRelation('steward.StewardProject')
 
     group = models.ForeignKey('LotGroup',
         blank=True,

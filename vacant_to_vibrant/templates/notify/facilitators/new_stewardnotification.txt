@@ -1,0 +1,9 @@
+{% extends "notify/facilitators/base.txt" %}
+
+{% block details %}A new land steward was posted on {{ target }}!
+
+This information will not be live on the site until you approve it.
+
+View and change it here: http://{{ BASE_URL }}{% url "admin:steward_stewardnotification_change" obj.pk %}
+
+Approve it here: http://{{ BASE_URL }}{% url "admin:steward_stewardnotification_changelist" %}?status=IP{% endblock %}

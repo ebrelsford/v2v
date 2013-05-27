@@ -125,6 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django.contrib.webdesign',
 
     #
     # third-party
@@ -133,6 +134,7 @@ INSTALLED_APPS = (
     'chosen',
     'compressor',
     'contact_form',
+    'django_monitor',
     'djangojs',
     'elephantblog',
     'feincms',
@@ -183,6 +185,7 @@ INSTALLED_APPS = (
     'phillydata.waterdept',
     'phillydata.zoning',
     'phillyorganize',
+    'steward',
     'survey',
     'sync',
 )

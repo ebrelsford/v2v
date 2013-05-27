@@ -19,7 +19,7 @@
     <a href="{% url "lots:add_watcher" pk=lot.pk %}">{% trans "Watch this lot" %}</a>
     <a href="{% url "lots:add_organizer" pk=lot.pk %}">{% trans "Become an organizer" %}</a>
 
-    <a href="{% url "lots:add_organizer" pk=lot.pk %}" style="float: right;">{% trans "Already using this lot? Let us know!" %}</a>
+    <a href="{% url "lots:add_stewardnotification" pk=lot.pk %}" style="float: right;">{% trans "Already using this lot? Let us know!" %}</a>
 </div>
 
 <div class="clear"></div>

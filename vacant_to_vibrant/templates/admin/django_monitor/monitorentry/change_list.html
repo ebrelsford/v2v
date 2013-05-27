@@ -1,0 +1,73 @@
+{% extends "admin/base_site.html" %}
+{% load admin_list i18n static %}
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />
+  {{ media.css }}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+{{ media.js }}
+{% endblock %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+  {% block breadcrumbs %}
+    <div class="breadcrumbs">
+      <a href="../../">
+        {% trans "Home" %}
+      </a>
+       &rsaquo;
+       <a href="../">
+         Monitor
+      </a>
+      &rsaquo;
+      Moderation Queue
+    </div>
+  {% endblock %}
+
+{% block coltype %}flex{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <div>
+      {% block result_list %}
+      <table width = "100%" class="module" id="changelist">
+      <caption>Moderation Queue</caption>
+      <thead>
+      <tr>
+            <th>App</th><th>Model</th>
+            <th>{{ ip_descr }}</th><th>{{ ch_descr }}</th></tr>
+      </thead>
+      {% for model in model_list %}
+      <tr class="{% cycle row1,row2 %}">
+          <td>{{ model.app_name }}</td>
+          <td>{{ model.model_name|capfirst }}</td>
+          <td>{% if model.pending %}
+                  <a href="{{ model.admin_url }}?status={{ ip_status }}">{{ model.pending }}</a>
+              {% else %}
+                  &nbsp;
+              {% endif %}
+          </td>
+          <td>{% if model.challenged %}
+                  <a href="{{ model.admin_url }}?status={{ ch_status }}">{{ model.challenged }}</a>
+              {% else %}
+                  &nbsp;
+              {% endif %}
+          </td>
+      </tr>
+      {% empty %}
+          <tr class="row1"><th span="row">No pending/challenged objects in queue.</th>
+          <th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th>
+          </tr>
+      {% endfor %}
+      </table>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
+

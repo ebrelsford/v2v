@@ -1,4 +1,4 @@
-{% extends "organize/notifications/facilitators/base.txt" %}
+{% extends "notify/facilitators/base.txt" %}
 
 {% block details %}Someone called {{ obj.name }} started organizing {{ target }}!
 

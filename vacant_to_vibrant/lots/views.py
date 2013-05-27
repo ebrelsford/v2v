@@ -19,12 +19,13 @@ from inplace.views import (GeoJSONListView, KMLView, GeoJSONResponseMixin,
 from libapps.content.files.forms import FileForm
 from libapps.content.notes.forms import NoteForm
 from libapps.content.photos.forms import PhotoForm
-from libapps.organize.notify import notify_participants_new_obj
+from libapps.organize.notifications import notify_participants_new_obj
 from libapps.organize.views import EditParticipantMixin
 
 from generic.views import CSVView, JSONResponseView
 from phillyorganize.forms import OrganizerForm, WatcherForm
 from phillyorganize.models import Organizer, Watcher
+from steward.forms import StewardNotificationForm
 from survey.forms import SurveyFormForForm
 from survey.models import SurveyFormEntry
 from .api import LotResource
@@ -324,6 +325,49 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
         return [
             'lots/organize/add_%s_success.html' % self._get_participant_type(),
         ]
+
+
+class AddStewardNotificationView(CreateView):
+    form_class = StewardNotificationForm
+    template_name = 'lots/steward/stewardnotification_add.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AddStewardNotificationView, self).get_context_data(**kwargs)
+        context.update({
+            'lot': Lot.objects.get(pk=self.kwargs['pk']),
+        })
+        return context
+
+    def get_initial(self):
+        initial = super(AddStewardNotificationView, self).get_initial()
+        try:
+            object_id = self.kwargs['pk']
+        except KeyError:
+            raise Http404
+        initial.update({
+            'content_type': ContentType.objects.get_for_model(Lot),
+            'object_id': object_id,
+        })
+        return initial
+
+    def get_success_url(self):
+        try:
+            return reverse('lots:add_stewardnotification_success',
+                           kwargs={
+                               'pk': self.object.object_id,
+                           })
+        except Exception:
+            raise Http404
+
+
+class AddStewardNotificationSuccessView(TemplateView):
+    template_name = 'lots/steward/stewardnotification_add_success.html'
+
+    def get_context_data(self, **kwargs):
+
+        context = super(AddStewardNotificationSuccessView, self).get_context_data(**kwargs)
+        context['lot'] = get_object_or_404(Lot, pk=kwargs['pk'])
+        return context
 
 
 class AddContentView(CreateView):

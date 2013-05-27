@@ -1,0 +1,21 @@
+{% extends "lots/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ block.super }}: {% trans "Already using this lot" %}{% endblock %}
+
+{% block body_class %}{{ block.super }} add-steward-page{% endblock %}
+
+{% block lot_content %}
+{{ block.super }}
+<div>
+    <h3>{% trans "I'm already using this lot" %}</h3>
+    <div>
+        <p>
+            {% blocktrans %}
+            Awesome! Tell us a little about yourself.
+            {% endblocktrans %}
+        </p>
+        {% include "steward/_stewardnotification_form.html" %}
+    </div>
+</div>
+{% endblock %}

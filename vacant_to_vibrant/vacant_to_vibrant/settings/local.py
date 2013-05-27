@@ -4,6 +4,10 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TASTYPIE_FULL_DEBUG = DEBUG
 
+FACILITATORS = {
+    'global': ['facilitator@v2v.org',],
+}
+
 TIME_ZONE = 'America/New_York'
 
 LOGGING = {

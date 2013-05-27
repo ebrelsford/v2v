@@ -1,5 +1,5 @@
 {% extends "lots/map/choro.html" %}
-{% load i18n %}
+{% load i18n webdesign %}
 
 {% block below_map %}
 
@@ -150,34 +150,14 @@
     <div>
         <h2>{% trans "Recent News" %}</h2>
         <div>
-            Fusce rutrum dui ornare erat bibendum venenatis. Maecenas blandit
-            velit at eros tristique vitae auctor nibh tincidunt. Etiam et ante
-            at lectus malesuada lobortis vel vel purus. Mauris sit amet nulla
-            nisi, ac aliquam arcu. Mauris dapibus venenatis nisi et vestibulum.
-            Mauris sed sapien orci. Class aptent taciti sociosqu ad litora
-            torquent per conubia nostra, per inceptos himenaeos. Fusce mi
-            sapien, consequat non vulputate ut, cursus sit amet arcu. Aliquam
-            lectus eros, congue at mollis id, faucibus a ipsum. Morbi placerat
-            aliquam rutrum. Nullam rhoncus turpis ipsum, sed sodales urna. Nunc
-            ac neque dui, id blandit turpis. Integer id quam eu lacus imperdiet
-            luctus.
+            {% lorem p random %}
         </div>
     </div>
 
     <div>
         <h2>{% trans "Upcoming Events" %}</h2>
         <div>
-            Fusce rutrum dui ornare erat bibendum venenatis. Maecenas blandit
-            velit at eros tristique vitae auctor nibh tincidunt. Etiam et ante
-            at lectus malesuada lobortis vel vel purus. Mauris sit amet nulla
-            nisi, ac aliquam arcu. Mauris dapibus venenatis nisi et vestibulum.
-            Mauris sed sapien orci. Class aptent taciti sociosqu ad litora
-            torquent per conubia nostra, per inceptos himenaeos. Fusce mi
-            sapien, consequat non vulputate ut, cursus sit amet arcu. Aliquam
-            lectus eros, congue at mollis id, faucibus a ipsum. Morbi placerat
-            aliquam rutrum. Nullam rhoncus turpis ipsum, sed sodales urna. Nunc
-            ac neque dui, id blandit turpis. Integer id quam eu lacus imperdiet
-            luctus.
+            {% lorem p random %}
         </div>
     </div>
 

@@ -4,6 +4,8 @@ from phillyorganize.models import Organizer, Watcher
 
 from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
                     LotsGeoJSON, LotsGeoJSONPolygon, AddParticipantSuccessView,
+                    AddStewardNotificationView,
+                    AddStewardNotificationSuccessView,
                     AddPhotoView, AddNoteView, AddFileView, LotsCountView,
                     LotsCountBoundaryView, LotsCSV, LotsKML)
 
@@ -47,6 +49,14 @@ urlpatterns = patterns('',
     url(r'^organize/(?P<hash>[^/]{30,})/edit/$',
         EditLotParicipantView.as_view(),
         name='edit_participant'),
+
+    url(r'^(?P<pk>\d+)/steward/add/$',
+        AddStewardNotificationView.as_view(),
+        name='add_stewardnotification'),
+
+    url(r'^(?P<pk>\d+)/steward/add/success/$',
+        AddStewardNotificationSuccessView.as_view(),
+        name='add_stewardnotification_success'),
 
     url(r'^(?P<pk>\d+)/photos/add/$',
         AddPhotoView.as_view(),

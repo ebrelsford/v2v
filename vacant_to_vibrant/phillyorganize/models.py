@@ -15,12 +15,14 @@ class ParticipantMixin(models.Model):
         abstract = True
 
 
-class Organizer(ParticipantMixin, BaseOrganizer):
-    vision = models.TextField(_('vision'),
-        blank=True,
-        null=True,
-        help_text=_('What is your vision for this lot?'),
-    )
+class BasePhillyOrganizer(ParticipantMixin, BaseOrganizer):
+
+    class Meta:
+        abstract = True
+
+
+class Organizer(BasePhillyOrganizer):
+    pass
 
 
 class Watcher(ParticipantMixin, BaseWatcher):

@@ -1,4 +1,4 @@
-{% autoescape off %}{% block header %}{% endblock %}Greetings. There has been a change to something you are watching.
+{% autoescape off %}{% block header %}{% endblock %}Greetings. There has been a change to a lot you are watching.
 
 {% block details %}{% endblock %}
 

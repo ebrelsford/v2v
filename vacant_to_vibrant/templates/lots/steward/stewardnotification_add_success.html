@@ -1,0 +1,30 @@
+{% extends "lots/base.html" %}
+{% load facebook_tags i18n twitter_tags %}
+
+{% block title %}{{ block.super }}: {% trans "Already using this lot" %}{% endblock %}
+
+{% block lot_content %}
+{{ block.super }}
+<div>
+    <h3>{% trans "I'm already using this lot" %}</h3>
+    <div>
+        <p>Success! Your information has been added to the system and will appear once an administrator looks over it.</p>
+
+        {% if nearby_lots %}
+        <p>Also, here are some lots near this one you might be interested in:
+        (TODO add again)
+        {% comment %}
+            <ul class="nearby-lots">
+                {% for nearby in nearby_lots %}
+                <li>
+                    <a href="{{ nearby.get_absolute_url }}">{{ nearby|lotname:"group" }}</a>
+                    {{ nearby|lot_short_description }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% endcomment %}
+        </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

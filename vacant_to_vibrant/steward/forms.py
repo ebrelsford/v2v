@@ -9,7 +9,13 @@ class StewardNotificationForm(NotifyOnCreationForm):
     class Meta:
         model = StewardNotification
         fields = (
+            # Hidden fields
+            'content_type', 'object_id',
+
+            # Organizer fields
             'name', 'phone', 'email', 'type', 'url', 'facebook_page',
+
+            # StewardProject fields
             'use', 'land_tenure_status', 'support_organization',
             'others_get_involved', 'farm_stand', 'waiting_list', 'part_of_nga',
         )

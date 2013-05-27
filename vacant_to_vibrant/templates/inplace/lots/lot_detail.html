@@ -148,6 +148,19 @@
         <p>{% trans "This land is being stewarded by the following group:" %}
 
         {% with steward=lot.steward_projects.all.0 %}
+
+        {% if "organize.change_organizer" in perms %}
+        <div class="lot-detail-admin admin-only grid">
+            <a href="{% url "admin:phillyorganize_organizer_change" steward.organizer.pk %}">{% trans "Edit this steward's organizer" %}</a>
+        </div>
+        {% endif %}
+
+        {% if "steward.change_stewardproject" in perms %}
+        <div class="lot-detail-admin admin-only grid">
+            <a href="{% url "admin:steward_stewardproject_change" steward.pk %}">{% trans "Edit this steward" %}</a>
+        </div>
+        {% endif %}
+
         <table>
             <tr>
                 <th>{% trans "group name" %}:</th>

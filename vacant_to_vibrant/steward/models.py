@@ -146,3 +146,6 @@ def create_steward_project_and_organizer(sender, instance, **kwargs):
         land_tenure_status=instance.land_tenure_status,
     )
     steward_project.save()
+
+    steward_project.content_object.known_use = steward_project.use
+    steward_project.content_object.save()

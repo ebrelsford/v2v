@@ -45,3 +45,8 @@ class WatcherForm(ParticipantForm):
 
     class Meta:
         model = get_watcher_model()
+        widgets = {
+            'added_by': HiddenInput(),
+            'content_type': HiddenInput(),
+            'object_id': HiddenInput(),
+        }

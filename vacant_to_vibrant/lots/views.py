@@ -364,7 +364,6 @@ class AddStewardNotificationSuccessView(TemplateView):
     template_name = 'lots/steward/stewardnotification_add_success.html'
 
     def get_context_data(self, **kwargs):
-
         context = super(AddStewardNotificationSuccessView, self).get_context_data(**kwargs)
         context['lot'] = get_object_or_404(Lot, pk=kwargs['pk'])
         return context

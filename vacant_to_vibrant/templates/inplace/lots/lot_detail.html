@@ -419,6 +419,13 @@
 
     <div id="pathways" class="pathways lot-detail-side-section">
         <h2>{% trans "Pathways" %}</h2>
+
+        {% if "pathways.add_pathway" in perms %}
+        <div class="lot-detail-admin admin-only grid">
+            <a href="{% url "admin:pathways_pathway_add" %}">{% trans "Add a pathway" %}</a>
+        </div>
+        {% endif %}
+
         {% get_pathways for lot as pathways %}
         <ul>
             {% for pathway in pathways %}

@@ -21,7 +21,12 @@ class PathwayAdmin(item_editor.ItemEditor):
             'fields': [
                 ('is_active', 'author',),
                 ('name', 'slug',),
-            ]
+            ],
+        }],
+        ['Which lots does this pathway apply to?', {
+            'fields': [
+                ('private_owners', 'public_owners', 'specific_public_owners',),
+            ],
         }],
         item_editor.FEINCMS_CONTENT_FIELDSET,
     ]

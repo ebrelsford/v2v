@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load files_tags i18n inplace_tags notes_tags organize_tags photos_tags %}
+{% load files_tags i18n inplace_tags notes_tags organize_tags pathways_tags photos_tags %}
 
 {% block title %}{{ block.super }} | {{ lot.address_line1 }}{% endblock %}
 
@@ -419,19 +419,16 @@
 
     <div id="pathways" class="pathways lot-detail-side-section">
         <h2>{% trans "Pathways" %}</h2>
-        <div>
-            Fusce rutrum dui ornare erat bibendum venenatis. Maecenas blandit
-            velit at eros tristique vitae auctor nibh tincidunt. Etiam et ante
-            at lectus malesuada lobortis vel vel purus. Mauris sit amet nulla
-            nisi, ac aliquam arcu. Mauris dapibus venenatis nisi et vestibulum.
-            Mauris sed sapien orci. Class aptent taciti sociosqu ad litora
-            torquent per conubia nostra, per inceptos himenaeos. Fusce mi
-            sapien, consequat non vulputate ut, cursus sit amet arcu. Aliquam
-            lectus eros, congue at mollis id, faucibus a ipsum. Morbi placerat
-            aliquam rutrum. Nullam rhoncus turpis ipsum, sed sodales urna. Nunc
-            ac neque dui, id blandit turpis. Integer id quam eu lacus imperdiet
-            luctus.
-        </div>
+        {% get_pathways for lot as pathways %}
+        <ul>
+            {% for pathway in pathways %}
+            <li>
+                <a href="{{ pathway.get_absolute_url }}">
+                    {{ pathway.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 
 </div>

@@ -75,7 +75,17 @@ STATICFILES_FINDERS = (
 STATICFILES_STORAGE = 'require.storage.OptimizedCachedStaticFilesStorage'
 
 REQUIRE_BASE_URL = 'js'
+REQUIRE_BUILD_PROFILE = 'app.build.js'
+REQUIRE_DEBUG = False
+REQUIRE_ENVIRONMENT = 'node'
 REQUIRE_JS = 'lib/require.js'
+
+REQUIRE_STANDALONE_MODULES = {
+    'app': {
+        'out': 'app-built.js',
+        'build_profile': 'app.build.js',
+    }
+}
 
 SECRET_KEY = get_env_variable('PHILLY_SECRET_KEY')
 

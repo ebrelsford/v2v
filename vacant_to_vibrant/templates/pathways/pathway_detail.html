@@ -6,6 +6,13 @@
     <header>
         <h3>{{ pathway.name }}</h3>
     </header>
+
+    {% if "pathways.change_pathway" in perms %}
+    <div class="lot-detail-admin admin-only grid">
+        <a href="{% url "admin:pathways_pathway_change" pathway.pk %}">{% trans "Edit this pathway" %}</a>
+    </div>
+    {% endif %}
+
     <div class="pathway-content">
         {% feincms_render_region object "main" request %}
     </div>

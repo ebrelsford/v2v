@@ -1,4 +1,4 @@
-{% load compress js %}
+{% load compress js require %}
 
 {% compress css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/lib/normalize.css">
@@ -14,4 +14,5 @@
 <![endif]-->
 
 {% django_js_init jquery=false i18n=false csrf=false %}
-<script src="{{ STATIC_URL }}js/lib/require.js" data-main="{{ STATIC_URL }}js/app.js"></script>
+{# <script src="{{ STATIC_URL }}js/lib/require.js" data-main="{{ STATIC_URL }}js/app.js"></script> #}
+{% require_module 'app' %}

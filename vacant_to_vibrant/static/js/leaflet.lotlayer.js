@@ -62,7 +62,7 @@ define(
                     this.getMap().getBounds().toGeoJson());
 
             // Build request url
-            var url = this.options.url + '?' + $.param(this.options.filters);
+            var url = this.options.url + '?' + $.param(this.options.filters, true);
             this._makeJsonRequest(url, this._processFeatures);
         },
 

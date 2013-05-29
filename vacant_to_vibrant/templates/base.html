@@ -7,14 +7,6 @@
         <title>{% block title %}{% trans "Grounded" %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width">
 
-        {% comment %}
-
-        TODO consider bootstrap:
-         https://www.boottheme.com/app/#generatetheme
-         http://twitter.github.io/bootstrap/customize.html
-
-        {% endcomment %}
-
         {% include "_includes.html" %}
         {% block scripts %}{% endblock %}
 
@@ -28,13 +20,13 @@
                     </h1>
                 </div>
                 <nav id="mainmenu" class="clearfix">
-                {% feincms_nav feincms_page level=2 depth=1 as mainmenu %}
-                {% for page in mainmenu %}
-                    <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
-                {% endfor %}
-                {% if user.is_superuser %}
-                    <a href="/extra-admin/">Admin</a>
-                {% endif %}
+                    {% feincms_nav feincms_page level=2 depth=1 as mainmenu %}
+                    {% for page in mainmenu %}
+                        <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+                    {% endfor %}
+                    {% if user.is_superuser %}
+                        <a href="/extra-admin/">Admin</a>
+                    {% endif %}
                 </nav>
             </header>
             <div class="content-wrapper">
@@ -56,9 +48,9 @@
                 {% endblock %}
             </div>
             <div class="clear"></div>
-            <div id="footer">
-                {% feincms_render_region feincms_page "footer" request %}
-            </div>
+        </div>
+        <div id="footer">
+            {% feincms_render_region feincms_page "footer" request %}
         </div>
     </body>
 </html>

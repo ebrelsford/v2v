@@ -10,6 +10,7 @@ requirejs.config({
         'async': 'lib/async',
         'json2': 'lib/json2',
         'spin': 'lib/spin.min',
+        'bootstrap': 'lib/bootstrap.min',
     },
     shim: {
         'django': {
@@ -21,6 +22,9 @@ requirejs.config({
         },
         'underscore': {
             exports: '_',
+        },
+        'bootstrap': {
+            deps: ['jquery'],
         },
         'json2': {
             exports: 'JSON',

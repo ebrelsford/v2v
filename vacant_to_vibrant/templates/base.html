@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{% block title %}{% trans "Grounded" %}{% endblock %}</title>
+        <title>{% block title %}{{ feincms_page.title }} | {% trans "Grounded in Philly" %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width">
 
         {% include "_includes.html" %}
@@ -31,6 +31,17 @@
             </header>
             <div class="content-wrapper">
                 <section id="main" class="{% block mainclasses %}grid grid-3-4{% endblock %}">
+
+                    <nav id="submenu" class="clearfix">
+                        {% feincms_nav feincms_page level=3 depth=1 as submenu %}
+
+                        {% if submenu %}{{ feincms_page.title }}:{% endif %}
+
+                        {% for page in submenu %}
+                            <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+                        {% endfor %}
+                    </nav>    
+
                     <nav id="breadcrumbs" class="clearfix"></nav>
 
                     {% include "_messages.html" %}

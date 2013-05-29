@@ -1,4 +1,4 @@
-define(['jquery', 'gmaps', 'jquery.plugin',], function($, google) {
+define(['jquery', 'jquery.plugin',], function($) {
     var StreetView = {
 
         init: function(options, elem) {

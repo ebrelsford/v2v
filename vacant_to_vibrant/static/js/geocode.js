@@ -1,4 +1,4 @@
-define(['gmaps'], function(google) {
+define([], function() {
     var geocoder = new google.maps.Geocoder();
 
     function geocode(address, bounds, state, f) {

@@ -130,6 +130,23 @@ th {
     font-size: 10px;
 }
 
+.map-filters {
+    display: none;
+}
+
+.map-filters-toggle,
+.map-filters-toggle:hover {
+    background-color: #E6E2E3;
+    color: #553B43;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 300px;
+    padding: 10px;
+}
+
 .filter {
     margin-bottom: 10px;
     margin-top: 10px;
@@ -140,6 +157,25 @@ th {
 }
 .filters-default-wrapper.visible {
     display: block;
+}
+
+.map-tally-container {
+    border-top: 1px solid #E6E2E3;
+    color: #553B43;
+}
+#map-left .map-tally-container h2 {
+    font-size: 16px;
+    text-transform: none;
+}
+
+.map-tally li {
+    float: left;
+    padding: 15px;
+}
+
+.map-tally .count {
+    color: #B1C06F;
+    font-size: 24px;
 }
 
 .email-participants-container {
@@ -243,6 +279,13 @@ th {
 }
 
 
+/* Map page */
+
+#map-right {
+    padding-left: 25px;
+}
+
+
 /* Lot detail page */
 
 .lot-detail-main,
@@ -277,6 +320,24 @@ th {
 .lot-detail-details th {
     padding-bottom: 5px;
     padding-top: 5px;
+}
+
+
+#map-left h2,
+#map-right h2 {
+    color: #553B43;
+    font-size: 12px;
+    line-height: 12px;
+    text-transform: uppercase;
+}
+
+.newsletter-signup {
+    background-color: #E6E2E3;
+    padding: 15px;
+}
+
+.newsletter-signup form {
+    margin: 0;
 }
 
 

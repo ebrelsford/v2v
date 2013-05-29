@@ -287,6 +287,12 @@ define(
                 lotsMap.setView([data.latitude, data.longitude], 15);
             });
 
+
+        // Show/hide filters
+        $('.map-filters-toggle').click(function() {
+            $('.map-filters').toggle();
+        });
+
     });
 
     return lotsMap;

@@ -18,6 +18,7 @@
 }
 
 body {
+    background-color: #61A194;
 }
 
 img {
@@ -100,8 +101,10 @@ th {
 }
 
 #page-wrapper {
-    padding-left: 50px;   
-    padding-right: 50px;   
+    background-color: white;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 25px;
 }
 
 
@@ -163,9 +166,12 @@ th {
 }
 
 #footer {
-    border-top: 1px solid black;
-    margin-top: 50px;
+    color: white;
+    margin-top: 25px;
     margin-bottom: 25px;
+    margin-left: 25%;
+    margin-right: 25%;
+    text-align: center;
 }
 
 .field-label {

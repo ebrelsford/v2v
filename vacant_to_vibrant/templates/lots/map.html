@@ -1,7 +1,6 @@
-{% extends "lots/map/choro.html" %}
 {% load i18n webdesign %}
 
-{% block below_map %}
+{% include "lots/map/_mainmap.html" %}
 
 <div id="streetview-container" style="padding: 25px; display: none;">
     <div id="streetview" style="height: 300px; width: 100%;">
@@ -174,4 +173,3 @@
     <div class="clear"></div>
 </div>
 <div class="clear"></div>
-{% endblock %}

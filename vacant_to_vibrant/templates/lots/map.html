@@ -1,5 +1,5 @@
 {% extends "lots/map/choro.html" %}
-{% load i18n webdesign %}
+{% load blog_widgets i18n webdesign %}
 
 {% block below_map %}
 
@@ -149,9 +149,14 @@
 
     <div>
         <h2>{% trans "Recent News" %}</h2>
-        <div>
-            {% lorem p random %}
-        </div>
+        <ul>
+            {% get_entries 3 %}
+            {% for entry in entries %}
+                <li>
+                    <a href="{{ entry.get_absolute_url }}">{{ entry }}</a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 
     <div>

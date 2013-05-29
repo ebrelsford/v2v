@@ -25,6 +25,7 @@ django-monitor==0.2.1a
 django-mptt==0.5.5
 django-reversion==1.6.6
 django-reversion-compare==0.3.5
+django-staticbuilder==0.4.0
 django-tastypie==0.9.14
 django.js==0.7.4
 djangorestframework==2.1.17

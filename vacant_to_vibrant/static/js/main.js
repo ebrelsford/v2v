@@ -16,6 +16,13 @@ define(['jquery'], function($) {
         $('form').submit(function() {
             $(this).find('input[type="submit"]').attr('disabled', 'disabled');
         });
+
+        /*
+         * Fancy the fancyboxes
+         */
+        require(['jquery', 'fancybox'], function() {
+            $('.fancybox').fancybox();
+        });
     });
 
     require(['chosen.jquery_ready']);
@@ -26,9 +33,6 @@ define(['jquery'], function($) {
      */
     if ($('.lot-base-page').length > 0) {
         require(['lotbasepage']);
-    }
-    if ($('.lot-detail-page').length > 0) {
-        require(['lotdetailpage']);
     }
     if ($('.add-organizer-page').length > 0) {
         require(['addorganizerpage']);

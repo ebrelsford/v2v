@@ -37,7 +37,6 @@ Page.create_content_type(RichTextContent)
 
 Page.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('default', _('default')),
-    ('lightbox', _('lightbox')),
 ))
 
 Page.create_content_type(ApplicationContent, APPLICATIONS=(
@@ -66,5 +65,4 @@ Pathway.create_content_type(RichTextContent)
 
 Pathway.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('default', _('default')),
-    ('lightbox', _('lightbox')),
 ))

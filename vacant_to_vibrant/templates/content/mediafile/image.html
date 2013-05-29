@@ -1,0 +1,9 @@
+{% load imagekit %}
+
+<div class="image">
+    <a class="fancybox" rel="page-gallery" href="{{ content.mediafile.file.url }}">
+        {% generateimage "cms:thumbnail" source=content.mediafile.file %}
+    </a>
+    <div class="caption">{{ content.mediafile.translation.caption }}</div>
+    {% if content.mediafile.copyright %}<span class="copyright">{{ content.mediafile.copyright }}</span>{% endif %}
+</div>

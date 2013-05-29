@@ -11,7 +11,6 @@
     include: [
         'main',
         'lotbasepage',
-        'lotdetailpage',
         'addorganizerpage',
         'mappage',
         'mailparticipantspage',

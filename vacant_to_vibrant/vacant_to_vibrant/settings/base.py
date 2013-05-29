@@ -72,21 +72,6 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-STATICFILES_STORAGE = 'require.storage.OptimizedCachedStaticFilesStorage'
-
-REQUIRE_BASE_URL = 'js'
-REQUIRE_BUILD_PROFILE = 'app.build.js'
-REQUIRE_DEBUG = False
-REQUIRE_ENVIRONMENT = 'node'
-REQUIRE_JS = 'lib/require.js'
-
-REQUIRE_STANDALONE_MODULES = {
-    'app': {
-        'out': 'app-built.js',
-        'build_profile': 'app.build.js',
-    }
-}
-
 SECRET_KEY = get_env_variable('PHILLY_SECRET_KEY')
 
 TEMPLATE_LOADERS = (
@@ -109,6 +94,7 @@ MIDDLEWARE_CLASSES = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.debug',
     'django.core.context_processors.media',
     'django.core.context_processors.request',
     'django.core.context_processors.static',
@@ -162,7 +148,6 @@ INSTALLED_APPS = (
     'inplace.boundaries',
     'jsonfield',
     'mptt',
-    'require',
     'reversion',
     'reversion_compare',
     'south',

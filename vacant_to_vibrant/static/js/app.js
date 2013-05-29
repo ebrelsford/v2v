@@ -38,6 +38,7 @@ requirejs.config({
         'lib/leaflet.utfgrid': ['leaflet'],
         'chosen.jquery.min': ['jquery'],
         'chosen.jquery_ready': ['jquery', 'chosen.jquery.min'],
+        'lib/jquery.noisy': ['jquery'],
     },
 });
 

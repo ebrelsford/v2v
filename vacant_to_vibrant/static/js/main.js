@@ -16,6 +16,16 @@ define(['jquery'], function($) {
         $('form').submit(function() {
             $(this).find('input[type="submit"]').attr('disabled', 'disabled');
         });
+
+        require(['lib/jquery.noisy'], function() {
+            $('body').noisy({
+                'intensity' : 1,
+                'size' : 200,
+                'opacity' : 0.08,
+                'fallback' : '',
+                'monochrome' : false
+            }).css('background-color', '#61A194');
+        });
     });
 
     require(['chosen.jquery_ready']);

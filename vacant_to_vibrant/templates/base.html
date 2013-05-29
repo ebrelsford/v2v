@@ -35,7 +35,7 @@
                     <nav id="submenu" class="clearfix">
                         {% feincms_nav feincms_page level=3 depth=1 as submenu %}
 
-                        {% if submenu %}{{ feincms_page.title }}:{% endif %}
+                        {% if submenu %}Also here:{% endif %}
 
                         {% for page in submenu %}
                             <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>

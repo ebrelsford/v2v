@@ -62,19 +62,19 @@ define(
                     this.getMap().getBounds().toGeoJson());
 
             // Build request url
-            var url = this.options.url + '?' + $.param(this.options.filters);
+            var url = this.options.url + '?' + $.param(this.options.filters, true);
             this._makeJsonRequest(url, this._processFeatures);
         },
 
         _makeJsonRequest: function(url, callback) {
             var instance = this;
-            this.getMap().fire('dataloading');
+            instance.getMap().fire('dataloading');
             $.getJSON(url, function(data) {
                 // Ensure this is the layer
                 callback.apply(instance, [data,]);
             })
             .always(function() {
-                this.getMap().fire('dataload');
+                instance.getMap().fire('dataload');
             });
         },
 

@@ -2,10 +2,10 @@ requirejs.config({
     baseUrl: '/static/js',
     paths: {
         'django': 'djangojs/django',
-        'jquery': '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min',
+        'jquery': 'lib/jquery-1.10.0.min',
         'jquery.infinitescroll': 'lib/jquery.infinitescroll.min',
         'fancybox': 'lib/fancybox/jquery.fancybox.pack',
-        'leaflet': '//cdn.leafletjs.com/leaflet-0.5.1/leaflet',
+        'leaflet': 'lib/leaflet',
         'underscore': 'lib/underscore-min',
         'async': 'lib/async',
         'json2': 'lib/json2',

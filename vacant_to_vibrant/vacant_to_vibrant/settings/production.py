@@ -39,7 +39,7 @@ EMAIL_BACKEND = 'mailer.backend.DbBackend'
 EMAIL_HOST = get_env_variable('PHILLY_EMAIL_HOST')
 EMAIL_HOST_USER = get_env_variable('PHILLY_EMAIL_USER')
 EMAIL_HOST_PASSWORD = get_env_variable('PHILLY_EMAIL_PASSWORD')
-EMAIL_PREFIX = '[Grounded 215] '
+EMAIL_PREFIX = '[Grounded in Philly] '
 DEFAULT_FROM_EMAIL = get_env_variable('PHILLY_DEFAULT_FROM_EMAIL')
 SERVER_EMAIL = get_env_variable('PHILLY_SERVER_EMAIL')
 

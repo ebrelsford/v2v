@@ -20,7 +20,7 @@ django-extensions==1.1.1
 -e git://github.com/stephenmcd/django-forms-builder.git@08f3fd5de9cd48a6fb181f7db844db63d4b0b1e5#egg=django_forms_builder-dev
 django-honeypot==0.3.0
 -e git://github.com/jdriscoll/django-imagekit.git@261f16412763c69fba64f130c521192ad726d2c1#egg=django_imagekit-dev
--e git://github.com/ebrelsford/django-inplace.git@50ea2f04eeed79726783cf82a48f3ae80e161c24#egg=django_inplace-dev
+-e git://github.com/ebrelsford/django-inplace.git@1e7eb79fa186e65920df4a02a9e5cbba38eb83f6#egg=django_inplace-dev
 django-jsonfield==0.9.2
 django-monitor==0.2.1a
 django-mptt==0.5.5

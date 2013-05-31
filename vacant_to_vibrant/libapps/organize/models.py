@@ -134,19 +134,3 @@ def get_participant_models():
         else:
             return (model,)
     return get_concrete_subclasses(Participant)
-
-
-#
-# Handle signals.
-#
-
-
-@receiver(post_save, sender=get_organizer_model(),
-          dispatch_uid='organizer_subscribe_organizer_watcher')
-@receiver(post_save, sender=get_watcher_model(),
-          dispatch_uid='watcher_subscribe_organizer_watcher')
-def subscribe_organizer_watcher(sender, created=False, instance=None, **kwargs):
-    if created:
-        # TODO subscribe Participant to mailing list
-        #subscribe(instance, is_participating=True)
-        pass

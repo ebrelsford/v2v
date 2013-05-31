@@ -12,6 +12,8 @@ class PathwayManager(models.Manager):
 
     def get_for_lot(self, lot):
         pathways = self.all()
+        if not lot or not lot.owner:
+            return self.none()
         if lot.owner.owner_type == 'private':
             pathways = pathways.filter(private_owners=True)
         elif lot.owner.owner_type == 'public':

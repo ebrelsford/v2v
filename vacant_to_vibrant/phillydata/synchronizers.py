@@ -203,8 +203,8 @@ class CityCouncilSynchronizer(Synchronizer):
                 )
                 lot.save()
             except Exception:
-                logger.warn('Caught exception while updating zoning for lot '
-                            '%s' % lot)
+                logger.warn('Caught exception while updating city council '
+                            'district for lot %s' % lot)
 
 
 class PlanningDistrictSynchronizer(Synchronizer):

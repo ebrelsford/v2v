@@ -207,6 +207,30 @@ class CityCouncilSynchronizer(Synchronizer):
                             '%s' % lot)
 
 
+class PlanningDistrictSynchronizer(Synchronizer):
+    """A Synchronizer that updates planning districts for lots."""
+
+    def sync(self, data_source):
+        logger.info('Starting to synchronize planning districts.')
+        self.update_planning_districts(count=data_source.batch_size or 1000)
+        logger.info('Finished synchronizing planning districts.')
+
+    def update_planning_districts(self, count=1000):
+        lots = Lot.objects.filter(
+            planning_district__isnull=True
+        ).order_by('?')
+        for lot in lots[:count]:
+            try:
+                lot.planning_district = Boundary.objects.get(
+                    geometry__contains=lot.centroid,
+                    layer__name='Planning Districts',
+                )
+                lot.save()
+            except Exception:
+                logger.warn('Caught exception while updating planning '
+                            'district for lot %s' % lot)
+
+
 class TaxAccountSynchronizer(Synchronizer):
     """A Synchronizer that updates tax account data for lots."""
 

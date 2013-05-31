@@ -115,7 +115,15 @@ class Lot(Place):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
+        related_name='+',
         verbose_name=_('city council district'),
+    )
+    planning_district = models.ForeignKey('boundaries.Boundary',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        verbose_name=_('planning district'),
     )
 
     added = models.DateTimeField(_('date added'),

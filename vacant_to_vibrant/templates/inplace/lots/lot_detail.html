@@ -79,6 +79,19 @@
             </tr>
 
             <tr>
+                <th>{% trans "Planning District" %}:</th>
+                <td>
+                    {% if lot.planning_district %}
+                    <a href="http://phila2035.org/home-page/district/{{ lot.planning_district.label|slugify }}" target="_blank">
+                            {{ lot.planning_district.label }}
+                        </a>
+                    {% else %}
+                        {% trans "unknown" %}
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
                 <th>{% trans "area" %}:</th>
                 <td>
                     {% if lot.billing_account %}

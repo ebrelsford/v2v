@@ -218,7 +218,7 @@
         <h2>{% trans "Why is this lot here?" %}</h2>
         {% if not lot.known_use %}
         <p>{% trans "We think this lot is vacant because:" %}
-        <ul>
+        <ul class="lot-detail-reasons">
 
             {% if lot.land_use_area and lot.land_use_area.category == "Vacant or Other" %}
             <li>

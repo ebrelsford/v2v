@@ -76,6 +76,7 @@ class FiltersForm(forms.Form):
     choropleth_boundary_layer = forms.ChoiceField(
         choices=(
             ('City Council Districts', _('city council districts')),
+            ('Planning Districts', _('planning districts')),
             ('zipcodes', _('zipcodes')),
         ),
         initial='City Council Districts',

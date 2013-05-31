@@ -300,7 +300,7 @@
                 <th>
                     {% trans "land use" %}:
                     <div class="help-text">
-                        {% trans "The land use according to the City Planning Commissiond, if we found a record for this lot" %}
+                        {% trans "The land use according to the City Planning Commission, if we found a record for this lot" %}
                     </div>
                 </th>
                 <td>
@@ -308,6 +308,11 @@
                         {{ lot.land_use_area.category }}, 
                         {{ lot.land_use_area.subcategory }},
                         {{ lot.land_use_area.description }}
+                        <div>
+                            {% blocktrans with area=lot.land_use_area.area|floatformat %}
+                            area: {{ area }} square feet
+                            {% endblocktrans %}
+                        </div>
                         {% if "landuse.change_landusearea" in perms %}
                         <div class="admin-link">
                             <a href="{% url "admin:landuse_landusearea_change" lot.land_use_area.pk %}" target="_blank">view/change</a>
@@ -323,12 +328,20 @@
                 <th>
                     {% trans "parcel" %}:
                     <div class="help-text">
-                        {% trans "The parcel we're using for this lot" %}
+                        {% blocktrans %}
+                        The parcel we're using for this lot. Parcels are often
+                        going to be larger than land use areas.
+                        {% endblocktrans %}
                     </div>
                 </th>
                 <td>
                     {% if lot.parcel %}
                         {{ lot.parcel }}
+                        <div>
+                            {% blocktrans with area=lot.parcel.area|floatformat %}
+                            area: {{ area }} square feet
+                            {% endblocktrans %}
+                        </div>
                         {% if "parcels.change_parcel" in perms %}
                         <div class="admin-link">
                             <a href="{% url "admin:parcels_parcel_change" lot.parcel.pk %}" target="_blank">view/change</a>

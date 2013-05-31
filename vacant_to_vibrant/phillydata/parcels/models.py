@@ -164,5 +164,14 @@ class Parcel(models.Model):
                     'number and street fields from the parcel database.')
     )
 
+    def calculate_geometry_area(self):
+        """Find the area of this parcel in square feet using its geometry."""
+        try:
+            # tranform to an area-preserving projection for south PA
+            return self.geometry.transform(102729, clone=True).area
+        except Exception:
+            return None
+    area = property(calculate_geometry_area)
+
     def __unicode__(self):
         return '%s, mapreg: %s' % (self.address or 'no address', self.mapreg)

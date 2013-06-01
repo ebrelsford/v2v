@@ -211,10 +211,25 @@ th {
 }
 
 #mainmenu {
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+#mainmenu li {
+    border-right: 1px solid #D4DAAC;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#mainmenu li:last-child {
+    border-right: 0;
+}
+
+#mainmenu a {
+    color: #5F424D;
 }
 
 #aside-right {

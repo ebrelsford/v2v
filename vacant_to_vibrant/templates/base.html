@@ -20,13 +20,19 @@
                     </h1>
                 </div>
                 <nav id="mainmenu" class="clearfix">
-                    {% feincms_nav feincms_page level=2 depth=1 as mainmenu %}
-                    {% for page in mainmenu %}
-                        <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
-                    {% endfor %}
-                    {% if user.is_superuser %}
-                        <a href="/extra-admin/">Admin</a>
-                    {% endif %}
+                    <ul>
+                        {% feincms_nav feincms_page level=2 depth=1 as mainmenu %}
+                        {% for page in mainmenu %}
+                        <li>
+                            <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+                        </li>
+                        {% endfor %}
+                        {% if user.is_superuser %}
+                        <li>
+                            <a href="/extra-admin/">Admin</a>
+                        </li>
+                        {% endif %}
+                    </ul>
                 </nav>
             </header>
             <div class="content-wrapper">

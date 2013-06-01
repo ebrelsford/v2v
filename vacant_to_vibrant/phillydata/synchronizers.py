@@ -1,5 +1,7 @@
 import logging
 
+from django.db.models import Q
+
 from inplace.boundaries.models import Boundary
 
 from lots.load import (load_lots_available, load_lots_with_licenses,
@@ -60,7 +62,12 @@ class WaterDeptSynchronizer(Synchronizer):
     def update_water_dept_data(self, count=1000):
         # TODO also lots where the water dept data has not been touched in a
         # while
-        lots = Lot.objects.filter(water_parcel__isnull=True).order_by('?')
+        # Find lots with no water parcel or where the building_description is
+        # null
+        lots = Lot.objects.filter(
+            Q(water_parcel__isnull=True) |
+            Q(water_parcel__building_description__isnull=True)
+        ).order_by('?')
         for lot in lots[:count]:
             logger.debug('Updating Water Department data for lot %s' % lot)
             try:
@@ -252,3 +259,27 @@ class TaxAccountSynchronizer(Synchronizer):
             except Exception:
                 logger.warn('Caught exception while getting tax account for '
                             'lot %s' % lot)
+
+
+class UseCertaintyScoresSynchronizer(Synchronizer):
+    """A Synchronizer that updates use certainty scores for lots."""
+
+    def sync(self, data_source):
+        logger.info('Starting to synchronize use certainty scores.')
+        self.update_use_certainty_scores(count=data_source.batch_size)
+        logger.info('Finished synchronizing use certainty scores.')
+
+    def update_use_certainty_scores(self, count=1000):
+        # Get lots that look like they haven't been updated and that we can
+        # change
+        lots = Lot.objects.filter(
+            known_use_locked=False,
+            known_use_certainty=0
+        ).order_by('?')
+        for lot in lots[:count]:
+            try:
+                lot.known_use_certainty = lot.calculate_known_use_certainty()
+                lot.save()
+            except Exception:
+                logger.warn('Caught exception while updating use certainty '
+                            'score for lot %s' % lot)

@@ -19,6 +19,7 @@ class PhillyDataSource(DataSource):
         ('planningdistrict', 'Planning Districts'),
         ('praavailableproperties', 'PRA Available Properties'),
         ('taxaccount', 'Tax Accounts'),
+        ('usecertaintyscores', 'Use Certainty Scores'),
         ('waterdept', 'Water Department data'),
         ('zoning', 'Zoning'),
     )

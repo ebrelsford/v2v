@@ -1,7 +1,10 @@
+from math import floor
+
 from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.gis.geos import MultiPolygon
 from django.contrib.gis.measure import D
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from inplace.models import Place, PlaceManager
@@ -212,6 +215,53 @@ class Lot(Place):
                 closest = side
 
         return closest.length
+
+    def calculate_known_use_certainty(self):
+        #
+        # First, the data that indicate real certainty
+        #
+
+        # If the lot is currently in the PRA's Available Property database,
+        # then we know for sure
+        ap = self.available_property
+        if ap and ap.status is not 'no longer available':
+            return 10
+
+        # TODO If someone told us what is happening here, return 10
+        # TODO If we manually changed the use for any reason, return 10
+
+        #
+        # Now for the fuzzy calculations
+        #
+        certainty = 0
+
+        # If the land use data has this lot marked vacant
+        if self.land_use_area and self.land_use_area.subcategory is 'Vacant':
+            certainty += 4
+
+        # If the L&I has given the lot "vacant" licenses
+        license_certainty = 2 * self.licenses.filter(status='ACTIVE').count()
+        if license_certainty > 4:
+            license_certainty = 4
+        certainty += license_certainty
+
+        # If the L&I has given the lot "vacant" violations in the past year
+        today = now()
+        last_year = today.replace(year=today.year - 1)
+        self.violations.filter(violation_datetime__gt=last_year).count()
+
+        if self.water_parcel:
+            # If the Water Dept's data says the lot is very permeable
+            certainty += floor(self.water_parcel.percent_permeable / 20)
+
+            # If the Water Dept's data says the lot has no buildings
+            description = self.water_parcel.building_description.lower()
+            if description.startswith('vac land') or description.startswith('vacant'):
+                certainty += 4
+
+        # Not really certain unless groundtruthed, which would have been
+        # returned earlier
+        return min(certainty, 9)
 
     def _get_area(self):
         if self.billing_account:

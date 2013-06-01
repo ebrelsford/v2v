@@ -27,7 +27,7 @@ img {
 
 a,
 a:visited {
-    color: #64948A;
+    color: #61A194;
     text-decoration: none;
 }
 
@@ -148,6 +148,35 @@ th {
 
 .help-text {
     font-size: 10px;
+}
+
+.map-find-a-lot-container {
+    background-color: #64948A;
+    color: white;
+    width: 100%;
+}
+
+.map-find-a-lot {
+    padding: 10px;
+}
+
+.map-find-a-lot label {
+    margin-right: 10px;
+}
+
+.map-find-a-lot input {
+    border: 0;
+    padding: 10px;
+    max-width: 100%;
+    width: 75%;
+}
+
+.map-find-a-lot-submit {
+    background-color: #9FB450;
+    border: 0;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
 }
 
 .map-filters {

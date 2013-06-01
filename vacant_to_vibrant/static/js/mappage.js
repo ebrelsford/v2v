@@ -20,6 +20,8 @@ define(
         // Leaflet Map mixin
         'leaflet.lotmap',
 
+        'jqueryui',
+
     ], function($, L, Django, JSON) {
 
     var lotsMap;
@@ -291,6 +293,16 @@ define(
         // Show/hide filters
         $('.map-filters-toggle').click(function() {
             $('.map-filters').toggle();
+        });
+
+        $('#map-overlay').position({
+            my: 'top left',
+            at: 'top left',
+            of: $('#map'),
+        });
+
+        $('.map-overlay-button').click(function() {
+            $('#map-overlay').hide();
         });
 
     });

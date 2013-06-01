@@ -3,6 +3,7 @@ requirejs.config({
     paths: {
         'django': 'djangojs/django',
         'jquery': 'lib/jquery-1.10.0.min',
+        'jqueryui': 'lib/jquery-ui-1.10.3.custom',
         'jquery.infinitescroll': 'lib/jquery.infinitescroll.min',
         'fancybox': 'lib/fancybox/jquery.fancybox.pack',
         'leaflet': 'lib/leaflet',

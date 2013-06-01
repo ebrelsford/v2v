@@ -179,6 +179,23 @@ th {
     padding: 10px;
 }
 
+#map-overlay {
+    background-color: #5C373C;
+    color: white;
+    font-size: 26px;
+    padding: 20px;
+    position: absolute;
+    width: 300px;
+}
+
+.map-overlay-button {
+    color: white;
+    background-color: #61A194;
+    border: 0;
+    padding: 5px;
+    text-transform: uppercase;
+}
+
 .map-filters {
     display: none;
 }

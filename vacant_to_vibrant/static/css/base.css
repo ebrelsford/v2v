@@ -25,6 +25,12 @@ img {
     border: 0;
 }
 
+a,
+a:visited {
+    color: #64948A;
+    text-decoration: none;
+}
+
 ul {
     list-style: none;
 }

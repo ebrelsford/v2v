@@ -10,7 +10,6 @@ requirejs.config({
         'async': 'lib/async',
         'json2': 'lib/json2',
         'spin': 'lib/spin.min',
-        'bootstrap': 'lib/bootstrap.min',
     },
     shim: {
         'django': {

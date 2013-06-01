@@ -5,6 +5,7 @@ from chosen.forms import ChosenSelectMultiple
 from inplace.boundaries.models import Boundary, Layer
 
 from phillydata.availableproperties.models import AvailableProperty
+from phillydata.owners.models import Owner
 from phillydata.zoning.models import ZoningType
 from .models import Use
 
@@ -94,9 +95,11 @@ class FiltersForm(forms.Form):
         widget=forms.CheckboxSelectMultiple(),
     )
 
-    owner__name__icontains = forms.CharField(
-        label=_('Owner name'),
+    owner__in = forms.ModelMultipleChoiceField(
+        label=_('Owner'),
+        queryset=Owner.objects.filter(owner_type='public'),
         required=False,
+        widget=forms.CheckboxSelectMultiple(),
     )
     owner__owner_type__in = forms.MultipleChoiceField(
         label=_('Owner types'),
@@ -136,6 +139,11 @@ class FiltersForm(forms.Form):
         label=_('Is licensed as vacant'),
     )
     has_violations = forms.NullBooleanField()
+
+    owner__name__icontains = forms.CharField(
+        label=_('Owner name'),
+        required=False,
+    )
 
     violations_count = forms.IntegerField(
         required=False,
@@ -185,6 +193,7 @@ class FiltersForm(forms.Form):
         for field in ('participant_types', 'has_available_property',
                       'has_billing_account', 'has_tax_account', 'has_parcel',
                       'has_land_use_area', 'has_water_parcel',
+                      'owner__name__icontains',
                       'water_parcel__impervious_area__lt',):
             yield self[field]
 
@@ -204,7 +213,7 @@ class FiltersForm(forms.Form):
             yield self[field]
 
     def owners_filters(self):
-        for field in ('owner__name__icontains', 'owner__owner_type__in',):
+        for field in ('owner__owner_type__in', 'owner__in',):
             yield self[field]
 
     def private_filters(self):
@@ -223,7 +232,7 @@ class FiltersForm(forms.Form):
             'available_property__status__in', 'polygon_area__gt',
             'polygon_area__lt', 'polygon_width__gt', 'polygon_width__lt',
             'owner__owner_type__in', 'view_type', 'choropleth_boundary_layer',
-            'participant_types', 'owner__name__icontains',
+            'participant_types', 'owner__name__icontains', 'owner__in',
             'has_available_property', 'has_billing_account', 'has_tax_account',
             'has_parcel', 'has_water_parcel', 'has_land_use_area',
             'has_licenses', 'has_violations', 'violations_count',

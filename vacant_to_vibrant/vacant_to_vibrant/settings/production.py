@@ -3,7 +3,7 @@ import os
 from .base import *
 
 ADMINS = (
-    ('Eric', 'ebrelsford@gmail.com'),
+    ('Eric', 'eric@596acres.org'),
 )
 
 MANAGERS = ADMINS

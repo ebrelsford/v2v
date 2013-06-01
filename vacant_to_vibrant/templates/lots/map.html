@@ -142,7 +142,7 @@
 
 <div id="map-right" class="grid grid-1-4">
 
-    <div>
+    <div class="map-sidebar-section">
         <h2>{% trans "Recent News" %}</h2>
         <ul>
             {% get_entries 3 %}
@@ -154,7 +154,7 @@
         </ul>
     </div>
 
-    <div class="newsletter-signup">
+    <div class="newsletter-signup map-sidebar-section">
         <h2>{% trans "Get news from Grounded in Philly" %}</h2>
         <form class="non-filter">
             <input placeholder="Enter Email Address" type="text" />
@@ -170,7 +170,7 @@
         </ul>
     </div>
 
-    <div class="activity-stream-section">
+    <div class="activity-stream-section map-sidebar-section">
         <h2>{% trans "Recent Activities" %}</h2>
         <div class="activity-stream">
             <div class="activity-stream-container"></div>

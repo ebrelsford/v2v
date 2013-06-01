@@ -34,6 +34,20 @@ p {
     padding-bottom: 10px;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 10px 0;
+  font-family: inherit;
+  font-weight: bold;
+  line-height: 20px;
+  color: inherit;
+  text-rendering: optimizelegibility;
+}
+
 th {
     text-align: left;
 }
@@ -285,6 +299,10 @@ th {
     padding-left: 25px;
 }
 
+.map-sidebar-section {
+    margin-bottom: 25px;
+}
+
 
 /* Lot detail page */
 
@@ -343,6 +361,7 @@ ul.lot-detail-reasons li {
 .newsletter-signup {
     background-color: #E6E2E3;
     padding: 15px;
+    padding-top: 5px;
 }
 
 .newsletter-signup form {

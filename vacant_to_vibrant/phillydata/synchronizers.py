@@ -76,8 +76,8 @@ class WaterDeptSynchronizer(Synchronizer):
                 )
                 lot.save()
             except Exception:
-                logger.exception('Exception while updating Water Department '
-                                 'data for lot %s' % lot)
+                logger.warn('Exception while updating Water Department data '
+                            'for lot %s' % lot)
 
 
 class LandUseAreaSynchronizer(Synchronizer):

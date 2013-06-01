@@ -26,6 +26,13 @@ define(['jquery'], function($) {
                 'monochrome' : false
             }).css('background-color', '#61A194');
         });
+
+        /*
+         * Fancy the fancyboxes
+         */
+        require(['jquery', 'fancybox'], function() {
+            $('.fancybox').fancybox();
+        });
     });
 
     require(['chosen.jquery_ready']);
@@ -36,9 +43,6 @@ define(['jquery'], function($) {
      */
     if ($('.lot-base-page').length > 0) {
         require(['lotbasepage']);
-    }
-    if ($('.lot-detail-page').length > 0) {
-        require(['lotdetailpage']);
     }
     if ($('.add-organizer-page').length > 0) {
         require(['addorganizerpage']);

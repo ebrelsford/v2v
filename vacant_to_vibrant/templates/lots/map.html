@@ -1,4 +1,4 @@
-{% load i18n webdesign %}
+{% load blog_widgets i18n webdesign %}
 
 <div id="map-left" class="grid grid-3-4">
     {% include "lots/map/_mainmap.html" %}
@@ -145,9 +145,12 @@
     <div>
         <h2>{% trans "Recent News" %}</h2>
         <ul>
-            <li>
-                {% lorem 10 w random %}
-            </li>
+            {% get_entries 3 %}
+            {% for entry in entries %}
+                <li>
+                    <a href="{{ entry.get_absolute_url }}">{{ entry }}</a>
+                </li>
+            {% endfor %}
         </ul>
     </div>
 

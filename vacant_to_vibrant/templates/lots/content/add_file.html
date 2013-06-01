@@ -1,4 +1,7 @@
 {% extends "lots/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Add a File" %} | {{ block.super }}{% endblock %}
 
 {% block lot_content %}
 {{ block.super }}

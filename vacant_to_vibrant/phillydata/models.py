@@ -16,8 +16,10 @@ class PhillyDataSource(DataSource):
         ('liviolations', 'L&I Violations'),
         ('landusearea', 'Land Use Areas'),
         ('opa', 'OPA API'),
+        ('planningdistrict', 'Planning Districts'),
         ('praavailableproperties', 'PRA Available Properties'),
         ('taxaccount', 'Tax Accounts'),
+        ('usecertaintyscores', 'Use Certainty Scores'),
         ('waterdept', 'Water Department data'),
         ('zoning', 'Zoning'),
     )

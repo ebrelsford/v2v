@@ -66,6 +66,9 @@ def _water_parcel_defaults(data):
         'address': parcel['Address'],
         'gross_area': parcel['GrossArea'],
         'impervious_area': parcel['ImpervArea'],
+        'building_type': parcel['BldgType'],
+        'building_description': parcel['BldgDesc'],
+        'building_code': parcel['BldgCode'],
     }
 
 

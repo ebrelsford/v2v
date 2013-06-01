@@ -322,6 +322,15 @@ th {
     padding-top: 5px;
 }
 
+ul.lot-detail-reasons {
+    list-style: outside disc;
+    margin-left: 20px;
+}
+
+ul.lot-detail-reasons li {
+    margin-bottom: 5px;
+}
+
 
 #map-left h2,
 #map-right h2 {

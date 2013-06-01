@@ -9,13 +9,19 @@
     name: 'lib/almond',
     out: '../main-built.js',
     include: [
+
+        // Main module
         'main',
+
+        // Per-page modules
         'lotbasepage',
-        'lotdetailpage',
         'addorganizerpage',
         'mappage',
         'mailparticipantspage',
-        'chosen.jquery_ready'
+
+        // require()d dependencies
+        'chosen.jquery_ready',
+        'fancybox'
     ],
     insertRequire: ['main'],
 

@@ -20,6 +20,6 @@ def get_point_data(lon, lat):
         data = json.load(urlopen(url))
         return data[0]
     except Exception:
-        logger.exception('Could not find Water Department records for %f, %f' %
-                         (lon, lat))
+        logger.warn('Could not find Water Department records for %f, %f' %
+                    (lon, lat))
         return None

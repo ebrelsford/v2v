@@ -113,6 +113,10 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'admin_tools',
+    'admin_tools.theming',
+    'admin_tools.menu',
+    'admin_tools.dashboard',
 
     #
     # django contrib
@@ -288,3 +292,5 @@ ORGANIZE = {
     'ORGANIZER_MODEL': 'phillyorganize.Organizer',
     'WATCHER_MODEL': 'phillyorganize.Watcher',
 }
+
+ADMIN_TOOLS_INDEX_DASHBOARD = 'vacant_to_vibrant.admindashboard.PhillyDashboard'

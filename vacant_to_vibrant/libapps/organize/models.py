@@ -7,8 +7,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.gis.db import models
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import get_model
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -134,19 +132,3 @@ def get_participant_models():
         else:
             return (model,)
     return get_concrete_subclasses(Participant)
-
-
-#
-# Handle signals.
-#
-
-
-@receiver(post_save, sender=get_organizer_model(),
-          dispatch_uid='organizer_subscribe_organizer_watcher')
-@receiver(post_save, sender=get_watcher_model(),
-          dispatch_uid='watcher_subscribe_organizer_watcher')
-def subscribe_organizer_watcher(sender, created=False, instance=None, **kwargs):
-    if created:
-        # TODO subscribe Participant to mailing list
-        #subscribe(instance, is_participating=True)
-        pass

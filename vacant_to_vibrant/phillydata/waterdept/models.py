@@ -64,7 +64,6 @@ class WaterParcel(models.Model):
         null=True,
         help_text=_('The area of the parcel in square feet')
     )
-    # TODO if this is very low parcel may be vacant
     impervious_area = models.DecimalField(_('impervious area'),
         max_digits=20,
         decimal_places=2,
@@ -73,9 +72,8 @@ class WaterParcel(models.Model):
         help_text=_('The impervious area of the parcel in square feet')
     )
 
-    # building information
-    # TODO these fields will have hints to vacancy--eg,
-    # 'building_description' startswith 'VAC LAND'
+    # These fields will have hints to vacancy--eg, 'building_description'
+    # startswith 'VAC LAND'
     building_type = models.CharField(_('building type'),
         max_length=50,
         blank=True,

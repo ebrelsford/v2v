@@ -8,6 +8,7 @@ TileStache==1.45.0
 Werkzeug==0.8.3
 argparse==1.2.1
 django-activity-stream==0.4.4
+django-admin-tools==0.5.1
 django-appconf==0.6
 django-braces==1.0.0
 -e git://github.com/ebrelsford/django-chosen.git@28b2358d99f1d6620fdf8047d68eac52c7594e70#egg=django_chosen-dev
@@ -19,12 +20,13 @@ django-extensions==1.1.1
 -e git://github.com/stephenmcd/django-forms-builder.git@08f3fd5de9cd48a6fb181f7db844db63d4b0b1e5#egg=django_forms_builder-dev
 django-honeypot==0.3.0
 -e git://github.com/jdriscoll/django-imagekit.git@261f16412763c69fba64f130c521192ad726d2c1#egg=django_imagekit-dev
--e git://github.com/ebrelsford/django-inplace.git@50ea2f04eeed79726783cf82a48f3ae80e161c24#egg=django_inplace-dev
+-e git://github.com/ebrelsford/django-inplace.git@1e7eb79fa186e65920df4a02a9e5cbba38eb83f6#egg=django_inplace-dev
 django-jsonfield==0.9.2
 django-monitor==0.2.1a
 django-mptt==0.5.5
 django-reversion==1.6.6
 django-reversion-compare==0.3.5
+django-staticbuilder==0.4.0
 django-tastypie==0.9.14
 django.js==0.7.4
 djangorestframework==2.1.17

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load files_tags i18n inplace_tags notes_tags organize_tags pathways_tags photos_tags %}
 
-{% block title %}{{ block.super }} | {{ lot.address_line1 }}{% endblock %}
+{% block title %}{{ lot.address_line1 }} | {% trans "Grounded in Philly" %}{% endblock %}
 
 {% block body_class %}{{ block.super }} lot-base-page lot-detail-page{% endblock %}
 
@@ -79,15 +79,22 @@
             </tr>
 
             <tr>
+                <th>{% trans "Planning District" %}:</th>
+                <td>
+                    {% if lot.planning_district %}
+                    <a href="http://phila2035.org/home-page/district/{{ lot.planning_district.label|slugify }}" target="_blank">
+                            {{ lot.planning_district.label }}
+                        </a>
+                    {% else %}
+                        {% trans "unknown" %}
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
                 <th>{% trans "area" %}:</th>
                 <td>
-                    {% if lot.billing_account %}
-                    according to the lot's billing account, this lot has an area of {{ lot.billing_account.land_area|floatformat:"-1"|default:"unknown" }} square feet
-                    {% elif lot.water_parcel %}
-                    according to the Water Department, this lot has an area of {{ lot.water_parcel.gross_area|floatformat:"-1"|default:"unknown" }} square feet
-                    {% else %}
-                    this lot has an area of {{ lot.polygon_area|floatformat:"-1"|default:"unknown" }} square feet
-                    {% endif %}
+                    {{ lot.polygon_area|floatformat:"-1"|default:"unknown" }} square feet
                 </td>
             </tr>
 
@@ -214,6 +221,56 @@
     </div>
     {% endif %}
 
+    <div class="lot-detail-details lot-detail-main-section">
+        <h2>{% trans "Why is this lot here?" %}</h2>
+        {% if not lot.known_use %}
+        <p>{% trans "We think this lot is vacant because:" %}
+        <ul class="lot-detail-reasons">
+
+            {% if lot.land_use_area and lot.land_use_area.category == "Vacant or Other" %}
+            <li>
+                {% blocktrans with description=lot.land_use_area.description %}
+                It is in the <a href="http://opendataphilly.org/opendata/resource/170/land-use/" target="_blank">City Planning Commission's Land Use database</a> marked as "{{ description }}".
+                {% endblocktrans %}
+            </li>
+            {% endif %}
+
+            {% if lot.available_property and lot.available_property.status != "no longer available" %}
+            <li>
+                {% blocktrans %}
+                It is for sale as part of the Redevelopment Authority's <a href="http://secure.phila.gov/paplpublicweb/" target="_blank">Available Property list</a>.
+                {% endblocktrans %}
+            </li>
+            {% endif %}
+
+            {% if lot.violations.all.count > 0 %}
+            <li>
+                {% blocktrans with location_id=lot.violations.all.0.location.external_id %}
+                It has <a href="http://www.phila.gov/data/Pages/LIPropertyHistory.aspx?entity=locationhistory&eid={{ location_id }}" target="_blank">violations from Licensing and Inspections</a> that indicate that it is vacant.
+                {% endblocktrans %}
+            </li>
+            {% endif %}
+
+            {% if lot.licenses.all.count > 0 %}
+            <li>
+                {% blocktrans with location_id=lot.licenses.all.0.location.external_id %}
+                It has <a href="http://www.phila.gov/data/Pages/LIPropertyHistory.aspx?entity=locationhistory&eid={{ location_id }}" target="_blank">licenses from Licensing and Inspections</a> that indicate that it is vacant.
+                {% endblocktrans %}
+            </li>
+            {% endif %}
+
+            {% if lot.water_parcel and lot.water_parcel.percent_permeable > 50 %}
+            <li>
+                {% blocktrans with pp=lot.water_parcel.percent_permeable|floatformat id=lot.water_parcel.parcel_id %}
+                The Water Department <a href="http://www.phila.gov/water/swmap/Parcel.aspx?parcel_id={{ id }}" target="_blank">claims</a> that the parcel is {{ pp }}% permeable (without structures or pavement).
+                {% endblocktrans %}
+            </li>
+            {% endif %}
+
+        </ul>
+        {% endif %}
+    </div>
+
     {% if "lots.view_all_details" in perms %}
     <div class="lot-detail-details lot-detail-main-section">
         <h2>{% trans "Admin Details" %}</h2>
@@ -250,7 +307,7 @@
                 <th>
                     {% trans "land use" %}:
                     <div class="help-text">
-                        {% trans "The land use according to the City Planning Commissiond, if we found a record for this lot" %}
+                        {% trans "The land use according to the City Planning Commission, if we found a record for this lot" %}
                     </div>
                 </th>
                 <td>
@@ -258,6 +315,11 @@
                         {{ lot.land_use_area.category }}, 
                         {{ lot.land_use_area.subcategory }},
                         {{ lot.land_use_area.description }}
+                        <div>
+                            {% blocktrans with area=lot.land_use_area.area|floatformat %}
+                            area: {{ area }} square feet
+                            {% endblocktrans %}
+                        </div>
                         {% if "landuse.change_landusearea" in perms %}
                         <div class="admin-link">
                             <a href="{% url "admin:landuse_landusearea_change" lot.land_use_area.pk %}" target="_blank">view/change</a>
@@ -273,12 +335,20 @@
                 <th>
                     {% trans "parcel" %}:
                     <div class="help-text">
-                        {% trans "The parcel we're using for this lot" %}
+                        {% blocktrans %}
+                        The parcel we're using for this lot. Parcels are often
+                        going to be larger than land use areas.
+                        {% endblocktrans %}
                     </div>
                 </th>
                 <td>
                     {% if lot.parcel %}
                         {{ lot.parcel }}
+                        <div>
+                            {% blocktrans with area=lot.parcel.area|floatformat %}
+                            area: {{ area }} square feet
+                            {% endblocktrans %}
+                        </div>
                         {% if "parcels.change_parcel" in perms %}
                         <div class="admin-link">
                             <a href="{% url "admin:parcels_parcel_change" lot.parcel.pk %}" target="_blank">view/change</a>

@@ -37,12 +37,11 @@ Page.create_content_type(RichTextContent)
 
 Page.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('default', _('default')),
-    ('lightbox', _('lightbox')),
 ))
 
 Page.create_content_type(ApplicationContent, APPLICATIONS=(
     ('lots.map_urls', _('Lots map')),
-    ('elephantblog', _('Blog'), {'urls': 'elephantblog.urls'}),
+    ('elephantblog.urls', _('Blog')),
     ('extraadmin.cms_urls', _('Extra admin functions')),
     ('pathways.urls', _('Pathways')),
     ('contact_form', _('Contact form'), {
@@ -66,5 +65,4 @@ Pathway.create_content_type(RichTextContent)
 
 Pathway.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('default', _('default')),
-    ('lightbox', _('lightbox')),
 ))

@@ -1,6 +1,7 @@
 from imagekit import ImageSpec, register
 from imagekit.processors import SmartResize
 
+
 class DetailPageThumbnail(ImageSpec):
     processors = [SmartResize(100, 100)]
     format = 'PNG'

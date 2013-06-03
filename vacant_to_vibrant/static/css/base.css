@@ -46,12 +46,18 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 10px 0;
-  font-family: inherit;
-  font-weight: bold;
-  line-height: 20px;
-  color: inherit;
-  text-rendering: optimizelegibility;
+    margin: 10px 0;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 20px;
+    color: #553B43;
+    text-rendering: optimizelegibility;
+}
+
+h2 {
+    font-size: 12px;
+    line-height: 12px;
+    text-transform: uppercase;
 }
 
 th {
@@ -415,15 +421,6 @@ ul.lot-detail-reasons {
 
 ul.lot-detail-reasons li {
     margin-bottom: 5px;
-}
-
-
-#map-left h2,
-#map-right h2 {
-    color: #553B43;
-    font-size: 12px;
-    line-height: 12px;
-    text-transform: uppercase;
 }
 
 .newsletter-signup {

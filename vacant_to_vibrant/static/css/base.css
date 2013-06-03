@@ -176,6 +176,7 @@ th {
     border: 0;
     color: white;
     font-weight: bold;
+    margin-left: -5px;
     padding: 10px;
 }
 

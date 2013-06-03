@@ -217,6 +217,7 @@ define(
 
             lotsMap.on('popupopen', function (e) {
                 $('#popup-content.loading').spin('large');
+                lotsMap.messageControl.hide();
             });
 
             lotsMap.on('popupclose', function (e) {

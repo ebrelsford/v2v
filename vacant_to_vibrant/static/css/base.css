@@ -459,6 +459,18 @@ input {
     margin-bottom: 0;
 }
 
+.lot-detail-map-right {
+    padding-left: 10px;
+}
+
+@media (max-width: 768px) {
+
+    .lot-detail-map-right {
+        padding-left: 0;
+    }
+
+}
+
 .lot-detail-details table {
     width: 100%;
 }

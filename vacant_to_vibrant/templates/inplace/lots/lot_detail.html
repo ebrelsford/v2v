@@ -26,15 +26,27 @@
 
 <div class="clear"></div>
 
-<div class="lot-detail-main grid grid-2-3">
+<div class="lot-detail-map-container">
 
-    <div id="streetview-container" data-lon="{{ lot.centroid.x }}" 
-        data-lat="{{ lot.centroid.y }}">
-        <div id="streetview" style="height: 200px; width: 100%;"></div>
+    <div class="grid grid-2-3">
+        <div id="streetview-container" data-lon="{{ lot.centroid.x }}" 
+            data-lat="{{ lot.centroid.y }}">
+            <div id="streetview" style="height: 200px; width: 100%;"></div>
+        </div>
+        <div id="streetview-error" class="streetview">
+            {% trans "Sorry, we couldn't find streetview imagery for this lot." %}
+        </div>
     </div>
-    <div id="streetview-error" class="streetview">
-        {% trans "Sorry, we couldn't find streetview imagery for this lot." %}
+
+    <div class="lot-detail-map-right grid grid-1-3">
+        {% with lot.get_geojson_url as places_url %}
+        {% place_map places_url 100% 200px %}
+        {% endwith %}
     </div>
+
+</div>
+
+<div class="lot-detail-main grid grid-2-3">
 
     <div class="lot-detail-details lot-detail-main-section">
         <table>
@@ -439,10 +451,6 @@
 </div>
 
 <div class="lot-detail-side grid grid-1-3">
-
-    {% with lot.get_geojson_url as places_url %}
-    {% place_map places_url 100% 200px %}
-    {% endwith %}
 
     <div id="photos" class="lot-detail-side-section photos">
         <h2>{% trans "Photos" %}</h2>

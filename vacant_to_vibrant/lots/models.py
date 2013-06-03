@@ -254,10 +254,11 @@ class Lot(Place):
             # If the Water Dept's data says the lot is very permeable
             certainty += floor(self.water_parcel.percent_permeable / 20)
 
-            # If the Water Dept's data says the lot has no buildings
-            description = self.water_parcel.building_description.lower()
-            if description.startswith('vac land') or description.startswith('vacant'):
-                certainty += 4
+            if self.water_parcel.building_description:
+                # If the Water Dept's data says the lot has no buildings
+                description = self.water_parcel.building_description.lower()
+                if description.startswith('vac land') or description.startswith('vacant'):
+                    certainty += 4
 
         # Not really certain unless groundtruthed, which would have been
         # returned earlier

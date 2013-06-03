@@ -282,7 +282,6 @@ define(
                 state: 'PA',
                 errorMessage: "Sorry, it doesn't seem that the address you " +
                     "entered is in Philadelphia. Try again?",
-                loadingSelector: '.loading',
                 warningSelector: '.warning',
             })
             .on('searchresultfound', function(e, data) {

@@ -35,7 +35,6 @@ define(
                 city: null,
                 state: null,
                 errorMessage: null,
-                loadingSelector: null,
                 warningSelector: null,
             },
 
@@ -55,15 +54,18 @@ define(
             searchByAddress: function () {
                 var instance = this;
                 instance.$elem.find(instance.options.warningSelector).hide();
-                instance.$elem.find(instance.options.loadingSelector).show();
+                instance.$elem.find(':input[type=submit]')
+                    .spin('small')
+                    .attr('disabled', 'disabled');
 
                 var query = instance.$elem.find('input[type="text"]').val();
                 query = instance.addCityAndState(query);
 
                 geocode(query, instance.options.bounds, instance.options.state, function (result, status) {
                     // Done searching
-                    instance.$elem.find(instance.options.loadingSelector).hide();
-                    instance.$elem.find('input[type="submit"]').removeAttr('disabled');
+                    instance.$elem.find(':input[type=submit]')
+                        .spin(false)
+                        .removeAttr('disabled');
 
                     // Is result valid?
                     if (result === null) {

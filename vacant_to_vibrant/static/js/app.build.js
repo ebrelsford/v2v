@@ -21,7 +21,8 @@
 
         // require()d dependencies
         'chosen.jquery_ready',
-        'fancybox'
+        'fancybox',
+        'lib/jquery.noisy'
     ],
     insertRequire: ['main'],
 

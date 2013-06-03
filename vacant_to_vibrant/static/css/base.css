@@ -64,6 +64,11 @@ th {
     text-align: left;
 }
 
+input {
+    max-width: 100%;
+}
+
+
 /* Clearfix from HTML 5 Boilerplate */
 
 .clearfix:before,
@@ -133,6 +138,15 @@ th {
     padding: 25px;
 }
 
+@media (max-width: 768px) {
+
+    #page-wrapper {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+
+}
+
 
 /*
  * _modules_
@@ -175,6 +189,14 @@ th {
     padding: 10px;
     max-width: 100%;
     width: 75%;
+}
+
+@media (max-width: 1000px) {
+
+    .map-find-a-lot input {
+        width: 50%;
+    }
+
 }
 
 .map-find-a-lot-submit {
@@ -378,6 +400,14 @@ th {
 
 #map-right {
     padding-left: 25px;
+}
+
+@media (max-width: 768px) {
+
+    #map-right {
+        padding-left: 0;
+    }
+
 }
 
 .map-sidebar-section {

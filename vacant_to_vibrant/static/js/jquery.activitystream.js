@@ -4,6 +4,8 @@ define(
         
         'jquery.plugin',
         'jquery.infinitescroll',
+        'lib/jquery.spin',
+
     ], function ($) {
         var ActivityStream = {
 
@@ -22,12 +24,15 @@ define(
             },
 
             load_activities: function (filters) {
+                var instance = this;
                 var url = '/activity-stream/?';
                 if (filters) url += $.param(filters);
+                instance.$elem.spin('large');
 
                 var t = this;
                 this.$elem.load(url,
                     function () {
+                        instance.$elem.spin(false);
                         t.$elem.infinitescroll({
                             behavior: 'local',
                             binder: t.$elem,

@@ -406,10 +406,6 @@ input {
     height: 200px;
 }
 
-#popup-content.loading {
-    background: url(/static/img/loading.gif) no-repeat center;
-}
-
 #popup-content a,
 #popup-content a:visited {
     color: #61A194;

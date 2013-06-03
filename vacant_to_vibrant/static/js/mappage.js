@@ -21,6 +21,7 @@ define(
         'leaflet.lotmap',
 
         'jqueryui',
+        'lib/jquery.spin',
 
     ], function($, L, Django, JSON) {
 
@@ -159,7 +160,8 @@ define(
                         jqxhr: $.get(url, function(response) {
                             $('#popup-content')
                                 .html(response)
-                                .removeClass('loading');
+                                .removeClass('loading')
+                                .spin(false);
                         }),
                     });
                 }
@@ -211,6 +213,10 @@ define(
             var event = data.event;
             $('#streetview-container').data('streetview').load_streetview(
                 event.latlng.lng, event.latlng.lat);
+        });
+
+        lotsMap.on('popupopen', function(e) {
+            $('#popup-content.loading').spin('large');
         });
 
         lotsMap.on('popupclose', function(e) {

@@ -41,6 +41,8 @@ def format_street_name(street_name):
 
 def fix_address(address):
     """Fix the formatting of an address for display."""
+    if not address:
+        return None
     components = address.split()
 
     # assume everything can be a street name

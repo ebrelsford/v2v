@@ -152,7 +152,7 @@ class FiltersForm(forms.Form):
     zoning_district__zoning_type__in = forms.ModelMultipleChoiceField(
         label=_('Zoning type'),
         queryset=ZoningType.objects.all(),
-        widget=ChosenSelectMultiple(),
+        widget=ChosenSelectMultiple(attrs={'style': 'width: 100px;',}),
     )
 
     known_use__name__in = forms.MultipleChoiceField(
@@ -180,7 +180,7 @@ class FiltersForm(forms.Form):
             choices=[(b.label, b.label) for b in boundaries],
             initial=(),
             label=_(layer.name),
-            widget=ChosenSelectMultiple(),
+            widget=ChosenSelectMultiple(attrs={'style': 'width: 100px;',}),
         )
 
     def _get_uses(self):

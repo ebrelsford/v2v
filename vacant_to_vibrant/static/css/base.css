@@ -54,6 +54,10 @@ h6 {
     text-rendering: optimizelegibility;
 }
 
+h1 {
+    line-height: 32px;
+}
+
 h2 {
     font-size: 12px;
     line-height: 12px;
@@ -299,6 +303,15 @@ input {
     padding-bottom: 5px;
 }
 
+@media (max-width: 400px) {
+
+    #mainmenu li {
+        border: 0;
+        float: none;
+    }
+
+}
+
 #mainmenu li:last-child {
     border-right: 0;
 }
@@ -309,6 +322,14 @@ input {
 
 #aside-right {
     padding-left: 25px;
+}
+
+@media (max-width: 768px) {
+
+    #aside-right {
+        padding-left: 0;
+    }
+
 }
 
 #footer {

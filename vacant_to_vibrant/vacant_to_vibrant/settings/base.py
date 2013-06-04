@@ -174,6 +174,7 @@ INSTALLED_APPS = (
     'cms',
     'contact',
     'extraadmin',
+    'groundtruth',
     'lots',
     'pathways',
     'phillydata',

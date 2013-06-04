@@ -23,6 +23,7 @@ from libapps.organize.notifications import notify_participants_new_obj
 from libapps.organize.views import EditParticipantMixin
 
 from generic.views import CSVView, JSONResponseView
+from groundtruth.forms import GroundtruthRecordForm
 from phillyorganize.forms import OrganizerForm, WatcherForm
 from phillyorganize.models import Organizer, Watcher
 from steward.forms import StewardNotificationForm
@@ -365,6 +366,48 @@ class AddStewardNotificationSuccessView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AddStewardNotificationSuccessView, self).get_context_data(**kwargs)
+        context['lot'] = get_object_or_404(Lot, pk=kwargs['pk'])
+        return context
+
+
+class AddGroundtruthRecordView(CreateView):
+    form_class = GroundtruthRecordForm
+    template_name = 'lots/groundtruth/groundtruthrecord_add.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AddGroundtruthRecordView, self).get_context_data(**kwargs)
+        context.update({
+            'lot': Lot.objects.get(pk=self.kwargs['pk']),
+        })
+        return context
+
+    def get_initial(self):
+        initial = super(AddGroundtruthRecordView, self).get_initial()
+        try:
+            object_id = self.kwargs['pk']
+            initial.update({
+                'content_type': ContentType.objects.get_for_model(Lot),
+                'object_id': object_id,
+            })
+        except KeyError:
+            raise Http404
+        return initial
+
+    def get_success_url(self):
+        try:
+            return reverse('lots:add_groundtruthrecord_success',
+                           kwargs={
+                               'pk': self.object.object_id,
+                           })
+        except Exception:
+            raise Http404
+
+
+class AddGroundtruthRecordSuccessView(TemplateView):
+    template_name = 'lots/groundtruth/groundtruthrecord_add_success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AddGroundtruthRecordSuccessView, self).get_context_data(**kwargs)
         context['lot'] = get_object_or_404(Lot, pk=kwargs['pk'])
         return context
 

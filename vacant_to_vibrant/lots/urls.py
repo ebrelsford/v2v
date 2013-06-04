@@ -6,6 +6,8 @@ from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
                     LotsGeoJSON, LotsGeoJSONPolygon, AddParticipantSuccessView,
                     AddStewardNotificationView,
                     AddStewardNotificationSuccessView,
+                    AddGroundtruthRecordView,
+                    AddGroundtruthRecordSuccessView,
                     AddPhotoView, AddNoteView, AddFileView, LotsCountView,
                     LotsCountBoundaryView, LotsCSV, LotsKML)
 
@@ -57,6 +59,14 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/steward/add/success/$',
         AddStewardNotificationSuccessView.as_view(),
         name='add_stewardnotification_success'),
+
+    url(r'^(?P<pk>\d+)/groundtruth/add/$',
+        AddGroundtruthRecordView.as_view(),
+        name='add_groundtruthrecord'),
+
+    url(r'^(?P<pk>\d+)/groundtruth/add/success/$',
+        AddGroundtruthRecordSuccessView.as_view(),
+        name='add_groundtruthrecord_success'),
 
     url(r'^(?P<pk>\d+)/photos/add/$',
         AddPhotoView.as_view(),

@@ -21,6 +21,7 @@
 
     {% if not lot.known_use %}
     <a href="{% url "lots:add_stewardnotification" pk=lot.pk %}" style="float: right;">{% trans "Already using this lot? Let us know!" %}</a>
+    <a href="{% url "lots:add_groundtruthrecord" pk=lot.pk %}" style="float: right;">{% trans "Have we made a mistake? Let us know!" %}</a>
     {% endif %}
 </div>
 

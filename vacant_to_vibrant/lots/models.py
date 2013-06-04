@@ -359,6 +359,12 @@ class LotGroup(Lot):
 class Use(models.Model):
     name = models.CharField(_('name'), max_length=200)
     slug = models.SlugField(_('slug'), max_length=200)
+    visible = models.BooleanField(_('visible'),
+        default=True,
+        help_text=_('Should lots with this use be visible on the map? If the '
+                    'use is not vacant and not a project that someone could '
+                    'join, probably not.'),
+    )
 
     def __unicode__(self):
         return self.name

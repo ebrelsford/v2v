@@ -185,7 +185,7 @@ class FiltersForm(forms.Form):
 
     def _get_uses(self):
         uses = []
-        for use in Use.objects.all().order_by('name'):
+        for use in Use.objects.filter(visible=True).order_by('name'):
             uses += [(use.name, use.name),]
         return uses
 

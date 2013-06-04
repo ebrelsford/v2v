@@ -60,7 +60,7 @@ urlpatterns = patterns('',
         AddStewardNotificationSuccessView.as_view(),
         name='add_stewardnotification_success'),
 
-    url(r'^(?P<pk>\d+)/groundtruth/add/$',
+    url(r'^(?P<pk>\d+)/correction/add/$',
         AddGroundtruthRecordView.as_view(),
         name='add_groundtruthrecord'),
 

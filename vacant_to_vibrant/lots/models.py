@@ -248,7 +248,11 @@ class Lot(Place):
         # If the L&I has given the lot "vacant" violations in the past year
         today = now()
         last_year = today.replace(year=today.year - 1)
-        self.violations.filter(violation_datetime__gt=last_year).count()
+        violation_count = self.violations.filter(violation_datetime__gt=last_year).count()
+        violation_certainty = 2 * violation_count
+        if violation_certainty > 4:
+            violation_certainty = 4
+        certainty += violation_certainty
 
         if self.water_parcel:
             # If the Water Dept's data says the lot is very permeable

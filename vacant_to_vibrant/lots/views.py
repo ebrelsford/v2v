@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, TemplateView
 
 from forms_builder.forms.models import Form
@@ -24,6 +25,7 @@ from libapps.organize.views import EditParticipantMixin
 
 from generic.views import CSVView, JSONResponseView
 from groundtruth.forms import GroundtruthRecordForm
+from groundtruth.models import GroundtruthRecord
 from phillyorganize.forms import OrganizerForm, WatcherForm
 from phillyorganize.models import Organizer, Watcher
 from steward.forms import StewardNotificationForm
@@ -394,8 +396,15 @@ class AddGroundtruthRecordView(CreateView):
         return initial
 
     def get_success_url(self):
+        if self.object.is_approved:
+            messages.success(self.request,
+                             _('Lot updated with your correction.'))
+        else:
+            messages.success(self.request,
+                             _('Thanks for your correction. The lot will be '
+                               'updated once we have a chance to look at it.'))
         try:
-            return reverse('lots:add_groundtruthrecord_success',
+            return reverse('lots:lot_detail',
                            kwargs={
                                'pk': self.object.object_id,
                            })
@@ -409,6 +418,10 @@ class AddGroundtruthRecordSuccessView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AddGroundtruthRecordSuccessView, self).get_context_data(**kwargs)
         context['lot'] = get_object_or_404(Lot, pk=kwargs['pk'])
+        context['groundtruth_record'] = get_object_or_404(
+            GroundtruthRecord,
+            pk=kwargs['record_pk']
+        )
         return context
 
 

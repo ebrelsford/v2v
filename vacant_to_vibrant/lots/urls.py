@@ -64,10 +64,6 @@ urlpatterns = patterns('',
         AddGroundtruthRecordView.as_view(),
         name='add_groundtruthrecord'),
 
-    url(r'^(?P<pk>\d+)/groundtruth/add/success/$',
-        AddGroundtruthRecordSuccessView.as_view(),
-        name='add_groundtruthrecord_success'),
-
     url(r'^(?P<pk>\d+)/photos/add/$',
         AddPhotoView.as_view(),
         name='add_photo'),

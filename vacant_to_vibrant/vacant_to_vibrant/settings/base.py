@@ -89,6 +89,8 @@ MIDDLEWARE_CLASSES = (
 
     'honeypot.middleware.HoneypotMiddleware',
     'reversion.middleware.RevisionMiddleware',
+
+    'vacant_to_vibrant.middleware.MonitorMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

@@ -236,7 +236,7 @@ class Lot(Place):
         certainty = 0
 
         # If the land use data has this lot marked vacant
-        if self.land_use_area and self.land_use_area.subcategory is 'Vacant':
+        if self.land_use_area and self.land_use_area.subcategory == 'Vacant':
             certainty += 4
 
         # If the L&I has given the lot "vacant" licenses

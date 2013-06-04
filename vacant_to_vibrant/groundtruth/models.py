@@ -14,6 +14,7 @@ class GroundtruthRecord(models.Model):
 
     use = models.ForeignKey('lots.Use',
         verbose_name=_('use'),
+        limit_choices_to={'visible': False},
         help_text=_('How is the lot actually being used?'),
     )
     contact_email = models.EmailField(_('contact email'),

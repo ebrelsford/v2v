@@ -13,6 +13,7 @@ class BaseStewardProject(models.Model):
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     use = models.ForeignKey('lots.Use',
+        limit_choices_to={'visible': True},
         help_text=_('How is the project using the land?'),
         verbose_name=_('use'),
     )

@@ -31,13 +31,17 @@ a:visited {
     text-decoration: none;
 }
 
-ul {
-    list-style: none;
+a:visited.btn {
+    color: black;
 }
 
-p {
-    padding-top: 10px;
-    padding-bottom: 10px;
+a:visited.btn-primary {
+    color: white;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
 }
 
 h1,
@@ -68,8 +72,45 @@ th {
     text-align: left;
 }
 
-input {
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+    margin-bottom: 0;
     max-width: 100%;
+}
+
+select:last-child,
+textarea:last-child,
+input[type="text"]:last-child,
+input[type="password"]:last-child,
+input[type="datetime"]:last-child,
+input[type="datetime-local"]:last-child,
+input[type="date"]:last-child,
+input[type="month"]:last-child,
+input[type="time"]:last-child,
+input[type="week"]:last-child,
+input[type="number"]:last-child,
+input[type="email"]:last-child,
+input[type="url"]:last-child,
+input[type="search"]:last-child,
+input[type="tel"]:last-child,
+input[type="color"]:last-child,
+.uneditable-input {
+    margin-bottom: 10px;
 }
 
 
@@ -156,10 +197,6 @@ input {
  * _modules_
  */
 
-.errorlist {
-    color: red;
-}
-
 .messages {
     border: 1px solid black;
     margin: 10px 0;
@@ -172,6 +209,27 @@ input {
 
 .help-text {
     font-size: 10px;
+    margin-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+
+    .form-wrapper {
+        display: table;
+    }
+
+    .form-row {
+        display: table-row;
+    }
+
+    .form-header {
+        display: table-cell;
+    }
+
+    .form-input {
+        display: table-cell;
+    }
+
 }
 
 .map-find-a-lot-container {
@@ -341,6 +399,10 @@ input {
     text-align: center;
 }
 
+.help-text {
+    font-size: 12px;
+}
+
 .field-label {
     font-weight: bold;
 }
@@ -465,6 +527,10 @@ input {
         padding-left: 0;
     }
 
+}
+
+.lot-detail-get-involved {
+    margin-bottom: 10px;
 }
 
 .lot-detail-details table {

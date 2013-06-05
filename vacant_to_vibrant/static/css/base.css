@@ -358,15 +358,16 @@ header {
 
 .map-filters-toggle,
 .map-filters-toggle:hover {
-    background-color: #E6E2E3;
+    background: url(/static/img/advanced_search_tools.png);
     color: #553B43;
     cursor: pointer;
     display: inline-block;
     font-weight: bold;
+    height: 21px;
     margin-top: 10px;
     margin-bottom: 10px;
-    max-width: 300px;
     padding: 10px;
+    width: 264px;
 }
 
 .filter {

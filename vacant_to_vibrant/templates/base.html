@@ -12,13 +12,11 @@
 
     </head>
     <body class="{% block body_class %}{% endblock %}">
+
         <div id="page-wrapper">
+
             <header>
-                <div id="logo">
-                    <h1>
-                        <a href="/">{% trans "Grounded in Philly" %}</a>
-                    </h1>
-                </div>
+
                 <nav id="mainmenu" class="clearfix">
                     <ul>
                         {% feincms_nav feincms_page level=2 depth=1 as mainmenu %}
@@ -34,8 +32,16 @@
                         {% endif %}
                     </ul>
                 </nav>
+
+                <div id="logo">
+                    <h1>
+                        <a href="/">{% trans "Grounded in Philly" %}</a>
+                    </h1>
+                </div>
+
             </header>
-            <div class="content-wrapper">
+
+            <div class="content-wrapper clearfix">
                 <section id="main" class="{% block mainclasses %}grid grid-3-4{% endblock %}">
 
                     <nav id="submenu" class="clearfix">

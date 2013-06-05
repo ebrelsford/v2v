@@ -1,9 +1,6 @@
 {% load i18n %}
 
 <form method="post" {% ifequal is_upload "true" %}enctype="multipart/form-data"{% endifequal %}>
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
+    {% include "_form.html" with form=form %}
     <input type="submit" value="{% trans "submit" %}" />
 </form>

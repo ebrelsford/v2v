@@ -314,12 +314,15 @@ header {
 }
 
 .map-find-a-lot-submit {
-    background-color: #9FB450;
+    background: url(/static/img/go.png);
     border: 0;
     color: white;
+    font-size: 24px;
     font-weight: bold;
-    margin-left: -5px;
+    height: 40px;
+    margin-left: -10px;
     padding: 10px;
+    width: 77px;
 }
 
 #map-overlay {

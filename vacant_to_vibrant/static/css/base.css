@@ -310,7 +310,7 @@ header {
     width: 75%;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
 
     .map-find-a-lot input {
         width: 50%;

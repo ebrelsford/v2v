@@ -341,10 +341,15 @@ header {
 
 .map-overlay-button {
     color: white;
-    background-color: #61A194;
+    background: url(/static/img/find_one.png);
     border: 0;
+    bottom: 0;
+    height: 40px;
+    left: 170px;
     padding: 5px;
+    position: relative;
     text-transform: uppercase;
+    width: 170px;
 }
 
 .map-filters {

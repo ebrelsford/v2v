@@ -16,12 +16,20 @@
 {% endif %}
 
 <div class="lot-detail-get-involved grid">
-    <a href="{% url "lots:add_watcher" pk=lot.pk %}">{% trans "Watch this lot" %}</a>
-    <a href="{% url "lots:add_organizer" pk=lot.pk %}">{% trans "Become an organizer" %}</a>
+    <a class="btn btn-primary" href="{% url "lots:add_watcher" pk=lot.pk %}">
+        {% trans "Watch this lot" %}
+    </a>
+    <a class="btn btn-primary" href="{% url "lots:add_organizer" pk=lot.pk %}">
+        {% trans "Become an organizer" %}
+    </a>
 
     {% if not lot.known_use %}
-    <a href="{% url "lots:add_stewardnotification" pk=lot.pk %}" style="float: right;">{% trans "Already using this lot?" %}</a>
-    <a href="{% url "lots:add_groundtruthrecord" pk=lot.pk %}" style="float: right;">{% trans "Have we made a mistake?" %}</a>
+        <a class="btn" href="{% url "lots:add_stewardnotification" pk=lot.pk %}" style="float: right;">
+            {% trans "Already using this lot?" %}
+        </a>
+        <a class="btn" href="{% url "lots:add_groundtruthrecord" pk=lot.pk %}" style="float: right;">
+            {% trans "Have we made a mistake?" %}
+        </a>
     {% endif %}
 </div>
 
@@ -427,13 +435,17 @@
 
     <div id="notes" class="notes lot-detail-main-section">
         <h2>{% trans "Notes" %}</h2>
-        <a href="{% url "lots:add_note" pk=lot.pk %}">{% trans "Add a note" %}</a>
+        <a class="btn" href="{% url "lots:add_note" pk=lot.pk %}">
+            {% trans "Add a note" %}
+        </a>
         {% render_note_list for lot %}
     </div>
 
     <div id="files" class="files lot-detail-main-section">
         <h2>{% trans "Files" %}</h2>
-        <a href="{% url "lots:add_file" pk=lot.pk %}">{% trans "Add a file" %}</a>
+        <a class="btn" href="{% url "lots:add_file" pk=lot.pk %}">
+            {% trans "Add a file" %}
+        </a>
         {% render_file_list for lot %}
     </div>
 
@@ -456,7 +468,9 @@
     <div id="photos" class="lot-detail-side-section photos">
         <h2>{% trans "Photos" %}</h2>
         <div>
-            <a href="{% url "lots:add_photo" pk=lot.pk %}">{% trans "Submit a photo" %}</a>
+            <a class="btn" href="{% url "lots:add_photo" pk=lot.pk %}">
+                {% trans "Submit a photo" %}
+            </a>
         </div>
         {% render_photo_list for lot %}
     </div>
@@ -485,7 +499,9 @@
         <h2>{% trans "Organize" %}</h2>
         {% get_organizer_count for lot as organizer_count %}
         <div>There {{ organizer_count|pluralize:"is,are" }} {{ organizer_count }} organizer{{ organizer_count|pluralize }} on this lot.</div>
-        <a href="{% url "lots:add_organizer" pk=lot.pk %}">{% trans "Become an organizer" %}</a>
+        <a class="btn" href="{% url "lots:add_organizer" pk=lot.pk %}">
+            {% trans "Become an organizer" %}
+        </a>
         {% render_organizer_list for lot %}
     </div>
 
@@ -493,7 +509,9 @@
         <h2>{% trans "Watch" %}</h2>
         {% get_watcher_count for lot as watcher_count %}
         <div>There {{ watcher_count|pluralize:"is,are" }} {{ watcher_count }} watcher{{ watcher_count|pluralize }} on this lot.</div>
-        <a href="{% url "lots:add_watcher" pk=lot.pk %}">{% trans "Watch this lot" %}</a>
+        <a class="btn" href="{% url "lots:add_watcher" pk=lot.pk %}">
+            {% trans "Watch this lot" %}
+        </a>
     </div>
 
     <div id="pathways" class="pathways lot-detail-side-section">

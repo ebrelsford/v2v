@@ -294,7 +294,12 @@ header {
     padding: 10px;
 }
 
+.map-find-a-lot-form {
+    margin: 0;
+}
+
 .map-find-a-lot label {
+    display: inline;
     margin-right: 10px;
 }
 

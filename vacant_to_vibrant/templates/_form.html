@@ -1,0 +1,29 @@
+{# Render the inside of a form. #}
+
+{% csrf_token %}
+
+{% for hidden in form.hidden_fields %}
+{{ hidden }}
+{% endfor %}
+
+<div class="form-wrapper">
+    {% for field in form.visible_fields %}
+        <div class="control-group form-row {% if field.errors %}error{% endif %}">
+            <div class="control-label form-header">
+                {{ field.label_tag }}
+            </div>
+            <div class="form-input">
+                {% if field.errors %}
+                <ul class="help-block">
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {{ field }}
+                <div class="help-text">{{ field.help_text|safe }}</div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

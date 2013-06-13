@@ -24,6 +24,7 @@
                 WHERE 
                     centroid IS NOT NULL AND 
                     lots_lotgroup.lot_ptr_id IS NULL AND
+                    known_use_certainty &gt; 3 AND known_use_certainty &lt; 11 AND
                     owners_owner.owner_type = 'public'
             ) as lots
             </Parameter>

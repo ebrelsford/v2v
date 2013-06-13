@@ -102,6 +102,9 @@ define(
                 return !$(this).parents('.filter').is(viewTypeFilterSelector);
             });
 
+            // Always enable default filters (for counts)
+            $('.filter.default :input').prop('disabled', false);
+
             // TODO for viewType===tiles, reset filters that are disabled 
             //  (ensures sanity and that counts are appropriate)
         }

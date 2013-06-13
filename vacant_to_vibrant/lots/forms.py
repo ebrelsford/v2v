@@ -58,6 +58,16 @@ class FiltersForm(forms.Form):
         label=_('Width (ft) less than'),
         required=False,
     )
+    known_use_certainty__gt = forms.IntegerField(
+        initial=3,
+        label=_('Known use certainty greater than'),
+        required=False,
+    )
+    known_use_certainty__lt = forms.IntegerField(
+        initial=11,
+        label=_('Known use certainty less than'),
+        required=False,
+    )
 
 
     #
@@ -201,11 +211,14 @@ class FiltersForm(forms.Form):
         for field in ('view_type', 'choropleth_boundary_layer',):
             yield self[field]
 
+    def default_filter_names(self):
+        return ('available_property__status__in', 'polygon_area__gt',
+                'polygon_area__lt', 'polygon_width__gt', 'polygon_width__lt',
+                'known_use_certainty__gt', 'known_use_certainty__lt',)
+
     def default_filters(self):
-        for field in ('available_property__status__in', 'polygon_area__gt',
-                      'polygon_area__lt', 'polygon_width__gt',
-                      'polygon_width__lt',):
-            yield self[field]
+        for field_name in self.default_filter_names():
+            yield self[field_name]
 
     def other_filters(self):
         for field in ('boundary_zipcodes', 'boundary_city_council_districts',
@@ -239,6 +252,7 @@ class FiltersForm(forms.Form):
             'zoning_district__zoning_type__in', 'known_use__name__in',
             'water_parcel__impervious_area__lt', 'boundary_zipcodes',
             'boundary_city_council_districts',
+            'known_use_certainty__gt', 'known_use_certainty__lt',
         )
 
     def tiles_filters(self):

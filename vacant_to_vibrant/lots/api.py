@@ -275,11 +275,13 @@ class LotResource(ModelResource):
 
     class Meta:
         allowed_methods = ('get',)
-        fields = ('centroid', 'polygon', 'pk', 'owner', 'known_use',)
+        fields = ('centroid', 'polygon', 'pk', 'owner', 'known_use',
+                  'known_use_certainty',)
         queryset = Lot.objects.all()
         filtering = {
             'centroid': ALL,
             'known_use': ALL_WITH_RELATIONS,
+            'known_use_certainty': ALL_WITH_RELATIONS,
             'owner': ALL_WITH_RELATIONS,
             'polygon': ALL,
         }

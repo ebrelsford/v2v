@@ -7,8 +7,8 @@
 </h1>
 
 <div class="lot-popup-get-involved">
-    <a href="{% url "lots:add_watcher" pk=object.pk %}" target="_blank">{% trans "Watch this lot" %}</a>
-    <a href="{% url "lots:add_organizer" pk=object.pk %}" target="_blank">{% trans "Become an organizer" %}</a>
+    <a class="btn btn-small" href="{% url "lots:add_watcher" pk=object.pk %}" target="_blank">{% trans "Watch this lot" %}</a>
+    <a class="btn btn-small" href="{% url "lots:add_organizer" pk=object.pk %}" target="_blank">{% trans "Become an organizer" %}</a>
 </div>
 
 <div class="lot-popup-size">
@@ -34,5 +34,5 @@
 </div>
 
 <div class="lot-popup-permalink">
-    <a href="{{ object.get_absolute_url }}" target="_blank">{% trans "Learn more about this lot" %}</a>
+    <a class="btn btn-small btn-primary" href="{{ object.get_absolute_url }}" target="_blank">{% trans "Learn more about this lot" %}</a>
 </div>

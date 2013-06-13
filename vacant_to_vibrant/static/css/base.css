@@ -508,10 +508,24 @@ header {
     font-size: 24px;
 }
 
-#popup-content h1 a {
+/* Header link */
+#popup-content h1 a,
+#popup-content h1 a:visited {
     color: #553B43;
 }
 
+/* Button links */
+#popup-content a.btn,
+#popup-content a:visited.btn {
+    color: black;
+}
+
+#popup-content a.btn-primary,
+#popup-content a:visited.btn-primary {
+    color: white;
+}
+
+/* Other links */
 #popup-content a,
 #popup-content a:visited {
     color: #61A194;

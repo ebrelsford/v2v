@@ -1,7 +1,9 @@
 {% load i18n %}
 
 <h1 class="lot-popup-display-name">
-    {{ object.address_line1|default:"unknown address" }}
+    <a href="{{ object.get_absolute_url }}" target="_blank">
+        {{ object.address_line1|default:"unknown address" }}
+    </a>
 </h1>
 
 <div class="lot-popup-get-involved">

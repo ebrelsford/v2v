@@ -504,6 +504,14 @@ header {
     height: 200px;
 }
 
+#popup-content h1 {
+    font-size: 24px;
+}
+
+#popup-content h1 a {
+    color: #553B43;
+}
+
 #popup-content a,
 #popup-content a:visited {
     color: #61A194;

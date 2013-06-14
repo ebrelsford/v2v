@@ -54,7 +54,9 @@
                         {% endfor %}
                     </nav>    
 
-                    <nav id="breadcrumbs" class="clearfix"></nav>
+                    <ul id="breadcrumbs" class="breadcrumb clearfix">
+                        {% block breadcrumbs %}{% endblock %}
+                    </ul>
 
                     {% include "_messages.html" %}
 

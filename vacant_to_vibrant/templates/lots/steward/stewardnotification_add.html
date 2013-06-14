@@ -1,9 +1,14 @@
 {% extends "lots/base.html" %}
 {% load i18n %}
 
-{% block title %}{{ block.super }}: {% trans "Already using this lot" %}{% endblock %}
+{% block title %}{% trans "Already using this lot" %} | {{ block.super }}{% endblock %}
 
 {% block body_class %}{{ block.super }} add-steward-page{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>{% trans "Already using this lot" %}</li>
+{% endblock %}
 
 {% block lot_content %}
 {{ block.super }}

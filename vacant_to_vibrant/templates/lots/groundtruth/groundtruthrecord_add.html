@@ -5,6 +5,11 @@
 
 {% block body_class %}{{ block.super }} add-groundtruthrecord-page{% endblock %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>{% trans "This lot is being used for something else" %}</li>
+{% endblock %}
+
 {% block lot_content %}
 {{ block.super }}
 <div>

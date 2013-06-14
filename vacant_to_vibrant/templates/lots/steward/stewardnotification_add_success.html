@@ -1,7 +1,12 @@
 {% extends "lots/base.html" %}
 {% load facebook_tags i18n twitter_tags %}
 
-{% block title %}{{ block.super }}: {% trans "Already using this lot" %}{% endblock %}
+{% block title %}{% trans "Already using this lot" %} | {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>{% trans "Already using this lot" %}</li>
+{% endblock %}
 
 {% block lot_content %}
 {{ block.super }}

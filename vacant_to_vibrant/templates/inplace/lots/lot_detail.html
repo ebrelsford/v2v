@@ -5,6 +5,15 @@
 
 {% block body_class %}{{ block.super }} lot-base-page lot-detail-page{% endblock %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>
+        <a href="/">{% trans "Home" %}</a>
+        <span class="divider">&raquo;</span>
+    </li>
+    <li>{{ lot.address_line1|default:lot.pk }}</li>
+{% endblock %}
+
 {% block content %}
 {{ block.super }}
 <h1>{{ lot.address_line1|default:"unknown" }}</h1>

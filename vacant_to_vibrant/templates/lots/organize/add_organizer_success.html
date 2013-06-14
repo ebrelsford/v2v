@@ -3,6 +3,11 @@
 
 {% block title %}{% trans "Become an Organizer" %} | {{ block.super }}{% endblock %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>{% trans "Become an Organizer" %}</li>
+{% endblock %}
+
 {% block lot_content %}
 {{ block.super }}
 <div id="lot-details">

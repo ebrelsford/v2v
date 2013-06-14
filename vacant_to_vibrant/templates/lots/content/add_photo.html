@@ -3,6 +3,11 @@
 
 {% block title %}{% trans "Add a Photo" %} | {{ block.super }}{% endblock %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>{% trans "Add a Photo" %}</li>
+{% endblock %}
+
 {% block lot_content %}
 {{ block.super }}
 <h3>Add a photo</h3>

@@ -5,6 +5,11 @@
 
 {% block body_class %}{{ block.super }} add-organizer-page{% endblock %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>{% trans "Become an Organizer" %}</li>
+{% endblock %}
+
 {% block lot_content %}
 {{ block.super }}
 <div>

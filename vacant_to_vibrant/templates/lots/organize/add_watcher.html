@@ -3,6 +3,11 @@
 
 {% block title %}{% trans "Watch a Lot" %} | {{ block.super }}{% endblock %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>{% trans "Watch a Lot" %}</li>
+{% endblock %}
+
 {% block lot_content %}
 {{ block.super }}
 <div id="lot-details">

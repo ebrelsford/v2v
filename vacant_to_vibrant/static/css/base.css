@@ -114,26 +114,6 @@ input[type="color"]:last-child,
 }
 
 
-/* Clearfix from HTML 5 Boilerplate */
-
-.clearfix:before,
-.clearfix:after {
-    content: " ";
-    display: table;
-}
-
-.clearfix:after {
-    clear: both; 
-}
-.clearfix { 
-    *zoom: 1; 
-}
-
-.clear {
-    clear: both;
-}
-
-
 /*
  * _state_
  */
@@ -186,8 +166,8 @@ input[type="color"]:last-child,
 @media (max-width: 768px) {
 
     #page-wrapper {
-        margin-left: 5%;
-        margin-right: 5%;
+        margin-left: 0;
+        margin-right: 0;
     }
 
 }

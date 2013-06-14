@@ -1,6 +1,4 @@
-from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
-from django.forms import HiddenInput, IntegerField, ModelChoiceField, ModelForm
+from django.forms import HiddenInput, ModelForm
 
 from notify.forms import NotifyOnCreationForm
 

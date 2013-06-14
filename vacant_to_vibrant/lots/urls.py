@@ -7,7 +7,6 @@ from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
                     AddStewardNotificationView,
                     AddStewardNotificationSuccessView,
                     AddGroundtruthRecordView,
-                    AddGroundtruthRecordSuccessView,
                     AddPhotoView, AddNoteView, AddFileView, LotsCountView,
                     LotsCountBoundaryView, LotsCSV, LotsKML)
 

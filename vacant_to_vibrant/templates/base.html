@@ -54,9 +54,13 @@
                         {% endfor %}
                     </nav>    
 
-                    <ul id="breadcrumbs" class="breadcrumb clearfix">
-                        {% block breadcrumbs %}{% endblock %}
-                    </ul>
+                    {% block breadcrumbs_wrapper %}
+                        <ul class="breadcrumb">
+                            {% block breadcrumbs %}
+                                {% feincms_breadcrumbs feincms_page %}
+                            {% endblock %}
+                        </ul>
+                    {% endblock %}
 
                     {% include "_messages.html" %}
 

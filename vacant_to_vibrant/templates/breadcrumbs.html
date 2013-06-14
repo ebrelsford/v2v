@@ -1,0 +1,13 @@
+{% for url, title in trail %}
+    <li>
+        {% if url %}
+            <a href="{{ url }}">{{ title }}</a>
+        {% else %}
+            {{ title }}
+        {% endif %}
+
+        {% if not forloop.last %}
+            <span class="divider">&raquo;</span>
+        {% endif %}
+    </li>
+{% endfor %}

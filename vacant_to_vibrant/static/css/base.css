@@ -176,6 +176,14 @@ input[type="color"]:last-child,
     padding: 25px;
 }
 
+@media (max-width: 400px) {
+
+    .content-wrapper {
+        padding: 5px;
+    }
+
+}
+
 
 /*
  * _modules_
@@ -206,7 +214,7 @@ header {
     left: 250px;
     max-width: 400px;
     position: relative;
-    top: 10px;
+    top: -90px;
 }
 
 #mainmenu li {
@@ -219,6 +227,14 @@ header {
 }
 
 @media (max-width: 400px) {
+
+    #mainmenu {
+        height: auto;
+        left: 0;
+        max-width: none;
+        position: static;
+        top: 0;
+    }
 
     #mainmenu li {
         border: 0;

@@ -284,6 +284,14 @@ header {
 
 }
 
+.form-actions {
+    background: transparent;
+}
+
+.required label {
+    font-weight: bold;
+}
+
 .map-find-a-lot-container {
     background-color: #64948A;
     color: white;
@@ -588,6 +596,10 @@ header {
 }
 
 .lot-detail-get-involved {
+    margin-bottom: 10px;
+}
+
+.lot-detail-admin {
     margin-bottom: 10px;
 }
 

@@ -6,9 +6,15 @@ class PrefixLabelTextInput(TextInput):
         super(PrefixLabelTextInput, self).__init__()
         self.prefix = prefix
 
-    def render(self, name, value, attrs=None):                                                                                                                            
+    def render(self, name, value, attrs=None):
         attributes = { 'class': 'prefixed' }
         if attrs:
             attributes = dict(attributes.items() + attrs.items())
-        return mark_safe('<span class="prefix">%s</span>' % self.prefix + super(PrefixLabelTextInput, self).render(name, value, attributes))
+        rendered_field = super(PrefixLabelTextInput, self).render(name, value, attributes)
+        return mark_safe("""
+            <div class="input-prepend">
+                <span class="add-on prefix">%s</span> %s
+            </div>
+        """ % (self.prefix, rendered_field))
+
 

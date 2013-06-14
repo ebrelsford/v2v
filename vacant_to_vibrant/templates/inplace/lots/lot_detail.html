@@ -16,20 +16,24 @@
 {% endif %}
 
 <div class="lot-detail-get-involved grid">
-    <a class="btn btn-primary" href="{% url "lots:add_watcher" pk=lot.pk %}">
-        {% trans "Watch this lot" %}
-    </a>
-    <a class="btn btn-primary" href="{% url "lots:add_organizer" pk=lot.pk %}">
-        {% trans "Become an organizer" %}
-    </a>
+    <div class="btn-group">
+        <a class="btn btn-primary" href="{% url "lots:add_watcher" pk=lot.pk %}">
+            {% trans "Watch this lot" %}
+        </a>
+        <a class="btn btn-primary" href="{% url "lots:add_organizer" pk=lot.pk %}">
+            {% trans "Become an organizer" %}
+        </a>
+    </div>
 
     {% if not lot.known_use %}
-        <a class="btn" href="{% url "lots:add_stewardnotification" pk=lot.pk %}" style="float: right;">
-            {% trans "Already using this lot?" %}
-        </a>
-        <a class="btn" href="{% url "lots:add_groundtruthrecord" pk=lot.pk %}" style="float: right;">
-            {% trans "Have we made a mistake?" %}
-        </a>
+        <div class="btn-group pull-right">
+            <a class="btn" href="{% url "lots:add_stewardnotification" pk=lot.pk %}">
+                {% trans "Already using this lot?" %}
+            </a>
+            <a class="btn" href="{% url "lots:add_groundtruthrecord" pk=lot.pk %}">
+                {% trans "Have we made a mistake?" %}
+            </a>
+        </div>
     {% endif %}
 </div>
 

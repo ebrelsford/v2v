@@ -210,6 +210,7 @@ header {
 }
 
 #mainmenu {
+    float: left;
     height: 0;
     left: 250px;
     max-width: 400px;

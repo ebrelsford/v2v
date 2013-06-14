@@ -70,13 +70,14 @@
                         {% endblock %}
                     </article>
                 </section>
+
                 {% block sidebar %}
                 <aside id="aside-right" class="grid grid-1-4">
                     {% feincms_render_region feincms_page "sidebar" request %}
                 </aside>
                 {% endblock %}
+
             </div>
-            <div class="clear"></div>
         </div>
         <div id="footer">
             {% feincms_render_region feincms_page "footer" request %}

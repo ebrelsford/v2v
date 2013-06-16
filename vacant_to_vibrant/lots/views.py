@@ -222,7 +222,7 @@ class LotDetailView(PlacesDetailView):
         # Get the existing SurveyFormEntry for this lot, if any
         try:
             form_kwargs['instance'] = SurveyFormEntry.objects.get(
-                content_type =ContentType.objects.get_for_model(self.object),
+                content_type=ContentType.objects.get_for_model(self.object),
                 object_id=self.object.pk,
             )
         except SurveyFormEntry.DoesNotExist:

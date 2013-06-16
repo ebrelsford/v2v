@@ -18,6 +18,7 @@ class StewardNotificationForm(NotifyOnCreationForm):
             # StewardProject fields
             'use', 'land_tenure_status', 'support_organization',
             'others_get_involved', 'farm_stand', 'waiting_list',
+            'include_on_map',
         )
         widgets = {
             'content_type': forms.HiddenInput(),

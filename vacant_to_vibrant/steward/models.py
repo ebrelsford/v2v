@@ -49,6 +49,10 @@ class BaseStewardProject(models.Model):
         help_text=_('What is the land tenure status for the project? (This '
                     'will not be shared publicly.)'),
     )
+    include_on_map = models.BooleanField(_('include on map'),
+        default=False,
+        help_text=_('Can we include the project on our map?'),
+    )
 
     class Meta:
         abstract = True

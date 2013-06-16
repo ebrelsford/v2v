@@ -44,13 +44,13 @@ class BaseStewardProject(models.Model):
     )
     land_tenure_status = models.CharField(_('land tenure status'),
         choices=(
-            ('owned', 'project owns the land'),
-            ('licensed', 'project has a license for the land'),
-            ('lease', 'project has a lease for the land'),
-            ('access', 'project has access to the land'),
-            ('not sure', "I'm not sure"),
+            ('owned', _('project owns the land')),
+            ('licensed', _('project has a license for the land')),
+            ('lease', _('project has a lease for the land')),
+            ('access', _('project has access to the land')),
+            ('not sure', _("I'm not sure")),
         ),
-        default='not sure',
+        default=_('not sure'),
         max_length=50,
         help_text=_('What is the land tenure status for the project? (This '
                     'will not be shared publicly.)'),

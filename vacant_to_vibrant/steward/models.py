@@ -17,12 +17,6 @@ class BaseStewardProject(models.Model):
         help_text=_('How is the project using the land?'),
         verbose_name=_('use'),
     )
-    part_of_nga = models.BooleanField(
-        _('part of Neighborhood Garden Association'),
-        default=False,
-        help_text=_('Is your project part of the Neighborhood Garden '
-                    'Association?'),
-    )
     support_organization = models.CharField(_('support organization'),
         max_length=300,
         blank=True,

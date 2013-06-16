@@ -78,18 +78,34 @@ class StewardNotification(BaseStewardProject):
     StewardProject, combined here so they can be moderated simultaneously.
 
     """
-    name = models.CharField(_('name'), max_length=256)
-    phone = models.CharField(_('phone'), max_length=32, null=True, blank=True)
-    email = models.EmailField(_('email'))
-    type = models.ForeignKey('organize.OrganizerType')
-    url = models.URLField(_('url'), null=True, blank=True)
+    name = models.CharField(_('name'),
+        max_length=256,
+        help_text=_('The name of the project using this lot.'),
+    )
+    phone = models.CharField(_('phone'),
+        max_length=32,
+        null=True,
+        blank=True,
+        help_text=_('A phone number where the project can be reached.'),
+    )
+    email = models.EmailField(_('email'),
+        help_text=_('An email address where the project can be reached.'),
+    )
+    type = models.ForeignKey('organize.OrganizerType',
+        help_text=_('The type of group working on the project.'),
+    )
+    url = models.URLField(_('url'),
+        null=True,
+        blank=True,
+        help_text=_('A website where others can learn more about the project.'),
+    )
     facebook_page = models.CharField(
         _('facebook page'),
         max_length=256,
         null=True,
         blank=True,
-        help_text=('The Facebook page for your organization. Please do not '
-                   'enter your personal Facebook page.'),
+        help_text=('The Facebook page for the project. Please do not enter '
+                   'your personal Facebook page.'),
     )
 
     def __unicode__(self):

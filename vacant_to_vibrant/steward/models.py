@@ -23,19 +23,6 @@ class BaseStewardProject(models.Model):
         null=True,
         help_text=_("What is your project's support organization, if any?"),
     )
-    farm_stand = models.BooleanField(_('farm stand'),
-        default=False,
-        help_text=_('Does your project have a farm stand?'),
-    )
-    waiting_list = models.BooleanField(_('waiting list'),
-        default=False,
-        help_text=_('Does your project have a waiting list?'),
-    )
-    others_get_involved = models.TextField(_('how others can get involved'),
-        blank=True,
-        null=True,
-        help_text=_('How can others get involved in your project?'),
-    )
     land_tenure_status = models.CharField(_('land tenure status'),
         choices=(
             ('owned', _('project owns the land')),

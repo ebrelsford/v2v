@@ -3,7 +3,6 @@ import geojson
 import json
 
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.http import Http404

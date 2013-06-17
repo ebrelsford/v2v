@@ -25,7 +25,7 @@ from libapps.content.photos.forms import PhotoForm
 from libapps.organize.notifications import notify_participants_new_obj
 from libapps.organize.views import EditParticipantMixin
 
-from generic.views import CSVView, JSONResponseView
+from generic.views import CSVView, JSONResponseView, SuccessMessageFormMixin
 from groundtruth.forms import GroundtruthRecordForm
 from groundtruth.models import GroundtruthRecord
 from monitor.views import MonitorMixin
@@ -357,10 +357,12 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
         ]
 
 
-class AddStewardNotificationView(LotAddGenericMixin, LotContextMixin,
-                                 MonitorMixin, NotifyFacilitatorsMixin,
-                                 CreateView):
+class AddStewardNotificationView(SuccessMessageFormMixin, LotAddGenericMixin,
+                                 LotContextMixin, MonitorMixin,
+                                 NotifyFacilitatorsMixin, CreateView):
     form_class = StewardNotificationForm
+    success_message = _('Your information has been added to the system and '
+                        'will appear once an administrator looks over it.')
     template_name = 'lots/steward/stewardnotification_add.html'
 
     def get_should_notify_facilitators(self, obj):
@@ -388,10 +390,17 @@ class AddStewardNotificationSuccessView(TemplateView):
 
 
 class AddGroundtruthRecordView(LotAddGenericMixin, LotContextMixin,
-                               MonitorMixin, NotifyFacilitatorsMixin,
-                               CreateView):
+                               MonitorMixin, SuccessMessageFormMixin,
+                               NotifyFacilitatorsMixin, CreateView):
     form_class = GroundtruthRecordForm
     template_name = 'lots/groundtruth/groundtruthrecord_add.html'
+
+    def get_success_message(self):
+        if self.object.is_approved:
+            return _('Lot updated with your correction.')
+        else:
+            return _('Thanks for your correction. The lot will be updated '
+                     'once we have a chance to look at it.')
 
     def get_should_notify_facilitators(self, obj):
         # Don't bother notifying facilitators of the object was auto-moderated
@@ -399,13 +408,6 @@ class AddGroundtruthRecordView(LotAddGenericMixin, LotContextMixin,
         return self.should_notify_facilitators and not obj.is_approved
 
     def get_success_url(self):
-        if self.object.is_approved:
-            messages.success(self.request,
-                             _('Lot updated with your correction.'))
-        else:
-            messages.success(self.request,
-                             _('Thanks for your correction. The lot will be '
-                               'updated once we have a chance to look at it.'))
         try:
             return reverse('lots:lot_detail',
                            kwargs={
@@ -428,14 +430,16 @@ class AddGroundtruthRecordSuccessView(TemplateView):
         return context
 
 
-class AddContentView(LotAddGenericMixin, LotContextMixin, CreateView):
+class AddContentView(SuccessMessageFormMixin, LotAddGenericMixin,
+                     LotContextMixin, CreateView):
 
     def _get_content_name(self):
         return self.form_class._meta.model._meta.object_name
 
+    def get_success_message(self):
+        return '%s added successfully.' % self._get_content_name()
+
     def get_success_url(self):
-        messages.success(self.request, '%s added successfully.' %
-                         self._get_content_name())
         return self.get_lot().get_absolute_url()
 
     def get_template_names(self):

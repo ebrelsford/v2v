@@ -13,10 +13,8 @@
 <div>
     <h3>{% trans "I'm already using this lot" %}</h3>
     <div>
-        <p>Success! Your information has been added to the system and will appear once an administrator looks over it.</p>
-
         {% if lot.nearby %}
-        <p>Also, here are some lots near this one you might know something about or be interested in:
+        <p>{% trans "Here are some lots near this one you might know something about or be interested in" %}:
             <ul class="nearby-lots">
                 {% for nearby in lot.nearby %}
                 <li>

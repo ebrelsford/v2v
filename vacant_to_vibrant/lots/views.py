@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, TemplateView
 from django.views.generic.base import ContextMixin
+from django.views.generic.edit import FormMixin
 
 from forms_builder.forms.models import Form
 from inplace.boundaries.models import Boundary
@@ -67,6 +68,26 @@ class LotContextMixin(ContextMixin):
         context = super(LotContextMixin, self).get_context_data(**kwargs)
         context['lot'] = self.get_lot()
         return context
+
+
+class LotAddGenericMixin(FormMixin):
+    """
+    A mixin that eases adding content that references a single lot using
+    generic relationships.
+    """
+
+    def get_initial(self):
+        """Add initial content_type and object_id to the form"""
+        initial = super(LotAddGenericMixin, self).get_initial()
+        try:
+            object_id = self.kwargs['pk']
+        except KeyError:
+            raise Http404
+        initial.update({
+            'content_type': ContentType.objects.get_for_model(Lot),
+            'object_id': object_id,
+        })
+        return initial
 
 
 class LotFieldsMixin(object):
@@ -290,25 +311,14 @@ class ParticipantMixin(object):
         return self.model._meta.object_name.lower()
 
 
-class AddParticipantView(LotContextMixin, ParticipantMixin, CreateView):
+class AddParticipantView(LotAddGenericMixin, LotContextMixin, ParticipantMixin,
+                         CreateView):
 
     def get_form_class(self):
         if self.model is Organizer:
             return OrganizerForm
         elif self.model is Watcher:
             return WatcherForm
-
-    def get_initial(self):
-        initial = super(AddParticipantView, self).get_initial()
-        try:
-            object_id = self.kwargs['pk']
-        except KeyError:
-            raise Http404
-        initial.update({
-            'content_type': ContentType.objects.get_for_model(Lot),
-            'object_id': object_id,
-        })
-        return initial
 
     def get_success_url(self):
         try:
@@ -347,22 +357,11 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
         ]
 
 
-class AddStewardNotificationView(LotContextMixin, MonitorMixin,
-                                 NotifyFacilitatorsMixin, CreateView):
+class AddStewardNotificationView(LotAddGenericMixin, LotContextMixin,
+                                 MonitorMixin, NotifyFacilitatorsMixin,
+                                 CreateView):
     form_class = StewardNotificationForm
     template_name = 'lots/steward/stewardnotification_add.html'
-
-    def get_initial(self):
-        initial = super(AddStewardNotificationView, self).get_initial()
-        try:
-            object_id = self.kwargs['pk']
-        except KeyError:
-            raise Http404
-        initial.update({
-            'content_type': ContentType.objects.get_for_model(Lot),
-            'object_id': object_id,
-        })
-        return initial
 
     def get_should_notify_facilitators(self, obj):
         # Don't bother notifying facilitators of the object was auto-moderated
@@ -388,22 +387,11 @@ class AddStewardNotificationSuccessView(TemplateView):
         return context
 
 
-class AddGroundtruthRecordView(LotContextMixin, MonitorMixin,
-                               NotifyFacilitatorsMixin, CreateView):
+class AddGroundtruthRecordView(LotAddGenericMixin, LotContextMixin,
+                               MonitorMixin, NotifyFacilitatorsMixin,
+                               CreateView):
     form_class = GroundtruthRecordForm
     template_name = 'lots/groundtruth/groundtruthrecord_add.html'
-
-    def get_initial(self):
-        initial = super(AddGroundtruthRecordView, self).get_initial()
-        try:
-            object_id = self.kwargs['pk']
-            initial.update({
-                'content_type': ContentType.objects.get_for_model(Lot),
-                'object_id': object_id,
-            })
-        except KeyError:
-            raise Http404
-        return initial
 
     def get_should_notify_facilitators(self, obj):
         # Don't bother notifying facilitators of the object was auto-moderated
@@ -440,22 +428,10 @@ class AddGroundtruthRecordSuccessView(TemplateView):
         return context
 
 
-class AddContentView(LotContextMixin, CreateView):
+class AddContentView(LotAddGenericMixin, LotContextMixin, CreateView):
 
     def _get_content_name(self):
         return self.form_class._meta.model._meta.object_name
-
-    def get_initial(self):
-        initial = super(AddContentView, self).get_initial()
-        try:
-            object_id = self.kwargs['pk']
-        except KeyError:
-            raise Http404
-        initial.update({
-            'content_type': ContentType.objects.get_for_model(Lot),
-            'object_id': object_id,
-        })
-        return initial
 
     def get_success_url(self):
         messages.success(self.request, '%s added successfully.' %

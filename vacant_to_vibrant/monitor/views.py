@@ -17,16 +17,12 @@ class MonitorMixin(ModelFormMixin):
 
     def automoderate(self, object, user):
         """Automatically approve the object if the user has permission."""
-        print 'user:', user
         opts = self.object.__class__._meta
         mod_perm = '%s.moderate_%s' % (
             opts.app_label.lower(), opts.object_name.lower()
         )
         if user and user.has_perm(mod_perm):
-            print 'user has mod_perm'
             return APPROVED_STATUS
-
-        print 'user does not have mod_perm'
         return PENDING_STATUS
 
     def moderate_object(self, obj, user, status):

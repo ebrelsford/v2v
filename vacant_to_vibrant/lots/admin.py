@@ -71,6 +71,9 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
             'fields': ('known_use', 'known_use_certainty',
                        'known_use_locked',),
         }),
+        ('Stewards', {
+            'fields': ('steward_inclusion_opt_in',),
+        }),
         ('Other data', {
             'classes': ('collapse',),
             'fields': ('owner', 'billing_account', 'tax_account',

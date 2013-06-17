@@ -4,6 +4,7 @@ from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.gis.geos import MultiPolygon
 from django.contrib.gis.measure import D
 from django.db import models
+from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -30,9 +31,27 @@ class LotManager(InitialRevisionManagerMixin, PlaceManager):
         )
 
 
+class VisibleLotManager(PlaceManager):
+    """A manager that only retrieves lots that are publicly viewable."""
+
+    def get_query_set(self):
+        """
+        Should be publicly viewable if:
+            * There is no known use or its type is visible
+            * The known_use_certainty is over 3
+            * If any steward_projects exist, they opted in to being included
+        """
+        return super(VisibleLotManager, self).get_query_set().filter(
+            Q(Q(known_use__isnull=True) | Q(known_use__visible=True)),
+            Q(~Q(steward_projects__isnull=False) | Q(steward_inclusion_opt_in=True)),
+            known_use_certainty__gt=3,
+        )
+
+
 class Lot(Place):
 
     objects = LotManager()
+    visible = VisibleLotManager()
 
     owner = models.ForeignKey(Owner,
         blank=True,
@@ -137,6 +156,10 @@ class Lot(Place):
     organizers = GenericRelation(Organizer)
     watchers = GenericRelation(Watcher)
     steward_projects = GenericRelation('steward.StewardProject')
+    steward_inclusion_opt_in = models.BooleanField(_('steward inclusion opt-in'),
+        default=False,
+        help_text=_('Did the steward opt in to being included on our map?'),
+    )
 
     group = models.ForeignKey('LotGroup',
         blank=True,

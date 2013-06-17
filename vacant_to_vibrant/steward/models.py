@@ -149,8 +149,13 @@ def create_steward_project_and_organizer(sender, instance, **kwargs):
         use=instance.use,
         support_organization=instance.support_organization,
         land_tenure_status=instance.land_tenure_status,
+        include_on_map=instance.include_on_map,
     )
     steward_project.save()
 
-    steward_project.content_object.known_use = steward_project.use
-    steward_project.content_object.save()
+    lot = steward_project.content_object
+    lot.known_use = steward_project.use
+    lot.known_use_certainty = 10
+    lot.known_use_locked = True
+    lot.steward_inclusion_opt_in = steward_project.include_on_map
+    lot.save()

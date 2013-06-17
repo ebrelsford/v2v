@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, TemplateView
+from django.views.generic.base import ContextMixin
 
 from forms_builder.forms.models import Form
 from inplace.boundaries.models import Boundary
@@ -33,7 +34,7 @@ from phillyorganize.models import Organizer, Watcher
 from steward.forms import StewardNotificationForm
 from survey.forms import SurveyFormForForm
 from survey.models import SurveyFormEntry
-from .api import LotResource
+from .api import LotResource, VisibleLotResource
 from .forms import FiltersForm
 from .models import Lot, Use
 
@@ -42,9 +43,30 @@ class FilteredLotsMixin(object):
     """A mixin that makes it easy to filter on Lots using a LotResource."""
 
     def get_lots(self):
-        resource = LotResource()
+        # Give the user a different set of lots based on their permissions
+        if self.request.user.has_perm('lots.view_all_lots'):
+            resource = LotResource()
+        else:
+            resource = VisibleLotResource()
         orm_filters = resource.build_filters(filters=self.request.GET)
         return resource.apply_filters(self.request, orm_filters)
+
+
+class LotContextMixin(ContextMixin):
+
+    def get_lot(self):
+        """Get the lot referred to by the incoming request"""
+        try:
+            if self.request.user.has_perm('lots.view_all_lots'):
+                return Lot.objects.get(pk=self.kwargs['pk'])
+            return Lot.visible.get(pk=self.kwargs['pk'])
+        except Lot.DoesNotExist:
+            raise Http404
+
+    def get_context_data(self, **kwargs):
+        context = super(LotContextMixin, self).get_context_data(**kwargs)
+        context['lot'] = self.get_lot()
+        return context
 
 
 class LotFieldsMixin(object):
@@ -160,7 +182,7 @@ class LotsCountView(FilteredLotsMixin, JSONResponseView):
             'lots-count': lots.count(),
             'no-known-use-count': lots.filter(known_use=None).count()
         }
-        for use in Use.objects.all():
+        for use in Use.objects.filter(visible=True):
             context['%s-count' % use.slug] = lots.filter(known_use=use).count()
         return context
 
@@ -268,14 +290,7 @@ class ParticipantMixin(object):
         return self.model._meta.object_name.lower()
 
 
-class AddParticipantView(ParticipantMixin, CreateView):
-
-    def get_context_data(self, **kwargs):
-        context = super(AddParticipantView, self).get_context_data(**kwargs)
-        context.update({
-            'lot': Lot.objects.get(pk=self.kwargs['pk']),
-        })
-        return context
+class AddParticipantView(LotContextMixin, ParticipantMixin, CreateView):
 
     def get_form_class(self):
         if self.model is Organizer:
@@ -332,16 +347,10 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
         ]
 
 
-class AddStewardNotificationView(MonitorMixin, NotifyFacilitatorsMixin, CreateView):
+class AddStewardNotificationView(LotContextMixin, MonitorMixin,
+                                 NotifyFacilitatorsMixin, CreateView):
     form_class = StewardNotificationForm
     template_name = 'lots/steward/stewardnotification_add.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(AddStewardNotificationView, self).get_context_data(**kwargs)
-        context.update({
-            'lot': Lot.objects.get(pk=self.kwargs['pk']),
-        })
-        return context
 
     def get_initial(self):
         initial = super(AddStewardNotificationView, self).get_initial()
@@ -379,16 +388,10 @@ class AddStewardNotificationSuccessView(TemplateView):
         return context
 
 
-class AddGroundtruthRecordView(MonitorMixin, NotifyFacilitatorsMixin, CreateView):
+class AddGroundtruthRecordView(LotContextMixin, MonitorMixin,
+                               NotifyFacilitatorsMixin, CreateView):
     form_class = GroundtruthRecordForm
     template_name = 'lots/groundtruth/groundtruthrecord_add.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(AddGroundtruthRecordView, self).get_context_data(**kwargs)
-        context.update({
-            'lot': Lot.objects.get(pk=self.kwargs['pk']),
-        })
-        return context
 
     def get_initial(self):
         initial = super(AddGroundtruthRecordView, self).get_initial()
@@ -437,23 +440,10 @@ class AddGroundtruthRecordSuccessView(TemplateView):
         return context
 
 
-class AddContentView(CreateView):
-
-    def _get_lot(self):
-        try:
-            return Lot.objects.get(pk=self.kwargs['pk'])
-        except Exception:
-            raise Http404
+class AddContentView(LotContextMixin, CreateView):
 
     def _get_content_name(self):
         return self.form_class._meta.model._meta.object_name
-
-    def get_context_data(self, **kwargs):
-        context = super(AddContentView, self).get_context_data(**kwargs)
-        context.update({
-            'lot': self._get_lot(),
-        })
-        return context
 
     def get_initial(self):
         initial = super(AddContentView, self).get_initial()
@@ -470,7 +460,7 @@ class AddContentView(CreateView):
     def get_success_url(self):
         messages.success(self.request, '%s added successfully.' %
                          self._get_content_name())
-        return self._get_lot().get_absolute_url()
+        return self.get_lot().get_absolute_url()
 
     def get_template_names(self):
         return [

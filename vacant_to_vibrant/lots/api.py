@@ -287,6 +287,15 @@ class LotResource(ModelResource):
         }
 
 
+class VisibleLotResource(LotResource):
+    """
+    A LotResource that will only return lots that should be publicly visible.
+    """
+
+    class Meta(LotResource.Meta):
+        queryset = Lot.visible.all()
+
+
 class LotListResource(LotResource):
     """An abbreviated endpoint for getting lots of Lot data at once."""
 

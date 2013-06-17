@@ -187,6 +187,7 @@ class Lot(Place):
         permissions = (
             ('view_all_details', 'Can view all details for lots'),
             ('view_all_filters', 'Can view all map filters for lots'),
+            ('view_all_lots', 'Can view all lots'),
         )
 
     def __unicode__(self):

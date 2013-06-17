@@ -39,6 +39,10 @@ from .forms import FiltersForm
 from .models import Lot, Use
 
 
+#
+# Helper mixins
+#
+
 class FilteredLotsMixin(object):
     """A mixin that makes it easy to filter on Lots using a LotResource."""
 
@@ -117,6 +121,10 @@ class LotFieldsMixin(object):
         return dict([(f, self._field_value(lot, f)) for f in self.fields])
 
 
+#
+# Export views
+#
+
 class LotsCSV(LotFieldsMixin, FilteredLotsMixin, CSVView):
     fields = ('address_line1', 'city', 'state_province', 'postal_code',
               'latitude', 'longitude', 'known_use', 'owner', 'owner_type',)
@@ -193,6 +201,10 @@ class LotsGeoJSONPolygon(FilteredLotsMixin, GeoJSONListView):
             precision=8,
         )
 
+
+#
+# Counting views
+#
 
 class LotsCountView(FilteredLotsMixin, JSONResponseView):
 
@@ -281,6 +293,10 @@ class LotDetailView(PlacesDetailView):
         return context
 
 
+#
+# Participant views
+#
+
 class EditLotParicipantView(EditParticipantMixin, TemplateView):
     template_name = 'lots/organize/edit_participant.html'
 
@@ -356,6 +372,10 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
         ]
 
 
+#
+# Steward views
+#
+
 class AddStewardNotificationView(SuccessMessageFormMixin, LotAddGenericMixin,
                                  LotContextMixin, MonitorMixin,
                                  NotifyFacilitatorsMixin, CreateView):
@@ -387,6 +407,10 @@ class AddStewardNotificationSuccessView(TemplateView):
         context['lot'] = get_object_or_404(Lot, pk=kwargs['pk'])
         return context
 
+
+#
+# Groundtruth views
+#
 
 class AddGroundtruthRecordView(LotAddGenericMixin, LotContextMixin,
                                MonitorMixin, SuccessMessageFormMixin,
@@ -428,6 +452,10 @@ class AddGroundtruthRecordSuccessView(TemplateView):
         )
         return context
 
+
+#
+# Content views
+#
 
 class AddContentView(SuccessMessageFormMixin, LotAddGenericMixin,
                      LotContextMixin, CreateView):

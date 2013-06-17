@@ -26,6 +26,8 @@ from libapps.organize.views import EditParticipantMixin
 from generic.views import CSVView, JSONResponseView
 from groundtruth.forms import GroundtruthRecordForm
 from groundtruth.models import GroundtruthRecord
+from monitor.views import MonitorMixin
+from notify.views import NotifyFacilitatorsMixin
 from phillyorganize.forms import OrganizerForm, WatcherForm
 from phillyorganize.models import Organizer, Watcher
 from steward.forms import StewardNotificationForm
@@ -330,7 +332,7 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
         ]
 
 
-class AddStewardNotificationView(CreateView):
+class AddStewardNotificationView(MonitorMixin, NotifyFacilitatorsMixin, CreateView):
     form_class = StewardNotificationForm
     template_name = 'lots/steward/stewardnotification_add.html'
 
@@ -353,6 +355,11 @@ class AddStewardNotificationView(CreateView):
         })
         return initial
 
+    def get_should_notify_facilitators(self, obj):
+        # Don't bother notifying facilitators of the object was auto-moderated
+        # and approved
+        return self.should_notify_facilitators and not obj.is_approved
+
     def get_success_url(self):
         try:
             return reverse('lots:add_stewardnotification_success',
@@ -372,7 +379,7 @@ class AddStewardNotificationSuccessView(TemplateView):
         return context
 
 
-class AddGroundtruthRecordView(CreateView):
+class AddGroundtruthRecordView(MonitorMixin, NotifyFacilitatorsMixin, CreateView):
     form_class = GroundtruthRecordForm
     template_name = 'lots/groundtruth/groundtruthrecord_add.html'
 
@@ -394,6 +401,11 @@ class AddGroundtruthRecordView(CreateView):
         except KeyError:
             raise Http404
         return initial
+
+    def get_should_notify_facilitators(self, obj):
+        # Don't bother notifying facilitators of the object was auto-moderated
+        # and approved
+        return self.should_notify_facilitators and not obj.is_approved
 
     def get_success_url(self):
         if self.object.is_approved:

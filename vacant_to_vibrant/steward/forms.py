@@ -1,10 +1,9 @@
 from django import forms
 
-from notify.forms import NotifyOnCreationForm
 from .models import StewardNotification
 
 
-class StewardNotificationForm(NotifyOnCreationForm):
+class StewardNotificationForm(forms.ModelForm):
 
     class Meta:
         model = StewardNotification

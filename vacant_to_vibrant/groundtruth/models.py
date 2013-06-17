@@ -42,6 +42,13 @@ class GroundtruthRecord(models.Model):
 
 django_monitor.nq(GroundtruthRecord)
 
+# Disconnect monitor's post-save handler
+from django.db.models.signals import post_save
+
+from django_monitor.util import save_handler
+
+post_save.disconnect(save_handler, sender=GroundtruthRecord)
+
 
 #
 # Signals

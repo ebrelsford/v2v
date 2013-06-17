@@ -99,6 +99,13 @@ class StewardNotification(BaseStewardProject):
 
 django_monitor.nq(StewardNotification)
 
+# Disconnect monitor's post-save handler
+from django.db.models.signals import post_save
+
+from django_monitor.util import save_handler
+
+post_save.disconnect(save_handler, sender=StewardNotification)
+
 
 #
 # Signals
@@ -140,11 +147,7 @@ def create_steward_project_and_organizer(sender, instance, **kwargs):
         content_type=instance.content_type,
         object_id=instance.object_id,
         use=instance.use,
-        part_of_nga=instance.part_of_nga,
         support_organization=instance.support_organization,
-        farm_stand=instance.farm_stand,
-        waiting_list=instance.waiting_list,
-        others_get_involved=instance.others_get_involved,
         land_tenure_status=instance.land_tenure_status,
     )
     steward_project.save()

@@ -264,27 +264,29 @@ class LotDetailView(PlacesDetailView):
     model = Lot
 
     def get_context_data(self, **kwargs):
-        form = Form.objects.get(pk=settings.LOT_SURVEY_FORM_PK)
+        survey_form = Form.objects.get(pk=settings.LOT_SURVEY_FORM_PK)
         form_context = RequestContext(self.request, {
-            'form': form,
+            'form': survey_form,
         })
 
         initial = {
             'content_object': self.object,
+            'survey_form': survey_form,
         }
         form_kwargs = {}
         form_kwargs['initial'] = initial
 
         # Get the existing SurveyFormEntry for this lot, if any
         try:
-            form_kwargs['instance'] = SurveyFormEntry.objects.get(
+            form_kwargs['instance'] = SurveyFormEntry.objects.filter(
                 content_type=ContentType.objects.get_for_model(self.object),
                 object_id=self.object.pk,
-            )
-        except SurveyFormEntry.DoesNotExist:
+                survey_form=survey_form,
+            ).order_by('-entry_time')[0]
+        except IndexError:
             pass
 
-        form_for_form = SurveyFormForForm(form, form_context, **form_kwargs)
+        form_for_form = SurveyFormForForm(survey_form, form_context, **form_kwargs)
 
         context = super(LotDetailView, self).get_context_data(**kwargs)
         context.update({

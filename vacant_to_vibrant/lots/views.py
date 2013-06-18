@@ -225,9 +225,15 @@ class LotsCountBoundaryView(JSONResponseView):
     def get_context_data(self, **kwargs):
         return self.get_counts()
 
+    def get_lot_resource(self):
+        if self.request.user.has_perm('lots.view_all_lots'):
+            return LotResource()
+        return VisibleLotResource()
+
     def get_counts(self):
         boundary_layer = self.request.GET.get('choropleth_boundary_layer', '')
-        filters = LotResource().build_filters(filters=self.request.GET)
+        lot_resource = self.get_lot_resource()
+        filters = lot_resource.build_filters(filters=self.request.GET)
 
         try:
             # Ignore bbox
@@ -235,7 +241,7 @@ class LotsCountBoundaryView(JSONResponseView):
         except Exception:
             pass
 
-        lots = LotResource().apply_filters(self.request, filters)
+        lots = lot_resource.apply_filters(self.request, filters)
 
         boundaries = Boundary.objects.filter(
             layer__name=boundary_layer,
@@ -353,7 +359,6 @@ class EditLandCharacteristicsSurvey(SuccessMessageFormMixin, LotContextMixin,
         except IndexError:
             pass
 
-        print 'get_form_kwargs:', kwargs
         return kwargs
 
 

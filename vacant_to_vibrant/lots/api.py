@@ -62,6 +62,8 @@ class LotResource(ModelResource):
         if 'owner__name__icontains' in orm_filters and orm_filters['owner__name__icontains'] == '':
             del orm_filters['owner__name__icontains']
 
+        orm_filters['known_use_existence'] = filters.getlist('known_use_existence', [])
+
         # Add participant types
         orm_filters['participant_types'] = filters.getlist('participant_types', [])
 
@@ -195,6 +197,12 @@ class LotResource(ModelResource):
         except Exception:
             return 0
 
+    def pop_custom_filter_known_use_existence(self, filters):
+        try:
+            return filters.pop('known_use_existence', [])
+        except Exception:
+            return 0
+
     def apply_custom_filter_boundary(self, qs, value):
         boundary_filters = None
         for layer, boundary_pks in value.items():
@@ -270,6 +278,15 @@ class LotResource(ModelResource):
             qs = qs.filter(
                 polygon_width__isnull=False,
                 polygon_width__lt=value,
+            )
+        return qs
+
+    def apply_custom_filter_known_use_existence(self, qs, value):
+        # Only change the queryset if exactly one type of existence is
+        # selected
+        if len(value) == 1:
+            qs = qs.filter(
+                known_use__isnull='not in use' in value,
             )
         return qs
 

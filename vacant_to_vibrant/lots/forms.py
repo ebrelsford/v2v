@@ -165,6 +165,16 @@ class FiltersForm(forms.Form):
         widget=ChosenSelectMultiple(attrs={'style': 'width: 100px;',}),
     )
 
+    known_use_existence = forms.MultipleChoiceField(
+        choices=(
+            ('not in use', _('none')),
+            ('in use', _('in use')),
+        ),
+        initial=('not in use', 'in use',),
+        required=False,
+        widget=forms.CheckboxSelectMultiple(),
+    )
+
     known_use__name__in = forms.MultipleChoiceField(
         choices=(),
         required=False,
@@ -234,7 +244,7 @@ class FiltersForm(forms.Form):
             yield self[field]
 
     def known_use_filters(self):
-        for field in ('known_use__name__in',):
+        for field in ('known_use_existence', 'known_use__name__in',):
             yield self[field]
 
     #
@@ -253,7 +263,8 @@ class FiltersForm(forms.Form):
             'water_parcel__impervious_area__lt', 'boundary_zipcodes',
             'boundary_city_council_districts',
             'known_use_certainty__gt', 'known_use_certainty__lt',
+            'known_use_existence',
         )
 
     def tiles_filters(self):
-        return ('owner__owner_type__in', 'view_type',)
+        return ('owner__owner_type__in', 'view_type', 'known_use_existence',)

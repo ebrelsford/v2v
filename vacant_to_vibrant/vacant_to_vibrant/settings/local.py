@@ -78,4 +78,6 @@ LOT_MAP_TILE_URLS = {
     'private_grid': 'http://127.0.0.1:8081/lot_points_private_grid/',
     'public': 'http://127.0.0.1:8081/lot_points_public/',
     'public_grid': 'http://127.0.0.1:8081/lot_points_public_grid/',
+    'in_use': 'http://127.0.0.1:8081/lot_points_in_use/',
+    'in_use_grid': 'http://127.0.0.1:8081/lot_points_in_use_grid/',
 }

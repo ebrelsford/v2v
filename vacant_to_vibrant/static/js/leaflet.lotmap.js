@@ -59,11 +59,12 @@ define(
             tileLayers: {
                 'public': [],
                 'private': [],
+                'not in use': [],
+                'in use': [],
             },
 
             choroplethBoundaryLayerName: null,
             filters: {},
-            ownerTypes: ['private', 'public'],
             viewType: 'tiles',
 
 
@@ -122,6 +123,8 @@ define(
                 this.addPointPrivateGridLayer();
                 this.addPointPublicTilesLayer();
                 this.addPointPublicGridLayer();
+                this.addPointInUseTilesLayer();
+                this.addPointInUseGridLayer();
             },
 
             addGridLayer: function (baseUrl) {
@@ -148,12 +151,14 @@ define(
                 var url = this.options.pointPrivateTilesBaseUrl + '{z}/{x}/{y}.png';
                 this.tilesPointPrivate = L.tileLayer(url).addTo(this);
                 this.tileLayers['private'].push(this.tilesPointPrivate);
+                this.tileLayers['not in use'].push(this.tilesPointPrivate);
             },
 
             addPointPrivateGridLayer: function () {
                 if (!(this.options.enablePointPrivateTiles && this.viewType === 'tiles')) return;
                 this.gridPointPrivate = this.addGridLayer(this.options.pointPrivateGridBaseUrl);
                 this.tileLayers['private'].push(this.gridPointPrivate);
+                this.tileLayers['not in use'].push(this.gridPointPrivate);
             },
 
             addPointPublicTilesLayer: function () {
@@ -163,12 +168,29 @@ define(
                 var url = this.options.pointPublicTilesBaseUrl + '{z}/{x}/{y}.png';
                 this.tilesPointPublic = L.tileLayer(url).addTo(this);
                 this.tileLayers['public'].push(this.tilesPointPublic);
+                this.tileLayers['not in use'].push(this.tilesPointPublic);
             },
 
             addPointPublicGridLayer: function () {
                 if (!(this.options.enablePointPublicTiles && this.viewType === 'tiles')) return;
                 this.gridPointPublic = this.addGridLayer(this.options.pointPublicGridBaseUrl);
                 this.tileLayers['public'].push(this.gridPointPublic);
+                this.tileLayers['not in use'].push(this.gridPointPublic);
+            },
+
+            addPointInUseTilesLayer: function () {
+                if (!(this.options.enablePointInUseTiles && this.viewType === 'tiles')) return;
+                if (!this.options.pointInUseTilesBaseUrl) return;
+
+                var url = this.options.pointInUseTilesBaseUrl + '{z}/{x}/{y}.png';
+                this.tilesPointInUse = L.tileLayer(url).addTo(this);
+                this.tileLayers['in use'].push(this.tilesPointInUse);
+            },
+
+            addPointInUseGridLayer: function () {
+                if (!(this.options.enablePointInUseTiles && this.viewType === 'tiles')) return;
+                this.gridPointInUse = this.addGridLayer(this.options.pointInUseGridBaseUrl);
+                this.tileLayers['in use'].push(this.gridPointInUse);
             },
 
             showTiles: function () {
@@ -176,40 +198,65 @@ define(
                 if (instance.viewType !== 'tiles') return;
                 var filtered = _.size(instance.filters) > 0;
                 var activeOwnerTypes = instance.getActiveOwnerTypes(instance.filters);
+                var activeKnownUseExistences = instance.getActiveKnownUseExistence(instance.filters);
+                var activeLayers = _.union(activeOwnerTypes, activeKnownUseExistences);
 
-                _.each(instance.ownerTypes, function (ownerType) {
+                _.each(_.keys(instance.tileLayers), function (layer) {
                     if (!filtered) {
                         // Always show if there are no current filters
-                        instance.showOwnerTypeTiles(ownerType);
-                    }
-                    else if (activeOwnerTypes.indexOf(ownerType) >= 0) {
-                        instance.showOwnerTypeTiles(ownerType);
+                        instance.showTilesByLayer(layer);
                     }
                     else {
-                        instance.hideOwnerTypeTiles(ownerType);
+                        if (_.contains(activeKnownUseExistences, 'not in use')) {
+                            // If 'not in use' is selected, show activeOwnerTypes
+                            // and 'in use' if it is selected
+                            if (layer === 'not in use') {
+                                return;
+                            }
+                            else if (layer === 'in use' && _.contains(activeKnownUseExistences, layer)) {
+                                instance.showTilesByLayer(layer);
+                            }
+                            else if (_.contains(activeOwnerTypes, layer)) {
+                                instance.showTilesByLayer(layer);
+                            }
+                            else {
+                                instance.hideTilesByLayer(layer);
+                            }
+                        }
+                        else {
+                            // If 'not in use' is *not* selected, do not show any 
+                            // layers except those representing other known use
+                            // existences
+                            if (_.contains(activeKnownUseExistences, layer)) {
+                                instance.showTilesByLayer(layer);
+                            }
+                            else {
+                                instance.hideTilesByLayer(layer);
+                            }
+                        }
                     }
                 });
             },
 
             hideTiles: function () {
                 var instance = this;
-                _.each(instance.ownerTypes, function (ownerType) {
-                    instance.hideOwnerTypeTiles(ownerType);
+                _.each(_.keys(instance.tileLayers), function (layer) {
+                    instance.hideTilesByLayer(layer);
                 });
             },
 
-            showOwnerTypeTiles: function (ownerType) {
+            showTilesByLayer: function (name) {
                 var instance = this;
-                _.each(instance.tileLayers[ownerType], function (layer) {
+                _.each(instance.tileLayers[name], function (layer) {
                     if (layer) {
                         instance.addLayer(layer);
                     }
                 });
             },
 
-            hideOwnerTypeTiles: function (ownerType) {
+            hideTilesByLayer: function (name) {
                 var instance = this;
-                _.each(instance.tileLayers[ownerType], function (layer) {
+                _.each(instance.tileLayers[name], function (layer) {
                     if (layer) {
                         instance.removeLayer(layer);
                     }
@@ -225,6 +272,17 @@ define(
                     return [activeOwnerTypes,];
                 }
                 return activeOwnerTypes;
+            },
+
+            getActiveKnownUseExistence: function (filters) {
+                var existence = filters['known_use_existence'];
+                if (!existence) {
+                    return [];
+                }
+                else if (!_.isArray(existence)) {
+                    return [existence,];
+                }
+                return existence;
             },
 
             /*
@@ -493,6 +551,11 @@ define(
                 if (this.options.enablePointPublicTiles) {
                     overlays['Lot Points (public)'] = L.layerGroup([
                         this.tilesPointPublic, this.gridPointPublic
+                    ]);
+                }
+                if (this.options.enablePointInUseTiles) {
+                    overlays['Lot Points (in use)'] = L.layerGroup([
+                        this.tilesPointInUse, this.gridPointInUse
                     ]);
                 }
                 var layersControl = L.control.layers(baseLayers, overlays).addTo(this);

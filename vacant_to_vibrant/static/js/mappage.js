@@ -197,6 +197,10 @@ define(
                 pointPublicTilesBaseUrl: $('#map').data('pointpublictilesbaseurl'),
                 pointPublicGridBaseUrl: $('#map').data('pointpublicgridbaseurl'),
 
+                enablePointInUseTiles: true,
+                pointInUseTilesBaseUrl: $('#map').data('pointinusetilesbaseurl'),
+                pointInUseGridBaseUrl: $('#map').data('pointinusegridbaseurl'),
+
             });
 
             /*

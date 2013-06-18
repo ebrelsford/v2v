@@ -19,7 +19,7 @@
 
 {% if "lots.change_lot" in perms %}
 <div class="lot-detail-admin admin-only grid">
-    <a class="btn btn-danger" href="{% url "admin:lots_lot_change" lot.pk %}">
+    <a class="btn btn-small btn-warning" href="{% url "admin:lots_lot_change" lot.pk %}">
         <i class="icon-edit icon-white"></i>
         {% trans "Edit this lot" %}
     </a>
@@ -185,73 +185,65 @@
         </table>
     </div>
 
-    {% if lot.steward_projects.count > 0 %}
+    {% if lot.steward_projects.all.count > 0 %}
     <div class="lot-detail-details lot-detail-main-section">
         <h2>{% trans "Steward" %}</h2>
         <p>{% trans "This land is being stewarded by the following group:" %}
 
         {% with steward=lot.steward_projects.all.0 %}
 
-        {% if "organize.change_organizer" in perms %}
-        <div class="lot-detail-admin admin-only grid">
-            <a href="{% url "admin:phillyorganize_organizer_change" steward.organizer.pk %}">{% trans "Edit this steward's organizer" %}</a>
-        </div>
-        {% endif %}
+            {% if "organize.change_organizer" in perms %}
+                <div class="lot-detail-admin admin-only grid">
+                    <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_change" steward.organizer.pk %}">
+                        <i class="icon-edit icon-white"></i>
+                        {% trans "Edit this steward's contact information" %}
+                    </a>
+                </div>
+            {% endif %}
 
-        {% if "steward.change_stewardproject" in perms %}
-        <div class="lot-detail-admin admin-only grid">
-            <a href="{% url "admin:steward_stewardproject_change" steward.pk %}">{% trans "Edit this steward" %}</a>
-        </div>
-        {% endif %}
+            {% if "steward.change_stewardproject" in perms %}
+                <div class="lot-detail-admin admin-only grid">
+                    <a class="btn btn-small btn-warning" href="{% url "admin:steward_stewardproject_change" steward.pk %}">
+                        <i class="icon-edit icon-white"></i>
+                        {% trans "Edit this steward's other information" %}
+                    </a>
+                </div>
+            {% endif %}
 
-        <table>
-            <tr>
-                <th>{% trans "group name" %}:</th>
-                <td>
-                    {% if steward.organizer.url %}
-                        <a href="{{ steward.organizer.url }}" target="_blank">
+            <table>
+                <tr>
+                    <th>{% trans "group name" %}:</th>
+                    <td>
+                        {% if steward.organizer.url %}
+                            <a href="{{ steward.organizer.url }}" target="_blank">
+                                {{ steward.organizer.name }}
+                            </a>
+                        {% else %}
                             {{ steward.organizer.name }}
-                        </a>
-                    {% else %}
-                        {{ steward.organizer.name }}
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>{% trans "phone" %}:</th>
-                <td>{{ steward.organizer.phone }}</td>
-            </tr>
-            <tr>
-                <th>{% trans "email" %}:</th>
-                <td>
-                    {% if steward.organizer.email %}
-                    {% with email=steward.organizer.email %}
-                    <a href="mailto:{{ email }}">{{ email }}</a>
-                    {% endwith %}
-                    {% endif %}
-                </td>
-            </tr>
-            {% if steward.support_organization %}
-            <tr>
-                <th>{% trans "supported by" %}:</th>
-                <td>{{ steward.support_organization }}</td>
-            </tr>
-            {% endif %}
-            <tr>
-                <th>{% trans "has a farm stand?" %}</th>
-                <td>{{ steward.farm_stand|yesno }}</td>
-            </tr>
-            <tr>
-                <th>{% trans "waiting list to join?" %}</th>
-                <td>{{ steward.farm_stand|yesno }}</td>
-            </tr>
-            {% if steward.others_get_involved %}
-            <tr>
-                <th>{% trans "how can people get involved?" %}</th>
-                <td>{{ steward.others_get_involved }}</td>
-            </tr>
-            {% endif %}
-        </table>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{% trans "phone" %}:</th>
+                    <td>{{ steward.organizer.phone }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "email" %}:</th>
+                    <td>
+                        {% if steward.organizer.email %}
+                        {% with email=steward.organizer.email %}
+                        <a href="mailto:{{ email }}">{{ email }}</a>
+                        {% endwith %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% if steward.support_organization %}
+                <tr>
+                    <th>{% trans "supported by" %}:</th>
+                    <td>{{ steward.support_organization }}</td>
+                </tr>
+                {% endif %}
+            </table>
         {% endwith %}
 
     </div>
@@ -259,51 +251,57 @@
 
     <div class="lot-detail-details lot-detail-main-section">
         <h2>{% trans "Why is this lot here?" %}</h2>
-        {% if not lot.known_use %}
-        <p>{% trans "We think this lot is vacant because:" %}
-        <ul class="lot-detail-reasons">
+        {% if not lot.is_visible %}
+            <p>{% trans "It's not, really--this lot is only visible for admins." %}
+        {% elif not lot.known_use %}
+            <p>{% trans "We think this lot is vacant because:" %}
+            <ul class="lot-detail-reasons">
 
-            {% if lot.land_use_area and lot.land_use_area.category == "Vacant or Other" %}
-            <li>
-                {% blocktrans with description=lot.land_use_area.description %}
-                It is in the <a href="http://opendataphilly.org/opendata/resource/170/land-use/" target="_blank">City Planning Commission's Land Use database</a> marked as "{{ description }}".
-                {% endblocktrans %}
-            </li>
-            {% endif %}
+                {% if lot.land_use_area and lot.land_use_area.category == "Vacant or Other" %}
+                <li>
+                    {% blocktrans with description=lot.land_use_area.description %}
+                    It is in the <a href="http://opendataphilly.org/opendata/resource/170/land-use/" target="_blank">City Planning Commission's Land Use database</a> marked as "{{ description }}".
+                    {% endblocktrans %}
+                </li>
+                {% endif %}
 
-            {% if lot.available_property and lot.available_property.status != "no longer available" %}
-            <li>
-                {% blocktrans %}
-                It is for sale as part of the Redevelopment Authority's <a href="http://secure.phila.gov/paplpublicweb/" target="_blank">Available Property list</a>.
-                {% endblocktrans %}
-            </li>
-            {% endif %}
+                {% if lot.available_property and lot.available_property.status != "no longer available" %}
+                <li>
+                    {% blocktrans %}
+                    It is for sale as part of the Redevelopment Authority's <a href="http://secure.phila.gov/paplpublicweb/" target="_blank">Available Property list</a>.
+                    {% endblocktrans %}
+                </li>
+                {% endif %}
 
-            {% if lot.violations.all.count > 0 %}
-            <li>
-                {% blocktrans with location_id=lot.violations.all.0.location.external_id %}
-                It has <a href="http://www.phila.gov/data/Pages/LIPropertyHistory.aspx?entity=locationhistory&eid={{ location_id }}" target="_blank">violations from Licensing and Inspections</a> that indicate that it is vacant.
-                {% endblocktrans %}
-            </li>
-            {% endif %}
+                {% if lot.violations.all.count > 0 %}
+                <li>
+                    {% blocktrans with location_id=lot.violations.all.0.location.external_id %}
+                    It has <a href="http://www.phila.gov/data/Pages/LIPropertyHistory.aspx?entity=locationhistory&eid={{ location_id }}" target="_blank">violations from Licensing and Inspections</a> that indicate that it is vacant.
+                    {% endblocktrans %}
+                </li>
+                {% endif %}
 
-            {% if lot.licenses.all.count > 0 %}
-            <li>
-                {% blocktrans with location_id=lot.licenses.all.0.location.external_id %}
-                It has <a href="http://www.phila.gov/data/Pages/LIPropertyHistory.aspx?entity=locationhistory&eid={{ location_id }}" target="_blank">licenses from Licensing and Inspections</a> that indicate that it is vacant.
-                {% endblocktrans %}
-            </li>
-            {% endif %}
+                {% if lot.licenses.all.count > 0 %}
+                <li>
+                    {% blocktrans with location_id=lot.licenses.all.0.location.external_id %}
+                    It has <a href="http://www.phila.gov/data/Pages/LIPropertyHistory.aspx?entity=locationhistory&eid={{ location_id }}" target="_blank">licenses from Licensing and Inspections</a> that indicate that it is vacant.
+                    {% endblocktrans %}
+                </li>
+                {% endif %}
 
-            {% if lot.water_parcel and lot.water_parcel.percent_permeable > 50 %}
-            <li>
-                {% blocktrans with pp=lot.water_parcel.percent_permeable|floatformat id=lot.water_parcel.parcel_id %}
-                The Water Department <a href="http://www.phila.gov/water/swmap/Parcel.aspx?parcel_id={{ id }}" target="_blank">claims</a> that the parcel is {{ pp }}% permeable (without structures or pavement).
-                {% endblocktrans %}
-            </li>
-            {% endif %}
+                {% if lot.water_parcel and lot.water_parcel.percent_permeable > 50 %}
+                <li>
+                    {% blocktrans with pp=lot.water_parcel.percent_permeable|floatformat id=lot.water_parcel.parcel_id %}
+                    The Water Department <a href="http://www.phila.gov/water/swmap/Parcel.aspx?parcel_id={{ id }}" target="_blank">claims</a> that the parcel is {{ pp }}% permeable (without structures or pavement).
+                    {% endblocktrans %}
+                </li>
+                {% endif %}
 
-        </ul>
+            </ul>
+        {% else %}
+            {% blocktrans with use=lot.known_use %}
+                The lot is being used as a {{ use }} and the steward listed above opted in to being displayed here.
+            {% endblocktrans %}
         {% endif %}
     </div>
 
@@ -331,7 +329,9 @@
                     {% if lot.billing_account %}
                         {{ lot.billing_account }}
                         {% if "opa.change_billingaccount" in perms %}
-                        <a href="{% url "admin:opa_billingaccount_change" lot.billing_account.pk %}" target="_blank">view/change</a>
+                            <a class="admin-only btn btn-small btn-warning" href="{% url "admin:opa_billingaccount_change" lot.billing_account.pk %}" target="_blank">
+                                {% trans "view/change" %}
+                            </a>
                         {% endif %}
                     {% else %}
                         {% trans "not found" %}
@@ -357,8 +357,10 @@
                             {% endblocktrans %}
                         </div>
                         {% if "landuse.change_landusearea" in perms %}
-                        <div class="admin-link">
-                            <a href="{% url "admin:landuse_landusearea_change" lot.land_use_area.pk %}" target="_blank">view/change</a>
+                        <div class="admin-link admin-only">
+                            <a class="btn btn-small btn-warning" href="{% url "admin:landuse_landusearea_change" lot.land_use_area.pk %}" target="_blank">
+                                {% trans "view/change" %}
+                            </a>
                         </div>
                         {% endif %}
                     {% else %}
@@ -386,8 +388,10 @@
                             {% endblocktrans %}
                         </div>
                         {% if "parcels.change_parcel" in perms %}
-                        <div class="admin-link">
-                            <a href="{% url "admin:parcels_parcel_change" lot.parcel.pk %}" target="_blank">view/change</a>
+                        <div class="admin-link admin-only">
+                            <a class="btn btn-small btn-warning" href="{% url "admin:parcels_parcel_change" lot.parcel.pk %}" target="_blank">
+                                {% trans "view/change" %}
+                            </a>
                         </div>
                         {% endif %}
                     {% else %}
@@ -409,8 +413,10 @@
                         {{ lot.tax_account.years_delinquent }} years delinquent<br />
                         ${{ lot.tax_account.amount_delinquent }} delinquent
                         {% if "taxaccounts.change_taxaccount" in perms %}
-                        <div class="admin-link">
-                            <a href="{% url "admin:taxaccounts_taxaccount_change" lot.tax_account.pk %}" target="_blank">view/change</a>
+                        <div class="admin-link admin-only">
+                            <a class="btn btn-small btn-warning" href="{% url "admin:taxaccounts_taxaccount_change" lot.tax_account.pk %}" target="_blank">
+                                {% trans "view/change" %}
+                            </a>
                         </div>
                         {% endif %}
                     {% else %}
@@ -435,8 +441,10 @@
                         {{lot.water_parcel.owner2}}<br />
                         <a href="http://www.phila.gov/water/swmap/Parcel.aspx?parcel_id={{ lot.water_parcel.parcel_id }}" target="_blank">view on the Water Department's site</a>
                         {% if "waterdept.change_waterparcel" in perms %}
-                        <div class="admin-link">
-                            <a href="{% url "admin:waterdept_waterparcel_change" lot.water_parcel.pk %}" target="_blank">view/change</a>
+                        <div class="admin-link admin-only">
+                            <a class="btn btn-small btn-warning" href="{% url "admin:waterdept_waterparcel_change" lot.water_parcel.pk %}" target="_blank">
+                                {% trans "view/change" %}
+                            </a>
                         </div>
                         {% endif %}
                     {% else %}
@@ -521,9 +529,14 @@
     </div>
 
     <div class="watch lot-detail-side-section">
-        <h2>{% trans "Watch" %}</h2>
         {% get_watcher_count for lot as watcher_count %}
-        <div>There {{ watcher_count|pluralize:"is,are" }} {{ watcher_count }} watcher{{ watcher_count|pluralize }} on this lot.</div>
+        <h2>
+            {% trans "Watch" %}
+        </h2>
+        <div>
+            There {{ watcher_count|pluralize:"is,are" }} {{ watcher_count }}
+            watcher{{ watcher_count|pluralize }} on this lot.
+        </div>
         <a class="btn" href="{% url "lots:add_watcher" pk=lot.pk %}">
             {% trans "Watch this lot" %}
         </a>
@@ -534,7 +547,10 @@
 
         {% if "pathways.add_pathway" in perms %}
         <div class="lot-detail-admin admin-only grid">
-            <a href="{% url "admin:pathways_pathway_add" %}">{% trans "Add a pathway" %}</a>
+            <a class="btn btn-small btn-warning" href="{% url "admin:pathways_pathway_add" %}">
+                <i class="icon-plus icon-white"></i>
+                {% trans "Add a pathway" %}
+            </a>
         </div>
         {% endif %}
 

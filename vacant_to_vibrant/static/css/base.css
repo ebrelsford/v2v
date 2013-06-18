@@ -35,7 +35,8 @@ a:visited.btn {
     color: black;
 }
 
-a:visited.btn-primary {
+a:visited.btn-primary,
+a:visited.btn-warning {
     color: white;
 }
 

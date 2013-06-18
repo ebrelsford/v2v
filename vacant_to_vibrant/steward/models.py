@@ -6,7 +6,20 @@ from django.utils.translation import ugettext_lazy as _
 import django_monitor
 
 
+class OptedInStewardProjectManager(models.Model):
+    """
+    A manager that only returns StewardProject instances where the group asked
+    to be included on the map.
+    """
+
+    def get_query_set(self):
+        return super(OptedInStewardProjectManager, self).get_query_set().filter(
+            include_on_map=True,
+        )
+
 class BaseStewardProject(models.Model):
+
+    opted_in = OptedInStewardProjectManager()
 
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()

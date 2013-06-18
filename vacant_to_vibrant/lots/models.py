@@ -327,6 +327,14 @@ class Lot(Place):
             return None
     longitude = property(_get_longitude)
 
+    def _is_visible(self):
+        return (
+            (not self.known_use or self.known_use.visible) and
+            (self.steward_projects.count() == 0 or self.steward_inclusion_opt_in) and
+            self.known_use_certainty > 3
+        )
+    is_visible = property(_is_visible)
+
 
 class LotGroup(Lot):
     """A group of lots."""

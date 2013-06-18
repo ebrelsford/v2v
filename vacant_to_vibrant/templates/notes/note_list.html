@@ -21,14 +21,20 @@
         </table>
 
         {% if "notes" in perms %}
-        <div class="admin-only">
+        <div class="admin-only btn-group">
 
             {% if "notes.change_note" in perms %}
-            <a href="{% url "admin:notes_note_change" note.pk %}">{% trans "Edit this note" %}</a>
+                <a class="btn btn-small btn-warning" href="{% url "admin:notes_note_change" note.pk %}">
+                    <i class="icon-edit icon-white"></i>
+                    {% trans "Edit" %}
+                </a>
             {% endif %}
 
             {% if "notes.delete_note" in perms %}
-            <a href="{% url "admin:notes_note_delete" note.pk %}">{% trans "Delete this note" %}</a>
+                <a class="btn btn-small btn-warning" href="{% url "admin:notes_note_delete" note.pk %}">
+                    <i class="icon-remove icon-white"></i>
+                    {% trans "Delete" %}
+                </a>
             {% endif %}
 
         </div>

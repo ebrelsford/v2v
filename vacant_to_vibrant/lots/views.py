@@ -9,10 +9,11 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, FormView, TemplateView
 from django.views.generic.base import ContextMixin
 from django.views.generic.edit import FormMixin
 
+from forms_builder.forms import signals
 from forms_builder.forms.models import Form
 from inplace.boundaries.models import Boundary
 from inplace.views import (GeoJSONListView, KMLView, GeoJSONResponseMixin,
@@ -293,6 +294,67 @@ class LotDetailView(PlacesDetailView):
             'form': form_for_form,
         })
         return context
+
+
+#
+# Survey views
+#
+
+class EditLandCharacteristicsSurvey(SuccessMessageFormMixin, LotContextMixin,
+                                    FormView):
+    form_class = SurveyFormForForm
+    success_message = _('Successfully updated survey.')
+    template_name = 'lots/survey/land_survey.html'
+
+    def get_form(self, form_class):
+        survey_form = self.get_survey_form()
+        form_context = RequestContext(self.request, {
+            'form': survey_form,
+        })
+        return form_class(survey_form, form_context, **self.get_form_kwargs())
+
+    def form_invalid(self, form):
+        signals.form_invalid.send(sender=self.request, form=form)
+        return super(EditLandCharacteristicsSurvey, self).form_invalid(form)
+
+    def form_valid(self, form):
+        entry = form.save()
+        self.content_object = entry.content_object
+        signals.form_valid.send(sender=self.request, form=form, entry=entry)
+        return super(EditLandCharacteristicsSurvey, self).form_valid(form)
+
+    def get_success_url(self):
+        return self.get_lot().get_absolute_url()
+
+    def get_initial(self):
+        return {
+            'content_object': self.get_lot(),
+            'survey_form': self.get_survey_form(),
+        }
+
+    def get_survey_form(self):
+        try:
+            return self.survey_form
+        except Exception:
+            self.survey_form = Form.objects.get(pk=settings.LOT_SURVEY_FORM_PK)
+            return self.survey_form
+
+    def get_form_kwargs(self):
+        kwargs = super(EditLandCharacteristicsSurvey, self).get_form_kwargs()
+
+        # Get the existing SurveyFormEntry for this lot, if any
+        try:
+            lot = self.get_lot()
+            kwargs['instance'] = SurveyFormEntry.objects.filter(
+                content_type=ContentType.objects.get_for_model(lot),
+                object_id=lot.pk,
+                survey_form=self.get_survey_form(),
+            ).order_by('-entry_time')[0]
+        except IndexError:
+            pass
+
+        print 'get_form_kwargs:', kwargs
+        return kwargs
 
 
 #

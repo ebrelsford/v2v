@@ -8,7 +8,8 @@ from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
                     AddStewardNotificationSuccessView,
                     AddGroundtruthRecordView,
                     AddPhotoView, AddNoteView, AddFileView, LotsCountView,
-                    LotsCountBoundaryView, LotsCSV, LotsKML)
+                    LotsCountBoundaryView, LotsCSV, LotsKML,
+                    EditLandCharacteristicsSurvey)
 
 
 urlpatterns = patterns('',
@@ -62,6 +63,10 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/correction/add/$',
         AddGroundtruthRecordView.as_view(),
         name='add_groundtruthrecord'),
+
+    url(r'^(?P<pk>\d+)/land-survey/$',
+        EditLandCharacteristicsSurvey.as_view(),
+        name='land_survey'),
 
     url(r'^(?P<pk>\d+)/photos/add/$',
         AddPhotoView.as_view(),

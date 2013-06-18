@@ -1,0 +1,20 @@
+{% load i18n %}
+
+{% if current_values %}
+    <table>
+        {% for field, value in current_values %}
+            <tr>
+                <th>{{ field.label }}</th>
+                <td>
+                    {% if field.get_field_type_display == "Check box" %}
+                        {{ value|yesno:"yes,no" }}
+                    {% else %}
+                        {{ value }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    {% trans "No land characteristics have been entered for this lot yet." %}
+{% endif %}

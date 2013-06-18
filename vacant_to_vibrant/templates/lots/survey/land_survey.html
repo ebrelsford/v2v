@@ -1,0 +1,15 @@
+{% extends "lots/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Land Characteristics Survey" %} | {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>{% trans "Land Characteristics Survey" %}</li>
+{% endblock %}
+
+{% block lot_content %}
+    {{ block.super }}
+    <h3>{% trans "Land Characteristics Survey" %}</h3>
+    {% include "_form.html" with form=form %}
+{% endblock %}

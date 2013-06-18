@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load files_tags i18n inplace_tags notes_tags organize_tags pathways_tags photos_tags %}
+{% load files_tags i18n inplace_tags notes_tags organize_tags survey_tags pathways_tags photos_tags %}
 
 {% block title %}{{ lot.address_line1 }} | {% trans "Grounded in Philly" %}{% endblock %}
 
@@ -474,14 +474,12 @@
 
     <div id="survey" class="survey lot-detail-main-section">
         <h2>{% trans "Land Characteristics" %}</h2>
-        <p>
-            What is this lot like?
-        </p>
-        <form action="{% url "survey_submit" pk=form.form.pk %}" class="survey-form" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="{% trans "Update" %}" />
-        </form>
+        <div class="lot-detail-details">
+            {% render_survey_entry 1 for lot %}
+        </div>
+        <a class="btn" href="{% url "lots:land_survey" pk=lot.pk %}">
+            {% trans "Edit" %}
+        </a>
     </div>
 
 </div>

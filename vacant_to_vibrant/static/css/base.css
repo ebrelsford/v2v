@@ -213,10 +213,10 @@ header {
 #mainmenu {
     float: left;
     height: 0;
-    left: 250px;
-    max-width: 400px;
+    left: 195px;
+    max-width: 700px;
     position: relative;
-    top: -90px;
+    top: -100px;
 }
 
 #mainmenu li {
@@ -253,13 +253,32 @@ header {
     color: #5F424D;
 }
 
-#logo {
+#page-header {
     background: url(/static/img/header.jpg);
     height: 101px;
 }
 
+#logo {
+    background: url(/static/img/logo.jpg);
+    display: block;
+    height: 72px;
+    left: 25px;
+    position: relative;
+    width: 162px;
+}
+
 #logo h1 {
     display: none;
+}
+
+@media (max-width: 400px) {
+
+    #logo {
+        left: 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
 }
 
 @media (min-width: 768px) {

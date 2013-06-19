@@ -30,8 +30,8 @@ define(
 
 
         /*
-        * Get bounds for searching
-        */
+         * Get bounds for searching
+         */
         function getBounds(map) {
             var bounds = map.options.maxBounds;
             var seBounds = bounds.getSouthEast();
@@ -47,8 +47,8 @@ define(
 
 
         /*
-        * Update counts
-        */
+         * Update counts
+         */
         function updateCounts() {
             lotsMap.fire('dataloading');
             var baseUrl = $('#map').data('countsbaseurl');
@@ -67,8 +67,8 @@ define(
 
 
         /*
-        * Handle filter inputs
-        */
+         * Handle filter inputs
+         */
         function serializeFilters() {
             return $('form').serialize();
         }
@@ -205,8 +205,8 @@ define(
             });
 
             /*
-            * Map events
-            */
+             * Map events
+             */
             lotsMap.on('moveend', function (e) {
                 var g = JSON.stringify(lotsMap.getBounds().toGeoJson());
                 $(':input[name="centroid__within"]').val(
@@ -242,22 +242,22 @@ define(
             lotsMap.changeView(currentView);
 
             /*
-            * Filters events
-            */
+             * Filters events
+             */
             $('.filters :input:not(.non-filter)').change(onFilterChange);
 
 
             /*
-            * Prepare streetview
-            */
+             * Prepare streetview
+             */
             $('#streetview-container').streetview({
                 errorSelector: '#streetview-error',
             });
 
 
             /*
-            * Handle export actions
-            */
+             * Handle export actions
+             */
             $('.export-link').click(function () {
                 // TODO make shorter urls
                 window.location.search = serializeFilters();

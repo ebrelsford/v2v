@@ -356,7 +356,7 @@ header {
 }
 
 #map-overlay {
-    background-color: #5C373C;
+    background: url(/static/img/overlay_bg.jpg);
     color: white;
     font-size: 26px;
     line-height: 30px;
@@ -367,15 +367,28 @@ header {
 
 .map-overlay-button {
     color: white;
-    background: url(/static/img/find_one.png);
+    background-color: #66AA9A;
     border: 0;
     bottom: 0;
     height: 40px;
-    left: 170px;
+    left: 110px;
     padding: 5px;
     position: relative;
     text-transform: uppercase;
-    width: 170px;
+    width: 250px;
+    line-height: 26px;
+}
+
+.right-arrow-button::after {
+    background: url(/static/img/right_arrow_button.png);
+    content: "";
+    width: 6px;
+    height: 40px;
+    position: relative;
+    float: right;
+    left: 11px;
+    top: -5px;
+    display: inline-block;
 }
 
 .map-filters {

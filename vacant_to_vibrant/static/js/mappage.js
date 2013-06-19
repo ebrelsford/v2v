@@ -22,6 +22,7 @@ define(
 
         'jqueryui',
         'lib/jquery.spin',
+        'lib/jquery.smartresize',
 
     ], function ($, L, Django, JSON) {
 
@@ -308,10 +309,19 @@ define(
                 $('.map-filters').toggle();
             });
 
+            // Overlay
             $('#map-overlay').position({
                 my: 'top left',
                 at: 'top left',
                 of: $('#map'),
+            });
+
+            $(window).smartresize(function () {
+                $('#map-overlay').position({
+                    my: 'center center',
+                    at: 'center center',
+                    of: $('#map'),
+                });
             });
 
             $('.map-overlay-button').click(function () {

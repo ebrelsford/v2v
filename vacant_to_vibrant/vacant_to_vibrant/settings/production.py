@@ -106,4 +106,6 @@ LOT_MAP_TILE_URLS = {
     'private_grid': 'http://{s}.tiles.v2v.webfactional.com/lot_points_private_grid/',
     'public': 'http://{s}.tiles.v2v.webfactional.com/lot_points_public/',
     'public_grid': 'http://{s}.tiles.v2v.webfactional.com/lot_points_public_grid/',
+    'in_use': 'http://{s}.tiles.v2v.webfactional.com/lot_points_in_use/',
+    'in_use_grid': 'http://{s}.tiles.v2v.webfactional.com/lot_points_in_use_grid/',
 }

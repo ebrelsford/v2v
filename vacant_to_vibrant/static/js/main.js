@@ -19,12 +19,12 @@ define(['jquery'], function($) {
 
         require(['lib/jquery.noisy'], function() {
             $('body').noisy({
-                'intensity' : 1,
-                'size' : 200,
-                'opacity' : 0.08,
+                'intensity' : 0.5,
+                'size' : 100,
+                'opacity' : 0.15,
                 'fallback' : '',
                 'monochrome' : false
-            }).css('background-color', '#61A194');
+            });
         });
 
         /*

@@ -120,6 +120,26 @@ define(
             lotsMap.fire('filterschange', { filters: serializedFilters, });
         }
 
+        function showOverlay() {
+            $('#map-overlay').position({
+                my: 'top left',
+                at: 'top left',
+                of: $('#map'),
+            });
+        }
+
+        function positionOverlay() {
+            $('#map-overlay').position({
+                my: 'center center',
+                at: 'center center',
+                of: $('#map'),
+            });
+        }
+
+        function hideOverlay() {
+            $('#map-overlay').hide();
+        }
+
         $(document).ready(function () {
             var key = $('#map').data('cloudmadekey'),
                 style = $('#map').data('cloudmadestyle');
@@ -300,6 +320,7 @@ define(
                     warningSelector: '.warning',
                 })
                 .on('searchresultfound', function (e, data) {
+                    hideOverlay();
                     lotsMap.setView([data.latitude, data.longitude], 15);
                 });
 
@@ -310,23 +331,9 @@ define(
             });
 
             // Overlay
-            $('#map-overlay').position({
-                my: 'top left',
-                at: 'top left',
-                of: $('#map'),
-            });
-
-            $(window).smartresize(function () {
-                $('#map-overlay').position({
-                    my: 'center center',
-                    at: 'center center',
-                    of: $('#map'),
-                });
-            });
-
-            $('.map-overlay-button').click(function () {
-                $('#map-overlay').hide();
-            });
+            showOverlay();
+            $(window).smartresize(positionOverlay);
+            $('.map-overlay-button').click(hideOverlay);
 
         });
 

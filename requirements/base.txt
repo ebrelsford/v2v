@@ -1,4 +1,5 @@
 Django==1.5.1
+Fabric==1.6.1
 FeinCMS==1.7.4
 IMAPClient==0.10.1
 ModestMaps==1.4.1

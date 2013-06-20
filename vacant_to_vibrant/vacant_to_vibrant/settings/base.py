@@ -176,6 +176,7 @@ INSTALLED_APPS = (
     'extraadmin',
     'groundtruth',
     'lots',
+    'mailreader',
     'pathways',
     'phillydata',
     'phillydata.availableproperties',

@@ -34,7 +34,7 @@ def get_target_email_address(target):
     """Get the from email for the given target."""
     site = Site.objects.get_current()
     target_name = target._meta.object_name
-    return '"%s %s %d" <%s-%d@%s>' % (
+    return '"%s %s %d" <%s+%d@%s>' % (
         site.name,
         target_name.title(),
         target.pk,

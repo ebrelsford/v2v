@@ -1,6 +1,7 @@
 import re
 
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
 from libapps.content.notes.models import Note
 
@@ -136,8 +137,8 @@ class NotesMailReader(MailReader):
             print text
 
         note = Note(
-            lot=lot,
-            noter=self.get_name(from_address),
+            added_by_name=self.get_name(from_address),
+            content_object=ContentType.objects.get_for_model(lot),
             text=text,
         )
         note.save()

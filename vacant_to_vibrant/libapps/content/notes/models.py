@@ -19,4 +19,4 @@ class Note(models.Model):
                                      null=True, blank=True)
 
     def __unicode__(self):
-        return self.subject
+        return self.subject or '%d' % self.pk

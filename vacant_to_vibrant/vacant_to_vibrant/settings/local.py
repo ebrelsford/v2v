@@ -4,8 +4,14 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TASTYPIE_FULL_DEBUG = DEBUG
 
+ADMINS = (
+    ('Admin', 'admin@groundedinphilly.com'),
+)
+
+MANAGERS = ADMINS
+
 FACILITATORS = {
-    'global': ['facilitator@v2v.org',],
+    'global': ['facilitator@groundedinphilly.org',],
 }
 
 TIME_ZONE = 'America/New_York'

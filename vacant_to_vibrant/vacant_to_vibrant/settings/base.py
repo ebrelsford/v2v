@@ -12,12 +12,6 @@ def get_env_variable(var_name):
         error_msg = "Set the %s env variable" % var_name
         raise ImproperlyConfigured(error_msg)
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
-
 DATABASES = {
     'default': {
         # > createdb -T template_postgis philly_living_lots

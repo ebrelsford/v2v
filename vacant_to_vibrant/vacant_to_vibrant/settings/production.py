@@ -6,7 +6,9 @@ ADMINS = (
     ('Eric', 'eric@596acres.org'),
 )
 
-MANAGERS = ADMINS
+MANAGERS = (
+    ('Grounded in Philly Facilitator', 'facilitators@groundedinphilly.org'),
+)
 
 FACILITATORS = {
     'global': ['facilitators@groundedinphilly.org',],

@@ -249,6 +249,8 @@ FACILITATORS = {
     'global': [],
 }
 
+EMAIL_SUBJECT_PREFIX = '[Grounded in Philly] '
+
 MAILREADER_REPLY_PREFIX = 'Reply with text above this line to post a public note.'
 
 FEINCMS_RICHTEXT_INIT_CONTEXT = {

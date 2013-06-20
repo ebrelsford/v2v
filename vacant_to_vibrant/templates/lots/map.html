@@ -142,7 +142,7 @@
     <div class="clear"></div>
 </div>
 
-<div id="map-right" class="grid grid-1-4">
+<div id="map-right" class="grid grid-1-4 clearfix">
 
     <div class="map-sidebar-section">
         <h2>{% trans "Recent News" %}</h2>
@@ -173,7 +173,14 @@
         </div>
     </div>
 
-    <div class="clear"></div>
+    <div class="map-sidebar-logos">
+        <a href="http://www.pilcop.org" target="_blank" id="pilcop">
+            <img src="{{ STATIC_URL }}/img/logo-pilcop.png" />
+        </a>
+        <a href="http://596acres.org" target="_blank" id="fiveninesix">
+            <img src="{{ STATIC_URL }}/img/logo-596acres.png" />
+        </a>
+    </div>
 </div>
 
 <div id="map-overlay">

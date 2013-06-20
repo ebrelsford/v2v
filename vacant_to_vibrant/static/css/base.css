@@ -589,6 +589,13 @@ header {
     margin-bottom: 25px;
 }
 
+.map-sidebar-logos img {
+    height: auto;
+    max-width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 
 /* Lot detail page */
 

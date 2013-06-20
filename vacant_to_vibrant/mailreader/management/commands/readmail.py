@@ -30,5 +30,6 @@ class Command(BaseCommand):
                                       'mail with reader %s' % str(reader))
                     self.stdout.write('mail: %s', str(mail))
                     traceback.print_exc(file=sys.stdout)
+                    traceback.print_stack(file=sys.stdout)
 
         self.stdout.write('mailreader: Done running readmail')

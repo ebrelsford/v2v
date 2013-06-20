@@ -3,8 +3,8 @@ import traceback
 
 from django.core.management.base import BaseCommand
 
-from .readers import NotesMailReader
-from .util import get_mail
+from ...readers import NotesMailReader
+from ...util import get_mail
 
 
 class Command(BaseCommand):

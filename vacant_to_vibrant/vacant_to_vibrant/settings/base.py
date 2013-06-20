@@ -252,6 +252,10 @@ FACILITATORS = {
 EMAIL_SUBJECT_PREFIX = '[Grounded in Philly] '
 
 MAILREADER_REPLY_PREFIX = 'Reply with text above this line to post a public note.'
+MAILREADER_IGNORE_FROM = []
+MAILREADER_HOST = get_env_variable('PHILLY_MAILREADER_HOST')
+MAILREADER_HOST_USER = get_env_variable('PHILLY_MAILREADER_HOST_USER')
+MAILREADER_HOST_PASSWORD = get_env_variable('PHILLY_MAILREADER_HOST_PASSWORD')
 
 FEINCMS_RICHTEXT_INIT_CONTEXT = {
     'TINYMCE_JS_URL': STATIC_URL + 'js/lib/tiny_mce/tiny_mce.js',

@@ -38,7 +38,7 @@ class MailReader(object):
 
 
 class NotesMailReader(MailReader):
-    lot_id_regex = '(?:.*\s+)?<?notes\+(\d+)@.+>?'
+    lot_id_regex = '(?:.*\s+)?<?lot\+(\d+)@.+>?'
     lot_id_pattern = re.compile(lot_id_regex)
 
     cutoff_line_pattern = '.*%s.*' % settings.MAILREADER_REPLY_PREFIX
@@ -61,12 +61,12 @@ class NotesMailReader(MailReader):
                     payloads=None, **kwargs):
         if from_address in settings.MAILREADER_IGNORE_FROM: return False
         # TODO rate limiting
-        return 'notes' in to_address
+        return 'lot' in to_address
 
     def get_lot(self, to_address):
         """
         Get the lot using the address the message was sent to, which should
-        include a BBL.
+        include an ID.
         """
         try:
             lot_id = self.lot_id_pattern.match(to_address).group(1)

@@ -138,7 +138,7 @@ class NotesMailReader(MailReader):
 
         note = Note(
             added_by_name=self.get_name(from_address),
-            content_object=ContentType.objects.get_for_model(lot),
+            content_object=lot,
             text=text,
         )
         note.save()

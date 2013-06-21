@@ -10,7 +10,7 @@ class StewardNotificationAdmin(MonitorAdmin):
 
 
 class StewardProjectAdmin(admin.ModelAdmin):
-    list_display = ('organizer', 'use',)
+    list_display = ('name', 'organizer', 'use',)
 
 
 admin.site.register(StewardNotification, StewardNotificationAdmin)

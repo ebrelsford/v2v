@@ -25,6 +25,10 @@ class BaseStewardProject(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
+    name = models.CharField(_('name'),
+        max_length=256,
+        help_text=_('The name of the project using this lot.'),
+    )
     use = models.ForeignKey('lots.Use',
         limit_choices_to={'visible': True},
         help_text=_('How is the project using the land?'),
@@ -62,11 +66,13 @@ class StewardProject(BaseStewardProject):
 
     organizer = models.ForeignKey('phillyorganize.Organizer',
         verbose_name=_('organizer'),
+        blank=True,
+        null=True,
         help_text=_('The organizer associated with this project.'),
     )
 
     def __unicode__(self):
-        return self.organizer.name
+        return self.name or '%d' % self.pk
 
 
 class StewardNotification(BaseStewardProject):
@@ -76,10 +82,6 @@ class StewardNotification(BaseStewardProject):
     StewardProject, combined here so they can be moderated simultaneously.
 
     """
-    name = models.CharField(_('name'),
-        max_length=256,
-        help_text=_('The name of the project using this lot.'),
-    )
     phone = models.CharField(_('phone'),
         max_length=32,
         null=True,

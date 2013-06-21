@@ -2,48 +2,48 @@
 
 <ul>
     {% for organizer in organizers %}
-    <li class="organizer-detail">
-        <table>
-            <tbody>
-                <tr>
-                    <th class="field-label">{% trans "name" %}:</th>
-                    <td>{{ organizer.name }}</td>
-                </tr>
-                <tr>
-                    <th class="field-label">{% trans "phone" %}:</th>
-                    <td>{{ organizer.phone }}</td>
-                </tr>
-                <tr>
-                    <th class="field-label">{% trans "email" %}:</th>
-                    <td>{{ organizer.email }}</td>
-                </tr>
-                <tr>
-                    <th class="field-label">{% trans "vision" %}:</th>
-                    <td>{{ organizer.vision|urlize|linebreaks }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <li class="organizer-detail">
+            <table>
+                <tbody>
+                    <tr>
+                        <th class="field-label">{% trans "name" %}:</th>
+                        <td>{{ organizer.name }}</td>
+                    </tr>
+                    <tr>
+                        <th class="field-label">{% trans "phone" %}:</th>
+                        <td>{{ organizer.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th class="field-label">{% trans "email" %}:</th>
+                        <td>{{ organizer.email }}</td>
+                    </tr>
+                    <tr>
+                        <th class="field-label">{% trans "vision" %}:</th>
+                        <td>{{ organizer.vision|urlize|linebreaks }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-        {% if "organize" in perms %}
-        <div class="admin-only btn-group">
+            {% if "organize" in perms %}
+                <div class="admin-only btn-group">
 
-            {% if "organize.change_organizer" in perms %}
-                <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_change" organizer.pk %}">
-                    <i class="icon-edit icon-white"></i>
-                    {% trans "Edit" %}
-                </a>
+                    {% if "organize.change_organizer" in perms %}
+                        <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_change" organizer.pk %}">
+                            <i class="icon-edit icon-white"></i>
+                            {% trans "Edit" %}
+                        </a>
+                    {% endif %}
+
+                    {% if "organize.delete_organizer" in perms %}
+                        <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_delete" organizer.pk %}">
+                            <i class="icon-remove icon-white"></i>
+                            {% trans "Delete" %}
+                        </a>
+                    {% endif %}
+
+                </div>
             {% endif %}
 
-            {% if "organize.delete_organizer" in perms %}
-                <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_delete" organizer.pk %}">
-                    <i class="icon-remove icon-white"></i>
-                    {% trans "Delete" %}
-                </a>
-            {% endif %}
-
-        </div>
-        {% endif %}
-
-    </li>
+        </li>
     {% endfor %}
 </ul>

@@ -158,8 +158,19 @@
 
     <div class="newsletter-signup map-sidebar-section">
         <h2>{% trans "Get news from Grounded in Philly" %}</h2>
-        <form class="non-filter">
-            <input class="input-medium" placeholder="Enter Email Address" type="text" />
+
+        <form class="non-filter" action="http://visitor.r20.constantcontact.com/d.jsp" method="post" name="ccoptin" target="_blank">
+            <p>
+                <input class="input-medium" placeholder="{% trans "Enter Email Address" %}" type="text" name="ea" value="" /> 
+                <button class="btn submit" type="submit" name="go">
+                    {% trans "GO" %}
+                </button>
+            </p>
+            <p>
+                <input type="hidden" name="llr" value="4zzjribab" /> 
+                <input type="hidden" name="m" value="1100871952191" /> 
+                <input type="hidden" name="p" value="oi" />
+            </p>
         </form>
     </div>
 

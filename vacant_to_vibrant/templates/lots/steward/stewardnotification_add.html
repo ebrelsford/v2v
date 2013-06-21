@@ -1,19 +1,19 @@
 {% extends "lots/base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Already using this lot" %} | {{ block.super }}{% endblock %}
+{% block title %}{% trans "This is an active space" %} | {{ block.super }}{% endblock %}
 
 {% block body_class %}{{ block.super }} add-steward-page{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li>{% trans "Already using this lot" %}</li>
+    <li>{% trans "This is an active community garden, farm or green space." %}</li>
 {% endblock %}
 
 {% block lot_content %}
 {{ block.super }}
 <div>
-    <h3>{% trans "I'm already using this lot" %}</h3>
+    <h3>{% trans "This is an active community garden, farm or green space." %}</h3>
     <div>
         <p>
             {% blocktrans %}

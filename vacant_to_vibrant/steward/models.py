@@ -70,6 +70,13 @@ class StewardProject(BaseStewardProject):
         null=True,
         help_text=_('The organizer associated with this project.'),
     )
+    external_id = models.CharField(_('external id'),
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text=_('The external id for this project. Listed as "PROJECT '
+                    'ID" in some data sources.'),
+    )
 
     def __unicode__(self):
         return self.name or '%d' % self.pk

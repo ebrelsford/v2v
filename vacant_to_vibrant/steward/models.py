@@ -77,6 +77,11 @@ class StewardProject(BaseStewardProject):
         help_text=_('The external id for this project. Listed as "PROJECT '
                     'ID" in some data sources.'),
     )
+    date_started = models.DateField(_('date started'),
+        blank=True,
+        null=True,
+        help_text=_('When did this project start?'),
+    )
 
     def __unicode__(self):
         return self.name or '%d' % self.pk

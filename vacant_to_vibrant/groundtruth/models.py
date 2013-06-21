@@ -15,6 +15,8 @@ class GroundtruthRecord(models.Model):
     use = models.ForeignKey('lots.Use',
         verbose_name=_('use'),
         limit_choices_to={'visible': False},
+    )
+    actual_use = models.TextField(_('actual use'),
         help_text=_('How is the lot actually being used?'),
     )
     contact_email = models.EmailField(_('contact email'),
@@ -27,11 +29,6 @@ class GroundtruthRecord(models.Model):
         null=True,
         max_length = 20,
         help_text=_('Who can we call for more information?'),
-    )
-    notes = models.TextField(_('notes'),
-        blank=True,
-        null=True,
-        help_text=_('Anything else we should know?'),
     )
     added = models.DateTimeField(_('date added'),
         auto_now_add=True,

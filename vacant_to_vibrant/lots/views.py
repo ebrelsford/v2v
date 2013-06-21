@@ -487,6 +487,11 @@ class AddGroundtruthRecordView(LotAddGenericMixin, LotContextMixin,
     form_class = GroundtruthRecordForm
     template_name = 'lots/groundtruth/groundtruthrecord_add.html'
 
+    def get_initial(self):
+        initial = super(AddGroundtruthRecordView, self).get_initial()
+        initial['use'] = Use.objects.get(visible=False, name='other (default)')
+        return initial
+
     def get_success_message(self):
         if self.object.is_approved:
             return _('Lot updated with your correction.')

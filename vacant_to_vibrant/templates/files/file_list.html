@@ -3,29 +3,21 @@
 <ul>
     {% for file in files %}
         <li id="file-{{ file.pk }}" class="file-detail">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="{{ file.document.url }}">
-                                {{ file.title }}
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="field-label">{% trans "uploader" %}:</th>
-                        <td>{{ file.your_name }}</td>
-                    </tr>
-                    <tr>
-                        <th class="field-label">{% trans "added" %}:</th>
-                        <td>{{ file.added }}</td>
-                    </tr>
-                    <tr>
-                        <th class="field-label">{% trans "description" %}:</th>
-                        <td>{{ file.description|urlize|linebreaks }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <span class="file-added">{{ file.added }}</span>
+            <div class="file-title">
+                <a href="{{ file.document.url }}" target="_blank">
+                    {{ file.title }}
+                </a>
+            </div>
+
+            <div class="file-meta">
+                <span class="file-added-by-prefix">{% trans "uploaded by" %}</span>
+                <span class="file-added-by">{{ file.added_by_name }}</span>
+            </div>
+
+            <div class="file-description">
+                {{ file.description|urlize|linebreaks }}
+            </div>
 
             {% if "files" in perms %}
             <div class="admin-only">

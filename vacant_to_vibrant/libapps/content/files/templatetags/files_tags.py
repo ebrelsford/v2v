@@ -4,7 +4,8 @@ Template tags for the files app, loosely based on django.contrib.comments.
 """
 from django import template
 
-from generic.tags import GetGenericRelationList, RenderGenericRelationList
+from generic.tags import (GetGenericRelationList, RenderGenericRelationList,
+                          GetGenericRelationCount)
 from ..models import File
 
 register = template.Library()
@@ -15,7 +16,14 @@ class RenderFileList(RenderGenericRelationList):
 
 register.tag(RenderFileList)
 
+
 class GetFileList(GetGenericRelationList):
     model = File
 
 register.tag(GetFileList)
+
+
+class GetFileCount(GetGenericRelationCount):
+    model = File
+
+register.tag(GetFileCount)

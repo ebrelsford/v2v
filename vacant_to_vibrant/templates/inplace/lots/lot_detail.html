@@ -471,7 +471,13 @@
     </div>
 
     <div id="files" class="files lot-detail-main-section">
-        <h2>{% trans "Files" %}</h2>
+        <h2>
+            {% trans "Files" %}
+            {% get_file_count for lot as file_count %}
+            {% if file_count > 0 %}
+                <span class="badge">{{ file_count }}</span>
+            {% endif %}
+        </h2>
         <a class="btn" href="{% url "lots:add_file" pk=lot.pk %}">
             {% trans "Add a file" %}
         </a>
@@ -523,9 +529,13 @@
     </div>
 
     <div id="organizers" class="organize lot-detail-side-section">
-        <h2>{% trans "Organize" %}</h2>
-        {% get_organizer_count for lot as organizer_count %}
-        <div>There {{ organizer_count|pluralize:"is,are" }} {{ organizer_count }} organizer{{ organizer_count|pluralize }} on this lot.</div>
+        <h2>
+            {% trans "Organize" %}
+            {% get_organizer_count for lot as organizer_count %}
+            {% if organizer_count > 0 %}
+                <span class="badge">{{ organizer_count }}</span>
+            {% endif %}
+        </h2>
         <a class="btn" href="{% url "lots:add_organizer" pk=lot.pk %}">
             {% trans "Become an organizer" %}
         </a>
@@ -533,14 +543,13 @@
     </div>
 
     <div class="watch lot-detail-side-section">
-        {% get_watcher_count for lot as watcher_count %}
         <h2>
             {% trans "Watch" %}
+            {% get_watcher_count for lot as watcher_count %}
+            {% if watcher_count > 0 %}
+                <span class="badge">{{ watcher_count }}</span>
+            {% endif %}
         </h2>
-        <div>
-            There {{ watcher_count|pluralize:"is,are" }} {{ watcher_count }}
-            watcher{{ watcher_count|pluralize }} on this lot.
-        </div>
         <a class="btn" href="{% url "lots:add_watcher" pk=lot.pk %}">
             {% trans "Watch this lot" %}
         </a>

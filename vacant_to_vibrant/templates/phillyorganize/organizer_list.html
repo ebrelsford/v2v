@@ -3,26 +3,19 @@
 <ul>
     {% for organizer in organizers %}
         <li id="organizer-{{ organizer.pk }}" class="organizer-detail">
-            <table>
-                <tbody>
-                    <tr>
-                        <th class="field-label">{% trans "name" %}:</th>
-                        <td>{{ organizer.name }}</td>
-                    </tr>
-                    <tr>
-                        <th class="field-label">{% trans "phone" %}:</th>
-                        <td>{{ organizer.phone }}</td>
-                    </tr>
-                    <tr>
-                        <th class="field-label">{% trans "email" %}:</th>
-                        <td>{{ organizer.email }}</td>
-                    </tr>
-                    <tr>
-                        <th class="field-label">{% trans "vision" %}:</th>
-                        <td>{{ organizer.vision|urlize|linebreaks }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="organizer-name">{{ organizer.name }}</div>
+            <div class="organizer-contact">
+                (
+                {% if organizer.phone %}
+                    <span class="organizer-contact-phone">
+                        {{ organizer.phone }}
+                    </span> /
+                {% endif %}
+                <span class="organizer-contact-email">
+                    {{ organizer.email }}
+                </span>
+                )
+            </div>
 
             {% if "organize" in perms %}
                 <div class="admin-only btn-group">

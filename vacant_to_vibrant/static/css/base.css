@@ -517,13 +517,27 @@ header {
 }
 
 .organizer-detail {
-    border-bottom: 1px solid black;
-    padding: 10px;
+    border-bottom: 1px solid #888;
+    padding: 20px 0;
+}
+
+.organizer-detail:last-child {
+    border-bottom: 0;
+}
+
+.organizer-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.organizer-contact {
+    color: #888;
+    font-size: 12px;
 }
 
 .note-detail {
     border-bottom: 1px solid #888;
-    padding: 10px 0;
+    padding: 20px 0;
 }
 
 .note-detail:last-child {
@@ -546,8 +560,33 @@ header {
 }
 
 .file-detail {
-    border-bottom: 1px solid black;
-    padding: 10px;
+    border-bottom: 1px solid #888;
+    padding: 20px 0;
+}
+
+.file-detail:last-child {
+    border-bottom: 0;
+}
+
+.file-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.file-added {
+    color: #888;
+    float: right;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.file-added-by {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.file-added-by-prefix {
+    font-size: 12px;
 }
 
 .activity-stream-section {

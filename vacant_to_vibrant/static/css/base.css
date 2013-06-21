@@ -270,8 +270,26 @@ header {
     color: #5F424D;
 }
 
+#tagline {
+    color: white;
+    cursor: default;
+    float: right;
+    font-style: italic;
+    right: 250px;
+    position: relative;
+    top: -23px;
+}
+
+@media (max-width: 600px) {
+
+    #tagline {
+        display: none;
+    }
+
+}
+
 #page-header {
-    background: url(/static/img/header.jpg);
+    background: url(/static/img/header_nowords.png);
     height: 101px;
 }
 

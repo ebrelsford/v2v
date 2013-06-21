@@ -1,7 +1,7 @@
 {% load i18n imagekit %}
 
 {% for photo in photos %}
-    <a class="fancybox" rel="lot-details-gallery" href="{{ photo.original_image.url }}">
+    <a id="photo-{{ photo.pk }}" class="fancybox" rel="lot-details-gallery" href="{{ photo.original_image.url }}">
         {% generateimage "lots:detail_page_thumbnail" source=photo.original_image %}
     </a>
 

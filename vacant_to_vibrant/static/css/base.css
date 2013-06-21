@@ -522,8 +522,27 @@ header {
 }
 
 .note-detail {
-    border-bottom: 1px solid black;
-    padding: 10px;
+    border-bottom: 1px solid #888;
+    padding: 10px 0;
+}
+
+.note-detail:last-child {
+    border-bottom: 0;
+}
+
+.note-added-by {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.note-added-by-suffix {
+    font-size: 12px;
+}
+
+.note-added {
+    color: #888;
+    float: right;
+    font-size: 12px;
 }
 
 .file-detail {

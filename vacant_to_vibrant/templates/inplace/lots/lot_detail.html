@@ -457,7 +457,13 @@
     {% endif %}
 
     <div id="notes" class="notes lot-detail-main-section">
-        <h2>{% trans "Notes" %}</h2>
+        <h2>
+            {% trans "Notes" %}
+            {% get_note_count for lot as note_count %}
+            {% if note_count > 0 %}
+                <span class="badge">{{ note_count }}</span>
+            {% endif %}
+        </h2>
         <a class="btn" href="{% url "lots:add_note" pk=lot.pk %}">
             {% trans "Add a note" %}
         </a>

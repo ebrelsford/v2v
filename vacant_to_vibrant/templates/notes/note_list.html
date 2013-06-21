@@ -3,22 +3,12 @@
 <ul>
     {% for note in notes %}
         <li id="note-{{ note.pk }}" class="note-detail">
-            <table>
-                <tbody>
-                    <tr>
-                        <th class="field-label">{% trans "author" %}:</th>
-                        <td>{{ note.added_by_name }}</td>
-                    </tr>
-                    <tr>
-                        <th class="field-label">{% trans "added" %}:</th>
-                        <td>{{ note.added }}</td>
-                    </tr>
-                    <tr>
-                        <th class="field-label">{% trans "text" %}:</th>
-                        <td>{{ note.text|urlize|linebreaks }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="note-meta">
+                <span class="note-added-by">{{ note.added_by_name }}</span>
+                <span class="note-added-by-suffix">{% trans "said:" %}
+                <span class="note-added">{{ note.added }}</span>
+            </div>
+            <div class="note-text">{{ note.text|urlize|linebreaks }}</div>
 
             {% if "notes" in perms %}
                 <div class="admin-only btn-group">

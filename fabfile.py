@@ -13,7 +13,7 @@ def pull():
 
 @task
 def build_static():
-    run('django-admin.py collectstatic')
+    run('django-admin.py collectstatic --noinput')
     with cd('~/webapps/django_gu/v2v/vacant_to_vibrant/collected_static/js/'):
         run('r.js -o app.build.js')
 

@@ -116,17 +116,14 @@
         <h2>{% trans "You are currently looking at" %}</h2>
         <div class="map-tally">
             <div class="grid grid-1-4">
-                <span class="count lots-count">...</span> lots
+                <span class="count lots-count">...</span> {% trans "lots" %}
             </div>
             <div class="grid grid-1-4">
-                <span class="count no-known-use-count">...</span> lots with no known use
+                <span class="count no-known-use-count">...</span> {% trans "lots with no known use" %}
             </div>
-
-            {% comment %}
-            {% for use in uses %}
-            <li><span class="count {{ use.slug }}-count">Y</span> lots being used as a {{ use.name }}</li>
-            {% endfor %}
-            {% endcomment %}
+            <div class="grid grid-1-4">
+                <span class="count in-use-count">...</span> {% trans "lots being used as community spaces" %}
+            </div>
 
             <div class="grid grid-1-4">
                 <a href="#" class="export-link">{% trans "Link to this view" %}</a>. 

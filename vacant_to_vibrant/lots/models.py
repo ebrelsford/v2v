@@ -45,6 +45,7 @@ class VisibleLotManager(PlaceManager):
             Q(Q(known_use__isnull=True) | Q(known_use__visible=True)),
             Q(~Q(steward_projects__isnull=False) | Q(steward_inclusion_opt_in=True)),
             known_use_certainty__gt=3,
+            group__isnull=True,
         )
 
 
@@ -301,8 +302,20 @@ class Lot(Place):
     area = property(_get_area)
 
     def _get_number_of_lots(self):
-        return 1
+        try:
+            return self.lotgroup.lot_set.count()
+        except Exception:
+            return 1
     number_of_lots = property(_get_number_of_lots)
+
+    def _get_display_name(self):
+        if self.name:
+            return self.name
+        elif self.address_line1:
+            return self.address_line1
+        else:
+            return "%d (unknown address)" % self.pk
+    display_name = property(_get_display_name)
 
     def _get_nearby_lots(self):
         nearby = Lot.objects.filter(
@@ -382,10 +395,6 @@ class LotGroup(Lot):
 
     def __unicode__(self):
         return self.name
-
-    def _get_number_of_lots(self):
-        return sum([l.number_of_lots for l in self.lot_set.all()])
-    number_of_lots = property(_get_number_of_lots)
 
 
 class Use(models.Model):

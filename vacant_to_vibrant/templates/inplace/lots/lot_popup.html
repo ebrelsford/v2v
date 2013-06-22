@@ -2,37 +2,39 @@
 
 <h1 class="lot-popup-display-name">
     <a href="{{ object.get_absolute_url }}" target="_blank">
-        {{ object.address_line1|default:"unknown address" }}
+        {{ object.display_name }}
     </a>
 </h1>
 
-<div class="lot-popup-get-involved">
+<div class="grid lot-popup-get-involved btn-group">
     <a class="btn btn-small" href="{% url "lots:add_watcher" pk=object.pk %}" target="_blank">{% trans "Watch this lot" %}</a>
     <a class="btn btn-small" href="{% url "lots:add_organizer" pk=object.pk %}" target="_blank">{% trans "Become an organizer" %}</a>
 </div>
 
-<div class="lot-popup-size">
+<div class="grid lot-popup-size">
+    {% if object.number_of_lots > 1 %}
     <div class="grid grid-1-2">
         {% trans "Number of lots" %}: {{ object.number_of_lots }}
     </div>
+    {% endif %}
     <div class="grid grid-1-2">
-        {% trans "Size" %}: {{ object.area|floatformat:"-1" }} {% trans "square feet" %}
+        {{ object.area|floatformat:"-1" }} {% trans "square feet" %}
     </div>
 </div>
 
-<div class="lot-popup-owner">
+<div class="grid lot-popup-owner">
     {% trans "Owner" %}: {{ object.owner|default:"unknown" }}
 </div>
 
-<div class="lot-popup-known-use">
+<div class="grid lot-popup-known-use">
     {% trans "Known use" %}: {{ object.known_use|default:"None" }}
 </div>
 
-<div class="lot-popup-council-district">
+<div class="grid lot-popup-council-district">
     {% trans "Council District" %}: 
     {{ object.city_council_district|default:"unknown" }}
 </div>
 
-<div class="lot-popup-permalink">
-    <a class="btn btn-small btn-primary" href="{{ object.get_absolute_url }}" target="_blank">{% trans "Learn more about this lot" %}</a>
+<div class="grid lot-popup-permalink">
+    <a class="btn btn-small btn-primary btn-block" href="{{ object.get_absolute_url }}" target="_blank">{% trans "Learn more about this lot" %}</a>
 </div>

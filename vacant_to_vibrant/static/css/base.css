@@ -639,6 +639,14 @@ header {
     font-size: 24px;
 }
 
+.lot-popup-get-involved {
+    margin-bottom: 15px;
+}
+
+.lot-popup-permalink {
+    margin-top: 15px;
+}
+
 /* Header link */
 #popup-content h1 a,
 #popup-content h1 a:visited {

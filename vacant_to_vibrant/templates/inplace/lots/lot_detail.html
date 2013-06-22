@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load files_tags i18n inplace_tags notes_tags organize_tags survey_tags pathways_tags photos_tags %}
 
-{% block title %}{{ lot.address_line1 }} | {% trans "Grounded in Philly" %}{% endblock %}
+{% block title %}{{ lot.display_name }} | {% trans "Grounded in Philly" %}{% endblock %}
 
 {% block body_class %}{{ block.super }} lot-base-page lot-detail-page{% endblock %}
 
@@ -10,12 +10,12 @@
         <a href="/">{% trans "Home" %}</a>
         <span class="divider">&raquo;</span>
     </li>
-    <li>{{ lot.address_line1|default:lot.pk }}</li>
+    <li>{{ lot.display_name|default:lot.pk }}</li>
 {% endblock %}
 
 {% block content %}
 {{ block.super }}
-<h1>{{ lot.address_line1|default:"unknown" }}</h1>
+<h1>{{ lot.display_name|default:"unknown" }}</h1>
 
 {% if "lots.change_lot" in perms %}
 <div class="lot-detail-admin admin-only grid">
@@ -514,7 +514,7 @@
         <ul>
             {% for nearby in lot.nearby %}
             <li>
-                <a href="{{ nearby.get_absolute_url }}">{{ nearby.address_line1 }}</a>
+                <a href="{{ nearby.get_absolute_url }}">{{ nearby.display_name }}</a>
             </li>
             {% endfor %}
         </ul>

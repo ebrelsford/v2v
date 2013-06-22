@@ -42,8 +42,10 @@ class VisibleLotManager(PlaceManager):
             * If any steward_projects exist, they opted in to being included
         """
         return super(VisibleLotManager, self).get_query_set().filter(
-            Q(Q(known_use__isnull=True) | Q(known_use__visible=True)),
-            Q(~Q(steward_projects__isnull=False) | Q(steward_inclusion_opt_in=True)),
+            Q(
+                Q(known_use__isnull=True) |
+                Q(known_use__visible=True, steward_inclusion_opt_in=True)
+            ),
             known_use_certainty__gt=3,
             group__isnull=True,
         )

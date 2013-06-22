@@ -213,10 +213,9 @@ class LotsCountView(FilteredLotsMixin, JSONResponseView):
         lots = self.get_lots()
         context = {
             'lots-count': lots.count(),
-            'no-known-use-count': lots.filter(known_use=None).count()
+            'no-known-use-count': lots.filter(known_use__isnull=True).count(),
+            'in-use-count': lots.filter(known_use__isnull=False).count(),
         }
-        for use in Use.objects.filter(visible=True):
-            context['%s-count' % use.slug] = lots.filter(known_use=use).count()
         return context
 
 

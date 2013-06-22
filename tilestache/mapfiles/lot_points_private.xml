@@ -19,11 +19,10 @@
             <Parameter name="table">(
                 SELECT lots_lot.id, lots_lot.centroid
                 FROM lots_lot 
-                    LEFT OUTER JOIN lots_lotgroup ON (lots_lot.group_id = lots_lotgroup.lot_ptr_id) 
                     LEFT OUTER JOIN owners_owner ON (lots_lot.owner_id = owners_owner.id) 
                 WHERE 
                     centroid IS NOT NULL AND 
-                    lots_lotgroup.lot_ptr_id IS NULL AND
+                    group_id IS NULL AND
                     known_use_certainty &gt; 3 AND known_use_certainty &lt; 11 AND
                     known_use_id IS NULL AND
                     owners_owner.owner_type = 'private'

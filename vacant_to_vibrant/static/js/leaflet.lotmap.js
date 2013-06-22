@@ -150,7 +150,7 @@ define(
 
                 var url = this.options.pointPrivateTilesBaseUrl + '{z}/{x}/{y}.png';
                 this.tilesPointPrivate = L.tileLayer(url, {
-                    zIndex: 1,
+                    zIndex: 10,
                     // TODO maxZoom
                 }).addTo(this);
                 this.tileLayers['private'].push(this.tilesPointPrivate);
@@ -171,7 +171,7 @@ define(
 
                 var url = this.options.pointPublicTilesBaseUrl + '{z}/{x}/{y}.png';
                 this.tilesPointPublic = L.tileLayer(url, {
-                    zIndex: 2,
+                    zIndex: 12,
                     // TODO maxZoom
                 }).addTo(this);
                 this.tileLayers['public'].push(this.tilesPointPublic);
@@ -191,7 +191,7 @@ define(
 
                 var url = this.options.pointInUseTilesBaseUrl + '{z}/{x}/{y}.png';
                 this.tilesPointInUse = L.tileLayer(url, {
-                    zIndex: 3,
+                    zIndex: 14,
                     // TODO maxZoom
                 }).addTo(this);
                 this.tileLayers['in use'].push(this.tilesPointInUse);

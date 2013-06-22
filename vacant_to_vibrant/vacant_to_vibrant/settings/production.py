@@ -8,10 +8,14 @@ ADMINS = (
 
 MANAGERS = (
     ('Grounded in Philly Facilitator', 'facilitators@groundedinphilly.org'),
+    ('Owen', 'otaylor@pilcop.org'),
 )
 
 FACILITATORS = {
-    'global': ['facilitators@groundedinphilly.org',],
+    'global': [
+        'facilitators@groundedinphilly.org',
+        'otaylor@pilcop.org',
+    ],
 }
 
 ALLOWED_HOSTS = [get_env_variable('PHILLY_ALLOWED_HOSTS')]

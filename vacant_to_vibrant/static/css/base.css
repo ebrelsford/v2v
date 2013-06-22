@@ -797,6 +797,46 @@ ul.lot-detail-reasons li {
     display: none;
 }
 
+.leaflet-control-legend {
+	box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
+	background: #f8f8f9;
+	-webkit-border-radius: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.leaflet-control-legend label {
+    cursor: default;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.leaflet-control-legend-feature-color {
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+}
+
+.leaflet-control-legend-feature-color-public {
+    background-color: #D38022;
+}
+
+.leaflet-control-legend-feature-color-private {
+    background-color: #287A68;
+}
+
+.leaflet-control-legend-feature-color-in-use {
+    background-color: #830F94;
+}
+
+.leaflet-control-legend.is-hidden {
+    display: none;
+}
+
 .leaflet-control-loading {
     background: url(/static/img/loading.gif);
 }

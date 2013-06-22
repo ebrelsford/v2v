@@ -18,6 +18,7 @@ define(
         'leaflet.geojsonbounds',
         'leaflet.lotlayer',
         'leaflet.message',
+        'leaflet.legend',
         'leaflet.loading',
 
         // Other plugins

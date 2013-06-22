@@ -194,6 +194,13 @@ define(
                 messageControl: true,
                 messageDefault: 'Zoom in for details',
 
+                legendControl: true,
+                legendFeatureTypes: [
+                    { name: 'public', },
+                    { name: 'private', },
+                    { name: 'in use', },
+                ],
+
                 loadingControl: true,
 
                 enableLayersControl: true,

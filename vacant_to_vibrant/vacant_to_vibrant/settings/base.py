@@ -231,6 +231,7 @@ ACTSTREAM_SETTINGS = {
         'auth.user',
         'files.file',
         'lots.lot',
+        'lots.lotgroup',
         'notes.note',
         'phillyorganize.organizer',
         'phillyorganize.watcher',

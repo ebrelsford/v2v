@@ -149,7 +149,10 @@ define(
                 if (!this.options.pointPrivateTilesBaseUrl) return;
 
                 var url = this.options.pointPrivateTilesBaseUrl + '{z}/{x}/{y}.png';
-                this.tilesPointPrivate = L.tileLayer(url).addTo(this);
+                this.tilesPointPrivate = L.tileLayer(url, {
+                    zIndex: 1,
+                    // TODO maxZoom
+                }).addTo(this);
                 this.tileLayers['private'].push(this.tilesPointPrivate);
                 this.tileLayers['not in use'].push(this.tilesPointPrivate);
             },
@@ -159,6 +162,7 @@ define(
                 this.gridPointPrivate = this.addGridLayer(this.options.pointPrivateGridBaseUrl);
                 this.tileLayers['private'].push(this.gridPointPrivate);
                 this.tileLayers['not in use'].push(this.gridPointPrivate);
+                this.addLayer(this.gridPointPrivate);
             },
 
             addPointPublicTilesLayer: function () {
@@ -166,7 +170,10 @@ define(
                 if (!this.options.pointPublicTilesBaseUrl) return;
 
                 var url = this.options.pointPublicTilesBaseUrl + '{z}/{x}/{y}.png';
-                this.tilesPointPublic = L.tileLayer(url).addTo(this);
+                this.tilesPointPublic = L.tileLayer(url, {
+                    zIndex: 2,
+                    // TODO maxZoom
+                }).addTo(this);
                 this.tileLayers['public'].push(this.tilesPointPublic);
                 this.tileLayers['not in use'].push(this.tilesPointPublic);
             },
@@ -183,7 +190,10 @@ define(
                 if (!this.options.pointInUseTilesBaseUrl) return;
 
                 var url = this.options.pointInUseTilesBaseUrl + '{z}/{x}/{y}.png';
-                this.tilesPointInUse = L.tileLayer(url).addTo(this);
+                this.tilesPointInUse = L.tileLayer(url, {
+                    zIndex: 3,
+                    // TODO maxZoom
+                }).addTo(this);
                 this.tileLayers['in use'].push(this.tilesPointInUse);
             },
 
@@ -543,21 +553,6 @@ define(
                     'Satellte': this.satellite,
                 };
                 var overlays = {};
-                if (this.options.enablePointPrivateTiles) {
-                    overlays['Lot Points (private)'] = L.layerGroup([
-                        this.tilesPointPrivate, this.gridPointPrivate
-                    ]);
-                }
-                if (this.options.enablePointPublicTiles) {
-                    overlays['Lot Points (public)'] = L.layerGroup([
-                        this.tilesPointPublic, this.gridPointPublic
-                    ]);
-                }
-                if (this.options.enablePointInUseTiles) {
-                    overlays['Lot Points (in use)'] = L.layerGroup([
-                        this.tilesPointInUse, this.gridPointInUse
-                    ]);
-                }
                 var layersControl = L.control.layers(baseLayers, overlays).addTo(this);
             },
 

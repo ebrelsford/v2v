@@ -3,9 +3,10 @@ import geojson
 import json
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -268,6 +269,15 @@ class LotsMap(TemplateView):
 
 class LotDetailView(PlacesDetailView):
     model = Lot
+
+    def get(self, request, *args, **kwargs):
+        # Redirect to the lot's group, if it has one
+        self.object = self.get_object()
+        if self.object.group:
+            messages.info(request, _("The lot you requested is part of a "
+                                     "group. Here is the group's page."))
+            return HttpResponseRedirect(self.object.group.get_absolute_url())
+        return super(LotDetailView, self).get(request, *args, **kwargs)
 
 
 #

@@ -24,24 +24,14 @@ from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
 
 class LotManager(InitialRevisionManagerMixin, PlaceManager):
 
-    def find_nearby(self, lot):
-        """Find lots near the given lot."""
-        return self.get_query_set().filter(
-            centroid__distance_lte=(lot.centroid, D(mi=.5))
-        )
-
-
-class VisibleLotManager(PlaceManager):
-    """A manager that only retrieves lots that are publicly viewable."""
-
-    def get_query_set(self):
+    def get_visible(self):
         """
         Should be publicly viewable if:
             * There is no known use or its type is visible
             * The known_use_certainty is over 3
             * If any steward_projects exist, they opted in to being included
         """
-        return super(VisibleLotManager, self).get_query_set().filter(
+        return super(LotManager, self).get_query_set().filter(
             Q(
                 Q(known_use__isnull=True) |
                 Q(known_use__visible=True, steward_inclusion_opt_in=True)
@@ -49,6 +39,19 @@ class VisibleLotManager(PlaceManager):
             known_use_certainty__gt=3,
             group__isnull=True,
         )
+
+    def find_nearby(self, lot):
+        """Find lots near the given lot."""
+        return self.get_visible().exclude(pk=lot.pk).filter(
+            centroid__distance_lte=(lot.centroid, D(mi=.5))
+        )
+
+
+class VisibleLotManager(LotManager):
+    """A manager that only retrieves lots that are publicly viewable."""
+
+    def get_query_set(self):
+        return self.get_visible()
 
 
 class Lot(Place):
@@ -201,7 +204,8 @@ class Lot(Place):
         return ('lots:lot_detail', (), { 'pk': self.pk, })
 
     def find_nearby(self, count=5):
-        return self.objects.find_nearby(self)[:count]
+        return Lot.objects.find_nearby(self)[:count]
+    nearby = property(find_nearby)
 
     def calculate_polygon_area(self):
         """Find the area of this lot in square feet using its polygon."""
@@ -318,15 +322,6 @@ class Lot(Place):
         else:
             return "%d (unknown address)" % self.pk
     display_name = property(_get_display_name)
-
-    def _get_nearby_lots(self):
-        nearby = Lot.objects.filter(
-            centroid__distance_lte=(self.centroid, D(mi=.1))
-        )
-        nearby = nearby.exclude(pk=self.pk)
-        nearby = nearby.distance(self.centroid).order_by('distance')
-        return nearby[:5]
-    nearby = property(_get_nearby_lots)
 
     def _get_latitude(self):
         try:

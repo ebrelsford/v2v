@@ -212,6 +212,26 @@ input[type="color"]:last-child,
     padding-left: 20px;
 }
 
+#beta-disclaimer {
+    display: none;
+}
+
+.home-map-page #beta-disclaimer {
+    background-color: #8A4296;
+    color: white;
+    display: block;
+    float: left;
+    font-size: 18px;
+    padding: 10px 25px;
+    position: relative;
+    top: -20px;
+}
+
+#beta-disclaimer a {
+    color: white;
+    text-decoration: underline;
+}
+
 .messages {
     border: 1px solid black;
     margin: 10px 0;
@@ -253,11 +273,13 @@ header {
 @media (max-width: 400px) {
 
     #mainmenu {
+        background-color: white;
         height: auto;
         left: 0;
         max-width: none;
         position: static;
         top: 0;
+        width: 100%;
     }
 
     #mainmenu li {

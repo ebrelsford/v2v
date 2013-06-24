@@ -753,6 +753,14 @@ header {
 
 /* Lot detail page */
 
+@media (min-width: 768px) {
+
+    .lot-content-inner {
+        padding-right: 25px;
+    }
+
+}
+
 .lot-detail-main,
 .lot-detail-side {
     padding: 10px;

@@ -6,4 +6,6 @@ This information will not be live on the site until you approve it.
 
 View and change it here: http://{{ BASE_URL }}{% url "admin:groundtruth_groundtruthrecord_change" obj.pk %}
 
+The lot's page is here: http://{{ BASE_URL }}{% url "lots:lot_detail" pk=target.pk %}
+
 Approve it here: http://{{ BASE_URL }}{% url "admin:groundtruth_groundtruthrecord_changelist" %}?status=IP{% endblock %}

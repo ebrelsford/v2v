@@ -22,6 +22,13 @@
             to review this.
             {% endblocktrans %}
         </p>
+        <p>
+            {% blocktrans %}
+            Also, if you have a picture of the lot as it is actually being used
+            or could take one, we would appreciate it. 
+            {% endblocktrans %}
+            <a href="{% url "lots:add_photo" pk=lot.pk %}" target="_blank">{% trans "Post your photo here" %}</a>.
+        </p>
         {% include "groundtruth/_groundtruthrecord_form.html" %}
     </div>
 </div>

@@ -41,6 +41,17 @@ def restart_django():
 
 
 @task
+def restart_tilestache():
+    run('bash ~/scripts/tiles/clean.sh')
+    run('supervisorctl -c ~/supervisor/supervisord.conf restart tiles')
+
+
+@task
+def restart_memcached():
+    run('supervisorctl -c ~/supervisor/supervisord.conf restart memcached')
+
+
+@task
 def status():
     run('supervisorctl -c ~/supervisor/supervisord.conf status')
 

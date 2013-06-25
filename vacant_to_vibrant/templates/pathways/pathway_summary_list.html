@@ -1,0 +1,9 @@
+<ul class="pathway-list">
+    {% for pathway in pathways %}
+        <li class="pathway">
+            <a href="{{ pathway.get_absolute_url }}">
+                {{ pathway.name }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>

@@ -13,30 +13,44 @@
 <div id="lot-details">
     <h3>{% trans "Watch a lot" %}</h3>
     <div>
-        {% if lot.sandy_dropoff_site or lot.sandy_distribution_site %}
-        <p>Success! You are now watching <a href="{{ lot.get_absolute_url }}">{% if lot.name %}{{ lot.name }}{% else %}{{ lot.address_line1 }}{% endif %}</a>.</p>
-        {% else %}
-        <p>Success! You are now watching a vacant lot that we're calling <a href="{{ lot.get_absolute_url }}">{% if lot.name %}{{ lot.name }}{% else %}{{ lot.address_line1 }}{% endif %}</a>.</p>
-        {% endif %}
-        <p>You will now receive emails when that lot is updated--when new
-        organizers sign up on the lot and notes are added to it. If this was an
-        accident or if you change your mind in the future, you can stop watching
-        this lot at any time on <a href="{% url "lots:edit_participant" hash=participant.email_hash %}">this page</a>. You should receive an email with this link soon.</p>
+        <p>
+            {% blocktrans %}
+                Success! You are now watching a vacant lot that we're calling 
+            {% endblocktrans %}
+            <a href="{{ lot.get_absolute_url }}">{{ lot.display_name }}</a>.
+        </p>
+
+        <p>
+            {% blocktrans %}
+                You will now receive emails when that lot is updated&mdash;when new
+                organizers sign up on the lot and notes are added to it. If this was an
+                accident or if you change your mind in the future, you can stop
+                organizing this lot at any time on 
+            {% endblocktrans %}
+            <a href="{% url "lots:edit_participant" hash=participant.email_hash %}">{% trans "this page" %}</a>. 
+            {% trans "You should receive an email with this link soon." %}
+        </p>
 
         {% if lot.nearby %}
-        <p>Also, here are some lots near this one you might be interested in:
-            <ul class="nearby-lots">
-                {% for nearby in lot.nearby %}
-                <li>
-                    <a href="{{ nearby.get_absolute_url }}">{{ nearby.address_line1 }}</a>
-                </li>
-                {% endfor %}
-            </ul>
-        </p>
+            <p>
+                {% blocktrans %}
+                    Also, here are some lots near this one you might be interested in:
+                {% endblocktrans %}
+                <ul class="nearby-lots">
+                    {% for nearby in lot.nearby %}
+                    <li>
+                        <a href="{{ nearby.get_absolute_url }}">{{ nearby.display_name }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </p>
         {% endif %}
 
         <p>
-            Let your friends know you're watching this lot! Share it on Twitter and Facebook:
+            {% blocktrans %}
+                Let your friends know you're watching this! Share it on Twitter and 
+                Facebook:
+            {% endblocktrans %}
             <div>
                 {% with message="I just started watching "|add:lot.display_name|add:" on @Grounded215" %}
                     {% tweet_button message link_to lot %}

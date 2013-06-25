@@ -276,7 +276,7 @@
                 {% if lot.violations.all.count > 0 %}
                 <li>
                     {% blocktrans with location_id=lot.violations.all.0.location.external_id %}
-                    It has <a href="http://www.phila.gov/data/Pages/LIPropertyHistory.aspx?entity=locationhistory&eid={{ location_id }}" target="_blank">violations from Licensing and Inspections</a> that indicate that it is vacant.
+                    It has <a href="http://www.phila.gov/data/Pages/default.aspx?entity=locationhistory&eid={{ location_id }}" target="_blank">violations from Licensing and Inspections</a> that indicate that it is vacant.
                     {% endblocktrans %}
                 </li>
                 {% endif %}
@@ -567,16 +567,7 @@
         </div>
         {% endif %}
 
-        {% get_pathways for lot as pathways %}
-        <ul class="pathway-list">
-            {% for pathway in pathways %}
-                <li class="pathway">
-                    <a href="{{ pathway.get_absolute_url }}">
-                        {{ pathway.name }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+        {% render_pathway_summary_list for lot %}
     </div>
 
 </div>

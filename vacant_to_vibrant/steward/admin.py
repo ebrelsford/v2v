@@ -6,11 +6,11 @@ from .models import StewardNotification, StewardProject
 
 
 class StewardNotificationAdmin(MonitorAdmin):
-    list_display = ('name',)
+    list_display = ('pk', 'name',)
 
 
 class StewardProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'organizer', 'use',)
+    list_display = ('pk', 'name', 'organizer', 'use',)
 
 
 admin.site.register(StewardNotification, StewardNotificationAdmin)

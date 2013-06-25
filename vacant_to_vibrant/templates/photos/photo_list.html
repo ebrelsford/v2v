@@ -1,21 +1,23 @@
 {% load i18n imagekit %}
 
-{% for photo in photos %}
-    <a id="photo-{{ photo.pk }}" class="fancybox" rel="lot-details-gallery" href="{{ photo.original_image.url }}">
-        {% generateimage "lots:detail_page_thumbnail" source=photo.original_image %}
-    </a>
+<div class="photo-list">
+    {% for photo in photos %}
+        <a id="photo-{{ photo.pk }}" class="fancybox" rel="lot-details-gallery" href="{{ photo.original_image.url }}">
+            {% generateimage "lots:detail_page_thumbnail" source=photo.original_image %}
+        </a>
 
-    {% if "photos" in perms %}
-    <div class="admin-only">
+        {% if "photos" in perms %}
+        <div class="admin-only">
 
-        {% if "photos.change_photo" in perms %}
-        <a href="{% url "admin:photos_photo_change" photo.pk %}">{% trans "Edit this photo" %}</a>
+            {% if "photos.change_photo" in perms %}
+            <a href="{% url "admin:photos_photo_change" photo.pk %}">{% trans "Edit this photo" %}</a>
+            {% endif %}
+
+            {% if "photos.delete_photo" in perms %}
+            <a href="{% url "admin:photos_photo_delete" photo.pk %}">{% trans "Delete this photo" %}</a>
+            {% endif %}
+
+        </div>
         {% endif %}
-
-        {% if "photos.delete_photo" in perms %}
-        <a href="{% url "admin:photos_photo_delete" photo.pk %}">{% trans "Delete this photo" %}</a>
-        {% endif %}
-
-    </div>
-    {% endif %}
-{% endfor %}
+    {% endfor %}
+</div>

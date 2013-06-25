@@ -37,13 +37,11 @@
         <p>
             Let your friends know you're organizing here! Share it on Twitter and Facebook:
             <div>
-                {% comment %}
-                TODO with a different twitter handle
-                {% with message="I just started organizing "|add:lot.display_name|add:" on @" %}
-                {% tweet_button message link_to lot %}
+                {% with message="I just started organizing "|add:lot.display_name|add:" on @Grounded215" %}
+                    {% tweet_button message link_to lot %}
                 {% endwith %}
-                {% endcomment %}
-                {% like_button lot.get_absolute_url %}
+
+                {% share_button lot.get_absolute_url %}
             </div>
         </p>
     </div>

@@ -597,8 +597,12 @@ header {
     border-bottom: 0;
 }
 
+.note-meta {
+    padding-bottom: 10px;
+}
+
 .note-added-by {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -610,6 +614,10 @@ header {
     color: #888;
     float: right;
     font-size: 12px;
+}
+
+.note-text {
+    font-size: 16px;
 }
 
 .file-detail {

@@ -568,13 +568,13 @@
         {% endif %}
 
         {% get_pathways for lot as pathways %}
-        <ul>
+        <ul class="pathway-list">
             {% for pathway in pathways %}
-            <li>
-                <a href="{{ pathway.get_absolute_url }}">
-                    {{ pathway.name }}
-                </a>
-            </li>
+                <li class="pathway">
+                    <a href="{{ pathway.get_absolute_url }}">
+                        {{ pathway.name }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     </div>

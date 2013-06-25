@@ -654,6 +654,10 @@ header {
     font-size: 12px;
 }
 
+.pathway {
+    padding: 10px 0;
+}
+
 .activity-stream-section {
     margin: 25px 0;
 }

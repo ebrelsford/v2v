@@ -10,9 +10,9 @@ from .api import LIViolationReader
 logger = logging.getLogger(__name__)
 
 
-def find_violations(code, since):
+def find_violations(code, since, until=None):
     reader = LIViolationReader()
-    for violation in reader.get(code, since=since):
+    for violation in reader.get(code, since=since, until=until):
         try:
             saved_violation = save_violation(violation)
             logger.debug('Added violation: %s' % saved_violation)

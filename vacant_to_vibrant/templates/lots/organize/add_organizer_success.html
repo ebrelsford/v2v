@@ -1,5 +1,5 @@
 {% extends "lots/base.html" %}
-{% load facebook_tags i18n twitter_tags %}
+{% load facebook_tags i18n pathways_tags twitter_tags %}
 
 {% block title %}{% trans "Become an Organizer" %} | {{ block.super }}{% endblock %}
 
@@ -9,66 +9,76 @@
 {% endblock %}
 
 {% block lot_content %}
-{{ block.super }}
-<div id="lot-details">
-    <h3>{% trans "Become an organizer" %}</h3>
-    <div>
-        <p>
-            {% blocktrans %}
-                Success! You are now organizing a vacant lot that we're calling 
-            {% endblocktrans %}
-            <a href="{{ lot.get_absolute_url }}">{{ lot.display_name }}</a>.
-        </p>
-
-        <p>
-            {% blocktrans %}
-                You will now receive emails when that lot is updated&mdash;when new
-                organizers sign up on the lot and notes are added to it. If this was an
-                accident or if you change your mind in the future, you can stop
-                organizing this lot at any time on 
-            {% endblocktrans %}
-            <a href="{% url "lots:edit_participant" hash=participant.email_hash %}">{% trans "this page" %}</a>. 
-            {% trans "You should receive an email with this link soon." %}
-        </p>
- 
-        <p>
-            {% blocktrans %}
-                Be aware that your contact information is now posted publicly on the 
-            {% endblocktrans %}
-            <a href="{{ lot.get_absolute_url }}">{% trans "lot's page" %}</a>
-            {% blocktrans %}
-                so others who are interested in the site can get in touch with you.
-            {% endblocktrans %}
-        </p>
-
-        {% if lot.nearby %}
-            <p>
+    {{ block.super }}
+    <div id="lot-details" class="participant-add-success">
+        <h3>{% trans "Become an organizer" %}</h3>
+        <div>
+            <section>
                 {% blocktrans %}
-                    Also, here are some lots near this one you might be interested in:
+                    Success! You are now organizing a vacant lot that we're calling 
                 {% endblocktrans %}
-                <ul class="nearby-lots">
-                    {% for nearby in lot.nearby %}
-                    <li>
-                        <a href="{{ nearby.get_absolute_url }}">{{ nearby.display_name }}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </p>
-        {% endif %}
+                <a href="{{ lot.get_absolute_url }}">{{ lot.display_name }}</a>.
+            </section>
 
-        <p>
-            {% blocktrans %}
-                Let your friends know you're organizing here! Share it on Twitter and 
-                Facebook:
-            {% endblocktrans %}
-            <div>
-                {% with message="I just started organizing "|add:lot.display_name|add:" on @Grounded215" %}
-                    {% tweet_button message link_to lot %}
-                {% endwith %}
+            <section>
+                {% blocktrans %}
+                    You will now receive emails when that lot is updated&mdash;when new
+                    organizers sign up on the lot and notes are added to it. If this was an
+                    accident or if you change your mind in the future, you can stop
+                    organizing this lot at any time on 
+                {% endblocktrans %}
+                <a href="{% url "lots:edit_participant" hash=participant.email_hash %}">{% trans "this page" %}</a>. 
+                {% trans "You should receive an email with this link soon." %}
+            </section>
 
-                {% share_button lot.get_absolute_url %}
-            </div>
-        </p>
+            <section>
+                {% blocktrans %}
+                    Be aware that your contact information is now posted publicly on the 
+                {% endblocktrans %}
+                <a href="{{ lot.get_absolute_url }}">{% trans "lot's page" %}</a>
+                {% blocktrans %}
+                    so others who are interested in the site can get in touch with you.
+                {% endblocktrans %}
+            </section>
+
+            {% if lot.nearby %}
+                <section>
+                    <h2>{% trans "Nearby" %}</h2>
+                    {% blocktrans %}
+                        Here are some lots near this one you might be interested in:
+                    {% endblocktrans %}
+                    <ul class="nearby-lots">
+                        {% for nearby in lot.nearby %}
+                        <li>
+                            <a href="{{ nearby.get_absolute_url }}">{{ nearby.display_name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
+
+            <section>
+                <h2>{% trans "Share" %}</h2>
+                {% blocktrans %}
+                    Let your friends know you're organizing here! Share it on Twitter and 
+                    Facebook:
+                {% endblocktrans %}
+                <div>
+                    {% with message="I just started organizing "|add:lot.display_name|add:" on @Grounded215" %}
+                        {% tweet_button message link_to lot %}
+                    {% endwith %}
+
+                    {% share_button lot.get_absolute_url %}
+                </div>
+            </section>
+
+            <section>
+                <h2>{% trans "Get Access" %}</h2>
+                {% blocktrans %}
+                    Here are some ways you might get legal access to this lot:
+                {% endblocktrans %}
+                {% render_pathway_summary_list for lot %}
+            </section>
+        </div>
     </div>
-</div>
 {% endblock %}

@@ -540,6 +540,14 @@ header {
     top: 50px !important;
 }
 
+.participant-add-success section {
+    margin-bottom: 25px;
+}
+
+.participant-add-success .pathway {
+    padding: 5px 0;
+}
+
 #aside-right {
     padding-left: 25px;
 }

@@ -323,6 +323,13 @@ header {
     color: #5F424D;
 }
 
+.nav-pills > .active > a,
+.nav-pills > .active > a:hover,
+.nav-pills > .active > a:focus {
+  color: #ffffff;
+  background-color: #61A194;
+}
+
 #tagline {
     color: white;
     cursor: default;

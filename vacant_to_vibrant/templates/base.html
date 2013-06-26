@@ -70,11 +70,13 @@
                     <nav id="submenu" class="clearfix">
                         {% feincms_nav feincms_page level=3 depth=1 as submenu %}
 
-                        {% if submenu %}Also here:{% endif %}
-
-                        {% for page in submenu %}
-                            <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
-                        {% endfor %}
+                        <ul class="nav nav-pills">
+                            {% for page in submenu %}
+                                <li class="{% ifequal page feincms_page %}active{% endifequal %}">
+                                    <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </nav>    
 
                     {% block breadcrumbs_wrapper %}

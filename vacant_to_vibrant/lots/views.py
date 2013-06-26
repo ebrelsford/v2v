@@ -270,6 +270,12 @@ class LotsMap(TemplateView):
 class LotDetailView(PlacesDetailView):
     model = Lot
 
+    def get_object(self):
+        lot = super(LotDetailView, self).get_object()
+        if not (lot.is_visible or self.request.user.has_perm('lots.view_all_lots')):
+            raise Http404
+        return lot
+
     def get(self, request, *args, **kwargs):
         # Redirect to the lot's group, if it has one
         self.object = self.get_object()

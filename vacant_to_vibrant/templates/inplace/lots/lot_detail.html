@@ -528,10 +528,13 @@
     {% endif %}
 
     <div class="lot-detail-side-section">
-        <h2>{% trans "Request a cleanup" %}</h2>
-        You can 
-        <a href="http://www.phila.gov/qualityoflife/Vacant_Lot_Criteria_.html" target="_blank">{% trans "request a cleanup" %}</a>
-        of this lot through the city's Vacant Lot Program
+        <h2>{% trans "Report a lot" %}</h2>
+        {% blocktrans %}
+            You can report a lot as vacant and request a cleanup by contacting 
+            <a href="http://www.phila.gov/311/requestsubmission.html" target="_blank">Philly 311</a>
+            by phone or with the 
+            <a href="http://www.phila.gov/311/requestsubmission.html" target="_blank">311 online form</a>. 
+        {% endblocktrans %}
     </div>
 
     <div id="organizers" class="organize lot-detail-side-section">

@@ -186,67 +186,68 @@
     </div>
 
     {% if lot.steward_projects.all.count > 0 %}
-    <div class="lot-detail-details lot-detail-main-section">
-        <h2>{% trans "Steward" %}</h2>
-        <p>{% trans "This land is being stewarded by the following group:" %}
-
         {% with steward=lot.steward_projects.all.0 %}
+            {% if steward.organizer %}
+                <div class="lot-detail-details lot-detail-main-section">
+                    <h2>{% trans "Steward" %}</h2>
+                    <p>{% trans "This land is being stewarded by the following group:" %}
 
-            {% if "organize.change_organizer" in perms %}
-                <div class="lot-detail-admin admin-only grid">
-                    <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_change" steward.organizer.pk %}">
-                        <i class="icon-edit icon-white"></i>
-                        {% trans "Edit this steward's contact information" %}
-                    </a>
-                </div>
-            {% endif %}
-
-            {% if "steward.change_stewardproject" in perms %}
-                <div class="lot-detail-admin admin-only grid">
-                    <a class="btn btn-small btn-warning" href="{% url "admin:steward_stewardproject_change" steward.pk %}">
-                        <i class="icon-edit icon-white"></i>
-                        {% trans "Edit this steward's other information" %}
-                    </a>
-                </div>
-            {% endif %}
-
-            <table>
-                <tr>
-                    <th>{% trans "group name" %}:</th>
-                    <td>
-                        {% if steward.organizer.url %}
-                            <a href="{{ steward.organizer.url }}" target="_blank">
-                                {{ steward.organizer.name }}
+                    {% if steward.organizer %}
+                        <div class="lot-detail-admin admin-only grid">
+                            <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_change" steward.organizer.pk %}">
+                                <i class="icon-edit icon-white"></i>
+                                {% trans "Edit this steward's contact information" %}
                             </a>
-                        {% else %}
-                            {{ steward.organizer.name }}
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>{% trans "phone" %}:</th>
-                    <td>{{ steward.organizer.phone }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "email" %}:</th>
-                    <td>
-                        {% if steward.organizer.email %}
-                        {% with email=steward.organizer.email %}
-                        <a href="mailto:{{ email }}">{{ email }}</a>
-                        {% endwith %}
-                        {% endif %}
-                    </td>
-                </tr>
-                {% if steward.support_organization %}
-                <tr>
-                    <th>{% trans "supported by" %}:</th>
-                    <td>{{ steward.support_organization }}</td>
-                </tr>
-                {% endif %}
-            </table>
-        {% endwith %}
+                        </div>
+                    {% endif %}
 
-    </div>
+                    {% if "steward.change_stewardproject" in perms %}
+                        <div class="lot-detail-admin admin-only grid">
+                            <a class="btn btn-small btn-warning" href="{% url "admin:steward_stewardproject_change" steward.pk %}">
+                                <i class="icon-edit icon-white"></i>
+                                {% trans "Edit this steward's other information" %}
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    <table>
+                        <tr>
+                            <th>{% trans "group name" %}:</th>
+                            <td>
+                                {% if steward.organizer.url %}
+                                    <a href="{{ steward.organizer.url }}" target="_blank">
+                                        {{ steward.organizer.name }}
+                                    </a>
+                                {% else %}
+                                    {{ steward.organizer.name }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "phone" %}:</th>
+                            <td>{{ steward.organizer.phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "email" %}:</th>
+                            <td>
+                                {% if steward.organizer.email %}
+                                {% with email=steward.organizer.email %}
+                                <a href="mailto:{{ email }}">{{ email }}</a>
+                                {% endwith %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if steward.support_organization %}
+                        <tr>
+                            <th>{% trans "supported by" %}:</th>
+                            <td>{{ steward.support_organization }}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+
+                </div>
+            {% endif %}
+        {% endwith %}
     {% endif %}
 
     <div class="lot-detail-details lot-detail-main-section">

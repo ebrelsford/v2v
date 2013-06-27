@@ -19,7 +19,7 @@ define(
         'leaflet.lotlayer',
         'leaflet.message',
         'leaflet.legend',
-        'leaflet.loading',
+        'Control.Loading',
 
         // Other plugins
         'jquery.singleminded',

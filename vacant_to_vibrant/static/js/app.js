@@ -33,6 +33,7 @@ requirejs.config({
             deps: ['leaflet'],
             exports: 'lvector',
         },
+        'Control.Loading': ['leaflet'],
         'Leaflet.Bing': ['leaflet'],
         'lib/leaflet.label': ['leaflet'],
         'lib/leaflet.utfgrid': ['leaflet'],

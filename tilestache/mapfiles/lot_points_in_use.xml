@@ -57,14 +57,12 @@
                 SELECT lots_lot.id, lots_lot.centroid
                 FROM lots_lot 
                     LEFT OUTER JOIN lots_use ON (lots_lot.known_use_id = lots_use.id) 
-                    LEFT OUTER JOIN owners_owner ON (lots_lot.owner_id = owners_owner.id) 
                 WHERE 
                     centroid IS NOT NULL AND 
                     group_id IS NULL AND
                     known_use_certainty &gt; 3 AND known_use_certainty &lt; 11 AND
                     known_use_id IS NOT NULL AND lots_use.visible = true AND
                     steward_inclusion_opt_in = true AND
-                    (owners_owner.owner_type = 'private' OR owners_owner.owner_type = 'public')
             ) as lots
             </Parameter>
             <Parameter name="key_field">id</Parameter>

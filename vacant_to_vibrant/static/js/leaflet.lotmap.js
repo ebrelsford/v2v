@@ -70,8 +70,6 @@ define(
 
 
             _lotMapInitialize: function () {
-                this._initLayers();
-
                 // Add base layers
                 this.addSatelliteLayer(false);
                 this.addStreetsLayer();

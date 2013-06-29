@@ -62,7 +62,7 @@
                     group_id IS NULL AND
                     known_use_certainty &gt; 3 AND known_use_certainty &lt; 11 AND
                     known_use_id IS NOT NULL AND lots_use.visible = true AND
-                    steward_inclusion_opt_in = true AND
+                    steward_inclusion_opt_in = true
             ) as lots
             </Parameter>
             <Parameter name="key_field">id</Parameter>

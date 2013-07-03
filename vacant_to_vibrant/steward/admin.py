@@ -10,7 +10,13 @@ class StewardNotificationAdmin(MonitorAdmin):
 
 
 class StewardProjectAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'organizer', 'use',)
+    list_display = ('pk', 'name', 'address', 'organizer', 'use',)
+
+    def address(self, obj):
+        try:
+            return obj.content_object.address_line1
+        except Exception:
+            return ''
 
 
 admin.site.register(StewardNotification, StewardNotificationAdmin)

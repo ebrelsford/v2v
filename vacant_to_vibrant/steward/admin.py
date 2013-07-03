@@ -10,7 +10,9 @@ class StewardNotificationAdmin(MonitorAdmin):
 
 
 class StewardProjectAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'address', 'organizer', 'use',)
+    list_display = ('pk', 'name', 'address', 'organizer', 'use',
+                    'include_on_map',)
+    list_filter = ('use', 'include_on_map',)
 
     def address(self, obj):
         try:

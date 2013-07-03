@@ -1,7 +1,7 @@
 /*
  * Module for the add organizer page.
  */
-define(['jquery',], function($) {
+define(['jquery',], function ($) {
     function toggle_cbo_fields(show) {
         var $cbo_fields = $(':input[name="facebook_page"],:input[name="url"]').parents('.control-group');
         if (show) {
@@ -16,10 +16,10 @@ define(['jquery',], function($) {
         return ($(':input[name="type"] :selected').text() === 'community based organization');
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         toggle_cbo_fields(is_cbo());
 
-        $(':input[name="type"]').change(function() {
+        $(':input[name="type"]').change(function () {
             toggle_cbo_fields(is_cbo());
         });
     });

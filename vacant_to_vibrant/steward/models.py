@@ -126,6 +126,11 @@ class StewardNotification(BaseStewardProject):
         help_text=('The Facebook page for the project. Please do not enter '
                    'your personal Facebook page.'),
     )
+    share_contact_details = models.BooleanField(_('share contact details'),
+        default=False,
+        help_text=_("Can we share your contact information (email and phone) "
+                    "on the project's page?"),
+    )
 
     def __unicode__(self):
         return self.name
@@ -172,6 +177,7 @@ def create_steward_project_and_organizer(sender, instance, **kwargs):
         type=instance.type,
         url=instance.url,
         facebook_page=instance.facebook_page,
+        post_publicly=instance.share_contact_details,
     )
     organizer.save()
 

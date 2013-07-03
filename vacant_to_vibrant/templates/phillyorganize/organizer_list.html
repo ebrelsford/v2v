@@ -2,41 +2,43 @@
 
 <ul>
     {% for organizer in organizers %}
-        <li id="organizer-{{ organizer.pk }}" class="organizer-detail">
-            <div class="organizer-name">{{ organizer.name }}</div>
-            <div class="organizer-contact">
-                (
-                {% if organizer.phone %}
-                    <span class="organizer-contact-phone">
-                        {{ organizer.phone }}
-                    </span> /
-                {% endif %}
-                <span class="organizer-contact-email">
-                    {{ organizer.email }}
-                </span>
-                )
-            </div>
-
-            {% if "organize" in perms %}
-                <div class="admin-only btn-group">
-
-                    {% if "organize.change_organizer" in perms %}
-                        <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_change" organizer.pk %}">
-                            <i class="icon-edit icon-white"></i>
-                            {% trans "Edit" %}
-                        </a>
+        {% if organizer.post_publicly or "organize.change_organizer" in perms %}
+            <li id="organizer-{{ organizer.pk }}" class="organizer-detail">
+                <div class="organizer-name">{{ organizer.name }}</div>
+                <div class="organizer-contact">
+                    (
+                    {% if organizer.phone %}
+                        <span class="organizer-contact-phone">
+                            {{ organizer.phone }}
+                        </span> /
                     {% endif %}
-
-                    {% if "organize.delete_organizer" in perms %}
-                        <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_delete" organizer.pk %}">
-                            <i class="icon-remove icon-white"></i>
-                            {% trans "Delete" %}
-                        </a>
-                    {% endif %}
-
+                    <span class="organizer-contact-email">
+                        {{ organizer.email }}
+                    </span>
+                    )
                 </div>
-            {% endif %}
 
-        </li>
+                {% if "organize" in perms %}
+                    <div class="admin-only btn-group">
+
+                        {% if "organize.change_organizer" in perms %}
+                            <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_change" organizer.pk %}">
+                                <i class="icon-edit icon-white"></i>
+                                {% trans "Edit" %}
+                            </a>
+                        {% endif %}
+
+                        {% if "organize.delete_organizer" in perms %}
+                            <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_delete" organizer.pk %}">
+                                <i class="icon-remove icon-white"></i>
+                                {% trans "Delete" %}
+                            </a>
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+
+            </li>
+        {% endif %}
     {% endfor %}
 </ul>

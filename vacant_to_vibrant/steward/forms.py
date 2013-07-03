@@ -16,7 +16,7 @@ class StewardNotificationForm(forms.ModelForm):
 
             # StewardProject fields
             'use', 'land_tenure_status', 'support_organization',
-            'include_on_map',
+            'include_on_map', 'share_contact_details',
         )
         widgets = {
             'content_type': forms.HiddenInput(),

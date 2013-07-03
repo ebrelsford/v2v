@@ -194,14 +194,12 @@
 
                     {% if "steward.change_stewardproject" in perms %}
 
-                        {% if steward.organizer %}
-                            <div class="lot-detail-admin admin-only grid">
-                                <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_change" steward.organizer.pk %}">
-                                    <i class="icon-edit icon-white"></i>
-                                    {% trans "Edit this steward's contact information" %}
-                                </a>
-                            </div>
-                        {% endif %}
+                        <div class="lot-detail-admin admin-only grid">
+                            <a class="btn btn-small btn-warning" href="{% url "admin:phillyorganize_organizer_change" steward.organizer.pk %}">
+                                <i class="icon-edit icon-white"></i>
+                                {% trans "Edit this steward's contact information" %}
+                            </a>
+                        </div>
 
                         <div class="lot-detail-admin admin-only grid">
                             <a class="btn btn-small btn-warning" href="{% url "admin:steward_stewardproject_change" steward.pk %}">
@@ -224,26 +222,31 @@
                                 {% endif %}
                             </td>
                         </tr>
-                        <tr>
-                            <th>{% trans "phone" %}:</th>
-                            <td>{{ steward.organizer.phone }}</td>
-                        </tr>
-                        <tr>
-                            <th>{% trans "email" %}:</th>
-                            <td>
-                                {% if steward.organizer.email %}
-                                {% with email=steward.organizer.email %}
-                                <a href="mailto:{{ email }}">{{ email }}</a>
-                                {% endwith %}
-                                {% endif %}
-                            </td>
-                        </tr>
+
+                        {% if steward.organizer.post_publicly or "steward.change_stewardproject" in perms %}
+                            <tr>
+                                <th>{% trans "phone" %}:</th>
+                                <td>{{ steward.organizer.phone }}</td>
+                            </tr>
+                            <tr>
+                                <th>{% trans "email" %}:</th>
+                                <td>
+                                    {% if steward.organizer.email %}
+                                    {% with email=steward.organizer.email %}
+                                    <a href="mailto:{{ email }}">{{ email }}</a>
+                                    {% endwith %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+
                         {% if steward.support_organization %}
                         <tr>
                             <th>{% trans "supported by" %}:</th>
                             <td>{{ steward.support_organization }}</td>
                         </tr>
                         {% endif %}
+
                     </table>
 
                 </div>

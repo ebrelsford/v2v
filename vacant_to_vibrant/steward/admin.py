@@ -23,7 +23,8 @@ class BaseStewardAdminMixin(EnhancedModelAdminMixin):
 class StewardNotificationAdmin(BaseStewardAdminMixin, MonitorAdmin):
 
     fields = ('stewarded_target', 'name', 'use', 'support_organization',
-              'land_tenure_status', 'include_on_map', 'phone', 'email', 'type',
+              'land_tenure_status', 'include_on_map', 'share_contact_details',
+              'phone', 'email', 'type',
               'url', 'facebook_page',)
     list_display = ('pk', 'name', 'stewarded_target',)
     readonly_fields = ('content_type', 'object_id', 'stewarded_target',)

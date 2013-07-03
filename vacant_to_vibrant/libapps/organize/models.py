@@ -58,6 +58,11 @@ class BaseOrganizer(Participant):
         help_text=('The Facebook page for your organization. Please do not '
                    'enter your personal Facebook page.'),
     )
+    post_publicly = models.BooleanField(_('post publicly'),
+        default=True,
+        help_text=_("Can we share your contact information (email and phone) "
+                    "publicly?"),
+    )
 
     def recent_change_label(self):
         return 'new organizer: %s' % self.name

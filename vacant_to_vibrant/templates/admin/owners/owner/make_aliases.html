@@ -1,12 +1,12 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static admin_modify %}
+{% load i18n admin_static admin_modify static %}
 {% load admin_urls %}
 
 {% block extrahead %}
 {{ block.super }}
-<script src="{{ STATIC_URL }}admin/js/jquery.min.js"></script>
-<script src="{{ STATIC_URL }}admin/js/jquery.init.js"></script>
-<script src="{{ STATIC_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+<script src="{% static "admin/js/jquery.min.js" %}"></script>
+<script src="{% static "admin/js/jquery.init.js" %}"></script>
+<script src="{% static "admin/js/admin/RelatedObjectLookups.js" %}"></script>
 <script>
     function updateChosen() {
         django.jQuery('#id_owner').trigger('liszt:updated');

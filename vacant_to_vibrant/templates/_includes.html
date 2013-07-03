@@ -1,13 +1,13 @@
-{% load compress js %}
+{% load compress js static %}
 
 {% compress css %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/lib/normalize.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/lib/bootstrap.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/lib/bootstrap-responsive.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/chosen.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}js/lib/fancybox/jquery.fancybox.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}js/lib/leaflet.label.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
+<link rel="stylesheet" href="{% static "css/lib/normalize.css" %}">
+<link rel="stylesheet" href="{% static "css/lib/bootstrap.css" %}">
+<link rel="stylesheet" href="{% static "css/lib/bootstrap-responsive.css" %}">
+<link rel="stylesheet" href="{% static "css/chosen.css" %}">
+<link rel="stylesheet" href="{% static "js/lib/fancybox/jquery.fancybox.css" %}">
+<link rel="stylesheet" href="{% static "js/lib/leaflet.label.css" %}" />
+<link rel="stylesheet" href="{% static "css/base.css" %}">
 {% endcompress %}
 
 <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.6.2/leaflet.css" />
@@ -23,8 +23,8 @@
 {# Load requirejs main, built if in production #}
 {% if not debug %}
     {% compress js %}
-    <script src="{{ STATIC_URL }}main-built.js"></script>
+    <script src="{% static "main-built.js" %}"></script>
     {% endcompress %}
 {% else %}
-    <script src="{{ STATIC_URL }}js/lib/require.js" data-main="{{ STATIC_URL }}js/app.js"></script>
+    <script src="{% static "js/lib/require.js" %}" data-main="{% static "js/app.js" %}"></script>
 {% endif %}

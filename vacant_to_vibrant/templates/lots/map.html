@@ -1,4 +1,4 @@
-{% load blog_widgets i18n %}
+{% load blog_widgets i18n static %}
 
 <div id="map-left" class="grid grid-3-4">
     {% include "lots/map/_mainmap.html" %}
@@ -191,10 +191,10 @@
 
     <div class="map-sidebar-logos">
         <a href="http://www.pilcop.org" target="_blank" id="pilcop">
-            <img src="{{ STATIC_URL }}/img/logo-pilcop.png" />
+            <img src="{% static "img/logo-pilcop.png" %}" />
         </a>
         <a href="http://596acres.org" target="_blank" id="fiveninesix">
-            <img src="{{ STATIC_URL }}/img/logo-596acres.png" />
+            <img src="{% static "img/logo-596acres.png" %}" />
         </a>
     </div>
 </div>

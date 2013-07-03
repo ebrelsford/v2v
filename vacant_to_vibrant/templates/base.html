@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load feincms_tags feincms_page_tags i18n %}
+{% load feincms_tags feincms_page_tags i18n static %}
 <html>
     <head>
         <meta charset="utf-8" />
@@ -7,7 +7,7 @@
         <title>{% block title %}{{ feincms_page.title }} | {% trans "Grounded in Philly" %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width">
 
-        <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon_shovel.ico" />
+        <link rel="shortcut icon" href="{% static "img/favicon_shovel.ico" %}" />
 
         {% include "_includes.html" %}
         {% block scripts %}{% endblock %}

@@ -1,11 +1,12 @@
 from django.contrib import admin
 
+from admin_enhancer.admin import EnhancedModelAdminMixin
 from django_monitor.admin import MonitorAdmin
 
 from .models import StewardNotification, StewardProject
 
 
-class StewardNotificationAdmin(MonitorAdmin):
+class StewardNotificationAdmin(EnhancedModelAdminMixin, MonitorAdmin):
     list_display = ('pk', 'name',)
 
 

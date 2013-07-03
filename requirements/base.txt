@@ -10,6 +10,7 @@ TileStache==1.45.0
 Werkzeug==0.8.3
 argparse==1.2.1
 django-activity-stream==0.4.4
+django-admin-enhancer==0.1.2
 django-admin-tools==0.5.1
 django-appconf==0.6
 django-braces==1.0.0

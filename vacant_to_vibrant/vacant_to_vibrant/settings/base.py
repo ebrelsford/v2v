@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     # third-party
     #
     'actstream',
+    'admin_enhancer',
     'chosen',
     'compressor',
     'contact_form',

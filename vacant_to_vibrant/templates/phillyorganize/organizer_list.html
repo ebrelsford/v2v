@@ -4,17 +4,34 @@
     {% for organizer in organizers %}
         {% if organizer.post_publicly or "organize.change_organizer" in perms %}
             <li id="organizer-{{ organizer.pk }}" class="organizer-detail">
-                <div class="organizer-name">{{ organizer.name }}</div>
+                <div class="organizer-name">
+                    {% if organizer.url %}
+                        <a href="{{ organizer.url }}" target="_blank">
+                            {{ organizer.name }}
+                        </a>
+                    {% else %}
+                        {{ organizer.name }}
+                    {% endif %}
+                </div>
                 <div class="organizer-contact">
                     (
-                    {% if organizer.phone %}
-                        <span class="organizer-contact-phone">
-                            {{ organizer.phone }}
-                        </span> /
-                    {% endif %}
-                    <span class="organizer-contact-email">
-                        {{ organizer.email }}
-                    </span>
+                        {% if organizer.phone %}
+                            <span class="organizer-contact-phone">
+                                {{ organizer.phone }}
+                            </span> /
+                        {% endif %}
+
+                        {% if organizer.facebook_page %}
+                            <span class="organizer-contact-facebook">
+                                <a href="http://facebook.com/{{ organizer.facebook_page }}" target="_blank">
+                                    {% trans "Facebook" %}
+                                </a>
+                            </span> /
+                        {% endif %}
+
+                        <span class="organizer-contact-email">
+                            {{ organizer.email }}
+                        </span>
                     )
                 </div>
 

@@ -17,9 +17,6 @@ requirejs.config({
             'deps': ['jquery'],
             'exports': 'Django',
         },
-        'leaflet': {
-            exports: 'L',
-        },
         'underscore': {
             exports: '_',
         },

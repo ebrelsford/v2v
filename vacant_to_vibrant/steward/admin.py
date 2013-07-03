@@ -7,7 +7,21 @@ from .models import StewardNotification, StewardProject
 
 
 class StewardNotificationAdmin(EnhancedModelAdminMixin, MonitorAdmin):
-    list_display = ('pk', 'name',)
+    fields = ('stewarded_target', 'name', 'use', 'support_organization',
+              'land_tenure_status', 'include_on_map', 'phone', 'email', 'type',
+              'url', 'facebook_page',)
+    list_display = ('pk', 'name', 'stewarded_target',)
+    readonly_fields = ('content_type', 'object_id', 'stewarded_target',)
+
+    def stewarded_target(self, obj):
+        try:
+            return '<a href="%s" target="_blank">%s</a>' % (
+                obj.content_object.get_absolute_url(),
+                obj.content_object
+            )
+        except Exception:
+            return ''
+    stewarded_target.allow_tags = True
 
 
 class StewardProjectAdmin(admin.ModelAdmin):

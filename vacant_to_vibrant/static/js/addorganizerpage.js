@@ -3,7 +3,7 @@
  */
 define(['jquery',], function($) {
     function toggle_cbo_fields(show) {
-        var $cbo_fields = $(':input[name="facebook_page"],:input[name="url"]').parents('tr');
+        var $cbo_fields = $(':input[name="facebook_page"],:input[name="url"]').parents('.control-group');
         if (show) {
             $cbo_fields.show();
         }

@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.generic import TemplateView
 
 from api.api import v1_api
 
@@ -37,3 +38,8 @@ urlpatterns += patterns('',
 
     url(r'', include('feincms.urls')),
 )
+
+# Include handlers to ensure STATIC_URL exists for django-compressor, as
+# suggested here: https://github.com/jezdez/django_compressor/pull/206
+handler404 = TemplateView.as_view(template_name='404.html')
+handler500 = TemplateView.as_view(template_name='500.html')

@@ -82,6 +82,13 @@ class StewardProject(BaseStewardProject):
         null=True,
         help_text=_('When did this project start?'),
     )
+    steward_notification = models.ForeignKey('StewardNotification',
+        verbose_name=_('steward notification'),
+        blank=True,
+        null=True,
+        help_text=_('The notification that led to the creation of this '
+                    'project, if any.'),
+    )
 
     def __unicode__(self):
         return self.name or '%d' % self.pk
@@ -173,10 +180,12 @@ def create_steward_project_and_organizer(sender, instance, **kwargs):
         organizer=organizer,
         content_type=instance.content_type,
         object_id=instance.object_id,
+        name=instance.name,
         use=instance.use,
         support_organization=instance.support_organization,
         land_tenure_status=instance.land_tenure_status,
         include_on_map=instance.include_on_map,
+        steward_notification=instance,
     )
     steward_project.save()
 

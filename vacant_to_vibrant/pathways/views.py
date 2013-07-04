@@ -1,5 +1,8 @@
+from django.http import Http404, HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+
+from feincms.module.page.models import Page
 
 from .models import Pathway
 
@@ -19,5 +22,11 @@ class PathwaysDetailView(PathwaysFeinCMSMixin, DetailView):
 
 
 class PathwaysListView(PathwaysFeinCMSMixin, ListView):
-    #model = Pathway
-    queryset = Pathway.objects.all()
+    redirect_to_page_slug = 'pathways-list'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            page = Page.objects.get(slug__iexact=self.redirect_to_page_slug)
+            return HttpResponseRedirect(page.get_absolute_url())
+        except Exception:
+            raise Http404

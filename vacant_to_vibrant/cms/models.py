@@ -1,3 +1,5 @@
+from django.db import models
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from feincms.module.page.models import Page
@@ -6,6 +8,23 @@ from feincms.content.richtext.models import RichTextContent
 from feincms.content.medialibrary.models import MediaFileContent
 
 from pathways.models import Pathway
+
+
+class PathwayListContent(models.Model):
+
+    class Meta:
+        abstract = True
+        verbose_name = _('pathway list')
+        verbose_name_plural = _('pathway lists')
+
+    def render(self, **kwargs):
+        context = {
+            'pathway_list': Pathway.objects.all().order_by('name'),
+        }
+        context.update(kwargs)
+        return render_to_string([
+            'pathways/page_content_list.html',
+        ], context, context_instance=kwargs.get('context'))
 
 
 Page.register_extensions(
@@ -34,6 +53,8 @@ Page.register_templates({
 })
 
 Page.create_content_type(RichTextContent)
+
+Page.create_content_type(PathwayListContent)
 
 Page.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('default', _('default')),

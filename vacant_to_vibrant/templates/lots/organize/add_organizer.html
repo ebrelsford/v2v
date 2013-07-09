@@ -17,12 +17,20 @@
     <div>
         <p>
             {% blocktrans %}
-            Awesome! Tell us a little about yourself.
+                Awesome! Tell us a little about yourself.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% url "lots:add_note" pk=lot.pk as add_note_url %}
+            {% blocktrans %}
+                Once you do, why not 
+                <a href="{{ add_note_url }}" target="_blank">post a note</a>
+                to tell everyone your vision for the lot? And be sure to post updates on your progress!
             {% endblocktrans %}
         </p>
         <p> 
             {% blocktrans %}
-            If you select "community based organization" from the dropdown below, you will be able to add your organization's webpage and Facebook pages, which will automatically become links. 
+                If you select "community based organization" from the dropdown below, you will be able to add your organization's webpage and Facebook pages, which will automatically become links. 
             {% endblocktrans %}
         </p>
         {% include "organize/form_snippet.html" %}

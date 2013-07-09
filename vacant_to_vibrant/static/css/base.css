@@ -474,6 +474,26 @@ header {
     line-height: 26px;
 }
 
+@media (max-width: 500px) {
+
+    #map-overlay {
+        width: 200px;
+    }
+
+    .map-overlay-button {
+        left: 0;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+    .map-overlay-button {
+        left: -25px;
+    }
+
+}
+
 .right-arrow-button::after {
     background: url(/static/img/right_arrow_button.png);
     content: "";

@@ -27,7 +27,7 @@ class GroundtruthRecord(models.Model):
     contact_phone = models.CharField(_('contact phone'),
         blank=True,
         null=True,
-        max_length = 20,
+        max_length=20,
         help_text=_('Who can we call for more information?'),
     )
     added = models.DateTimeField(_('date added'),

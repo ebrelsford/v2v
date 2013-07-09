@@ -6,8 +6,8 @@ from .models import GroundtruthRecord
 
 
 class GroundtruthRecordAdmin(MonitorAdmin):
-    list_display = ('pk', 'use', 'address', 'contact_email', 'contact_phone',
-                    'added',)
+    list_display = ('pk', 'use', 'address', 'contact_name', 'contact_email',
+                    'contact_phone', 'added',)
 
     def address(self, obj):
         try:

@@ -19,6 +19,10 @@ class GroundtruthRecord(models.Model):
     actual_use = models.TextField(_('actual use'),
         help_text=_('How is the lot actually being used?'),
     )
+    contact_name = models.CharField(_('contact name'),
+        max_length=50,
+        help_text=_("What's your name?"),
+    )
     contact_email = models.EmailField(_('contact email'),
         blank=True,
         null=True,

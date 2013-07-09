@@ -6,14 +6,21 @@ from .models import GroundtruthRecord
 
 
 class GroundtruthRecordAdmin(MonitorAdmin):
-    list_display = ('pk', 'use', 'address', 'contact_name', 'contact_email',
-                    'contact_phone', 'added',)
+    fields = ('groundtruth_target', 'actual_use', 'contact_name',
+              'contact_email', 'contact_phone', 'added',)
+    list_display = ('pk', 'groundtruth_target', 'actual_use', 'contact_name',
+                    'contact_email', 'contact_phone', 'added',)
+    readonly_fields = ('added', 'groundtruth_target',)
 
-    def address(self, obj):
+    def groundtruth_target(self, obj):
         try:
-            return obj.content_object.address_line1
+            return '<a href="%s" target="_blank">%s</a>' % (
+                obj.content_object.get_absolute_url(),
+                obj.content_object
+            )
         except Exception:
             return ''
+    groundtruth_target.allow_tags = True
 
 
 admin.site.register(GroundtruthRecord, GroundtruthRecordAdmin)

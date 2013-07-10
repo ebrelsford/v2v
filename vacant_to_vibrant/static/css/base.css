@@ -474,6 +474,18 @@ header {
     line-height: 26px;
 }
 
+.map-overlay-close-button,
+.map-overlay-close-button:hover {
+    color: white;
+    cursor: pointer;
+    font: bold 16px/14px Tahoma,Verdana,sans-serif;
+    padding: 4px;
+    position: absolute;
+    right: 0;
+    text-decoration: none;
+    top: 0;
+}
+
 @media (max-width: 500px) {
 
     #map-overlay {

@@ -350,6 +350,7 @@ define(
             showOverlay();
             $(window).smartresize(positionOverlay);
             $('.map-overlay-button').click(hideOverlay);
+            $('.map-overlay-close-button').click(hideOverlay);
 
         });
 

@@ -340,14 +340,40 @@ define(
                     filters: this.options.polygonInitialFilters,
                     scaleRange: [16, 18],
                     symbology: {
-                        type: 'single',
-                        vectorOptions: {
-                            fillColor: '#78C679',
-                            fillOpacity: 0.7,
-                            color: 'white',
-                            opacity: 0.8,
-                            weight: 1,
-                        },
+                        type: 'unique',
+                        property: 'layer',
+                        values: [
+                            {
+                                value: 'in use',
+                                vectorOptions: {
+                                    fillColor: '#830F94',
+                                    fillOpacity: 0.7,
+                                    color: 'white',
+                                    opacity: 0.8,
+                                    weight: 1,
+                                },
+                            },
+                            {
+                                value: 'public',
+                                vectorOptions: {
+                                    fillColor: '#D38022',
+                                    fillOpacity: 0.7,
+                                    color: 'white',
+                                    opacity: 0.8,
+                                    weight: 1,
+                                },
+                            },
+                            {
+                                value: 'private',
+                                vectorOptions: {
+                                    fillColor: '#287A68',
+                                    fillOpacity: 0.7,
+                                    color: 'white',
+                                    opacity: 0.8,
+                                    weight: 1,
+                                },
+                            },
+                        ],
                     },
                     uniqueField: 'pk',
                     url: this.options.polygonBaseUrl,

@@ -189,11 +189,20 @@ class LotsGeoJSON(LotFieldsMixin, FilteredLotsMixin, GeoJSONResponseMixin,
 class LotsGeoJSONPolygon(FilteredLotsMixin, GeoJSONListView):
 
     def get_feature(self, lot):
+        if lot.known_use:
+            layer = 'in use'
+        elif lot.owner.owner_type == 'public':
+            layer = 'public'
+        elif lot.owner.owner_type == 'private':
+            layer = 'private'
+        else:
+            layer = ''
         return geojson.Feature(
             lot.pk,
             geometry=json.loads(lot.geojson),
             properties={
                 'pk': lot.pk,
+                'layer': layer,
             },
         )
 

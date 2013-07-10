@@ -735,6 +735,22 @@ header {
 
 /* Map */
 
+.leaflet-popup-content {
+    overflow: auto;
+}
+
+@media (max-width: 400px) {
+
+    .leaflet-popup-content {
+        margin: 3px 10px;
+    }
+    
+    .lot-popup-display-name {
+        margin: 5px 0;
+    }
+
+}
+
 #popup-content {
     height: 200px;
 }

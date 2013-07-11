@@ -1,4 +1,0 @@
-after collectstatic:
-
-cd collected_static/js
-r.js -o app.build.js 

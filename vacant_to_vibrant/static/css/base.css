@@ -608,6 +608,13 @@ header {
     text-align: center;
 }
 
+#footer a,
+#footer a:active,
+#footer a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
 .help-text {
     font-size: 12px;
 }

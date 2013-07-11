@@ -136,16 +136,20 @@
 
             {% if lot.licenses.count > 0 %}
             <tr>
-                <th>{% trans "licenses" %}:</th>
+                <th>
+                    {% trans "licenses" %}
+                    <span class="badge">{{ lot.licenses.count }}</span>
+                </th>
                 <td>
-                    {{ lot.licenses.count }}:
-                    {% for license in lot.licenses.all %}
-                    {{ license.status }},
-                    {% trans "issued on" %}
-                    {{ license.issued_datetime|date:"SHORT_DATE_FORMAT" }},
-                    {{ license.license_type.name }}
-                    <br />
-                    {% endfor %}
+                    <ul>
+                        {% for license in lot.licenses.all %}
+                            <li>
+                                <a href="http://www.phila.gov/data/Pages/default.aspx?entity=licenses&eid={{ license.external_id }}" target="_blank">
+                                    {{ license.status|lower }} ({{ license.external_id }})
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </td>
             </tr>
             {% endif %}

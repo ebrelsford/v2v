@@ -322,6 +322,11 @@ class EditLandCharacteristicsSurvey(SuccessMessageFormMixin, LotContextMixin,
         signals.form_valid.send(sender=self.request, form=form, entry=entry)
         return super(EditLandCharacteristicsSurvey, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(EditLandCharacteristicsSurvey, self).get_context_data(**kwargs)
+        context['survey_form_pk'] = settings.LOT_SURVEY_FORM_PK
+        return context
+
     def get_success_url(self):
         return self.get_lot().get_absolute_url()
 

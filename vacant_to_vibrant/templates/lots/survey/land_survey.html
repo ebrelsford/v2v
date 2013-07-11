@@ -11,5 +11,13 @@
 {% block lot_content %}
     {{ block.super }}
     <h3>{% trans "Land Characteristics Survey" %}</h3>
+
+    {% if "forms.change_form" in perms %}
+        <a class="btn btn-small btn-warning" href="{% url "admin:forms_form_change" survey_form_pk %}">
+            <i class="icon-edit icon-white"></i>
+            {% trans "Edit the land characteristics survey fields" %}
+        </a>
+    {% endif %}
+
     {% include "_form.html" with form=form %}
 {% endblock %}

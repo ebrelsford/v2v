@@ -27,8 +27,8 @@ class Violation(models.Model):
         unique=True,
     )
 
-    # TODO add
-    #status
+    # TODO actually want case_number so we can link like this:
+    # http://www.phila.gov/data/Pages/default.aspx?entity=violationdetails&eid=
 
     def __unicode__(self):
         return u'Violation (%s): %s at %s' % (self.external_id,

@@ -175,15 +175,18 @@ def get_or_create_lot(parcel, address, polygon=None, centroid=None,
 
 def _get_lot_kwargs(address=None, land_use_area=None, parcel=None):
     """Get a dictionary of kwargs for getting a distinct Lot."""
+    # Never accept LotGroups
+    kwargs = { 'lotgroup': None }
     if address:
-        return { 'address_line1': address }
+        kwargs['address_line1'] = address
     if parcel:
         if parcel.address:
-            return { 'address_line1': parcel.address }
+            kwargs['address_line1'] = parcel.address
         else:
-            return { 'parcel': parcel }
+            kwargs['parcel'] = parcel
     if land_use_area:
-        return { 'land_use_area': land_use_area }
+        kwargs['land_use_area'] = land_use_area
+    return kwargs
 
 
 def _get_lot_defaults(address=None, centroid=None, land_use_area=None,

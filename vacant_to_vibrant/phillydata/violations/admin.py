@@ -9,6 +9,7 @@ class ViolationAdmin(CompareVersionAdmin):
     date_hierarchy = 'violation_datetime'
     list_display = ('external_id', 'case_number', 'violation_type',
                     'violation_datetime',)
+    list_filter = ('violation_type',)
     readonly_fields = ('external_id', 'case_number', 'location',
                        'violation_type', 'violation_datetime',)
     search_fields = ('external_id', 'case_number', 'location__address',)

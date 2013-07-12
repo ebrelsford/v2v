@@ -20,6 +20,27 @@ def find_violations(code, since, until=None):
             logger.exception('Failed to load violation: %s' % violation)
 
 
+def find_violations_fill_case_number(code, since, until=None):
+    """
+    Get case_number from the API for violations that we likely already have.
+    """
+    reader = LIViolationReader()
+    for violation in reader.get(code, since=since, until=until):
+        try:
+            existing_violation = Violation.objects.get(
+                external_id=violation['violation_details_id']
+            )
+            existing_violation.case_number = violation['case_number']
+            existing_violation.save()
+            logger.debug('Updated violation: %s' % existing_violation)
+        except Exception:
+            try:
+                saved_violation = save_violation(violation)
+                logger.debug('Added violation: %s' % saved_violation)
+            except Exception:
+                logger.exception('Failed to load violation: %s' % violation)
+
+
 def get_violation_type(violation):
     violation_type, created = ViolationType.objects.get_or_create(
         code=violation['violation_code'],

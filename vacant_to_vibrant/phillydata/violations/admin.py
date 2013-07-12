@@ -6,9 +6,11 @@ from .models import Violation, ViolationType
 
 
 class ViolationAdmin(CompareVersionAdmin):
-    list_display = ('external_id', 'violation_type', 'violation_datetime',)
-    readonly_fields = ('location', 'violation_type',)
-    search_fields = ('external_id', 'location__address',)
+    list_display = ('external_id', 'case_number', 'violation_type',
+                    'violation_datetime',)
+    readonly_fields = ('external_id', 'case_number', 'location',
+                       'violation_type', 'violation_datetime',)
+    search_fields = ('external_id', 'case_number', 'location__address',)
 
 
 class ViolationTypeAdmin(admin.ModelAdmin):

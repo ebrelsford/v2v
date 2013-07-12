@@ -35,6 +35,7 @@ def save_violation(violation):
 
     saved_violation, created = Violation.objects.get_or_create(
         external_id=violation['violation_details_id'],
+        case_number=violation['case_number'],
         violation_datetime=LIViolationReader.parse_datetime(violation.get('violation_datetime', None)),
         location=location,
         violation_type=violation_type,

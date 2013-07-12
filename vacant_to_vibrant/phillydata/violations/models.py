@@ -26,9 +26,13 @@ class Violation(models.Model):
         help_text=_("The ID of this violation in L&I's API"),
         unique=True,
     )
-
-    # TODO actually want case_number so we can link like this:
-    # http://www.phila.gov/data/Pages/default.aspx?entity=violationdetails&eid=
+    case_number = models.CharField(_('case number'),
+        blank=True,
+        null=True,
+        max_length=30,
+        help_text=_("The case number of this violation in L&I's API"),
+        unique=True,
+    )
 
     def __unicode__(self):
         return u'Violation (%s): %s at %s' % (self.external_id,

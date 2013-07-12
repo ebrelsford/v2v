@@ -66,7 +66,6 @@ def load_lots_with_violations():
                               '%s') % str(violation))
             continue
 
-        # TODO account for violations that don't agree with each other
         with reversion.create_revision():
             lot = get_or_create_lot(
                 parcel, violation.location.address,

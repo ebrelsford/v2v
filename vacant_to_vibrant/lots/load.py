@@ -164,19 +164,24 @@ def load_lots_by_tax_account(force=False):
 
 def get_or_create_lot(parcel, address, polygon=None, centroid=None,
                       zipcode=None):
-    lot, created = Lot.objects.get_or_create(
-        defaults=_get_lot_defaults(address=address, parcel=parcel,
-                                   centroid=centroid, polygon=polygon,
-                                   zipcode=zipcode),
-        **_get_lot_kwargs(address=address, parcel=parcel)
-    )
-    return lot
+    defaults = _get_lot_defaults(address=address, parcel=parcel,
+                                 centroid=centroid, polygon=polygon,
+                                 zipcode=zipcode)
+    kwargs = _get_lot_kwargs(address=address, parcel=parcel)
+
+    try:
+        # Try to get the lot (without a LotGroup), first
+        existing_lot = Lot.objects.get(lotgroup=None, **kwargs)
+        existing_lot.update(**defaults)
+        return existing_lot
+    except Exception:
+        lot, created = Lot.objects.get_or_create(defaults=defaults, **kwargs)
+        return lot
 
 
 def _get_lot_kwargs(address=None, land_use_area=None, parcel=None):
     """Get a dictionary of kwargs for getting a distinct Lot."""
-    # Never accept LotGroups
-    kwargs = { 'lotgroup': None }
+    kwargs = {}
     if address:
         kwargs['address_line1'] = address
     if parcel:

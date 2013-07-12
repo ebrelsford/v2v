@@ -164,8 +164,15 @@
                     <ul>
                         {% for violation in lot.violations.all %}
                             <li>
-                                {{ violation.violation_datetime|date:"SHORT_DATE_FORMAT" }}
-                                {{ violation.violation_type }}
+                                {% if violation.case_number %}
+                                    <a href="http://www.phila.gov/data/Pages/default.aspx?entity=violationdetails&eid={{ violation.case_number }}" target="_blank">
+                                        {{ violation.violation_datetime|date:"SHORT_DATE_FORMAT" }}
+                                        {{ violation.violation_type }}
+                                    </a>
+                                {% else %}
+                                    {{ violation.violation_datetime|date:"SHORT_DATE_FORMAT" }}
+                                    {{ violation.violation_type }}
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>

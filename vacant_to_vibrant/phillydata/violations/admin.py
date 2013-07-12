@@ -6,6 +6,7 @@ from .models import Violation, ViolationType
 
 
 class ViolationAdmin(CompareVersionAdmin):
+    date_hierarchy = 'violation_datetime'
     list_display = ('external_id', 'case_number', 'violation_type',
                     'violation_datetime',)
     readonly_fields = ('external_id', 'case_number', 'location',

@@ -31,7 +31,6 @@ class Violation(models.Model):
         null=True,
         max_length=30,
         help_text=_("The case number of this violation in L&I's API"),
-        unique=True,
     )
 
     def __unicode__(self):

@@ -156,13 +156,19 @@
 
             {% if lot.violations.count > 0 %}
             <tr>
-                <th>{% trans "violations" %}:</th>
+                <th>
+                    {% trans "violations" %}
+                    <span class="badge">{{ lot.violations.count }}</span>
+                </th>
                 <td>
-                    {{ lot.violations.count }}:
-                    {% for violation in lot.violations.all %}
-                    {{ violation.violation_datetime|date:"SHORT_DATE_FORMAT" }}
-                    {{ violation.violation_type }}
-                    {% endfor %}
+                    <ul>
+                        {% for violation in lot.violations.all %}
+                            <li>
+                                {{ violation.violation_datetime|date:"SHORT_DATE_FORMAT" }}
+                                {{ violation.violation_type }}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </td>
             </tr>
             {% endif %}

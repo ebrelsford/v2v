@@ -191,9 +191,9 @@ class LotsGeoJSONPolygon(FilteredLotsMixin, GeoJSONListView):
     def get_feature(self, lot):
         if lot.known_use:
             layer = 'in use'
-        elif lot.owner.owner_type == 'public':
+        elif lot.owner and lot.owner.owner_type == 'public':
             layer = 'public'
-        elif lot.owner.owner_type == 'private':
+        elif lot.owner and lot.owner.owner_type == 'private':
             layer = 'private'
         else:
             layer = ''

@@ -95,7 +95,8 @@ def parse_datetime(s):
         return None
 
 
-def load(filename=settings.DATA_ROOT + '/gardens.csv', create_organizers=False):
+def load(filename=settings.DATA_ROOT + '/gardens.csv',
+         create_organizers=False, append_to_existing=False):
     reader = csv.DictReader(open(filename, 'r'))
 
     gardens = itertools.groupby(reader, lambda r: r['GARDEN NAME'])
@@ -162,26 +163,52 @@ def load(filename=settings.DATA_ROOT + '/gardens.csv', create_organizers=False):
         print 'organizer_kwargs', organizer_kwargs
         print 'steward_kwargs', steward_kwargs
 
-        # Group Lots (if len > 1)
-        if len(lots) > 1:
-            lot = LotGroup(**lotgroup_kwargs)
-            lot.save()
+        if append_to_existing:
+            # Try to find existing steward project
+            try:
+                steward_project = StewardProject.objects.get(
+                    name=steward_kwargs['name']
+                )
+            except Exception:
+                steward_project = None
+
+        if steward_project:
+            # Look for steward_project's LotGroup
+            try:
+                lot_group = steward_project.content_object.lotgroup
+            except Exception:
+                # Create new LotGroup
+                lot_group = LotGroup(**lotgroup_kwargs)
+                lot_group.save()
+                # Swap the steward project's old lot with the new group
+                steward_project.content_object.group = lot_group
+                steward_project.content_object.save()
+                steward_project.content_object = lot_group
+                steward_project.save()
             for member_lot in lots:
-                member_lot.group = lot
+                member_lot.group = lot_group
                 member_lot.save()
         else:
-            lot = lots[0]
+            # Group Lots (if len > 1)
+            if len(lots) > 1:
+                lot = LotGroup(**lotgroup_kwargs)
+                lot.save()
+                for member_lot in lots:
+                    member_lot.group = lot
+                    member_lot.save()
+            else:
+                lot = lots[0]
 
-        if create_organizers and organizer_kwargs['name'] and organizer_kwargs['email']:
-            organizer = Organizer(content_object=lot, **organizer_kwargs)
-            organizer.save()
-        else:
-            organizer = None
+            if create_organizers and organizer_kwargs['name'] and organizer_kwargs['email']:
+                organizer = Organizer(content_object=lot, **organizer_kwargs)
+                organizer.save()
+            else:
+                organizer = None
 
-        # Create a StewardProject for the (group of) lots
-        steward_project = StewardProject(
-            content_object=lot,
-            organizer=organizer,
-            **steward_kwargs
-        )
-        steward_project.save()
+            # Create a StewardProject for the (group of) lots
+            steward_project = StewardProject(
+                content_object=lot,
+                organizer=organizer,
+                **steward_kwargs
+            )
+            steward_project.save()

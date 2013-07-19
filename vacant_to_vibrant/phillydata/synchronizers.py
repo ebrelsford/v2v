@@ -39,14 +39,20 @@ class OPASynchronizer(Synchronizer):
         # grab a random set of lots to update
         lots = Lot.objects.filter(owner__isnull=True).order_by('?')[:count]
         for lot in lots:
-            logger.debug('Updating OPA data for lot %s' % lot)
-            try:
-                lot.billing_account = find_opa_details(lot.address_line1)
-                lot.owner = lot.billing_account.account_owner.owner
-                lot.save()
-            except Exception:
-                logger.warn('Caught exception while getting OPA data for lot '
-                            '%s' % lot)
+            self.update_lot_owner_data(lot)
+
+    def update_lot_owner_data(self, lot):
+        logger.debug('Updating OPA data for lot %s' % lot)
+        try:
+            kwargs = {}
+            if lot.water_parcel:
+                kwargs['brt_account'] = lot.water_parcel.brt_account
+            lot.billing_account = find_opa_details(lot.address_line1, **kwargs)
+            lot.owner = lot.billing_account.account_owner.owner
+            lot.save()
+        except Exception:
+            logger.warn('Caught exception while getting OPA data for lot %s' %
+                        lot)
 
 
 class WaterDeptSynchronizer(Synchronizer):

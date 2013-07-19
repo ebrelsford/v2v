@@ -9,7 +9,7 @@ import logging
 
 import reversion
 
-from .api import get_address_data
+from .api import get_account_data, get_address_data
 from .models import AccountOwner, BillingAccount
 from phillydata.owners.models import Owner
 from vacant_to_vibrant.utils import html_unescape
@@ -84,10 +84,18 @@ def get_or_create_billing_account(data, account_owner):
     return billing_account
 
 
-def find_opa_details(address):
+def find_opa_details(address, brt_account=None):
     """Get or create a BillingAccount for the given address."""
     logger.debug('Getting OPA data for address "%s"' % address)
+
+    # Attempt to get owner by address
     data = get_address_data(address)
+
+    # Attempt to get owner by BRT number
+    if brt_account and not data:
+        logger.debug('Getting OPA data for account "%s"' % brt_account)
+        data = get_account_data(brt_account)
+
     if not data:
         raise Exception('Could not find OPA details for "%s"' % address)
 

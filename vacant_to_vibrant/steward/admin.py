@@ -40,6 +40,7 @@ class StewardProjectAdmin(BaseStewardAdminMixin, admin.ModelAdmin):
     list_filter = ('use', 'include_on_map',)
     readonly_fields = ('content_type', 'object_id', 'stewarded_target',
                        'steward_notification_link',)
+    search_fields = ('name',)
 
     def steward_notification_link(self, obj):
         try:

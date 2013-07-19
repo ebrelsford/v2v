@@ -151,10 +151,10 @@
 
     <div class="map-sidebar-section">
         <h2>{% trans "Recent News" %}</h2>
-        <ul>
+        <ul class="recent-entries">
             {% get_entries 3 %}
             {% for entry in entries %}
-                <li>
+                <li class="recent-entry">
                     <a href="{{ entry.get_absolute_url }}">{{ entry }}</a>
                 </li>
             {% endfor %}

@@ -53,14 +53,14 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
     actions = ('add_to_group',)
     exclude = ('available_property', 'parcel',)
     form = LotAdminForm
-    list_display = ('address_line1', 'city', 'owner', 'known_use',
+    list_display = ('address_line1', 'city', 'name', 'owner', 'known_use',
                     'billing_account',)
     list_filter = ('known_use',)
     readonly_fields = ('added', 'available_property_link', 'billing_account',
                        'city_council_district', 'land_use_area', 'owner',
                        'parcel_link', 'tax_account', 'violations',
                        'water_parcel', 'zoning_district',)
-    search_fields = ('address_line1',)
+    search_fields = ('address_line1', 'name',)
 
     fieldsets = (
         (None, {

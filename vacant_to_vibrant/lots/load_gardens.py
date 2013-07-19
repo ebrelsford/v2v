@@ -21,7 +21,10 @@ def find_lot(basereg, address):
         return Lot.objects.get(parcel__basereg=basereg)
     except Exception:
         try:
-            return Lot.objects.get(address_line1__iexact=address)
+            return Lot.objects.get(
+                address_line1__iexact=address,
+                parcel__basereg=basereg,
+            )
         except Exception:
             return None
 

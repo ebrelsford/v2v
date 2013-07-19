@@ -24,6 +24,8 @@ define(
         'lib/jquery.spin',
         'lib/jquery.smartresize',
 
+        'lib/leaflet.usermarker/leaflet.usermarker',
+
     ], function ($, L, Django, JSON) {
 
         var lotsMap;
@@ -337,7 +339,11 @@ define(
                 })
                 .on('searchresultfound', function (e, data) {
                     hideOverlay();
-                    lotsMap.setView([data.latitude, data.longitude], 15);
+                    var latlng = [data.latitude, data.longitude];
+                    lotsMap.setView(latlng, 15);
+                    var usermarker = L.userMarker(latlng, { smallIcon: true })
+                        .bindPopup('This is the address you searched for.');
+                    usermarker.addTo(lotsMap);
                 });
 
 

@@ -11,6 +11,7 @@ requirejs.config({
         'async': 'lib/async',
         'json2': 'lib/json2',
         'spin': 'lib/spin.min',
+        'leaflet.usermarker': 'lib/leaflet.usermarker/leaflet.usermarker',
     },
     shim: {
         'django': {
@@ -34,6 +35,7 @@ requirejs.config({
         'Leaflet.Bing': ['leaflet'],
         'lib/leaflet.label': ['leaflet'],
         'lib/leaflet.utfgrid': ['leaflet'],
+        'leaflet.usermarker': ['leaflet'],
         'chosen.jquery.min': ['jquery'],
         'chosen.jquery_ready': ['jquery', 'chosen.jquery.min'],
         'lib/jquery.noisy': ['jquery'],

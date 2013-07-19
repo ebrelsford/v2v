@@ -114,10 +114,11 @@ class FiltersForm(forms.Form):
     owner__owner_type__in = forms.MultipleChoiceField(
         label=_('Owner types'),
         choices=(
+            ('mixed', 'mixed / multiple owners'),
             ('private', 'private'),
             ('public', 'public'),
         ),
-        initial=('private', 'public',),
+        initial=('mixed', 'private', 'public',),
         required=False,
         widget=forms.CheckboxSelectMultiple(),
     )

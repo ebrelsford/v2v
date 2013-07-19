@@ -40,17 +40,9 @@ class OwnerResource(ModelResource):
 
 class LotResource(ModelResource):
     known_use = fields.ForeignKey(UseResource, 'known_use', null=True, blank=True)
-    owner = fields.ForeignKey(OwnerResource, 'owner', null=True, blank=True)
 
     def build_filters(self, filters={}):
         orm_filters_filters = filters.copy()
-
-        # Make owner__owner_type__in look the way tastypie wants it to
-        try:
-            owner_types = ','.join(orm_filters_filters.getlist('owner__owner_type__in'))
-            orm_filters_filters['owner__owner_type__in'] = owner_types
-        except Exception:
-            pass
 
         orm_filters = super(LotResource, self).build_filters(filters=orm_filters_filters)
 
@@ -61,6 +53,8 @@ class LotResource(ModelResource):
         # Remove empty owner name filter
         if 'owner__name__icontains' in orm_filters and orm_filters['owner__name__icontains'] == '':
             del orm_filters['owner__name__icontains']
+
+        orm_filters['owner__owner_type__in'] = filters.getlist('owner__owner_type__in', [])
 
         orm_filters['known_use_existence'] = filters.getlist('known_use_existence', [])
 
@@ -203,6 +197,9 @@ class LotResource(ModelResource):
         except Exception:
             return 0
 
+    def pop_custom_filter_owner__owner_type__in(self, filters):
+        return filters.pop('owner__owner_type__in', [])
+
     def apply_custom_filter_boundary(self, qs, value):
         boundary_filters = None
         for layer, boundary_pks in value.items():
@@ -290,16 +287,26 @@ class LotResource(ModelResource):
             )
         return qs
 
+    def apply_custom_filter_owner__owner_type__in(self, qs, value):
+        # Make owner__owner_type__in look the way tastypie wants it to
+        if 'mixed' in value:
+            return qs.filter(
+                Q(owner__owner_type__in=value) | Q(owner__isnull=True)
+            )
+        else:
+            return qs.filter(
+                owner__owner_type__in=value,
+            )
+
     class Meta:
         allowed_methods = ('get',)
-        fields = ('centroid', 'polygon', 'pk', 'owner', 'known_use',
+        fields = ('centroid', 'polygon', 'pk', 'known_use',
                   'known_use_certainty',)
         queryset = Lot.objects.all()
         filtering = {
             'centroid': ALL,
             'known_use': ALL_WITH_RELATIONS,
             'known_use_certainty': ALL_WITH_RELATIONS,
-            'owner': ALL_WITH_RELATIONS,
             'polygon': ALL,
         }
 

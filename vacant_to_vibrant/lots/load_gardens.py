@@ -68,24 +68,25 @@ def to_basereg(s):
     return s.replace('-', '')
 
 
-def find_or_create_lot(row):
-    basereg = to_basereg(row['BaseReg'])
+def find_or_create_lots(row):
     address = fix_address(row['INDIVIDUAL_PARCEL'])
+    for basereg_raw in row['BaseReg'].split(','):
+        basereg = to_basereg(basereg_raw.strip())
 
-    # Try to find the parcel as a Lot
-    lot = find_lot(basereg, address)
+        # Try to find the parcel as a Lot
+        lot = find_lot(basereg, address)
 
-    # If that fails find it as a Parcel, and create a Lot for it
-    if not lot:
-        # Let OPASynchronizer handle ownership data
-        defaults = {
-            'address_line1': address,
-            'city': 'Philadelphia',
-            'state_province': 'PA',
-            'postal_code': row['ZIP'],
-        }
-        lot = create_lot(basereg, address, **defaults)
-    return lot
+        # If that fails find it as a Parcel, and create a Lot for it
+        if not lot:
+            # Let OPASynchronizer handle ownership data
+            defaults = {
+                'address_line1': address,
+                'city': 'Philadelphia',
+                'state_province': 'PA',
+                'postal_code': row['ZIP'],
+            }
+            lot = create_lot(basereg, address, **defaults)
+        yield lot
 
 
 def parse_datetime(s):
@@ -150,9 +151,7 @@ def load(filename=settings.DATA_ROOT + '/gardens.csv',
                                  steward_kwargs.get('date_started', None)),
             })
 
-            lot = find_or_create_lot(parcel)
-            if lot:
-                lots.append(lot)
+            lots += find_or_create_lots(parcel)
 
         print 'Trying to add garden "%s"' % lotgroup_kwargs['name']
         if not lots:

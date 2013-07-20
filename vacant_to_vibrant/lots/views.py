@@ -108,6 +108,9 @@ class LotFieldsMixin(object):
     def get_field_owner_type(self, lot):
         return lot.owner.get_owner_type_display()
 
+    def get_field_known_use(self, lot):
+        return lot.known_use.name
+
     def _field_value(self, lot, field):
         try:
             # Call get_field_<field>()

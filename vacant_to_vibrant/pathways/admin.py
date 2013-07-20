@@ -1,11 +1,12 @@
 from django.contrib import admin
 
 from feincms.admin import item_editor
+from reversion_compare.admin import CompareVersionAdmin
 
 from .models import Pathway
 
 
-class PathwayAdmin(item_editor.ItemEditor):
+class PathwayAdmin(item_editor.ItemEditor, CompareVersionAdmin):
     list_display = ['name', 'is_active',]
     list_editable = ['is_active',]
     list_filter = ['is_active',]

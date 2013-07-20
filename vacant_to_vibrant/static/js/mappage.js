@@ -29,6 +29,8 @@ define(
     ], function ($, L, Django, JSON) {
 
         var lotsMap;
+        var visibleLotsCount = 0;
+        var MAX_LOTS_DOWNLOAD = 2000;
 
 
         /*
@@ -60,6 +62,7 @@ define(
                     $.each(data, function (label, count) {
                         $('.' + label).text(count);
                     });
+                    visibleLotsCount = data['lots-count'];
                 })
                 .always(function () {
                     lotsMap.fire('dataload');
@@ -98,7 +101,12 @@ define(
         }
 
         function exportView() {
-            window.location = $(this).data('baseurl') + serializeFilters();
+            if (visibleLotsCount > MAX_LOTS_DOWNLOAD) {
+                alert('Too many lots to download! Filter the map and try again once the number of lots is no more than ' + MAX_LOTS_DOWNLOAD + '.');
+            }
+            else {
+                window.location = $(this).data('baseurl') + serializeFilters();
+            }
             return false;
         }
 

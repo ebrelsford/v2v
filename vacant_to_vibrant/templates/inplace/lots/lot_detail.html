@@ -76,11 +76,9 @@
 
         {% if lot.available_property %}
             <div class="alert alert-info">
-                {% trans "This lot is" %}
-                <a href="http://secure.phila.gov/PAPLPublicWeb/AddAsset.aspx?AssetID={{ lot.available_property.asset_id }}">{% trans "available for purchase from" %} {{ lot.available_property.agency }}</a>
-                {% if lot.available_property.price_str != "$0.00" %}
-                    for {{ lot.available_property.price_str }}
-                {% endif %}
+                {% trans "This lot is available for purchase from" %} {{ lot.available_property.agency }}{% if not lot.available_property.price_str != "$0.00" %}.{% else %} for {{ lot.available_property.price_str }}.{% endif %}
+                <a href="http://groundedinphilly.org/pathways/get-permission-use-land-Philly-Land-Works/" target="_blank">Learn more</a> or
+                <a href="http://secure.phila.gov/PAPLPublicWeb/AddAsset.aspx?AssetID={{ lot.available_property.asset_id }}" target="_blank">express interest in buying it</a>.
             </div>
         {% endif %}
 

@@ -73,6 +73,17 @@
 <div class="lot-detail-main grid grid-2-3">
 
     <div class="lot-detail-details lot-detail-main-section">
+
+        {% if lot.available_property %}
+            <div class="alert alert-info">
+                {% trans "This lot is" %}
+                <a href="http://secure.phila.gov/PAPLPublicWeb/AddAsset.aspx?AssetID={{ lot.available_property.asset_id }}">{% trans "available for purchase from" %} {{ lot.available_property.agency }}</a>
+                {% if lot.available_property.price_str != "$0.00" %}
+                    for {{ lot.available_property.price_str }}
+                {% endif %}
+            </div>
+        {% endif %}
+
         <table>
             <tr>
                 <th>{% trans "address" %}:</th>
@@ -189,16 +200,6 @@
             </tr>
             {% endif %}
 
-            {% if lot.available_property %}
-            <tr>
-                <th>{% trans "available" %}:</th>
-                <td>
-                    Available for purchase from {{ lot.available_property.agency }}
-                    price: {{ lot.available_property.price_str }}
-                </td>
-            </tr>
-            {% endif %}
-
         </table>
     </div>
 
@@ -295,8 +296,10 @@
                 {% if lot.available_property and lot.available_property.status != "no longer available" %}
                 <li>
                     {% blocktrans %}
-                    It is for sale as part of the Redevelopment Authority's <a href="http://secure.phila.gov/paplpublicweb/" target="_blank">Available Property list</a>.
+                        It is for sale as part of the Redevelopment Authority's <a href="http://secure.phila.gov/paplpublicweb/" target="_blank">Available Property list</a>.
                     {% endblocktrans %}
+                    <a href="https://secure.phila.gov/PAPLPublicWeb/AddAsset.aspx?AssetID={{ lot.available_property.asset_id }}" target="_blank">{% trans "Express interest" %}</a>
+                    {% trans "in this lot" %}.
                 </li>
                 {% endif %}
 

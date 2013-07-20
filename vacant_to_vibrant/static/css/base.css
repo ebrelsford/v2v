@@ -587,6 +587,12 @@ header {
     padding: 5px 0;
 }
 
+.alert-info a,
+.alert-info a:visited {
+    color: inherit;
+    font-weight: bold;
+}
+
 #aside-right {
     padding-left: 25px;
 }

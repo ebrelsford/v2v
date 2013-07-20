@@ -97,6 +97,11 @@ define(
             }
         }
 
+        function exportView() {
+            window.location = $(this).data('baseurl') + serializeFilters();
+            return false;
+        }
+
         function updateViewType(viewType) {
             var viewTypeFilterSelector = '.view-type-' + viewType;
 
@@ -301,20 +306,9 @@ define(
                 window.location.search = serializeFilters();
             });
 
-            $('.export-csv').click(function () {
-                window.location = $(this).data('baseurl') + serializeFilters();
-                return false;
-            });
-
-            $('.export-geojson').click(function () {
-                window.location = $(this).data('baseurl') + serializeFilters();
-                return false;
-            });
-
-            $('.export-kml').click(function () {
-                window.location = $(this).data('baseurl') + serializeFilters();
-                return false;
-            });
+            $('.export-csv').click(exportView);
+            $('.export-geojson').click(exportView);
+            $('.export-kml').click(exportView);
 
 
             // Fire up the activitystream

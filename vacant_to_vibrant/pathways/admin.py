@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.db import models
 
+from chosen.forms import ChosenSelectMultiple
 from feincms.admin import item_editor
 from reversion_compare.admin import CompareVersionAdmin
 
@@ -34,6 +36,12 @@ class PathwayAdmin(item_editor.ItemEditor, CompareVersionAdmin):
         }],
         item_editor.FEINCMS_CONTENT_FIELDSET,
     ]
+
+    formfield_overrides = {
+        models.ManyToManyField: {
+            'widget': ChosenSelectMultiple,
+        },
+    }
 
     @classmethod
     def add_extension_options(cls, *f):

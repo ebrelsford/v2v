@@ -12,7 +12,7 @@
     </li>
     <li>
         <a href="{{ lot.get_absolute_url }}">
-            {{ lot.address_line1|default:lot.pk }}
+            {{ lot.display_name|default:lot.pk }}
         </a>
         <span class="divider">&raquo;</span>
     </li>

@@ -4,6 +4,7 @@ from phillyorganize.models import Organizer
 
 from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
                     LotsGeoJSON, LotsGeoJSONPolygon, AddParticipantSuccessView,
+                    DeletePhillyOrganizerView,
                     AddStewardNotificationView,
                     AddStewardNotificationSuccessView,
                     AddGroundtruthRecordView,
@@ -35,6 +36,10 @@ urlpatterns = patterns('',
             model=Organizer,
         ),
         name='add_organizer_success'),
+
+    url(r'^(?P<lot_pk>\d+)/grow-community/(?P<pk>\d+)/delete/$',
+        DeletePhillyOrganizerView.as_view(),
+        name='delete_organizer'),
 
     url(r'^organize/(?P<hash>[^/]{30,})/edit/$',
         EditLotParicipantView.as_view(),

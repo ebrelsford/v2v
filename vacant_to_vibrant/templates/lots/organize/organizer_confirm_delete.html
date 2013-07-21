@@ -1,7 +1,20 @@
-{% extends "base.html" %}
+{% extends "lots/organize/base.html" %}
 {% load i18n %}
 
-{% block title %}{{ block.super }}: {% trans "Unsubscribe" %}{% endblock %}
+{% block title %}{% trans "Unsubscribe" %} | {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>
+        <a href="{% url "lots:edit_participant" hash=organizer.email_hash %}">
+            {% trans "Change the lots you're growing community in" %}
+        </a>
+        <span class="divider">&raquo;</span>
+    </li>
+    <li>
+        {% trans "Unsubscribe" %}
+    </li>
+{% endblock %}
 
 {% block content %}
 {{ block.super }}

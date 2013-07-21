@@ -24,7 +24,7 @@ from libapps.content.files.forms import FileForm
 from libapps.content.notes.forms import NoteForm
 from libapps.content.photos.forms import PhotoForm
 from libapps.organize.notifications import notify_participants_new_obj
-from libapps.organize.views import EditParticipantMixin
+from libapps.organize.views import DeleteOrganizerView, EditParticipantMixin
 
 from generic.views import CSVView, JSONResponseView, SuccessMessageFormMixin
 from groundtruth.forms import GroundtruthRecordForm
@@ -441,6 +441,22 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
         return [
             'lots/organize/add_%s_success.html' % self._get_participant_type(),
         ]
+
+
+class DeletePhillyOrganizerView(DeleteOrganizerView):
+    template_name = 'lots/organize/organizer_confirm_delete.html'
+
+    def get_object(self, **kwargs):
+        try:
+            return Organizer.objects.get(
+                object_id=self.kwargs['lot_pk'],
+                pk=self.kwargs['pk'],
+            )
+        except Exception:
+            raise Http404('Could not find the lot you were looking for.')
+
+    def _get_success_message(self):
+        return _('You are no longer subscribed to %s' % self.object.content_object)
 
 
 #

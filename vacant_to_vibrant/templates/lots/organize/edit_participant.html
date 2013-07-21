@@ -1,9 +1,12 @@
-{% extends "base.html" %}
+{% extends "lots/organize/base.html" %}
 {% load i18n %}
 
-{% block title %}{{ block.super }}: {% trans "Change the lots you're growing community in" %}{% endblock %}
+{% block title %}{% trans "Change the lots you're growing community in" %} | {{ block.super }}{% endblock %}
 
-{% block breadcrumbs %}{% endblock %}
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li>{% trans "Change the lots you're growing community in" %}</li>
+{% endblock %}
 
 {% block content %}
 {{ block.super }}
@@ -23,7 +26,7 @@
                         <a class="subscribed-lot-link" href="{{ organizer.content_object.get_absolute_url }}">
                             {{ organizer.content_object.address_line1|default:"no address" }}
                         </a>
-                        <a class="btn btn-danger btn-mini" href="{% url "organize:delete_organizer" pk=organizer.pk %}?next_url={{ request.path }}">
+                        <a class="btn btn-danger btn-mini" href="{% url "lots:delete_organizer" lot_pk=organizer.content_object.pk pk=organizer.pk %}?next_url={{ request.path }}">
                             <i class="icon-white icon-trash"></i>
                             {% trans "unsubscribe" %}
                         </a>

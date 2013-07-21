@@ -1,31 +1,36 @@
 {% extends "lots/base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Become an Organizer" %} | {{ block.super }}{% endblock %}
+{% block title %}{% trans "Grow Community Here" %} | {{ block.super }}{% endblock %}
 
 {% block body_class %}{{ block.super }} add-organizer-page{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li>{% trans "Become an Organizer" %}</li>
+    <li>{% trans "Grow Community Here" %}</li>
 {% endblock %}
 
 {% block lot_content %}
 {{ block.super }}
 <div>
-    <h3>{% trans "Become an organizer" %}</h3>
+    <h3>{% trans "Grow Community Here" %}</h3>
     <div>
         <p>
             {% blocktrans %}
-                Awesome! Tell us a little about yourself.
+                Awesome! Thank you for helping to make Philadelphia beautiful and productive. There are different ways to get access to this land&mdash;we'll share the options with you on the next screen.
             {% endblocktrans %}
         </p>
         <p>
             {% url "lots:add_note" pk=lot.pk as add_note_url %}
             {% blocktrans %}
-                Once you do, why not 
+                Tell us a little about yourself! Once you do, why not 
                 <a href="{{ add_note_url }}" target="_blank">post a note</a>
                 to tell everyone your vision for the lot? And be sure to post updates on your progress!
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                When you fill out this form, you will receive notifications when other people show interest in growing community on this lot or add notes or a picture.  
             {% endblocktrans %}
         </p>
         <p> 

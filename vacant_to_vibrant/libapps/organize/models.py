@@ -64,8 +64,10 @@ class BaseOrganizer(Participant):
     )
     post_publicly = models.BooleanField(_('post publicly'),
         default=True,
-        help_text=_("Can we share your contact information (email and phone) "
-                    "publicly?"),
+        help_text=_("Check this if you want to share your information on the "
+                    "lot's page so that your neighbors can reach you and work "
+                    "for access together. (If you don't click it, we'll just "
+                    "send you updates but keep your information hidden.)"),
     )
 
     def recent_change_label(self):

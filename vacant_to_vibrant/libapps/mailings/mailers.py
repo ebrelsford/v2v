@@ -78,7 +78,7 @@ class Mailer(object):
         """Get intended recipients, prepare the message, send it."""
         recipients = self.get_recipients()
 
-        # faking it--just add delivery records for recipients and jump out
+        # Faking it--just add delivery records for recipients and jump out
         if fake:
             self.add_delivery_records(recipients)
             return recipients
@@ -91,7 +91,7 @@ class Mailer(object):
                     recipient_group = [recipient_group[0]]
                 self._prepare_and_send_message(list(recipient_group), email)
         else:
-            # don't bother grouping--every recipient gets every message
+            # Don't bother grouping--every recipient gets every message
             for r in recipients:
                 self._prepare_and_send_message([r], r.email)
         return recipients

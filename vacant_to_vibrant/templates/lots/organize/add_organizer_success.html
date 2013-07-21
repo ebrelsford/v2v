@@ -1,45 +1,47 @@
 {% extends "lots/base.html" %}
 {% load facebook_tags i18n pathways_tags twitter_tags %}
 
-{% block title %}{% trans "Become an Organizer" %} | {{ block.super }}{% endblock %}
+{% block title %}{% trans "Grow Community Here" %} | {{ block.super }}{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li>{% trans "Become an Organizer" %}</li>
+    <li>{% trans "Grow Community Here" %}</li>
 {% endblock %}
 
 {% block lot_content %}
     {{ block.super }}
     <div id="lot-details" class="participant-add-success">
-        <h3>{% trans "Become an organizer" %}</h3>
+        <h3>{% trans "Grow Community Here" %}</h3>
         <div>
             <section>
-                {% blocktrans %}
-                    Success! You are now organizing a vacant lot that we're calling 
+                {% blocktrans with url=lot.get_absolute_url name=lot.display_name %}
+                    Success! You are now subscribed to a vacant lot that we're calling 
+                    <a href="{{ url }}">{{ name }}</a>.
                 {% endblocktrans %}
-                <a href="{{ lot.get_absolute_url }}">{{ lot.display_name }}</a>.
             </section>
 
             <section>
-                {% blocktrans %}
-                    You will now receive emails when that lot is updated&mdash;when new
-                    organizers sign up on the lot and notes are added to it. If this was an
-                    accident or if you change your mind in the future, you can stop
-                    organizing this lot at any time on 
+                {% url "lots:edit_participant" hash=participant.email_hash as edit_url %}
+                {% blocktrans with email=participant.email %}
+                    You will now receive emails at <strong>{{ email }}</strong> 
+                    when that lot is updated&mdash;when new neighbors sign up 
+                    on the lot and notes are added to it. If this was an 
+                    accident or if you change your mind in the future, you can 
+                    stop this at any time on <a href="{{ edit_url }}">this page</a>. 
+                    You should receive an email with this link soon.
                 {% endblocktrans %}
-                <a href="{% url "lots:edit_participant" hash=participant.email_hash %}">{% trans "this page" %}</a>. 
-                {% trans "You should receive an email with this link soon." %}
             </section>
 
-            <section>
-                {% blocktrans %}
-                    Be aware that your contact information is now posted publicly on the 
-                {% endblocktrans %}
-                <a href="{{ lot.get_absolute_url }}">{% trans "lot's page" %}</a>
-                {% blocktrans %}
-                    so others who are interested in the site can get in touch with you.
-                {% endblocktrans %}
-            </section>
+            {% if participant.post_publicly %}
+                <section>
+                    {% blocktrans with url=lot.get_absolute_url %}
+                        Be aware that your contact information is now posted 
+                        publicly on the <a href="{{ url }}">lot's page</a>
+                        so others who are interested in it can get in touch 
+                        with you.
+                    {% endblocktrans %}
+                </section>
+            {% endif %}
 
             {% if lot.nearby %}
                 <section>
@@ -60,8 +62,8 @@
             <section>
                 <h2>{% trans "Share" %}</h2>
                 {% blocktrans %}
-                    Let your friends know you're organizing here! Share it on Twitter and 
-                    Facebook:
+                    Let your friends know you're growing community here! Share 
+                    it on Twitter and Facebook:
                 {% endblocktrans %}
                 <div>
                     {% with message="I just started organizing "|add:lot.display_name|add:" on @Grounded215" %}

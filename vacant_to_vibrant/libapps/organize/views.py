@@ -17,8 +17,10 @@ class EditParticipantMixin(ContextMixin):
         context = super(EditParticipantMixin, self).get_context_data(**kwargs)
         context.update({
             'organizers': get_organizer_model().objects.filter(email_hash__istartswith=hash).order_by('added'),
-            'watchers': get_watcher_model().objects.filter(email_hash__istartswith=hash).order_by('added'),
         })
+        watcher_model = get_watcher_model()
+        if watcher_model:
+            context['watchers'] = watcher_model.objects.filter(email_hash__istartswith=hash).order_by('added')
         return context
 
     def get_participant_hash(self):

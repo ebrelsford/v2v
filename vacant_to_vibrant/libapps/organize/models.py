@@ -130,6 +130,7 @@ def get_watcher_model():
     except Exception:
         logging.info('No watcher model found. Set ORGANIZE.WATCHER_MODEL if '
                      'you have one.')
+        return None
 
 
 def get_participant_models():

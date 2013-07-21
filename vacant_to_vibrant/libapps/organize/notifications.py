@@ -3,6 +3,7 @@ from .models import get_participant_models
 
 
 def notify_participant_type_new_obj(participant_class, obj):
+    """Notify all participants of the given class of obj's existence."""
     target = obj.content_object
     if not target: return
 
@@ -27,5 +28,6 @@ def notify_participant_type_new_obj(participant_class, obj):
 
 
 def notify_participants_new_obj(obj):
+    """Notify all participants of obj's target of obj's existence."""
     for participant_cls in get_participant_models():
         notify_participant_type_new_obj(participant_cls, obj)

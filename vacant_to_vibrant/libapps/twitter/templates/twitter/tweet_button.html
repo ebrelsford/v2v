@@ -3,8 +3,7 @@
     data-lang="en"
     data-related="596acres"
     data-size="large"
-    data-text="{{ text }}"
-    {% if obj %}data-url="{{ BASE_URL }}{{ obj.get_absolute_url }}"{% endif %}
+    data-text="{{ text }}{% if obj %} http://{{ BASE_URL }}{{ obj.get_absolute_url }}{% endif %}"
     class="twitter-share-button" 
 >
     Tweet
@@ -20,3 +19,5 @@
         }
     }(document,"script","twitter-wjs");
 </script>
+
+{{ obj }}

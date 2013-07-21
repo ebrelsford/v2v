@@ -235,7 +235,6 @@ ACTSTREAM_SETTINGS = {
         'lots.lotgroup',
         'notes.note',
         'phillyorganize.organizer',
-        'phillyorganize.watcher',
         'photos.photo',
     ),
     'USE_JSONFIELD': True,
@@ -294,7 +293,6 @@ LOT_MAP_TILE_URLS = {}
 
 ORGANIZE = {
     'ORGANIZER_MODEL': 'phillyorganize.Organizer',
-    'WATCHER_MODEL': 'phillyorganize.Watcher',
 }
 
 ADMIN_TOOLS_INDEX_DASHBOARD = 'vacant_to_vibrant.admindashboard.PhillyDashboard'

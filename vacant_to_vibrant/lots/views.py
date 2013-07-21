@@ -31,8 +31,8 @@ from groundtruth.forms import GroundtruthRecordForm
 from groundtruth.models import GroundtruthRecord
 from monitor.views import MonitorMixin
 from notify.views import NotifyFacilitatorsMixin
-from phillyorganize.forms import OrganizerForm, WatcherForm
-from phillyorganize.models import Organizer, Watcher
+from phillyorganize.forms import OrganizerForm
+from phillyorganize.models import Organizer
 from steward.forms import StewardNotificationForm
 from survey.forms import SurveyFormForForm
 from survey.models import SurveyFormEntry
@@ -405,8 +405,6 @@ class AddParticipantView(LotAddGenericMixin, LotContextMixin, ParticipantMixin,
     def get_form_class(self):
         if self.model is Organizer:
             return OrganizerForm
-        elif self.model is Watcher:
-            return WatcherForm
 
     def get_success_url(self):
         try:

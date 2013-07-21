@@ -61,7 +61,7 @@ from libapps.content.files.models import File
 from libapps.content.notes.models import Note
 from libapps.content.photos.models import Photo
 
-from phillyorganize.models import Organizer, Watcher
+from phillyorganize.models import Organizer
 
 from .signals import action
 
@@ -82,12 +82,6 @@ def _add_action(sender, verb, created=False, instance=None, **kwargs):
 def add_organizer_action(sender, instance=None, **kwargs):
     if not instance: return
     _add_action(instance, 'started organizing', instance=instance, **kwargs)
-
-
-@receiver(post_save, sender=Watcher, dispatch_uid='activity_stream.watcher')
-def add_action(sender, instance=None, **kwargs):
-    if not instance: return
-    _add_action(instance, 'started watching', instance=instance, **kwargs)
 
 
 @receiver(post_save, sender=Note, dispatch_uid='activity_stream.note')

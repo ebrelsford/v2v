@@ -4,8 +4,8 @@ from django.views.generic import FormView, TemplateView
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from feincms.content.application.models import app_reverse
 
-from libapps.organize.mail import mass_mail_organizers, mass_mail_watchers
-from phillyorganize.models import Organizer, Watcher
+from libapps.organize.mail import mass_mail_organizers
+from phillyorganize.models import Organizer
 
 from forms import MailParticipantsForm
 from generic.views import JSONResponseView
@@ -33,14 +33,12 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
 
         if 'organizers' in participant_types:
             self._mail_organizers(lot_pks, subject, message)
-        if 'watchers' in participant_types:
-            self._mail_watchers(lot_pks, subject, message)
 
         return super(MailParticipantsView, self).form_valid(form)
 
     def get_initial(self):
         initial = super(MailParticipantsView, self).get_initial()
-        initial['participant_types'] = ('organizers', 'watchers',)
+        initial['participant_types'] = ('organizers',)
         return initial
 
     def get_success_url(self):
@@ -54,14 +52,6 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
         organizers = organizers.exclude(email='')
         mass_mail_organizers(subject, message, organizers)
 
-    def _mail_watchers(self, lot_pks, subject, message):
-        watchers = Watcher.objects.filter(
-            content_type=ContentType.objects.get_for_model(Lot),
-            object_id__in=lot_pks,
-        )
-        watchers = watchers.exclude(email='')
-        mass_mail_watchers(subject, message, watchers)
-
 
 class MailParticipantsCountView(JSONResponseView):
 
@@ -70,7 +60,6 @@ class MailParticipantsCountView(JSONResponseView):
         lot_pks = self.get_lots().values_list('pk', flat=True)
         return {
             'organizers': self._get_organizer_count(participant_types, lot_pks),
-            'watchers': self._get_watcher_count(participant_types, lot_pks),
         }
 
     def get_lots(self):
@@ -80,15 +69,6 @@ class MailParticipantsCountView(JSONResponseView):
 
     def _get_participant_types(self):
         return self.request.GET.getlist('participant_types', [])
-
-    def _get_watcher_count(self, participant_types, lot_pks):
-        watcher_count = 0
-        if 'watchers' in participant_types:
-            watcher_count = Watcher.objects.filter(
-                content_type=ContentType.objects.get_for_model(Lot),
-                object_id__in=lot_pks,
-            ).distinct().count()
-        return watcher_count
 
     def _get_organizer_count(self, participant_types, lot_pks):
         organizer_count = 0

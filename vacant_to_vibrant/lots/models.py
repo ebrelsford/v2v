@@ -18,7 +18,7 @@ from phillydata.parcels.models import Parcel
 from phillydata.taxaccounts.models import TaxAccount
 from phillydata.violations.models import Violation
 from phillydata.waterdept.models import WaterParcel
-from phillyorganize.models import Organizer, Watcher
+from phillyorganize.models import Organizer
 from vacant_to_vibrant.reversion_utils import InitialRevisionManagerMixin
 
 
@@ -160,7 +160,6 @@ class Lot(Place):
     )
 
     organizers = GenericRelation(Organizer)
-    watchers = GenericRelation(Watcher)
     steward_projects = GenericRelation('steward.StewardProject')
     steward_inclusion_opt_in = models.BooleanField(_('steward inclusion opt-in'),
         default=False,

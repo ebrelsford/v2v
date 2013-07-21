@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-from phillyorganize.models import Organizer, Watcher
+from phillyorganize.models import Organizer
 
 from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
                     LotsGeoJSON, LotsGeoJSONPolygon, AddParticipantSuccessView,
@@ -30,23 +30,11 @@ urlpatterns = patterns('',
         ),
         name='add_organizer'),
 
-    url(r'^(?P<pk>\d+)/watch/$',
-        AddParticipantView.as_view(
-            model=Watcher,
-        ),
-        name='add_watcher'),
-
     url(r'^(?P<pk>\d+)/organize/organizer/(?P<hash>[^/]{30,})/success/$',
         AddParticipantSuccessView.as_view(
             model=Organizer,
         ),
         name='add_organizer_success'),
-
-    url(r'^(?P<pk>\d+)/organize/watcher/(?P<hash>[^/]{30,})/success/$',
-        AddParticipantSuccessView.as_view(
-            model=Watcher,
-        ),
-        name='add_watcher_success'),
 
     url(r'^organize/(?P<hash>[^/]{30,})/edit/$',
         EditLotParicipantView.as_view(),

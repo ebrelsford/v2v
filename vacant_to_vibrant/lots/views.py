@@ -410,8 +410,9 @@ class AddParticipantView(LotAddGenericMixin, LotContextMixin, ParticipantMixin,
         try:
             return reverse('lots:add_%s_success' % self._get_participant_type(),
                            kwargs={
+                               'lot_pk': self.object.object_id,
                                'hash': self.object.email_hash[:30],
-                               'pk': self.object.object_id,
+                               'pk': self.object.pk,
                            })
         except Exception:
             raise Http404
@@ -426,12 +427,15 @@ class AddParticipantSuccessView(ParticipantMixin, TemplateView):
     model = None
 
     def get_context_data(self, **kwargs):
+        lot = get_object_or_404(Lot, pk=kwargs['lot_pk'])
 
         context = super(AddParticipantSuccessView, self).get_context_data(**kwargs)
-        context['lot'] = get_object_or_404(Lot, pk=kwargs['pk'])
+        context['lot'] = lot
         try:
             context['participant'] = self.model.objects.filter(
-                email_hash__istartswith=kwargs['hash']
+                object_id=lot.pk,
+                email_hash__istartswith=kwargs['hash'],
+                pk=self.kwargs['pk'],
             )[0]
         except Exception:
             raise Http404
@@ -450,6 +454,7 @@ class DeletePhillyOrganizerView(DeleteOrganizerView):
         try:
             return Organizer.objects.get(
                 object_id=self.kwargs['lot_pk'],
+                email_hash__istartswith=self.kwargs['hash'],
                 pk=self.kwargs['pk'],
             )
         except Exception:

@@ -31,13 +31,13 @@ urlpatterns = patterns('',
         ),
         name='add_organizer'),
 
-    url(r'^(?P<pk>\d+)/grow-community/(?P<hash>[^/]{30,})/success/$',
+    url(r'^(?P<lot_pk>\d+)/grow-community/(?P<hash>[^/]{30,})/(?P<pk>\d+)/success/$',
         AddParticipantSuccessView.as_view(
             model=Organizer,
         ),
         name='add_organizer_success'),
 
-    url(r'^(?P<lot_pk>\d+)/grow-community/(?P<pk>\d+)/delete/$',
+    url(r'^(?P<lot_pk>\d+)/grow-community/(?P<hash>[^/]{30,})/(?P<pk>\d+)/delete/$',
         DeletePhillyOrganizerView.as_view(),
         name='delete_organizer'),
 

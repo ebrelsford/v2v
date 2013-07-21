@@ -52,7 +52,7 @@ class Owner(models.Model):
     )
     owner_type = models.CharField(_('owner type'),
         choices=OWNER_TYPE_CHOICES,
-        default='unknown',
+        default='private',
         max_length=20,
     )
 

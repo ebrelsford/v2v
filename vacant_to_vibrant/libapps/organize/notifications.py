@@ -7,6 +7,14 @@ def notify_participant_type_new_obj(participant_class, obj):
     target = obj.content_object
     if not target: return
 
+    try:
+        # Objects that are opted-out of being posted publicly should not get
+        # emailed to participants
+        if not obj.post_publicly:
+            return
+    except Exception:
+        pass
+
     kwargs = {
         'obj': obj,
     }

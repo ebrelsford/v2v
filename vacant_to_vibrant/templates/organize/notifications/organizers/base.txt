@@ -1,6 +1,6 @@
-{% autoescape off %}{% block header %}{% endblock %}Greetings. There has been a change to a lot you are organizing.
+{% autoescape off %}{% block header %}{% endblock %}Greetings. There has been a change to a lot you are subscribed to.
 
 {% block details %}{% endblock %}
 
 --
-{% block footer %}You are receiving this email because you are organizing {{ target }}.  Please go here to change this: http://{{ BASE_URL }}{% url "lots:edit_participant" hash=participant.email_hash %}{% endblock %}{% endautoescape %}
+{% block footer %}You are receiving this email because you are subscribed to {{ target }}.  Please go here to change this: http://{{ BASE_URL }}{% url "lots:edit_participant" hash=participant.email_hash %}{% endblock %}{% endautoescape %}

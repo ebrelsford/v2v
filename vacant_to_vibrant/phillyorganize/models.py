@@ -24,7 +24,10 @@ class BasePhillyOrganizer(ParticipantMixin, BaseOrganizer):
 
 
 class Organizer(BasePhillyOrganizer):
-    pass
+
+    @classmethod
+    def participation_adjective(cls):
+        return 'subscribed'
 
 
 #

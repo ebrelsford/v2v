@@ -1,26 +1,26 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{{ block.super }}: {% trans "Stop organizing" %}{% endblock %}
+{% block title %}{{ block.super }}: {% trans "Unsubscribe" %}{% endblock %}
 
 {% block content %}
 {{ block.super }}
 <div>
-    <h1>{% trans "Stop organizing" %}</h1>
+    <h1>{% trans "Unsubscribe" %}</h1>
     <h2>
-        {{ organizer.target }}
+        {{ organizer.content_object }}
     </h2>
     <div>
         <p>
             {% blocktrans %}
-            Are you sure you want to stop organizing here?
+                Are you sure you want to stop getting updates about this lot?
             {% endblocktrans %}
         </p>
         <p>
             <form action="." method="post">
                 {% csrf_token %}
                 <input type="hidden" name="next_url" value="{{ next_url }}" />
-                <input type="submit" value="Yes, stop organizing" />
+                <input type="submit" value="Yes, unsubscribe me" />
             </form>
         </p>
     </div>

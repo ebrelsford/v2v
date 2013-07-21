@@ -46,7 +46,7 @@ class DeleteParticipantView(DeleteView):
     def _get_success_message(self):
         verb = 'working on'
         if isinstance(self.object, get_organizer_model()):
-            verb = 'organizing'
+            verb = 'subscribed to'
         elif isinstance(self.object, get_watcher_model()):
             verb = 'watching'
         return 'You are no longer %s %s.' % (verb, self.object.content_object)

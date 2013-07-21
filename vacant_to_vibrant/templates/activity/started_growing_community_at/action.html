@@ -1,5 +1,9 @@
 {% extends "activity/action_detail_base.html" %}
 
 {% block actor %}
-    {{ action.action_object.name }}
+    {% if action.action_object.post_publicly %}
+        {{ action.action_object.name }}
+    {% else %}
+        someone
+    {% endif %}
 {% endblock %}

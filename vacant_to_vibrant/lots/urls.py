@@ -24,13 +24,13 @@ urlpatterns = patterns('',
 
     url(r'^(?P<pk>\d+)/$', LotDetailView.as_view(), name='lot_detail'),
 
-    url(r'^(?P<pk>\d+)/organize/$',
+    url(r'^(?P<pk>\d+)/grow-community/$',
         AddParticipantView.as_view(
             model=Organizer,
         ),
         name='add_organizer'),
 
-    url(r'^(?P<pk>\d+)/organize/organizer/(?P<hash>[^/]{30,})/success/$',
+    url(r'^(?P<pk>\d+)/grow-community/(?P<hash>[^/]{30,})/success/$',
         AddParticipantSuccessView.as_view(
             model=Organizer,
         ),

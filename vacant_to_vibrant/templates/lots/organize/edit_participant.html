@@ -1,63 +1,52 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{{ block.super }}: {% trans "Change the lots you're organizing and watching" %}{% endblock %}
+{% block title %}{{ block.super }}: {% trans "Change the lots you're growing community in" %}{% endblock %}
 
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
 {{ block.super }}
 <div>
-    <h1>{% trans "Change the lots you're organizing and watching" %}</h1>
+    <h1>{% trans "Change the lots you're growing community in" %}</h1>
     <div>
 
-        {% if organizers or watchers %}
-        <p>
-            {% trans "Hi" %} <strong>{{ email }}</strong>! 
+        {% if organizers %}
+            <p>
+                {% blocktrans %}
+                    Hi <strong>{{ email }}</strong>!  You're listed as growing 
+                    community in the following lots:
+                {% endblocktrans %}
+                <ul>
+                    {% for organizer in organizers %}
+                    <li class="edit-participant-subscribed-lot">
+                        <a class="subscribed-lot-link" href="{{ organizer.content_object.get_absolute_url }}">
+                            {{ organizer.content_object.address_line1|default:"no address" }}
+                        </a>
+                        <a class="btn btn-danger btn-mini" href="{% url "organize:delete_organizer" pk=organizer.pk %}?next_url={{ request.path }}">
+                            <i class="icon-white icon-trash"></i>
+                            {% trans "unsubscribe" %}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
 
-            {% if organizers %}
-            {% trans "You're organizing the following lots" %}:
-            {% endif %}
-            <ul>
-                {% for organizer in organizers %}
-                <li>
-                    <a href="{{ organizer.content_object.get_absolute_url }}">
-                        {{ organizer.content_object.address_line1|default:"no address" }}
-                    </a>
-                    (<a href="{% url "organize:delete_organizer" pk=organizer.pk %}?next_url={{ request.path }}">{% trans "stop organizing" %}</a>)
-                </li>
-                {% endfor %}
-            </ul>
-
-            {% if watchers %}
-            {% trans "You're watching the following lots" %}:
-            {% endif %}
-            <ul>
-                {% for watcher in watchers %}
-                <li>
-                    <a href="{{ watcher.content_object.get_absolute_url }}">
-                        {{ watcher.content_object.address_line1|default:"no address" }}
-                    </a>
-                    (<a href="{% url "organize:delete_watcher" pk=watcher.pk %}?next_url={{ request.path }}">
-                        {% trans "stop watching" %}
-                    </a>)
-                </li>
-                {% endfor %}
-            </ul>
-        </p>
-
+            </p>
         {% else %}
-        <p>
-            {% trans "Looks like you're not organizing or watching any lots. Check out our" %} 
-            <a href="/">{% trans "map" %}</a>
-            {% trans "and find a lot near you to watch" %}!
-        </p>
+            <p>
+                {% blocktrans %}
+                    Looks like you're not growing community in any lots. Check out 
+                    our <a href="/">map</a> and find a lot near you to watch!
+                {% endblocktrans %}
+            </p>
         {% endif %}
 
         <p>
-            {% trans "If you think this information is incorrect, please" %}
-            <a href="/get-involved/contact-us/">{% trans "contact us" %}</a>
-            {% trans "and let us know" %}.
+            {% blocktrans %}
+                If you think this information is incorrect, please
+                <a href="/get-involved/contact-us/">contact us</a>
+                and let us know.
+            {% endblocktrans %}
         </p>
     </div>
 </div>

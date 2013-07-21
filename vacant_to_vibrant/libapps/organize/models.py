@@ -1,4 +1,5 @@
 from hashlib import sha1
+import logging
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -8,6 +9,9 @@ from django.contrib.gis.db import models
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import get_model
 from django.utils.translation import ugettext_lazy as _
+
+
+logger = logging.getLogger(__name__)
 
 
 class Participant(models.Model):
@@ -124,16 +128,17 @@ def get_watcher_model():
         watcher_model = settings.ORGANIZE['WATCHER_MODEL']
         return get_model(*watcher_model.split('.'))
     except Exception:
-        raise ImproperlyConfigured('Could not find a watcher model. Did you '
-                                   'set ORGANIZE.WATCHER_MODEL in your '
-                                   'settings.py?')
+        logging.info('No watcher model found. Set ORGANIZE.WATCHER_MODEL if '
+                     'you have one.')
 
 
 def get_participant_models():
     def get_concrete_subclasses(model):
         if model._meta.abstract:
             parts = [get_concrete_subclasses(s) for s in model.__subclasses__()]
-            return reduce(lambda a, b: a + b, parts)
+            if parts:
+                return reduce(lambda a, b: a + b, parts)
+            return tuple()
         else:
             return (model,)
     return get_concrete_subclasses(Participant)

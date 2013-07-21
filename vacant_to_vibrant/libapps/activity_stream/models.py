@@ -81,7 +81,11 @@ def _add_action(sender, verb, created=False, instance=None, **kwargs):
 @receiver(post_save, sender=Organizer, dispatch_uid='activity_stream.organizer')
 def add_organizer_action(sender, instance=None, **kwargs):
     if not instance: return
-    _add_action(instance, 'started organizing', instance=instance, **kwargs)
+
+    actor = None
+    if instance.post_publicly:
+        actor = instance
+    _add_action(actor, 'started growing community at', instance=instance, **kwargs)
 
 
 @receiver(post_save, sender=Note, dispatch_uid='activity_stream.note')

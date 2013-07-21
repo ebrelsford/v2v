@@ -29,6 +29,10 @@ class Organizer(BasePhillyOrganizer):
     def participation_adjective(cls):
         return 'subscribed'
 
+    @models.permalink
+    def get_edit_url(self):
+        return ('lots:edit_participant', (), { 'hash': self.email_hash[:30] })
+
 
 #
 # Handle signals.

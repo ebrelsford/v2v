@@ -1,0 +1,8 @@
+{% autoescape off %}{% if not has_received_this_mailing %}Welcome to Grounded in Philly!{% else %}Hello again from Grounded in Philly!{% endif %}
+
+You are now subscribed to {% include "mailings/lot_info_snippet.txt" %}
+{% if not has_received_this_mailing %}This{% else %}As you know, this{% endif %} means that any time someone adds information to the lot's page, you'll get an email like this. And (if you posted publicly) it means that other folks who are interested in this lot can see your contact information on its page and may reach out to you directly.
+
+It would be great if you would add a note to the lot's page describing what your vision for the space is.
+
+{% include "mailings/edit_url_snippet.txt" %}{% endautoescape %}

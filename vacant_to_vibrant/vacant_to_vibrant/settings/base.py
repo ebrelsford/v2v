@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     'libapps.content.notes',
     'libapps.content.photos',
     'libapps.facebook',
+    'libapps.mailings',
     'libapps.organize',
     'libapps.twitter',
 

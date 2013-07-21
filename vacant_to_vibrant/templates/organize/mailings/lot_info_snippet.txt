@@ -1,5 +1,0 @@
-{% for lot in lots %}
-* {% load lot_filters %}{{ lot|lotname:"group" }}
-    view online: {{ BASE_URL }}{{ lot.get_absolute_url }}
-{% if lot.owner.type.name == 'city' %}    agency: {{ lot.owner.name }}{% else %}{% if lot.owner.type.name == 'private' %}    owner: private{% endif %}{% endif %}
-    contact: {{ lot|lot_contact }}{% endfor %}

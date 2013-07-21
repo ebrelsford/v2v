@@ -1,0 +1,1 @@
+If this was a mistake or you change your mind, unsubscribe here: http://{{ BASE_URL }}{{ edit_url }}

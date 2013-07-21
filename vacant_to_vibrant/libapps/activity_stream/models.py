@@ -90,7 +90,6 @@ def add_organizer_action(sender, instance=None, **kwargs):
 
 @receiver(post_save, sender=Note, dispatch_uid='activity_stream.note')
 def add_note_action(sender, instance=None, **kwargs):
-    print 'note added:', instance
     if not instance: return
     _add_action(instance.added_by, 'wrote', instance=instance, **kwargs)
 

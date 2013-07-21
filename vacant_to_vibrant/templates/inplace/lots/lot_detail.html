@@ -27,9 +27,9 @@
 {% endif %}
 
 <div class="lot-detail-get-involved grid">
-    <div class="btn-group">
-        <a class="btn btn-primary" href="{% url "lots:add_organizer" pk=lot.pk %}">
-            {% trans "Become an organizer" %}
+    <div class="pull-left">
+        <a class="btn btn-primary build-community-button" href="{% url "lots:add_organizer" pk=lot.pk %}" data-toggle="tooltip" title="{% trans "Get involved with this lot or let people know you are already growing food and community here." %}">
+            {% trans "Grow community here" %}
         </a>
     </div>
 
@@ -564,8 +564,8 @@
                 <span class="badge">{{ organizer_count }}</span>
             {% endif %}
         </h2>
-        <a class="btn" href="{% url "lots:add_organizer" pk=lot.pk %}">
-            {% trans "Become an organizer" %}
+        <a class="btn build-community-button" href="{% url "lots:add_organizer" pk=lot.pk %}" data-toggle="tooltip" title="{% trans "Get involved with this lot or let people know you are already growing food and community here." %}">
+            {% trans "Grow community here" %}
         </a>
         {% render_organizer_list for lot %}
     </div>

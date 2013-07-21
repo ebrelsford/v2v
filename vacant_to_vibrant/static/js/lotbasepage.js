@@ -1,7 +1,13 @@
 /*
  * Module for all pages derived from the base lot page.
  */
-define(['jquery', 'leaflet', 'jquery.streetview'], function($, L) {
+define(
+    [
+        'jquery',
+        'leaflet',
+        'jquery.streetview',
+        'lib/bootstrap/bootstrap-tooltip'
+    ], function($, L) {
 
     $(document).ready(function() {
         $streetviewContainer = $('#streetview-container');
@@ -36,6 +42,8 @@ define(['jquery', 'leaflet', 'jquery.streetview'], function($, L) {
             var feature_layer = new L.GeoJSON(data, { style: style, }).addTo(map);
             map.fitBounds(feature_layer.getBounds());
         });
+
+        $('.build-community-button').tooltip();
 
     });
 

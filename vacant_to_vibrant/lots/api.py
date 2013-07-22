@@ -44,6 +44,12 @@ class LotResource(ModelResource):
     def build_filters(self, filters={}):
         orm_filters_filters = filters.copy()
 
+        # Remove the bits we won't actually be filtering on
+        if 'centroid' in orm_filters_filters:
+            del orm_filters_filters['centroid']
+        if 'zoom' in orm_filters_filters:
+            del orm_filters_filters['zoom']
+
         orm_filters = super(LotResource, self).build_filters(filters=orm_filters_filters)
 
         # Remove empty bbox filter

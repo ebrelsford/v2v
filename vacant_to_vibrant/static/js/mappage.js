@@ -93,9 +93,20 @@ define(
             $('select').trigger('liszt:updated');
 
             // Update map viewport
-            var bboxString = $('#id_centroid__within').val();
+            var bboxString = $(':input[name="centroid__within"]').val();
             if (bboxString) {
+                hideOverlay();
                 lotsMap.fitBounds(L.geoJsonLatLngBounds(bboxString));
+            }
+            var zoomString = $(':input[name="zoom"]').val();
+            var zoom = 16;
+            if (zoomString) {
+                zoom = parseInt(zoomString, 10);
+            }
+            var centroidString = $(':input[name="centroid"]').val();
+            if (centroidString) {
+                hideOverlay();
+                lotsMap.setView(JSON.parse(centroidString), zoom);
             }
         }
 
@@ -262,6 +273,11 @@ define(
                 $(':input[name="centroid__within"]').val(
                     JSON.stringify(lotsMap.getBounds().toGeoJson())
                 );
+                $(':input[name="centroid"]').val(
+                    JSON.stringify(lotsMap.getCenter())
+                );
+                $(':input[name="zoom"]').val(lotsMap.getZoom());
+
                 updateCounts();
                 var serializedFilters = $('.filters :input:not(.non-filter)').serializeObject();
                 lotsMap.fire('filterschange', { filters: serializedFilters, });

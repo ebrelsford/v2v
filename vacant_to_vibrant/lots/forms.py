@@ -19,6 +19,14 @@ class FiltersForm(forms.Form):
         required=False,
         widget=forms.HiddenInput,
     )
+    centroid = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput,
+    )
+    zoom = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput,
+    )
     limit = forms.CharField(
         initial='1000',
         required=False,

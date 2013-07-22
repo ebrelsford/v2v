@@ -4,7 +4,7 @@
 // Scripts that should run on every page.
 //
 
-define(['jquery'], function ($) {
+define(['jquery', 'jquery.activitystream',], function ($) {
 
     /*
      * Global form-related scripts

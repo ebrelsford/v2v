@@ -7,7 +7,6 @@ define(
         'json2',
 
         // Internal plugins
-        'jquery.activitystream',
         'jquery.emailparticipants',
         'jquery.searchbar',
         'jquery.singleminded',
@@ -317,10 +316,6 @@ define(
             $('.export-csv').click(exportView);
             $('.export-geojson').click(exportView);
             $('.export-kml').click(exportView);
-
-
-            // Fire up the activitystream
-            $('.activity-stream-container').activitystream();
 
 
             // Fire up the emailparticipants

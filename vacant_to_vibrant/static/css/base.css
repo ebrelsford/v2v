@@ -741,6 +741,10 @@ header {
     width: 100%;
 }
 
+#aside-right .activity-stream-container {
+    height: 300px;
+}
+
 .activity-stream-list {
     list-style: none;
     margin: 0;

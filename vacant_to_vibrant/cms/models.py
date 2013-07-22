@@ -27,6 +27,19 @@ class PathwayListContent(models.Model):
         ], context, context_instance=kwargs.get('context'))
 
 
+class RecentActivitiesContent(models.Model):
+
+    class Meta:
+        abstract = True
+        verbose_name = _('recent activity list')
+        verbose_name_plural = _('recent activity lists')
+
+    def render(self, **kwargs):
+        return render_to_string([
+            'activity/plugin.html',
+        ], {}, context_instance=kwargs.get('context'))
+
+
 Page.register_extensions(
     'feincms.module.extensions.datepublisher',
     'feincms.module.extensions.translations'
@@ -55,6 +68,7 @@ Page.register_templates({
 Page.create_content_type(RichTextContent)
 
 Page.create_content_type(PathwayListContent)
+Page.create_content_type(RecentActivitiesContent)
 
 Page.create_content_type(MediaFileContent, TYPE_CHOICES=(
     ('default', _('default')),

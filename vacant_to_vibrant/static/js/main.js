@@ -33,6 +33,14 @@ define(['jquery'], function($) {
         require(['jquery', 'fancybox'], function() {
             $('.fancybox').fancybox();
         });
+
+        /*
+         * Activate the activitystreams
+         */
+        require(['jquery.activitystream'], function() {
+            $('.activity-stream-container').activitystream();
+        });
+
     });
 
     require(['chosen.jquery_ready']);

@@ -4,20 +4,20 @@
 // Scripts that should run on every page.
 //
 
-define(['jquery'], function($) {
+define(['jquery'], function ($) {
 
     /*
      * Global form-related scripts
      */
-    $(document).ready(function() {
+    $(document).ready(function () {
         /*
          * Disable submit buttons on forms once they have been submitted once.
          */
-        $('form').submit(function() {
+        $('form').submit(function () {
             $(this).find('input[type="submit"]').attr('disabled', 'disabled');
         });
 
-        require(['lib/jquery.noisy'], function() {
+        require(['lib/jquery.noisy'], function () {
             $('body').noisy({
                 'intensity' : 0.5,
                 'size' : 100,
@@ -30,14 +30,14 @@ define(['jquery'], function($) {
         /*
          * Fancy the fancyboxes
          */
-        require(['jquery', 'fancybox'], function() {
+        require(['jquery', 'fancybox'], function () {
             $('.fancybox').fancybox();
         });
 
         /*
          * Activate the activitystreams
          */
-        require(['jquery.activitystream'], function() {
+        require(['jquery.activitystream'], function () {
             $('.activity-stream-container').activitystream();
         });
 

@@ -7,7 +7,9 @@
 </h1>
 
 <div class="grid lot-popup-get-involved btn-group">
-    <a class="grid grid-1-2 btn btn-small" href="{% url "lots:add_organizer" pk=object.pk %}" target="_blank">{% trans "Become an organizer" %}</a>
+    <a class="btn btn-small grid grid-1-2 build-community-button" href="{% url "lots:add_organizer" pk=lot.pk %}" data-toggle="tooltip" title="{% trans "Get involved with this lot or let people know you are already growing food and community here." %}" target="_blank">
+        {% trans "Grow community here" %}
+    </a>
 </div>
 
 <div class="grid lot-popup-size">

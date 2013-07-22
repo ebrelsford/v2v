@@ -342,7 +342,7 @@ define(
                 .on('searchresultfound', function (e, data) {
                     hideOverlay();
                     var latlng = [data.latitude, data.longitude];
-                    lotsMap.setView(latlng, 15);
+                    lotsMap.setView(latlng, 18);
                     var usermarker = L.userMarker(latlng, { smallIcon: true })
                         .bindPopup('This is the address you searched for.');
                     usermarker.addTo(lotsMap);

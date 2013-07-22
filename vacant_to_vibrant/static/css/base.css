@@ -334,6 +334,10 @@ header {
   background-color: #61A194;
 }
 
+.nav {
+    margin: 0;
+}
+
 #tagline {
     color: white;
     cursor: default;

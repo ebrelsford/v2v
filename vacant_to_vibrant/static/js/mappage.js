@@ -27,9 +27,10 @@ define(
 
     ], function ($, L, Django, JSON) {
 
+        var MAX_LOTS_DOWNLOAD = 2000;
+
         var lotsMap;
         var visibleLotsCount = 0;
-        var MAX_LOTS_DOWNLOAD = 2000;
 
 
         /*

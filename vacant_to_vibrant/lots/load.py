@@ -169,12 +169,12 @@ def get_or_create_lot(parcel, address, polygon=None, centroid=None,
                                  zipcode=zipcode)
     kwargs = _get_lot_kwargs(address=address, parcel=parcel)
 
-    try:
-        # Try to get the lot (without a LotGroup), first
-        existing_lot = Lot.objects.get(lotgroup=None, **kwargs)
+    # Try to update the lot (without a LotGroup), first
+    existing_lot = Lot.objects.filter(lotgroup=None, **kwargs)
+    if existing_lot.count() == 1:
         existing_lot.update(**defaults)
-        return existing_lot
-    except Exception:
+        return existing_lot[0]
+    else:
         lot, created = Lot.objects.get_or_create(defaults=defaults, **kwargs)
         return lot
 

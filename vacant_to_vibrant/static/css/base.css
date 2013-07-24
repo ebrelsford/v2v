@@ -216,6 +216,34 @@ input[type="color"]:last-child,
     padding-left: 20px;
 }
 
+.collapsible-section-icon {
+    margin-left: 15px;
+}
+
+.collapsible-section .collapsible-section-expanded-icon {
+    display: none;
+}
+
+.collapsible-section .collapsible-section-collapsed-icon {
+    display: inline-block;
+}
+
+.collapsible-section.is-expanded .collapsible-section-expanded-icon {
+    display: inline-block;
+}
+
+.collapsible-section.is-expanded .collapsible-section-collapsed-icon {
+    display: none;
+}
+
+.collapsible-section-header {
+    cursor: pointer;
+}
+
+.collapsible-section-text {
+    margin-bottom: 50px;
+}
+
 #beta-disclaimer {
     display: none;
 }

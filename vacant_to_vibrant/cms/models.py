@@ -27,6 +27,20 @@ class PathwayListContent(models.Model):
         ], context, context_instance=kwargs.get('context'))
 
 
+class CollapsibleSectionContent(RichTextContent):
+
+    title = models.CharField(_('title'), max_length=200)
+
+    class Meta:
+        abstract = True
+        verbose_name = _('collapsible section')
+        verbose_name_plural = _('collapsible sections')
+
+    def render(self, **kwargs):
+        return render_to_string('cms/collapsiblesection/default.html',
+            { 'content': self }, context_instance=kwargs.get('context'))
+
+
 class RecentActivitiesContent(models.Model):
 
     class Meta:
@@ -67,6 +81,7 @@ Page.register_templates({
 
 Page.create_content_type(RichTextContent)
 
+Page.create_content_type(CollapsibleSectionContent)
 Page.create_content_type(PathwayListContent)
 Page.create_content_type(RecentActivitiesContent)
 

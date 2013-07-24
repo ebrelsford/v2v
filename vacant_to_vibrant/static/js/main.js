@@ -28,6 +28,18 @@ define(['jquery', 'jquery.activitystream',], function ($) {
         });
 
         /*
+         * Collapse the collapsible sections
+         */
+        require(['jquery'], function () {
+            $('.collapsible-section-header').click(function () {
+                var $section = $(this).parent(),
+                    $sectionText = $section.find('.collapsible-section-text');
+                $section.toggleClass('is-expanded');
+                $sectionText.slideToggle();
+            });
+        });
+
+        /*
          * Fancy the fancyboxes
          */
         require(['jquery', 'fancybox'], function () {

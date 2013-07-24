@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load files_tags i18n inplace_tags notes_tags organize_tags survey_tags pathways_tags photos_tags %}
+{% load files_tags i18n inplace_tags lot_tags notes_tags organize_tags survey_tags pathways_tags photos_tags %}
 
 {% block title %}{{ lot.display_name }} | {% trans "Grounded in Philly" %}{% endblock %}
 
@@ -63,6 +63,8 @@
         {% with lot.get_geojson_url as places_url %}
         {% place_map places_url 100% 200px %}
         {% endwith %}
+
+        <a href="{{ lot|main_map_url }}">{% trans "view lot on main map" %}</a>
     </div>
 
 </div>

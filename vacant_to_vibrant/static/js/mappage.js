@@ -106,6 +106,7 @@ define(
             var centroidString = $(':input[name="centroid"]').val();
             if (centroidString) {
                 hideOverlay();
+                // TODO This works, but doesn't seem to make the lotlayer load?
                 lotsMap.setView(JSON.parse(centroidString), zoom);
             }
         }
@@ -298,14 +299,16 @@ define(
                 $('#streetview-container').hide();
             });
 
-            // Load filters from search string in URL, update map/counts accordingly
-            deserializeFilters();
-            onFilterChange();
+            lotsMap.whenReady(function (e) {
+                // Load filters from search string in URL, update map/counts accordingly
+                deserializeFilters();
+                onFilterChange();
 
-            // Update map and UI with the current view
-            var currentView = $(':input[name=view_type]').val();
-            updateViewType(currentView);
-            lotsMap.changeView(currentView);
+                // Update map and UI with the current view
+                var currentView = $(':input[name=view_type]').val();
+                updateViewType(currentView);
+                lotsMap.changeView(currentView);
+            });
 
             /*
              * Filters events

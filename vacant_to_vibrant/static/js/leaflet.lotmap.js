@@ -330,6 +330,7 @@ define(
             _getPolygonLayer: function () {
                 var instance = this;
                 return new lvector.LotLayer({
+                    map: instance,
                     clickEvent: function (feature, event) {
                         instance.options.clickHandler(event, feature);
                         instance.fire('lotclicked', {

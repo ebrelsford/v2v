@@ -35,10 +35,10 @@
 
     {% if not lot.known_use %}
         <div class="btn-group pull-right">
-            <a class="btn" href="{% url "lots:add_stewardnotification" pk=lot.pk %}">
+            <a class="btn lot-page-tooltip" href="{% url "lots:add_stewardnotification" pk=lot.pk %}" data-toggle="tooltip" title="{% trans "Tell us more about your garden project." %}">
                 {% trans "Is this an active garden?" %}
             </a>
-            <a class="btn" href="{% url "lots:add_groundtruthrecord" pk=lot.pk %}">
+            <a class="btn lot-page-tooltip" href="{% url "lots:add_groundtruthrecord" pk=lot.pk %}" data-toggle="tooltip" title="{% trans "Let us know that this lot's actual use is not correctly identified." %}">
                 {% trans "Have we made a mistake?" %}
             </a>
         </div>

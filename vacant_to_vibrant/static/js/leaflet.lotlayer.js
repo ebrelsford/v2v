@@ -45,7 +45,7 @@ define(
 
             _requiredParams: ["url",],
 
-            _getFeatures: function () {        
+            _getFeatures: function () {
                 // Only load when map at a visible zoom
                 if (!this.options.visibleAtScale) {
                     return;

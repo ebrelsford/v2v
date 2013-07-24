@@ -29,8 +29,9 @@ define(
 
         var MAX_LOTS_DOWNLOAD = 2000;
 
-        var lotsMap;
-        var visibleLotsCount = 0;
+        var lotsMap,
+            mapViewportSet = false,
+            visibleLotsCount = 0;
 
 
         /*
@@ -96,7 +97,7 @@ define(
             // Update map viewport
             var bboxString = $(':input[name="centroid__within"]').val();
             if (bboxString) {
-                hideOverlay();
+                mapViewportSet = true;
                 lotsMap.fitBounds(L.geoJsonLatLngBounds(bboxString));
             }
             var zoomString = $(':input[name="zoom"]').val();
@@ -106,7 +107,7 @@ define(
             }
             var centroidString = $(':input[name="centroid"]').val();
             if (centroidString) {
-                hideOverlay();
+                mapViewportSet = true;
                 // TODO This works, but doesn't seem to make the lotlayer load?
                 lotsMap.setView(JSON.parse(centroidString), zoom);
             }
@@ -148,11 +149,8 @@ define(
         }
 
         function showOverlay() {
-            $('#map-overlay').position({
-                my: 'top left',
-                at: 'top left',
-                of: $('#map'),
-            });
+            $('#map-overlay').show();
+            positionOverlay();
         }
 
         function positionOverlay() {
@@ -370,10 +368,12 @@ define(
             });
 
             // Overlay
-            showOverlay();
-            $(window).smartresize(positionOverlay);
-            $('.map-overlay-button').click(hideOverlay);
-            $('.map-overlay-close-button').click(hideOverlay);
+            if (!mapViewportSet) {
+                showOverlay();
+                $(window).smartresize(positionOverlay);
+                $('.map-overlay-button').click(hideOverlay);
+                $('.map-overlay-close-button').click(hideOverlay);
+            }
 
         });
 

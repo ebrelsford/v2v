@@ -461,6 +461,7 @@ header {
 #map-overlay {
     background: url(/static/img/overlay_bg.jpg);
     color: white;
+    display: none;
     font-size: 26px;
     line-height: 30px;
     padding: 20px;

@@ -100,7 +100,20 @@
 
             <tr>
                 <th>{% trans "owner" %}:</th>
-                <td>{{ lot.owner|default:"unknown" }}</td>
+                <td>
+                    <div>
+                        {{ lot.owner|default:"unknown" }}
+                    </div>
+
+                    {% if lot.owner and "owners.change_owner" in perms %}
+                        <div class="lot-detail-admin admin-only grid">
+                            <a class="btn btn-small btn-warning" href="{% url "admin:lots_lot_changelist" %}?owner={{ lot.owner.pk }}">
+                                {% trans "View all lots this owner owns" %}
+                            </a>
+                        </div>
+                    {% endif %}
+
+                </td>
             </tr>
 
             <tr>

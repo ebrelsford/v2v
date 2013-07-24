@@ -184,8 +184,9 @@ define(
                 clickHandler: function (e, feature) {
                     var featureId = null;
                     if (feature) featureId = feature.id;
+                    var popupOptions;
                     if (L.Browser.mobile === true) {
-                        var popupOptions = {
+                        popupOptions = {
                             maxHeight: 200,
                             maxWidth: 200,
                             minWidth: 200,

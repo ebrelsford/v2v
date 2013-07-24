@@ -11,9 +11,10 @@ from .models import AgencyCode, Alias, Owner
 
 class OwnerAdmin(CompareVersionAdmin):
     actions = ('make_aliases',)
+    fields = ('name', 'owner_type', 'agency_codes', 'aliases', 'view_lots',)
     list_display = ('name', 'owner_type', 'aliases_summary', 'view_lots',)
     list_filter = ('owner_type', 'agency_codes',)
-    readonly_fields = ('aliases',)
+    readonly_fields = ('aliases', 'view_lots',)
     search_fields = ('name',)
 
     def aliases_summary(self, obj):

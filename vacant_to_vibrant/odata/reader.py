@@ -27,12 +27,24 @@ class ODataReader(object):
     def get_url(self, url):
         while True:
             # load this url and return results
-            logger.debug('About to load violations from url %s' % url)
-            try:
-                response = json.load(urlopen(url))
-            except:
-                logger.exception('Exception while loading url: %s' % url)
-                raise
+            logger.debug('About to load OData source from url %s' % url)
+
+            attempts = 0
+            while attempts < 5:
+                attempts += 1
+                try:
+                    logger.debug('Attempt #%d to load url %s' %
+                                 (attempts, url))
+                    response = json.load(urlopen(url))
+                    break
+                except Exception:
+                    # Don't bother with looking at HTTP error code: some
+                    # services have returned 500 once, then responded
+                    # successfully after
+                    logger.exception('Exception while loading url: %s' % url)
+            if not response:
+                logger.warn('No response after %d attempts' % attempts)
+                raise StopIteration
 
             for result in response['d']['results']:
                 yield result

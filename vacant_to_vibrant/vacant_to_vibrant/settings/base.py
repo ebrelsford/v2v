@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'inplace.boundaries',
     'jsonfield',
     'mptt',
+    'report_builder',
     'reversion',
     'reversion_compare',
     'south',

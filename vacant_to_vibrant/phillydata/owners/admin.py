@@ -11,19 +11,24 @@ from .models import AgencyCode, Alias, Owner
 
 class OwnerAdmin(CompareVersionAdmin):
     actions = ('make_aliases',)
-    list_display = ('name', 'owner_type', 'agency_codes_summary',
-                    'aliases_summary',)
+    list_display = ('name', 'owner_type', 'aliases_summary', 'view_lots',)
     list_filter = ('owner_type', 'agency_codes',)
     readonly_fields = ('aliases',)
     search_fields = ('name',)
 
-    def agency_codes_summary(self, obj):
-        return ', '.join(obj.agency_codes.all().values_list('code', flat=True))
-    agency_codes_summary.short_description = 'Agency Codes'
-
     def aliases_summary(self, obj):
         return ', '.join(obj.aliases.all().values_list('name', flat=True))
     aliases_summary.short_description = 'AKA'
+
+    def view_lots(self, obj):
+        try:
+            return '<a href="%s?owner=%d">view lots</a>' % (
+                reverse('admin:lots_lot_changelist'),
+                obj.pk
+            )
+        except Exception:
+            return ''
+    view_lots.allow_tags = True
 
     def make_aliases(self, request, queryset):
         ids = queryset.values_list('pk', flat=True)

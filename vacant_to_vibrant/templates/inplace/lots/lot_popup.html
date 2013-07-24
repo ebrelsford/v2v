@@ -18,11 +18,25 @@
 </div>
 
 <div class="grid lot-popup-owner">
-    {% trans "Owner" %}: {{ object.owner|default:"unknown" }}
+    {% if object.owner %}
+        {% if object.owner.owner_type == "private" %}
+            {% trans "Privately" %}
+        {% elif object.owner.owner_type == "public" %}
+            {% trans "Publicly" %}
+        {% endif %}
+        {% trans "owned by" %}
+        {{ object.owner.name }}
+    {% else %}
+        {% trans "Unknown owner" %}
+    {% endif %}
 </div>
 
 <div class="grid lot-popup-known-use">
-    {% trans "Known use" %}: {{ object.known_use|default:"None" }}
+    {% if object.known_use %}
+        {% trans "Used as a" %} {{ object.known_use }}
+    {% else %}
+        {% trans "No known use" %}
+    {% endif %}
 </div>
 
 <div class="grid lot-popup-permalink">

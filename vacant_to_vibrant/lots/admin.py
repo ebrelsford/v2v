@@ -53,11 +53,11 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
     actions = ('add_to_group',)
     exclude = ('available_property', 'parcel',)
     form = LotAdminForm
-    list_display = ('address_line1', 'city', 'name', 'owner', 'known_use',
+    list_display = ('address_line1', 'city', 'name', 'owner_link', 'known_use',
                     'billing_account',)
     list_filter = ('known_use',)
     readonly_fields = ('added', 'available_property_link', 'billing_account',
-                       'city_council_district', 'land_use_area', 'owner',
+                       'city_council_district', 'land_use_area', 'owner_link',
                        'parcel_link', 'tax_account', 'violations',
                        'water_parcel', 'zoning_district',)
     search_fields = ('address_line1', 'name',)
@@ -76,7 +76,7 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
         }),
         ('Other data', {
             'classes': ('collapse',),
-            'fields': ('owner', 'billing_account', 'tax_account',
+            'fields': ('owner_link', 'billing_account', 'tax_account',
                        'parcel_pk', 'parcel_link', 'land_use_area',
                        'violations', 'available_property_link', 'water_parcel',
                        'city_council_district', 'zoning_district',
@@ -96,6 +96,17 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
         return mark_safe('<a href="%s">%s</a>' % (change_url,
                                                   str(obj.available_property)))
     available_property_link.short_description = 'public available property record'
+
+    def owner_link(self, obj):
+        try:
+            return '<a href="%s">%s</a>' % (
+                reverse('admin:owners_owner_change', args=(obj.owner.pk,)),
+                obj.owner.name,
+            )
+        except Exception:
+            return ''
+    owner_link.allow_tags = True
+    owner_link.short_description = 'Owner'
 
     def parcel_link(self, obj):
         change_url = reverse(

@@ -43,7 +43,7 @@ define(
                 map.fitBounds(feature_layer.getBounds());
             });
 
-            $('.build-community-button').tooltip();
+            $('.lot-page-tooltip').tooltip();
 
         });
 

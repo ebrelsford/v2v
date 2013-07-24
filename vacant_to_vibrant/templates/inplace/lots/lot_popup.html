@@ -6,12 +6,6 @@
     </a>
 </h1>
 
-<div class="grid lot-popup-get-involved btn-group">
-    <a class="btn btn-small grid grid-1-2 build-community-button" href="{% url "lots:add_organizer" pk=lot.pk %}" data-toggle="tooltip" title="{% trans "Get involved with this lot or let people know you are already growing food and community here." %}" target="_blank">
-        {% trans "Grow community here" %}
-    </a>
-</div>
-
 <div class="grid lot-popup-size">
     {% if object.number_of_lots > 1 %}
     <div class="grid grid-1-2">
@@ -29,11 +23,6 @@
 
 <div class="grid lot-popup-known-use">
     {% trans "Known use" %}: {{ object.known_use|default:"None" }}
-</div>
-
-<div class="grid lot-popup-council-district">
-    {% trans "Council District" %}: 
-    {{ object.city_council_district|default:"unknown" }}
 </div>
 
 <div class="grid lot-popup-permalink">

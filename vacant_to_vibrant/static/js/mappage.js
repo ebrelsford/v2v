@@ -184,19 +184,15 @@ define(
                 clickHandler: function (e, feature) {
                     var featureId = null;
                     if (feature) featureId = feature.id;
-                    var popupOptions;
+                    var popupOptions = {
+                        maxHeight: 150
+                    };
                     if (L.Browser.mobile === true) {
-                        popupOptions = {
-                            maxHeight: 200,
-                            maxWidth: 200,
-                            minWidth: 200,
-                        };
+                        popupOptions.maxWidth = 200;
+                        popupOptions.minWidth = 200;
                     }
                     else {
-                        popupOptions = {
-                            minHeight: 250,
-                            minWidth: 300,
-                        };
+                        popupOptions.minWidth = 300;
                     }
                     var popupContent = '<div id="popup-content" class="loading"></div>';
                     if (e.targetType === 'utfgrid' && e.data !== null) {

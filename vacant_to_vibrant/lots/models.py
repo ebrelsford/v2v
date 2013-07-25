@@ -257,14 +257,16 @@ class Lot(Place):
         # First, the data that indicate real certainty
         #
 
+        # If someone told us what is happening here, known_use_locked should be
+        # set. Similarly if we manually changed the use for any reason.
+        if self.known_use_locked:
+            return self.known_use_certainty
+
         # If the lot is currently in the PRA's Available Property database,
         # then we know for sure
         ap = self.available_property
         if ap and ap.status is not 'no longer available':
             return 10
-
-        # TODO If someone told us what is happening here, return 10
-        # TODO If we manually changed the use for any reason, return 10
 
         #
         # Now for the fuzzy calculations

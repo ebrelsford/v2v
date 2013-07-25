@@ -13,7 +13,7 @@ from .models import Owner
 
 class MakeAliasesForm(forms.Form):
     owner = forms.ModelChoiceField(
-        # TODO exclude owners_to_delete
+        # NB, does not exclude owners_to_delete
         queryset=Owner.objects.all().order_by('name'),
         widget=AddAnotherWidgetWrapper(
             ChoiceWidget('OwnerAutocomplete'),

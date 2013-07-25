@@ -574,12 +574,17 @@
     <div id="organizers" class="organize lot-detail-side-section">
         <h2>
             {% trans "Grow Community Here" %}
-            {% get_organizer_count for lot as organizer_count %}
         </h2>
+        {% get_organizer_count for lot as organizer_count %}
         {% if organizer_count > 0 %}
             <div class="help-text">
-                {% blocktrans %}
+                {% blocktrans count organizer_count=organizer_count %}
+                    One person is interested in this lot.
+                {% plural %}
                     {{ organizer_count }} people are interested in this lot.
+                {% endblocktrans %}
+
+                {% blocktrans %}
                     They'll get your message if you post a note or photo.
                 {% endblocktrans %}
             </div>

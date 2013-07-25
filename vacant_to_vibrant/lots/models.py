@@ -187,6 +187,12 @@ class Lot(Place):
         null=True,
         help_text=_('The width of the polygon in feet'),
     )
+    polygon_tied_to_parcel = models.BooleanField(_('polygon tied to parcel'),
+        default=True,
+        help_text=_("Is the polygon of this lot always matched up with the "
+                    "parcel's polygon on save?"),
+    )
+
 
     class Meta:
         permissions = (

@@ -35,8 +35,11 @@ class LotAdminForm(forms.ModelForm):
         try:
             parcel_pk = self.cleaned_data['parcel_pk']
             lot.parcel = Parcel.objects.get(pk=parcel_pk)
-            lot.centroid = lot.parcel.geometry.centroid
-            lot.polygon = lot.parcel.geometry
+
+            polygon_tied_to_parcel = self.cleaned_data['polygon_tied_to_parcel']
+            if polygon_tied_to_parcel:
+                lot.centroid = lot.parcel.geometry.centroid
+                lot.polygon = lot.parcel.geometry
         except Exception:
             # It's okay to have lots without parcels sometimes (eg, with
             # LotGroup instances).
@@ -80,7 +83,8 @@ class LotAdmin(OSMGeoAdmin, CompareVersionAdmin):
                        'parcel_pk', 'parcel_link', 'land_use_area',
                        'violations', 'available_property_link', 'water_parcel',
                        'city_council_district', 'zoning_district',
-                       'polygon_area', 'polygon_width',),
+                       'polygon_area', 'polygon_width',
+                       'polygon_tied_to_parcel',),
         }),
         ('Geography', {
             'classes': ('collapse',),

@@ -576,7 +576,7 @@ define(
                 if (!this.options.enableLayersControl) return;
                 var baseLayers = {
                     'Streets': this.streets,
-                    'Satellte': this.satellite,
+                    'Satellite': this.satellite,
                 };
                 var overlays = {};
                 var layersControl = L.control.layers(baseLayers, overlays).addTo(this);

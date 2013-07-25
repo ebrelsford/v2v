@@ -13,6 +13,7 @@ django-activity-stream==0.4.4
 django-admin-enhancer==0.1.2
 django-admin-tools==0.5.1
 django-appconf==0.6
+django-autocomplete-light==1.2.2
 django-braces==1.0.0
 -e git://github.com/ebrelsford/django-chosen.git@28b2358d99f1d6620fdf8047d68eac52c7594e70#egg=django_chosen-dev
 django-classy-tags==0.4

@@ -5,6 +5,9 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from api.api import v1_api
+import autocomplete_light
+
+autocomplete_light.autodiscover()
 
 admin.autodiscover()
 
@@ -32,6 +35,7 @@ urlpatterns += patterns('',
 
     url(r'^api/', include(v1_api.urls)),
 
+    url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'^djangojs/', include('djangojs.urls')),
     url(r'^report_builder/', include('report_builder.urls')),
 

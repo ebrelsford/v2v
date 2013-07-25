@@ -4,8 +4,8 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView
 
+from autocomplete_light import ChoiceWidget
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
-from chosen.forms import ChosenSelect
 
 from vacant_to_vibrant.forms import AddAnotherWidgetWrapper
 from .models import Owner
@@ -16,7 +16,7 @@ class MakeAliasesForm(forms.Form):
         # TODO exclude owners_to_delete
         queryset=Owner.objects.all().order_by('name'),
         widget=AddAnotherWidgetWrapper(
-            ChosenSelect(),
+            ChoiceWidget('OwnerAutocomplete'),
             Owner,
         )
     )

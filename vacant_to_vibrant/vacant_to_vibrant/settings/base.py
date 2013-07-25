@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     #
     'actstream',
     'admin_enhancer',
+    'autocomplete_light',
     'chosen',
     'compressor',
     'contact_form',

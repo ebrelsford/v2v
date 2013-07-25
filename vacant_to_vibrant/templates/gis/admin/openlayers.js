@@ -145,7 +145,6 @@ OpenLayers.Projection.addTransform("EPSG:4326", "EPSG:3857",
 }
 
 {{ module }}.init = function() {
-    console.log('init');
 
     // The options hash, w/ zoom, resolution, and projection settings.
     {% block map_options %}
@@ -160,10 +159,19 @@ OpenLayers.Projection.addTransform("EPSG:4326", "EPSG:3857",
 
     // The admin map for this geometry field.
     {% block map_creation %}
-    {{ module }}.map = new OpenLayers.Map('{{ id }}_map', options);
-    // Base Layer
-    {{ module }}.layers.base = {% block base_layer %}new OpenLayers.Layer.WMS("{{ wms_name }}", "{{ wms_url }}", {layers: '{{ wms_layer }}'{{ wms_options|safe }}});{% endblock %}
-    {{ module }}.map.addLayer({{ module }}.layers.base);
+        {{ module }}.map = new OpenLayers.Map('{{ id }}_map', options);
+
+        // Base Layer
+        {{ module }}.layers.base = {% block base_layer %}new OpenLayers.Layer.WMS("{{ wms_name }}", "{{ wms_url }}", {layers: '{{ wms_layer }}'{{ wms_options|safe }}});{% endblock %}
+        {{ module }}.map.addLayer({{ module }}.layers.base);
+
+        // Satellite layer
+        {{ module }}.layers.satellite = new OpenLayers.Layer.Bing({
+            name: 'Satellite',
+            type: 'Aerial',
+            key: 'ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr'
+        });
+        {{ module }}.map.addLayer({{ module }}.layers.satellite);
     {% endblock %}
 
     {% block extra_layers %}{% endblock %}
@@ -178,7 +186,6 @@ OpenLayers.Projection.addTransform("EPSG:4326", "EPSG:3857",
 
     // Read WKT from the text field.
     var wkt = document.getElementById('{{ id }}').value;
-    console.log(wkt);
 
     if (wkt){
       // After reading into geometry, immediately write back to

@@ -3,11 +3,11 @@
 
 {% block extrahead %}{{ block.super }}
 
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.3/leaflet.css" />
 <!--[if lte IE 8]>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.3/leaflet.ie.css" />
 <![endif]-->
-<script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.6.3/leaflet.js"></script>
 
 <style>
     .loading {
@@ -149,6 +149,8 @@
             findParcel({'pk': $('#id_parcel_pk').val()});
         }
 
+        // TODO if findParcel fails, attempt geocode, then look for parcel that
+        // contains that point?
         $('#id_address_line1').change(function() {
             var address = $(this).val();
             if (address !== null && address !== '') {

@@ -16,6 +16,21 @@
         height: 16px;
         width: 16px;
     }
+
+    .change-lot-parcel {
+        float: right;
+        max-width: 601px;
+    }
+
+    #change-lot-parcel-map {
+        width: 600px;
+        height: 250px;
+    }
+
+    #change-lot-parcel-message {
+        font-weight: bold;
+        padding: 5px;
+    }
 </style>
 
 <script>
@@ -23,7 +38,7 @@
     django.jQuery(document).ready(function() {
         var $ = django.jQuery;
 
-        var parcelMap = L.map('parcelmap', {
+        var parcelMap = L.map('change-lot-parcel-map', {
             center: [39.952335, -75.163789],
             zoom: 12,
 
@@ -40,48 +55,87 @@
         });       
 
         var parcelLayer = null;
+        var parcelId = null;
+
+        function clearParcelId() {
+            $('#id_parcel_pk').val('');
+        }
+
+        function setParcelId() {
+            $('#id_parcel_pk').val(parcelId);
+        }
+
+        function shouldUseParcel() {
+            return $('#change-lot-parcel-form-use:checked').length > 0;
+        }
+
+        function onParcelFound(data) {
+            $('.loading').hide();
+            if (data.features.length === 0) {
+                $('#id_parcel_pk').val(null);
+                $('#change-lot-parcel-message').text("Couldn't find a parcel!");
+                return;
+            }
+
+            // TODO what if there are multiple matches?
+            var feature = data.features[0];
+            parcelId = feature.id;
+            if (shouldUseParcel) {
+                setParcelId();
+            }
+            $('#id_address_line1').val(feature.properties.address);
+            var msg = 'This is the parcel we found.';
+
+            var zipcode = feature.properties.zipcode;
+            if (zipcode !== null && zipcode !== '') {
+                $('#id_postal_code').val(zipcode);
+            }
+            else {
+                msg += ' Could not find a zipcode for the parcel--if you add a <a href="{% url "admin:boundaries_layer_changelist" %}">boundary layer</a> named "zipcodes" we would find one automatically.';
+            }
+
+            parcelLayer = L.geoJson(data).addTo(parcelMap);
+            parcelMap.setView(parcelLayer.getBounds().getCenter(), 16);
+
+            if (feature.properties.lot_count <= 1) {
+                $('#change-lot-parcel-message').text(msg);
+            }
+            else {
+                $('#change-lot-parcel-message').html('There are <a href="{% url "admin:lots_lot_changelist" %}?parcel=' + feature.id + '" target="_blank">multiple lots</a> using this parcel. Check those first to make sure you\'re not adding a duplicate.'); 
+            }
+
+        }
+
+        function updatePolygonTiedToParcel() {
+            if ($('#change-lot-parcel-form-use:checked').length > 0) {
+                $('#id_polygon_tied_to_parcel').attr('checked', 'checked');
+            }
+            else {
+                $('#id_polygon_tied_to_parcel').removeAttr('checked');
+            }
+        }
+
+        function updateUseParcelShape() {
+            if ($('#id_polygon_tied_to_parcel:checked').length > 0) {
+                $('#change-lot-parcel-form-use').attr('checked', 'checked');
+            }
+            else {
+                $('#change-lot-parcel-form-use').removeAttr('checked', 'checked');
+            }
+        }
 
         function findParcel(params) {
             // Clear any existing parcels
             if (parcelLayer !== null) {
                 parcelLayer.clearLayers();
             }
-            $('#parcelmessage').text('Finding a matching parcel...');
+            $('#change-lot-parcel-message').text('Finding a matching parcel...');
             $('.loading').show();
 
             // Try to display new parcels, by address
             var url = '{% url "parcels:find_parcel" %}?' + $.param(params);
             $.getJSON(url, function(data) {
-                $('.loading').hide();
-                if (data.features.length === 0) {
-                    $('#id_parcel_pk').val(null);
-                    $('#parcelmessage').text("Couldn't find a parcel!");
-                    return;
-                }
-
-                // TODO what if there are multiple matches?
-                var feature = data.features[0];
-                $('#id_parcel_pk').val(feature.id);
-                $('#id_address_line1').val(feature.properties.address);
-                var msg = 'This is the parcel we found.';
-
-                var zipcode = feature.properties.zipcode;
-                if (zipcode !== null && zipcode !== '') {
-                    $('#id_postal_code').val(zipcode);
-                }
-                else {
-                    msg += ' Could not find a zipcode for the parcel--if you add a <a href="{% url "admin:boundaries_layer_changelist" %}">boundary layer</a> named "zipcodes" we would find one automatically.';
-                }
-
-                parcelLayer = L.geoJson(data).addTo(parcelMap);
-                parcelMap.setView(parcelLayer.getBounds().getCenter(), 16);
-
-                if (feature.properties.lot_count <= 1) {
-                    $('#parcelmessage').text(msg);
-                }
-                else {
-                    $('#parcelmessage').html('There are <a href="{% url "admin:lots_lot_changelist" %}?parcel=' + feature.id + '" target="_blank">multiple lots</a> using this parcel. Check those first to make sure you\'re not adding a duplicate.'); 
-                }
+                onParcelFound(data);
             });
             
         }
@@ -98,6 +152,19 @@
             }
         });
 
+        $('#change-lot-parcel-form-use').change(function() {
+            updatePolygonTiedToParcel();
+            if (shouldUseParcel()) {
+                setParcelId();
+            }
+            else {
+                clearParcelId();
+            }
+        });
+
+        // Make the use parcel shape checkbox match polygon_tied_to_parcel
+        updateUseParcelShape();
+
         if ($('#id_city').val() === '') {
             $('#id_city').val('Philadelphia');
         }
@@ -109,15 +176,26 @@
 </script>
 {% endblock %}
 
-{% block extrastyle %}{{ block.super }}
-{% endblock %}
+{% block extrastyle %}{{ block.super }}{% endblock %}
 
 {% block field_sets %}
-<div style="float: right;">
-    <div id="parcelmap" style="width: 600px; height: 250px;"></div>
-    <span id="parcelmessage" style="padding: 5px; font-weight: bold;">
+<div class="change-lot-parcel">
+    <div id="change-lot-parcel-map"></div>
+    <span id="change-lot-parcel-message">
         Parcel for this lot: enter an address to find a parcel
     </span>
+    <div id="change-lot-parcel-form">
+        <label for="change-lot-parcel-form-use">Use this parcel's shape</label>
+        <input id="change-lot-parcel-form-use" name="change-lot-parcel-form-use" type="checkbox" checked="checked" />
+        <div>
+            <p>
+                If you do not use the parcel's shape, you can edit the geography of the lot below in the geography section. There you should set the <strong>centroid</strong> (where the point will appear) and the <strong>polygon</strong> (the shape of the lot).
+            </p>
+            <p>
+                If you would like to base the lot's shape on this parcel, leave this checked, click <strong>save and continue editing</strong>, then uncheck this and change the polygon.
+            </p>
+        </div>
+    </div>
     <div class="loading" style="display: none;"></div>
 </div>
 {{ block.super }}

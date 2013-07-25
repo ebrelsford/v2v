@@ -69,7 +69,8 @@ def to_basereg(s):
 
 
 def find_or_create_lots(row):
-    address = fix_address(row['INDIVIDUAL_PARCEL'])
+    raw_address = row.get('INDIVIDUAL_PARCEL', None) or row.get('ADDRESS', None)
+    address = fix_address(raw_address)
     for basereg_raw in row['BaseReg'].split(','):
         basereg = to_basereg(basereg_raw.strip())
 
@@ -86,6 +87,8 @@ def find_or_create_lots(row):
                 'postal_code': row['ZIP'],
             }
             lot = create_lot(basereg, address, **defaults)
+        if not lot:
+            continue
         yield lot
 
 
@@ -116,9 +119,11 @@ def load(filename=settings.DATA_ROOT + '/gardens.csv',
             'known_use_locked': True,
             'steward_inclusion_opt_in': True,
         }
-        organizer_kwargs = {
-            'type': organizer_type,
-        }
+        organizer_kwargs = {}
+        if create_organizers:
+            organizer_kwargs.update({
+                'type': organizer_type,
+            })
         steward_kwargs = {
             'use': steward_project_use,
             'include_on_map': True,
@@ -133,35 +138,39 @@ def load(filename=settings.DATA_ROOT + '/gardens.csv',
                 'postal_code': (parcel['ZIP'] or
                                 lotgroup_kwargs.get('postal_code', None)),
             })
-            organizer_kwargs.update({
-                'name': (parcel['Main Contact'] or
-                         organizer_kwargs.get('name', None)),
-                'phone': (parcel['Phone Number'] or
-                          organizer_kwargs.get('phone', None)),
-                'email': (parcel['Email Address'] or
-                          organizer_kwargs.get('email', None)),
-            })
+            if create_organizers:
+                organizer_kwargs.update({
+                    'name': (parcel['Main Contact'] or
+                            organizer_kwargs.get('name', None)),
+                    'phone': (parcel['Phone Number'] or
+                            organizer_kwargs.get('phone', None)),
+                    'email': (parcel['Email Address'] or
+                            organizer_kwargs.get('email', None)),
+                })
             steward_kwargs.update({
                 'name': fix_address(parcel['GARDEN NAME']) or steward_kwargs.get('name', None),
                 'support_organization': (parcel['Support Organization'] or
                                          organizer_kwargs.get('support_organization', None)),
-                'external_id': (parcel['PROJECT ID'] or
+                'external_id': (parcel.get('PROJECT ID', None) or
                                 steward_kwargs.get('external_id', None)),
-                'date_started': (parse_datetime(parcel['DATESTARTED']) or
+                'date_started': (parse_datetime(parcel.get('DATESTARTED', None)) or
                                  steward_kwargs.get('date_started', None)),
             })
 
             lots += find_or_create_lots(parcel)
 
         print 'Trying to add garden "%s"' % lotgroup_kwargs['name']
+        print 'lots:', lots
         if not lots:
             print 'No lots found, skipping garden "%s"' % lotgroup_kwargs['name']
             continue
 
         print 'lotgroup_kwargs', lotgroup_kwargs
-        print 'organizer_kwargs', organizer_kwargs
+        if create_organizers:
+            print 'organizer_kwargs', organizer_kwargs
         print 'steward_kwargs', steward_kwargs
 
+        steward_project = None
         if append_to_existing:
             # Try to find existing steward project
             try:
@@ -169,7 +178,7 @@ def load(filename=settings.DATA_ROOT + '/gardens.csv',
                     name=steward_kwargs['name']
                 )
             except Exception:
-                steward_project = None
+                pass
 
         if steward_project:
             # Look for steward_project's LotGroup

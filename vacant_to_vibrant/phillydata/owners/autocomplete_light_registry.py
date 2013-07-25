@@ -1,9 +1,11 @@
-import autocomplete_light
+from autocomplete_light import AutocompleteModelBase, register
 
 from .models import Owner
 
 
-autocomplete_light.register(Owner,
-    search_fields=['name',],
-    autocomplete_js_attributes={'placeholder': 'Owner name',},
-)
+class OwnerAutocomplete(AutocompleteModelBase):
+    autocomplete_js_attributes = {'placeholder': 'Owner name',}
+    search_fields = ('name',)
+
+
+register(Owner, OwnerAutocomplete)

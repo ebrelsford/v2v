@@ -1,8 +1,8 @@
-{% extends feincms_page.template.path|default:"base.html" %}
+{% extends "elephantblog/base.html" %}
 
 {% load feincms_tags i18n %}
 
-{% block title %}{% trans "News" %} - {{ block.super }}{% endblock %}
+{% block title %}{% trans "News" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
 {% block content_title %}

@@ -11,14 +11,27 @@ define(
         'lib/bootstrap/bootstrap-tooltip'
     ], function ($, L, lotStyles) {
 
+        var lotPk;
+
         function styleLayer(feature) {
-            return lotStyles[feature.properties.layer];
+            var style = lotStyles[feature.properties.layer];
+            if (+feature.properties.pk !== lotPk) {
+                style.fillOpacity = 0.3;
+                style.weight = 0.5;
+            }
+            else {
+                style.fillOpacity = 1;
+                style.weight = 3;
+            }
+            return style;
         }
 
         $(document).ready(function () {
             var $streetviewContainer = $('#streetview-container'),
                 lon = $('body').data('lon'),
                 lat = $('body').data('lat');
+
+            lotPk = $('body').data('lotpk');
 
             // Set up streetview
             $streetviewContainer.streetview({

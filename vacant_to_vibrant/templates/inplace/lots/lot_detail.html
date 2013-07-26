@@ -6,6 +6,7 @@
 {% block body_class %}{{ block.super }} lot-base-page lot-detail-page{% endblock %}
 
 {% block body_data %}
+    data-lotpk="{{ lot.pk }}"
     data-lon="{{ lot.centroid.x }}" 
     data-lat="{{ lot.centroid.y }}"
 {% endblock %}

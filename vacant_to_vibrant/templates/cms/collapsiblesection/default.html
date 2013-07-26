@@ -1,4 +1,4 @@
-<section class="collapsible-section is-expanded">
+<section class="collapsible-section{% if not content.start_collapsed %} is-expanded{% endif %}">
     <h2 class="collapsible-section-header">
         <span class="collapsible-section-title">
             {{ content.title }}

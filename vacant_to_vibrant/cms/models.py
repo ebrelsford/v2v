@@ -30,6 +30,7 @@ class PathwayListContent(models.Model):
 class CollapsibleSectionContent(RichTextContent):
 
     title = models.CharField(_('title'), max_length=200)
+    start_collapsed = models.BooleanField(_('start collapsed'), default=False)
 
     class Meta:
         abstract = True

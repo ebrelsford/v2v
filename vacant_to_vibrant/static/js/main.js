@@ -31,6 +31,10 @@ define(['jquery', 'jquery.activitystream',], function ($) {
          * Collapse the collapsible sections
          */
         require(['jquery'], function () {
+            // Slide up those sections not initially expanded
+            $('.collapsible-section:not(.is-expanded) .collapsible-section-text').slideUp();
+
+            // Prepare headers for clicking
             $('.collapsible-section-header').click(function () {
                 var $section = $(this).parent(),
                     $sectionText = $section.find('.collapsible-section-text');

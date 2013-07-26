@@ -20,7 +20,7 @@
     <article class="hentry{% if forloop.first %} first{% endif %}">
         <header>
             <h2 class="entry-title"><a href="{{ entry.get_absolute_url }}" rel="bookmark">{{ entry }}</a></h2>
-            <span class="byline small">
+            <span class="byline small meta">
                 {% for category in entry.fetched_categories %}
                     <a href="{{ category.get_absolute_url }}" rel="tag">{{ category }}</a>{% if not forloop.last %},{% else %} | {% endif %}
                 {% endfor %}

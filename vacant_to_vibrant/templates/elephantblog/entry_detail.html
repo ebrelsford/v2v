@@ -24,7 +24,7 @@
 <article class="hentry">
     <header>
         <h1 class="entry-title">{{ entry }}</h1>
-        <span class="small byline">
+        <span class="small byline meta">
             {% for category in entry.categories.all %}
                 <a href="{{ category.get_absolute_url }}">{{ category }}</a>{% if not forloop.last %},{% else %} | {% endif %}
             {% endfor %}

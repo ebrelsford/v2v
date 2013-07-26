@@ -864,6 +864,7 @@ h2.entry-title {
     font-size: 10px;
 }
 
+.entry-content,
 .entry-summary {
     margin-bottom: 10px;
     margin-top: 10px;

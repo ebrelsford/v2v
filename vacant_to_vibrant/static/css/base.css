@@ -362,6 +362,43 @@ header {
   background-color: #61A194;
 }
 
+.nav-tabs > .dropdown > a:hover {
+    color: #61A194;
+    text-decoration: underline;
+}
+
+.nav-tabs > .dropdown.open > a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.nav .dropdown-toggle .caret,
+.nav .dropdown-toggle:hover .caret,
+.nav .dropdown-toggle:focus .caret {
+    margin-top: 6px;
+    border-top-color: #61A194;
+    border-bottom-color: #61A194;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: hsl(167, 30%, 50%) !important;
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#9bc9bf", endColorstr="#59a595");
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#9bc9bf), to(#59a595));
+    background-image: -moz-linear-gradient(top, #9bc9bf, #59a595);
+    background-image: -ms-linear-gradient(top, #9bc9bf, #59a595);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9bc9bf), color-stop(100%, #59a595));
+    background-image: -webkit-linear-gradient(top, #9bc9bf, #59a595);
+    background-image: -o-linear-gradient(top, #9bc9bf, #59a595);
+    background-image: linear-gradient(#9bc9bf, #59a595);
+    border-color: #59a595 #59a595 hsl(167, 30%, 45%);
+}
+
 .nav {
     margin: 0;
 }

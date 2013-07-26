@@ -56,6 +56,7 @@ define(['jquery', 'jquery.activitystream',], function ($) {
     });
 
     require(['chosen.jquery_ready']);
+    require(['lib/bootstrap/bootstrap-dropdown']);
 
 
     /*

@@ -67,17 +67,47 @@
             <div class="content-wrapper clearfix">
                 <section id="main" class="{% block mainclasses %}grid grid-3-4{% endblock %}">
 
-                    <nav id="submenu" class="clearfix">
-                        {% feincms_nav feincms_page level=3 depth=1 as submenu %}
+                    {% block submenu %}
+                        <nav id="submenu" class="clearfix">
+                            {% feincms_nav feincms_page level=3 depth=1 as submenu %}
 
-                        <ul class="nav nav-pills">
-                            {% for page in submenu %}
-                                <li class="{% ifequal page feincms_page %}active{% endifequal %}">
-                                    <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </nav>    
+                            <ul class="nav nav-tabs">
+
+                                {% for page in submenu %}
+                                    <li class="dropdown {% ifequal page feincms_page %}active{% endifequal %} {% ifequal page feincms_page.parent %}active{% endifequal %}">
+
+                                        {% feincms_nav page level=4 depth=1 as subsubmenu %}
+
+                                        {% if not subsubmenu %}
+                                            <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+                                        {% else %}
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                                {{ page.title }}
+                                                <b class="caret"></b>
+                                            </a>
+
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="{{ page.get_absolute_url }}">
+                                                        {{ page.title }}
+                                                    </a>
+                                                </li>
+
+                                                {% for childpage in subsubmenu %}
+                                                    <li>
+                                                        <a href="{{ childpage.get_absolute_url }}">
+                                                            {{ childpage.title }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </nav>
+                    {% endblock %}
 
                     {% block breadcrumbs_wrapper %}
                         <ul class="breadcrumb">

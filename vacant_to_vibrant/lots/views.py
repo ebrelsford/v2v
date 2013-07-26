@@ -321,10 +321,7 @@ class LotGeoJSONDetailView(LotGeoJSONMixin, GeoJSONListView):
 
     def get_queryset(self):
         lot = get_object_or_404(self.model, pk=self.kwargs['pk'])
-        visible_only = not self.request.user.has_perm('lots.view_all_lots')
-        return self.model.objects.find_nearby(lot, include_self=True,
-                                              visible_only=visible_only,
-                                              miles=.1)
+        return self.model.objects.find_nearby(lot, include_self=True, miles=.1)
 
 
 #

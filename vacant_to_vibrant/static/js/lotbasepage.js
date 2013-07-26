@@ -5,21 +5,32 @@ define(
     [
         'jquery',
         'leaflet',
+        'lotstyles',
+
         'jquery.streetview',
         'lib/bootstrap/bootstrap-tooltip'
-    ], function ($, L) {
+    ], function ($, L, lotStyles) {
+
+        function styleLayer(feature) {
+            return lotStyles[feature.properties.layer];
+        }
 
         $(document).ready(function () {
-            var $streetviewContainer = $('#streetview-container');
+            var $streetviewContainer = $('#streetview-container'),
+                lon = $('body').data('lon'),
+                lat = $('body').data('lat');
+
+            // Set up streetview
             $streetviewContainer.streetview({
                 errorSelector: '#streetview-error',
             });
-            $streetviewContainer.data('streetview').load_streetview(
-                $streetviewContainer.data('lon'),
-                $streetviewContainer.data('lat')
-            );
+            $streetviewContainer.data('streetview').load_streetview(lon, lat);
 
-            var map = new L.Map('map');
+            // Set up lot map
+            var map = new L.Map('map', {
+                center: { lat: lat, lng: lon },
+                zoom: 17
+            });
             var key = $('#map').data('cloudmadekey'),
                 style = $('#map').data('cloudmadestyle');
             var cloudmade = new L.TileLayer(
@@ -32,15 +43,8 @@ define(
             map.addLayer(cloudmade);
 
             $.get($('#map').data('url'), function (data) {
-                var style = {
-                    fillColor: 'hsl(140, 42%, 40%)',
-                    fillOpacity: 0.7,
-                    color: 'white',
-                    opacity: 0.8,
-                    weight: 2,
-                };
-                var feature_layer = new L.GeoJSON(data, { style: style, }).addTo(map);
-                map.fitBounds(feature_layer.getBounds());
+                var feature_layer = new L.GeoJSON(data, { style: styleLayer })
+                    .addTo(map);
             });
 
             $('.lot-page-tooltip').tooltip({ container: 'body' });

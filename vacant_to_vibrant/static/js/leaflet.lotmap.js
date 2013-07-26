@@ -10,6 +10,7 @@ define(
         'lib/leaflet.lvector',
         'django',
         'underscore',
+        'lotstyles',
 
         // Leaflet plugins
         'lib/leaflet.label',
@@ -24,7 +25,7 @@ define(
         // Other plugins
         'jquery.singleminded',
 
-    ], function ($, L, lvector, Django, _) {
+    ], function ($, L, lvector, Django, _, lotStyles) {
 
         L.Map.include({
 
@@ -329,6 +330,13 @@ define(
 
             _getPolygonLayer: function () {
                 var instance = this;
+                var symbologyValues = _.map(lotStyles, function (style, name) {
+                    return {
+                        value: name,
+                        vectorOptions: style
+                    };
+                });
+
                 return new lvector.LotLayer({
                     map: instance,
                     clickEvent: function (feature, event) {
@@ -343,38 +351,7 @@ define(
                     symbology: {
                         type: 'unique',
                         property: 'layer',
-                        values: [
-                            {
-                                value: 'in use',
-                                vectorOptions: {
-                                    fillColor: '#830F94',
-                                    fillOpacity: 0.7,
-                                    color: 'white',
-                                    opacity: 0.8,
-                                    weight: 1,
-                                },
-                            },
-                            {
-                                value: 'public',
-                                vectorOptions: {
-                                    fillColor: '#D38022',
-                                    fillOpacity: 0.7,
-                                    color: 'white',
-                                    opacity: 0.8,
-                                    weight: 1,
-                                },
-                            },
-                            {
-                                value: 'private',
-                                vectorOptions: {
-                                    fillColor: '#287A68',
-                                    fillOpacity: 0.7,
-                                    color: 'white',
-                                    opacity: 0.8,
-                                    weight: 1,
-                                },
-                            },
-                        ],
+                        values: symbologyValues,
                     },
                     uniqueField: 'pk',
                     url: this.options.polygonBaseUrl,

@@ -126,6 +126,35 @@ class LotFieldsMixin(object):
         return dict([(f, self._field_value(lot, f)) for f in self.fields])
 
 
+class LotGeoJSONMixin(object):
+
+    def get_feature(self, lot):
+        if lot.known_use:
+            layer = 'in use'
+        elif lot.owner and lot.owner.owner_type == 'public':
+            layer = 'public'
+        elif lot.owner and lot.owner.owner_type == 'private':
+            layer = 'private'
+        else:
+            layer = ''
+
+        try:
+            lot_geojson = lot.geojson
+        except Exception:
+            if lot.polygon:
+                lot_geojson = lot.polygon.geojson
+            else:
+                lot_geojson = lot.centroid.geojson
+        return geojson.Feature(
+            lot.pk,
+            geometry=json.loads(lot_geojson),
+            properties={
+                'pk': lot.pk,
+                'layer': layer,
+            },
+        )
+
+
 #
 # Export views
 #
@@ -189,25 +218,7 @@ class LotsGeoJSON(LotFieldsMixin, FilteredLotsMixin, GeoJSONResponseMixin,
         return response
 
 
-class LotsGeoJSONPolygon(FilteredLotsMixin, GeoJSONListView):
-
-    def get_feature(self, lot):
-        if lot.known_use:
-            layer = 'in use'
-        elif lot.owner and lot.owner.owner_type == 'public':
-            layer = 'public'
-        elif lot.owner and lot.owner.owner_type == 'private':
-            layer = 'private'
-        else:
-            layer = ''
-        return geojson.Feature(
-            lot.pk,
-            geometry=json.loads(lot.geojson),
-            properties={
-                'pk': lot.pk,
-                'layer': layer,
-            },
-        )
+class LotsGeoJSONPolygon(LotGeoJSONMixin, FilteredLotsMixin, GeoJSONListView):
 
     def get_queryset(self):
         return self.get_lots().filter(polygon__isnull=False).geojson(
@@ -282,6 +293,10 @@ class LotsMap(TemplateView):
         return context
 
 
+#
+# Detail views
+#
+
 class LotDetailView(PlacesDetailView):
     model = Lot
 
@@ -299,6 +314,17 @@ class LotDetailView(PlacesDetailView):
                                      "group. Here is the group's page."))
             return HttpResponseRedirect(self.object.group.get_absolute_url())
         return super(LotDetailView, self).get(request, *args, **kwargs)
+
+
+class LotGeoJSONDetailView(LotGeoJSONMixin, GeoJSONListView):
+    model = Lot
+
+    def get_queryset(self):
+        lot = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        visible_only = not self.request.user.has_perm('lots.view_all_lots')
+        return self.model.objects.find_nearby(lot, include_self=True,
+                                              visible_only=visible_only,
+                                              miles=.1)
 
 
 #

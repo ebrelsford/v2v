@@ -2,9 +2,9 @@ from django.conf.urls.defaults import patterns, url
 
 from phillyorganize.models import Organizer
 
-from .views import (LotDetailView, EditLotParicipantView, AddParticipantView,
-                    LotsGeoJSON, LotsGeoJSONPolygon, AddParticipantSuccessView,
-                    DeletePhillyOrganizerView,
+from .views import (LotDetailView, LotGeoJSONDetailView, EditLotParicipantView,
+                    AddParticipantView, LotsGeoJSON, LotsGeoJSONPolygon,
+                    AddParticipantSuccessView, DeletePhillyOrganizerView,
                     AddStewardNotificationView,
                     AddStewardNotificationSuccessView,
                     AddGroundtruthRecordView,
@@ -24,6 +24,8 @@ urlpatterns = patterns('',
         name='lot_count_by_boundary'),
 
     url(r'^(?P<pk>\d+)/$', LotDetailView.as_view(), name='lot_detail'),
+    url(r'^(?P<pk>\d+)/geojson/$', LotGeoJSONDetailView.as_view(),
+        name='lot_detail_geojson'),
 
     url(r'^(?P<pk>\d+)/grow-community/$',
         AddParticipantView.as_view(

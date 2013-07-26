@@ -40,11 +40,15 @@ class LotManager(InitialRevisionManagerMixin, PlaceManager):
             group__isnull=True,
         )
 
-    def find_nearby(self, lot):
+    def find_nearby(self, lot, include_self=False, visible_only=True, miles=.5):
         """Find lots near the given lot."""
-        return self.get_visible().exclude(pk=lot.pk).filter(
-            centroid__distance_lte=(lot.centroid, D(mi=.5))
-        )
+        if visible_only:
+            qs = self.get_visible()
+        else:
+            qs = super(LotManager, self).get_query_set()
+        if not include_self:
+            qs = qs.exclude(pk=lot.pk)
+        return qs.filter(centroid__distance_lte=(lot.centroid, D(mi=miles)))
 
 
 class VisibleLotManager(LotManager):
@@ -351,6 +355,11 @@ class Lot(Place):
             self.known_use_certainty > 3
         )
     is_visible = property(_is_visible)
+
+    @models.permalink
+    def get_geojson_url(self):
+        """Override inplace url"""
+        return ('lots:lot_detail_geojson', (), { 'pk': self.pk })
 
 
 class LotGroup(Lot):

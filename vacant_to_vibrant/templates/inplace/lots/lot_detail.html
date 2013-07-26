@@ -5,6 +5,11 @@
 
 {% block body_class %}{{ block.super }} lot-base-page lot-detail-page{% endblock %}
 
+{% block body_data %}
+    data-lon="{{ lot.centroid.x }}" 
+    data-lat="{{ lot.centroid.y }}"
+{% endblock %}
+
 {% block breadcrumbs %}
     <li>
         <a href="/">{% trans "Home" %}</a>
@@ -50,8 +55,7 @@
 <div class="lot-detail-map-container">
 
     <div class="grid grid-2-3">
-        <div id="streetview-container" data-lon="{{ lot.centroid.x }}" 
-            data-lat="{{ lot.centroid.y }}">
+        <div id="streetview-container">
             <div id="streetview" style="height: 200px; width: 100%;"></div>
         </div>
         <div id="streetview-error" class="streetview">

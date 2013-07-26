@@ -5,6 +5,11 @@
 
 {% block body_class %}{{ block.super }} lot-base-page{% endblock %}
 
+{% block body_data %}
+    data-lon="{{ lot.centroid.x }}" 
+    data-lat="{{ lot.centroid.y }}"
+{% endblock %}
+
 {% block breadcrumbs %}
     <li>
         <a href="/">{% trans "Home" %}</a>
@@ -31,9 +36,7 @@
     {% place_map places_url 100% 200px %}
     {% endwith %}
 
-    <div id="streetview-container" style="width: 100%; height: 200px;"
-        data-lon="{{ lot.centroid.x }}" 
-        data-lat="{{ lot.centroid.y }}"></div>
+    <div id="streetview-container" style="width: 100%; height: 200px;"></div>
 
 </div>
 {% endblock %}

@@ -41,6 +41,7 @@
                 {% if entry.first_richtext %}{{ entry.first_richtext.render }}{% endif %}
             {% endif %}
         </div>
+        <div class="entry-link"><a href="{{ entry.get_absolute_url }}">{% trans "read more" %}</a></div>
     </article>
 {% endfor %}
 </div>

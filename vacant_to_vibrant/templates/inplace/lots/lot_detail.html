@@ -165,7 +165,7 @@
                     <ul>
                         {% for license in lot.licenses.all %}
                             <li>
-                                <a href="http://www.phila.gov/data/Pages/default.aspx?entity=licenses&eid={{ license.external_id }}" target="_blank">
+                                <a href="http://www.phila.gov/data/Pages/default.aspx?entity=licenses&eid={{ license.external_id }}" target="_blank" class="lot-page-tooltip" data-toggle="tooltip" title="{% trans "Active or recent licenses can indicate that the lot's owner is paying attention to the lot. They might be easier to get in touch with than other owners." %}">
                                     {{ license.status|lower }} ({{ license.external_id }})
                                 </a>
                             </li>

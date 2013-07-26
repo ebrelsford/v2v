@@ -14,12 +14,13 @@ Entry.register_extensions(
 
 Entry.register_regions(
     ('main', _('Main content area')),
+    ('teaser', _('Blog entry teaser')),
 )
 
 Entry.create_content_type(
     RichTextContent,
     cleanse=feincms_cleanse.cleanse_html,
-    regions=('main',)
+    regions=('main', 'teaser',)
 )
 
 Entry.create_content_type(MediaFileContent, TYPE_CHOICES=(

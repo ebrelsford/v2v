@@ -47,6 +47,7 @@ class FiltersForm(forms.Form):
             AvailableProperty.STATUS_AVAILABLE,
             AvailableProperty.STATUS_NEW,
         ),
+        label=_('Available property status'),
         required=False,
         widget=forms.CheckboxSelectMultiple(),
     )
@@ -106,7 +107,6 @@ class FiltersForm(forms.Form):
     participant_types = forms.MultipleChoiceField(
         choices=(
             ('organizers', 'organizers'),
-            ('watchers', 'watchers'),
         ),
         initial=(),
         required=False,
@@ -180,12 +180,14 @@ class FiltersForm(forms.Form):
             ('in use', _('in use')),
         ),
         initial=('not in use', 'in use',),
+        label=_('Known use'),
         required=False,
         widget=forms.CheckboxSelectMultiple(),
     )
 
     known_use__name__in = forms.MultipleChoiceField(
         choices=(),
+        label=_('Known use category'),
         required=False,
         widget=forms.CheckboxSelectMultiple(),
     )

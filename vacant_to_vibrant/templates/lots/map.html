@@ -47,27 +47,41 @@
                 {% endwith %}
             </div>
 
-            <div class="filters-default-wrapper {% if "lots.view_all_filters" in perms %}visible{% endif %}">
-                <h2>{% trans "Default filters" %}
+            <div class="filters-default-wrapper collapsible-section {% if "lots.view_all_filters" in perms %}visible{% endif %}">
+                <h2 class="collapsible-section-header">
+                    <span class="collapsible-section-title">
+                        {% trans "Default filters" %}
+                    </span>
+                    <i class="collapsible-section-icon collapsible-section-expanded-icon icon-minus"></i>
+                    <i class="collapsible-section-icon collapsible-section-collapsed-icon icon-plus"></i>
                     <div class="help-text">These are not usually visible to users</div>
                 </h2>
-                <div class="filters filters-default">
+                <div class="filters filters-default collapsible-section-text">
                     {% with filtergroup=filters.default_filters %}
                     {% include "lots/_filtergroup.html" %}
                     {% endwith %}
                 </div>
             </div>
 
-            {% if "lots.view_all_filters" in perms %}
-            <h2>{% trans "Admin filters" %}</h2>
-            <div class="filters filters-admin">
-                {% with filtergroup=filters.admin_filters %}
-                {% include "lots/_filtergroup.html" %}
-                {% endwith %}
+            <div class="collapsible-section">
+                {% if "lots.view_all_filters" in perms %}
+                    <h2 class="collapsible-section-header">
+                        <span class="collapsible-section-title">
+                            {% trans "Admin filters" %}
+                        </span>
+                        <i class="collapsible-section-icon collapsible-section-expanded-icon icon-minus"></i>
+                        <i class="collapsible-section-icon collapsible-section-collapsed-icon icon-plus"></i>
+                    </h2>
+                    <div class="filters filters-admin collapsible-section-text">
+                        {% with filtergroup=filters.admin_filters %}
+                        {% include "lots/_filtergroup.html" %}
+                        {% endwith %}
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
 
         </div>
+
 
         <div class="grid grid-1-3">
             <h2>{% trans "View" %}</h2>

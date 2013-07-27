@@ -615,6 +615,10 @@ header {
     margin-top: 10px;
 }
 
+.filter.is-disabled {
+    display: none;
+}
+
 .filters-default-wrapper {
     display: none;
 }

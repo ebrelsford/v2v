@@ -85,10 +85,10 @@
             </div>
 
             {% if "organize.email_participants" in perms %}
-            <h2>{% trans "Admin actions" %}</h2>
-            <div class="admin-actions">
-                <a href="#" class="email-participants">{% trans "Email organizers and watchers" %}</a>
-            </div>
+                <h2 class="always-enabled">{% trans "Admin actions" %}</h2>
+                <div class="admin-actions">
+                    <a href="#" class="email-participants">{% trans "Email organizers and watchers" %}</a>
+                </div>
             {% endif %}
         </div>
 

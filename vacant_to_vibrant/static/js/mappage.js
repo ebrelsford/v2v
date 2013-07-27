@@ -131,6 +131,21 @@ define(
                 return !$(this).parents('.filter').is(viewTypeFilterSelector);
             });
 
+            // Hide filters that have been disabled, show those enabled
+            $('.filter' + viewTypeFilterSelector).removeClass('is-disabled');
+            $('.filter:not(' + viewTypeFilterSelector + ')').addClass('is-disabled');
+
+            // Hide/Show filter labels if there are any filters enabled below
+            // them
+            $('.map-filters h2:not(.always-enabled)').each(function () {
+                if ($(this).nextAll().find('.filter:not(.is-disabled)').length > 0) {
+                    $(this).show();
+                }
+                else {
+                    $(this).hide();
+                }
+            });
+
             // Always enable default filters (for counts)
             $('.filter.default :input').prop('disabled', false);
 

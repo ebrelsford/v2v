@@ -3,7 +3,7 @@
 <div>
     <h3>{% trans "Email Participants" %}</h3>
     <div>
-        <p>{% trans "Use this form to email watchers and organizers in the lots currently visible on the map above. Adjust the above filters to select which watchers and organizers will receive emails." %}</p>
+        <p>{% trans "Use this form to email participants in the lots currently visible on the map above. Adjust the above filters to select which participants will receive emails." %}</p>
         <p>{% trans "Please enter your email below." %}</p>
         <form method="post" action="{% url "extraadmin:mail_participants" %}">
             {% csrf_token %}
@@ -11,16 +11,16 @@
             {{ hidden }}
             {% endfor %}
             <div>
-                {% for field in form %}
+                {% for field in form.visible_fields %}
                     <div>
                         {{ field.errors }}
-                        <div>{{ field.label_tag }}:</div>
+                        <div>{{ field.label_tag }}</div>
                         <div>{{ field }}</div>
                     </div>
                 {% endfor %}
             </div>
             <div>
-                This email will be sent to <span class="organizer-count"></span> organizers and <span class="watcher-count"></span> watchers.
+                This email will be sent to <span class="organizer-count"></span> organizers.
             </div>
             <input type="submit" value="{% trans "submit" %}" />
         </form>

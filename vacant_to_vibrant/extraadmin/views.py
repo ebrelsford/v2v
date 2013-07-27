@@ -1,8 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 from django.views.generic import FormView, TemplateView
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
-from feincms.content.application.models import app_reverse
 
 from libapps.organize.mail import mass_mail_organizers
 from phillyorganize.models import Organizer
@@ -42,7 +42,7 @@ class MailParticipantsView(LoginRequiredMixin, PermissionRequiredMixin,
         return initial
 
     def get_success_url(self):
-        return app_reverse('mail_participants_success', 'extraadmin.urls')
+        return reverse('extraadmin:mail_participants_success')
 
     def _mail_organizers(self, lot_pks, subject, message):
         organizers = Organizer.objects.filter(

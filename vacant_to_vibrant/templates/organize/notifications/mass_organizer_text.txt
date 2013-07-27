@@ -2,6 +2,4 @@
 
 --
 
-You are receiving this email because you are growing community at {{ target.address_line1|default:"unknown address" }} on {{ site.name }}. Please go here to change this: http://{{ site.domain }}{% url "lots:edit_participant" hash=obj.email_hash %}
-{% if lot.group_has_access %}
-If you know of someone else who is part of the project at this lot who would like to receive these updates from us (about things like free beehives, how to get mulch from the city, and calls for support for existing community sites throughout the network), please ask them to become subscribe here: http://{{ site.domain }}{% url "add_organizer" pk=target.pk %}{% endif %}{% endautoescape %}
+You are receiving this email because you are growing community at {{ target.address_line1|default:"unknown address" }} on {{ site.name }}. Please go here to change this: http://{{ site.domain }}{% url "lots:edit_participant" hash=obj.email_hash %}{% endautoescape %}

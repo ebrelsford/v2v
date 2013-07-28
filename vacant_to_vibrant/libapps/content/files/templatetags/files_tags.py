@@ -4,8 +4,10 @@ Template tags for the files app, loosely based on django.contrib.comments.
 """
 from django import template
 
-from generic.tags import (GetGenericRelationList, RenderGenericRelationList,
-                          GetGenericRelationCount)
+from livinglots_generictags.tags import (GetGenericRelationList,
+                                         RenderGenericRelationList,
+                                         GetGenericRelationCount)
+
 from ..models import File
 
 register = template.Library()

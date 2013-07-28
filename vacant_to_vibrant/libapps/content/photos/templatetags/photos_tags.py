@@ -4,7 +4,9 @@ Template tags for the notes app, loosely based on django.contrib.comments.
 """
 from django import template
 
-from generic.tags import GetGenericRelationList, RenderGenericRelationList
+from livinglots_generictags.tags import (GetGenericRelationList,
+                                         RenderGenericRelationList)
+
 from ..models import Photo
 
 register = template.Library()

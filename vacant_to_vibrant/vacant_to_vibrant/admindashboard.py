@@ -39,14 +39,14 @@ class PhillyDashboard(Dashboard):
                 'elephantblog.*',
                 'feincms.module.page.*',
                 'phillydata.*',
-                'libapps.content.*',
+                'livinglots_usercontent.*',
                 'lots.*',
             ),
         ))
 
         self.children.append(modules.ModelList(
             title=_('Lot Content'),
-            models=('libapps.content.*',),
+            models=('livinglots_usercontent.*',),
         ))
 
         self.children.append(modules.AppList(

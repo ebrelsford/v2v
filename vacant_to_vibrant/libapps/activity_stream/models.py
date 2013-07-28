@@ -57,9 +57,9 @@ PointField(blank=True, null=True).contribute_to_class(Action, 'place')
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from libapps.content.files.models import File
-from libapps.content.notes.models import Note
-from libapps.content.photos.models import Photo
+from livinglots_usercontent.files.models import File
+from livinglots_usercontent.notes.models import Note
+from livinglots_usercontent.photos.models import Photo
 
 from phillyorganize.models import Organizer
 

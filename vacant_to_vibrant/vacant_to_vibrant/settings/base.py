@@ -156,10 +156,10 @@ INSTALLED_APPS = (
     #
     # first-party, project-generic
     #
+    'livinglots_usercontent.files',
+    'livinglots_usercontent.notes',
+    'livinglots_usercontent.photos',
     'libapps.activity_stream',
-    'libapps.content.files',
-    'libapps.content.notes',
-    'libapps.content.photos',
     'libapps.facebook',
     'libapps.mailings',
     'libapps.organize',

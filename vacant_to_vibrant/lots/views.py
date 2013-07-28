@@ -20,9 +20,9 @@ from inplace.boundaries.models import Boundary
 from inplace.views import (GeoJSONListView, KMLView, GeoJSONResponseMixin,
                            PlacesDetailView)
 
-from libapps.content.files.forms import FileForm
-from libapps.content.notes.forms import NoteForm
-from libapps.content.photos.forms import PhotoForm
+from livinglots_usercontent.files.forms import FileForm
+from livinglots_usercontent.notes.forms import NoteForm
+from livinglots_usercontent.photos.forms import PhotoForm
 from libapps.organize.notifications import notify_participants_new_obj
 from libapps.organize.views import DeleteOrganizerView, EditParticipantMixin
 

@@ -3,7 +3,7 @@ import re
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 
-from libapps.content.notes.models import Note
+from livinglots_usercontent.notes.models import Note
 
 from lots.models import Lot
 

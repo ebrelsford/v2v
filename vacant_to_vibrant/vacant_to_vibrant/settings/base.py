@@ -165,18 +165,6 @@ INSTALLED_APPS = (
     'libapps.mailings',
     'libapps.organize',
     'libapps.twitter',
-
-    #
-    # first-party, project-specific
-    #
-    'blog',
-    'cms',
-    'contact',
-    'extraadmin',
-    'groundtruth',
-    'lots',
-    'mailreader',
-    'pathways',
     'phillydata',
     'phillydata.availableproperties',
     'phillydata.citycouncil',
@@ -190,6 +178,19 @@ INSTALLED_APPS = (
     'phillydata.violations',
     'phillydata.waterdept',
     'phillydata.zoning',
+
+    #
+    # first-party, project-specific
+    #
+    'blog',
+    'cms',
+    'contact',
+    'extraadmin',
+    'groundtruth',
+    'lots',
+    'mailreader',
+    'pathways',
+    'phillydata_local',
     'phillyorganize',
     'steward',
     'survey',

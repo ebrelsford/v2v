@@ -9,7 +9,8 @@ class PhillyDataSourceAdmin(admin.ModelAdmin):
                     'ordering', 'last_synchronized', 'next_synchronize',)
     fieldsets = (
         (None, {
-            'fields': ('name', 'description', 'ordering',),
+            'fields': ('name', 'description', 'ordering',
+                       'synchronizer_record',),
         }),
         ('Status', {
             'fields': (('synchronize_in_progress', 'healthy', 'enabled',),),

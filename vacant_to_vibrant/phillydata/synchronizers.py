@@ -3,39 +3,14 @@ import logging
 from external_data_sync.synchronizers import Synchronizer
 from inplace.boundaries.models import Boundary
 
-from lots.load import (load_lots_with_licenses, load_lots_with_violations)
+from lots.load import load_lots_with_violations
 from lots.models import Lot
-from .licenses.adapter import find_licenses
 from .taxaccounts.models import TaxAccount
 from .violations.adapter import find_violations
 from .zoning.models import BaseDistrict
 
 
 logger = logging.getLogger(__name__)
-
-
-class LILicensesSynchronizer(Synchronizer):
-    """
-    A Synchronizer that updates L&I license data.
-
-    """
-    codes = (
-        '3219', # residential vacancy license
-        '3634', # commercial vacancy license
-    )
-
-    def sync(self, data_source):
-        logger.info('Starting to synchronize L&I license data.')
-        self.update_license_data()
-        logger.info('Finished synchronizing L&I license data.')
-
-        logger.info('Adding lots with licenses.')
-        load_lots_with_licenses()
-        logger.info('Done adding lots with licenses.')
-
-    def update_license_data(self):
-        for code in self.codes:
-            find_licenses(code, self.data_source.last_synchronized)
 
 
 class LIViolationsSynchronizer(Synchronizer):

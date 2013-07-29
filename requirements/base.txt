@@ -21,7 +21,7 @@ django-compressor==1.3
 django-contact-form-gv==0.4.1
 django-debug-toolbar==0.9.4
 django-extensions==1.1.1
-git+git://github.com/596acres/django-external-data-sync.git@efd53fe
+git+git://github.com/596acres/django-external-data-sync.git@5f5de10
 -e git://github.com/stephenmcd/django-forms-builder.git@08f3fd5de9cd48a6fb181f7db844db63d4b0b1e5#egg=django_forms_builder-dev
 django-honeypot==0.3.0
 git+git://github.com/matthewwithanm/django-imagekit/@261f16412763c69fba64f130c521192ad726d2c1

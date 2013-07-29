@@ -4,11 +4,10 @@ from external_data_sync.synchronizers import Synchronizer
 from inplace.boundaries.models import Boundary
 
 from lots.load import (load_lots_available, load_lots_with_licenses,
-                       load_lots_with_violations, load_lots_land_use_vacant)
+                       load_lots_with_violations)
 from lots.models import Lot
 from .availableproperties.adapter import (find_available_properties,
                                           find_no_longer_available_properties)
-from .landuse.adapter import find_land_use_areas
 from .licenses.adapter import find_licenses
 from .taxaccounts.models import TaxAccount
 from .violations.adapter import find_violations
@@ -16,19 +15,6 @@ from .zoning.models import BaseDistrict
 
 
 logger = logging.getLogger(__name__)
-
-
-class LandUseAreaSynchronizer(Synchronizer):
-    """Synchronizes LandUseAreas."""
-
-    def sync(self, data_source):
-        logger.info('Synchronizing vacant land use area data.')
-        find_land_use_areas()
-        logger.info('Done synchronizing vacant land use area data.')
-
-        logger.info('Adding lots with vacant land use areas.')
-        load_lots_land_use_vacant(added_after=data_source.last_synchronized)
-        logger.info('Done adding lots with vacant land use areas.')
 
 
 class PRAAvailablePropertiesSynchronizer(Synchronizer):

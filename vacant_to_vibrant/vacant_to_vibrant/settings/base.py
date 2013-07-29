@@ -156,6 +156,7 @@ INSTALLED_APPS = (
     #
     # first-party, project-generic
     #
+    'external_data_sync',
     'livinglots_usercontent.files',
     'livinglots_usercontent.notes',
     'livinglots_usercontent.photos',
@@ -192,7 +193,6 @@ INSTALLED_APPS = (
     'phillyorganize',
     'steward',
     'survey',
-    'sync',
 )
 
 LOGGING = {

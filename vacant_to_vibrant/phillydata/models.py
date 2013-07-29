@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from sync.models import DataSource
+from external_data_sync.models import DataSource
+
 from .synchronizers import *
 
 

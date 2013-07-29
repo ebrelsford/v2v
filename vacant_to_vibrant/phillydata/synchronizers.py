@@ -2,12 +2,12 @@ import logging
 
 from django.db.models import Q
 
+from external_data_sync.synchronizers import Synchronizer
 from inplace.boundaries.models import Boundary
 
 from lots.load import (load_lots_available, load_lots_with_licenses,
                        load_lots_with_violations, load_lots_land_use_vacant)
 from lots.models import Lot
-from sync.synchronizers import Synchronizer
 from .availableproperties.adapter import (find_available_properties,
                                           find_no_longer_available_properties)
 from .landuse.adapter import find_land_use_areas

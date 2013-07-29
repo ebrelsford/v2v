@@ -5,11 +5,13 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from api.api import v1_api
+import external_data_sync
 import autocomplete_light
 
 autocomplete_light.autodiscover()
 
 admin.autodiscover()
+external_data_sync.autodiscover()
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,
                      show_indexes=True)

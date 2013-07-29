@@ -234,5 +234,14 @@ class UseCertaintyScoresSynchronizer(Synchronizer):
                             'score for lot %s' % lot)
 
 
+external_data_sync.register(LotOwnershipSynchronizer)
+external_data_sync.register(TaxAccountSynchronizer)
+external_data_sync.register(LotsAvailablePropertiesSynchronizer)
+external_data_sync.register(LotsLandUseAreaSynchronizer)
+external_data_sync.register(ZoningSynchronizer)
+external_data_sync.register(WaterDeptSynchronizer)
+external_data_sync.register(LotsLILicensesSynchronizer)
+external_data_sync.register(LotsLIViolationsSynchronizer)
+external_data_sync.register(CityCouncilSynchronizer)
 external_data_sync.register(PlanningDistrictSynchronizer)
 external_data_sync.register(UseCertaintyScoresSynchronizer)

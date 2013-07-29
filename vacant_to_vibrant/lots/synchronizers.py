@@ -1,9 +1,10 @@
 import logging
 
+import external_data_sync
 from external_data_sync.synchronizers import Synchronizer
 from inplace.boundaries.models import Boundary
 
-from lots.models import Lot
+from .models import Lot
 
 
 logger = logging.getLogger(__name__)
@@ -55,3 +56,7 @@ class UseCertaintyScoresSynchronizer(Synchronizer):
             except Exception:
                 logger.warn('Caught exception while updating use certainty '
                             'score for lot %s' % lot)
+
+
+external_data_sync.register(PlanningDistrictSynchronizer)
+external_data_sync.register(UseCertaintyScoresSynchronizer)

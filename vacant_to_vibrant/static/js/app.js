@@ -39,6 +39,8 @@ requirejs.config({
         'chosen.jquery.min': ['jquery'],
         'chosen.jquery_ready': ['jquery', 'chosen.jquery.min'],
         'lib/jquery.noisy': ['jquery'],
+        'lib/bootstrap/bootstrap-dropdown': ['jquery'],
+        'lib/bootstrap/bootstrap-tooltip': ['jquery'],
     },
 });
 

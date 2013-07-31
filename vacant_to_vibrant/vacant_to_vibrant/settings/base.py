@@ -157,10 +157,10 @@ INSTALLED_APPS = (
     # first-party, project-generic
     #
     'external_data_sync',
+    'inplace_activity_stream',
     'livinglots_usercontent.files',
     'livinglots_usercontent.notes',
     'livinglots_usercontent.photos',
-    'libapps.activity_stream',
     'libapps.facebook',
     'libapps.mailings',
     'libapps.organize',
@@ -182,6 +182,7 @@ INSTALLED_APPS = (
     #
     # first-party, project-specific
     #
+    'activity_stream',
     'blog',
     'cms',
     'contact',
@@ -231,7 +232,7 @@ RECAPTCHA_PUBLIC_KEY = get_env_variable('PHILLY_RECAPTCHA_PUBLIC_KEY')
 ORGANIZE_PARTICIPANT_SALT = get_env_variable('PHILLY_ORGANIZE_PARTICIPANT_SALT')
 
 ACTSTREAM_SETTINGS = {
-    'MANAGER': 'libapps.activity_stream.managers.PlaceActionManager',
+    'MANAGER': 'inplace_activity_stream.managers.PlaceActionManager',
     'MODELS': (
         'auth.user',
         'files.file',

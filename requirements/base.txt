@@ -26,6 +26,7 @@ git+git://github.com/596acres/django-external-data-sync.git@5f5de10
 django-honeypot==0.3.0
 git+git://github.com/matthewwithanm/django-imagekit/@261f16412763c69fba64f130c521192ad726d2c1
 -e git://github.com/ebrelsford/django-inplace.git@1e7eb79fa186e65920df4a02a9e5cbba38eb83f6#egg=django_inplace-dev
+git+git://github.com/ebrelsford/django-inplace-activity-stream/@e361b056
 django-jsonfield==0.9.2
 django-livinglots-generictags==1.0
 git+git://github.com/596acres/django-livinglots-groundtruth/@89955e

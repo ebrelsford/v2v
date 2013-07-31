@@ -7,7 +7,6 @@ define(['jquery', 'jquery.plugin',], function ($) {
             this.elem = elem;
             this.$elem = $(elem);
 
-            this.load_streetview();
             this.service = new google.maps.StreetViewService();
 
             return this;

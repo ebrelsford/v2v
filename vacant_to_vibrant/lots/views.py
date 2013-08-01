@@ -227,6 +227,15 @@ class LotsGeoJSONPolygon(LotGeoJSONMixin, FilteredLotsMixin, GeoJSONListView):
         )
 
 
+class LotsGeoJSONCentroid(LotGeoJSONMixin, FilteredLotsMixin, GeoJSONListView):
+
+    def get_queryset(self):
+        return self.get_lots().filter(centroid__isnull=False).geojson(
+            field_name='centroid',
+            precision=8,
+        ).select_related('known_use', 'owner__owner_type')
+
+
 #
 # Counting views
 #

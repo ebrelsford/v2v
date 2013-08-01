@@ -43,6 +43,17 @@ define(
                 url: null,
             },
 
+            // Override zoom change listener--only check visibility if the 
+            // layer is on a map currently.
+            _zoomChangeListenerTemplate: function () {
+                var instance = this;
+                return function () {
+                    if (instance.getMap()) {
+                        instance._checkLayerVisibility();
+                    }
+                };
+            },
+
             _requiredParams: ["url",],
 
             _getFeatures: function () {

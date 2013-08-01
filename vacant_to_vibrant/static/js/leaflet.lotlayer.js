@@ -47,7 +47,7 @@ define(
 
             _getFeatures: function () {
                 // Only load when map at a visible zoom
-                if (!this.options.visibleAtScale) {
+                if (!this.options.visibleAtScale || !this.getMap()) {
                     return;
                 }
 
@@ -68,7 +68,9 @@ define(
                     callback.apply(instance, [data,]);
                 })
                 .always(function () {
-                    instance.getMap().fire('dataload');
+                    if (instance.getMap()) {
+                        instance.getMap().fire('dataload');
+                    }
                 });
             },
 

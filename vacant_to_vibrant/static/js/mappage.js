@@ -29,7 +29,8 @@ define(
 
         var MAX_LOTS_DOWNLOAD = 2000;
 
-        var lotsMap,
+        var currentViewType,
+            lotsMap,
             mapViewportSet = false,
             visibleLotsCount = 0;
 
@@ -64,6 +65,7 @@ define(
                         $('.' + label).text(count);
                     });
                     visibleLotsCount = data['lots-count'];
+                    lotsMap.setVisibleLotsCount(visibleLotsCount);
                 })
                 .always(function () {
                     lotsMap.fire('dataload');
@@ -124,6 +126,7 @@ define(
         }
 
         function updateViewType(viewType) {
+            currentViewType = viewType;
             var viewTypeFilterSelector = '.view-type-' + viewType;
 
             // {En,Dis}able filters that should be {en,dis}abled for this view type
@@ -260,6 +263,14 @@ define(
                 polygonInitialFilters: {
                     parentsOnly: true,
                 },
+
+                enableCentroids: true,
+                centroidBaseUrl: $('#map').data('centroidbaseurl'),
+                centroidInitialFilters: {
+                    parentsOnly: true,
+                },
+
+                lotsCentroidThreshold: 2000,
 
                 gridResolution: 8,
 

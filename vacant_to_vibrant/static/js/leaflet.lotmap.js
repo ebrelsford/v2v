@@ -32,6 +32,8 @@ define(
             /*
             options: {
                 bingKey: String,
+                centroidBaseUrl: String,
+                centroidInitialFilters: Object,
                 cloudmadeKey: String,
                 cloudmadeStyleId: String,
                 enableLayersControl: Boolean,
@@ -42,6 +44,7 @@ define(
                 polygonInitialFilters: Object,
                 messageControl: Boolean,
                 messageDefault: String,
+                lotsCentroidThreshold: Integer,
             },
             */
 
@@ -68,6 +71,7 @@ define(
             choroplethBoundaryLayerName: null,
             filters: {},
             viewType: 'tiles',
+            visibleLotsCount: 0,
 
 
             _lotMapInitialize: function () {
@@ -76,6 +80,7 @@ define(
                 this.addStreetsLayer();
 
                 // Add overlays
+                this.addCentroidLayer();
                 this.addChoroplethLayer();
                 this.addPolygonLayer();
                 this.addTilesLayers();
@@ -375,6 +380,77 @@ define(
 
 
             /*
+             * Centroids
+             */
+
+            _getCentroidLayer: function () {
+                var instance = this;
+
+                var symbologyValues = _.map(lotStyles, function (style, name) {
+                    style.circleMarker = true;
+                    return {
+                        value: name,
+                        vectorOptions: style
+                    };
+                });
+
+                return new lvector.LotLayer({
+                    map: null,
+                    clickEvent: function (feature, event) {
+                        instance.options.clickHandler(event, feature);
+                        instance.fire('lotclicked', {
+                            event: event,
+                            lot: feature,
+                        });
+                    },
+                    filters: instance.options.centroidInitialFilters,
+                    scaleRange: [1, 16],
+                    symbology: {
+                        type: 'unique',
+                        property: 'layer',
+                        values: symbologyValues,
+                    },
+                    uniqueField: 'pk',
+                    url: instance.options.centroidBaseUrl,
+                });
+            },
+
+            _loadCentroidLayer: function (queryString) {
+                if (!this.options.enableCentroids) return;
+                if (!this.options.centroidBaseUrl) return;
+                var instance = this;
+
+                if (!instance.centroids) {
+                    instance.centroids = instance._getCentroidLayer();
+                }
+            },
+
+            addCentroidLayer: function (queryString) {
+                this._loadCentroidLayer(queryString, true);
+            },
+
+            reloadCentroidLayer: function (filters) {
+                if (this.centroids === undefined) return;
+                this.centroids._clearFeatures();
+                this.centroids._lastQueriedBounds = null;
+                this.centroids.options.filters = filters;
+                this.centroids._getFeatures();
+            },
+
+            showCentroidLayer: function () {
+                var instance = this;
+                instance.centroids.setMap(instance);
+            },
+
+            hideCentroidLayer: function () {
+                var instance = this;
+                if (instance.centroids) {
+                    instance.centroids.setMap(null);
+                }
+            },
+
+
+            /*
             * Choropleth
             */
 
@@ -544,6 +620,29 @@ define(
 
             },
 
+            setVisibleLotsCount: function (count) {
+                this.visibleLotsCount = count;
+                this.pickChoroplethLayer();
+            },
+
+            /*
+             * Determine the choropleth / summary view layer that should be
+             * displayed. If it won't be too many lots, show centroids.
+             */
+            pickChoroplethLayer: function () {
+                var instance = this;
+                if (instance.viewType === 'choropleth') {
+                    if (instance.visibleLotsCount <= instance.options.lotsCentroidThreshold) {
+                        instance.hideChoropleth();
+                        instance.showCentroidLayer();
+                    }
+                    else {
+                        instance.hideCentroidLayer();
+                        instance.showChoropleth();
+                    }
+                }
+            },
+
 
             /*
             * Controls
@@ -574,9 +673,6 @@ define(
                     }
                     else {
                         instance.messageControl.show();
-                        if (instance.viewType === 'choropleth') {
-                            instance.showChoropleth();
-                        }
                     }
 
                     if (zoom >= 17) {
@@ -603,6 +699,7 @@ define(
                 }
 
                 // Now, reload everything
+                this.reloadCentroidLayer(filters);
                 this.reloadChoropleth(filters);
                 this.reloadPolygonLayer(filters);
                 this.reloadTiles(filters);

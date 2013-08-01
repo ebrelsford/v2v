@@ -4,6 +4,7 @@
     data-countsbaseurl="{% url "lots:lot_count" %}?"
     data-choroplethbaseurl="{% url "lots:lot_count_by_boundary" %}" 
     data-polygonbaseurl="{% url "lots:lot_geojson_polygon" %}"
+    data-centroidbaseurl="{% url "lots:lot_geojson_centroid" %}"
 
     data-pointprivatetilesbaseurl="{{ lot_tile_urls.private }}"
     data-pointprivategridbaseurl="{{ lot_tile_urls.private_grid }}"

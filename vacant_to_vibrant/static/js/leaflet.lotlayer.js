@@ -1,6 +1,6 @@
 /*
  * Extend Leaflet Vector Layer's GeoJSONLayer to intelligently display polygons
- * of lots.
+ * and centroids of lots.
  */
 
 define(

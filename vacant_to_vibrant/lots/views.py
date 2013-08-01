@@ -224,7 +224,7 @@ class LotsGeoJSONPolygon(LotGeoJSONMixin, FilteredLotsMixin, GeoJSONListView):
         return self.get_lots().filter(polygon__isnull=False).geojson(
             field_name='polygon',
             precision=8,
-        )
+        ).select_related('known_use', 'owner__owner_type')
 
 
 class LotsGeoJSONCentroid(LotGeoJSONMixin, FilteredLotsMixin, GeoJSONListView):

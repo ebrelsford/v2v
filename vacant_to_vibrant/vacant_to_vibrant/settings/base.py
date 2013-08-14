@@ -291,8 +291,8 @@ ABSOLUTE_URL_OVERRIDES = {
     'elephantblog.categorytranslation': elephantblog_categorytranslation_url_app,
 }
 
-HONEYPOT_FIELD_NAME = 'officeaddress'
-HONEYPOT_VALUE = '123 Could Not Exist St'
+HONEYPOT_FIELD_NAME = 'homepage'
+HONEYPOT_VALUE = 'http://example.com/'
 
 LOT_MAP_TILE_URLS = {}
 

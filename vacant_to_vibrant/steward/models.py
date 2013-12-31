@@ -77,6 +77,12 @@ class StewardProject(BaseStewardProject):
         help_text=_('The external id for this project. Listed as "PROJECT '
                     'ID" in some data sources.'),
     )
+    pilcop_garden_id = models.CharField(_('pilcop garden id'),
+        max_length=25,
+        blank=True,
+        null=True,
+        help_text=_('The pilcop garden id for this project'),
+    )
     date_started = models.DateField(_('date started'),
         blank=True,
         null=True,

@@ -68,28 +68,89 @@ def to_basereg(s):
     return s.replace('-', '')
 
 
-def find_or_create_lots(row):
-    raw_address = row.get('INDIVIDUAL_PARCEL', None) or row.get('ADDRESS', None)
+def find_or_create_lot(address, basereg, zip):
+    # Try to find the parcel as a Lot
+    lot = find_lot(basereg, address)
+
+    # If that fails find it as a Parcel, and create a Lot for it
+    if not lot:
+        # Let OPASynchronizer handle ownership data
+        defaults = {
+            'address_line1': address,
+            'city': 'Philadelphia',
+            'state_province': 'PA',
+            'postal_code': zip,
+        }
+        lot = create_lot(basereg, address, **defaults)
+    return lot
+
+
+def find_or_create_lots(row, address=None):
+    raw_address = (row.get('INDIVIDUAL_PARCEL', None) or
+                   row.get('ADDRESS', None) or
+                   address)
     address = fix_address(raw_address)
+    lots = []
     for basereg_raw in row['BaseReg'].split(','):
         basereg = to_basereg(basereg_raw.strip())
+        lot = find_or_create_lot(address, basereg, row['ZIP'])
+        if lot:
+            lots += (lot,)
+    return lots
 
-        # Try to find the parcel as a Lot
-        lot = find_lot(basereg, address)
 
-        # If that fails find it as a Parcel, and create a Lot for it
-        if not lot:
-            # Let OPASynchronizer handle ownership data
-            defaults = {
-                'address_line1': address,
-                'city': 'Philadelphia',
-                'state_province': 'PA',
-                'postal_code': row['ZIP'],
-            }
-            lot = create_lot(basereg, address, **defaults)
-        if not lot:
+def find_or_create_lotgroup(parcels, address=None, **lotgroup_defaults):
+    """
+    Find or create a LotGroup for the given parcels. If there is only one lot
+    in the parcels, just return that lot.
+    """
+    lots = []
+    lotgroup = None
+    for parcel in parcels:
+        parcel_lots = find_or_create_lots(parcel, address=address)
+        for lot in parcel_lots:
+            if lot.group:
+                lotgroup = lot.group
+        lots += parcel_lots
+
+    if len(lots) > 1:
+        if lotgroup:
+            lot = lotgroup
+        else:
+            lot = LotGroup(**get_lotgroup_kwargs(address=address,
+                                                 **lotgroup_defaults))
+            lot.save()
+        for member_lot in lots:
+            member_lot.group = lot
+            member_lot.save()
+        return lot
+    elif len(lots) == 1:
+        lot = lots[0]
+        # Intentionally don't get the address, trust the parcel's
+        kwargs = get_lotgroup_kwargs(**lotgroup_defaults)
+        Lot.objects.filter(pk=lot.pk).update(**kwargs)
+        return lot
+    return None
+
+
+def load_final_gardens(filename):
+    gardens_reader = csv.DictReader(open(filename, 'r'))
+    gardens = []
+    for garden in gardens_reader:
+        if garden['Garden exists?'].lower() == 'not a garden':
             continue
-        yield lot
+        gardens.append({
+            'pilcop code': garden['PILCOP GARDEN code'],
+            'name': garden['Garden Name (DO NOT EDIT  - from Garden Code)'],
+            'address': garden['Address (DO NOT EDIT - from GARDEN CODE)'],
+            'zip': garden['ZIP - should be deleted in exchange for parcel information'],
+        })
+    return gardens
+
+
+def load_final_parcels(filename):
+    reader = csv.DictReader(open(filename, 'r'))
+    return itertools.groupby(reader, lambda p: p['pilcop garden code'])
 
 
 def parse_datetime(s):
@@ -97,6 +158,105 @@ def parse_datetime(s):
         return datetime.strptime(s, '%m/%d/%Y')
     except Exception:
         return None
+
+
+def get_lotgroup_kwargs(name=None, address=None, zip=None):
+    kwargs = {
+        'city': 'Philadelphia',
+        'state_province': 'PA',
+        'known_use': Use.objects.get(name__exact='community garden'),
+        'known_use_certainty': 7,
+        'known_use_locked': True,
+        'steward_inclusion_opt_in': True,
+    }
+    if name:
+        kwargs['name'] = name
+    if address:
+        kwargs['address_line1'] = address
+    if zip:
+        kwargs['postal_code'] = zip
+    return kwargs
+
+
+def get_steward_kwargs(name=None, support_organization=None,
+                       pilcop_garden_id=None):
+    kwargs = {
+        'use': Use.objects.get(name__exact='community garden'),
+        'include_on_map': True,
+    }
+    if name:
+        kwargs['name'] = name
+    if support_organization:
+        kwargs['support_organization'] = support_organization
+    if pilcop_garden_id:
+        kwargs['pilcop_garden_id'] = pilcop_garden_id
+    return kwargs
+
+
+def find_garden(gardens, code):
+    for g in gardens:
+        if g['pilcop code'] == code:
+            return g
+    return None
+
+
+def get_support_organization(parcels):
+    for parcel in parcels:
+        support_organization = parcel.get('Support Organization', None)
+        if support_organization:
+            return support_organization
+    return None
+
+
+def load_final_db(gardens_filename=settings.DATA_ROOT + '/final_gardens.csv',
+                  parcels_filename=settings.DATA_ROOT + '/final_parcels.csv'):
+    """
+    Load the "final" garden database created by PILCOP.
+
+    Gardens and their parcels are kept in separate files. Group parcels by
+    garden and add or update steward projects for each.
+
+    This is basically a one-off script for loading the database and will likely
+    be modified for future versions of the database.
+    """
+    gardens = load_final_gardens(gardens_filename)
+
+    for garden_code, parcels in load_final_parcels(parcels_filename):
+        garden = find_garden(gardens, garden_code)
+
+        if not garden:
+            print ('%s: Could not find garden (maybe it is marked "not a ' +
+                   'garden?". Skipping.') % garden_code
+            continue
+
+        lot = find_or_create_lotgroup(parcels,
+            address=garden['address'],
+            name=garden['name'],
+            zip=garden['zip']
+        )
+        if not lot:
+            print '%s: Could not find lot for parcels. Skipping.' % garden_code
+            continue
+
+        steward_kwargs = get_steward_kwargs(
+            name=garden['name'],
+            support_organization=get_support_organization(parcels),
+            pilcop_garden_id=garden_code,
+        )
+
+        if lot.steward_projects.count() > 0:
+            steward_project = lot.steward_projects.all()[0]
+            print ('%s: Lot already has a steward project, %s. Updating.' %
+                   (garden_code, steward_project,))
+            StewardProject.objects.filter(pk=steward_project.pk).update(
+                **steward_kwargs
+            )
+            continue
+
+        # Create a StewardProject for the (group of) lots
+        print '%s: Lot did not have a steward project. Adding now.' % garden_code
+        steward_project = StewardProject(content_object=lot, **steward_kwargs)
+        steward_project.save()
 
 
 def load(filename=settings.DATA_ROOT + '/gardens.csv',
@@ -111,14 +271,7 @@ def load(filename=settings.DATA_ROOT + '/gardens.csv',
 
     for garden, parcels in gardens:
         lots = []
-        lotgroup_kwargs = {
-            'city': 'Philadelphia',
-            'state_province': 'PA',
-            'known_use': steward_project_use,
-            'known_use_certainty': 7,
-            'known_use_locked': True,
-            'steward_inclusion_opt_in': True,
-        }
+        lotgroup_kwargs = get_lotgroup_kwargs()
         organizer_kwargs = {}
         if create_organizers:
             organizer_kwargs.update({

@@ -34,13 +34,14 @@ class StewardProjectAdmin(BaseStewardAdminMixin, admin.ModelAdmin):
 
     fields = ('stewarded_target', 'name', 'use', 'support_organization',
               'land_tenure_status', 'include_on_map', 'organizer',
-              'date_started', 'external_id', 'steward_notification_link',)
-    list_display = ('pk', 'name', 'stewarded_target', 'organizer', 'use',
-                    'include_on_map',)
+              'date_started', 'external_id', 'pilcop_garden_id',
+              'steward_notification_link',)
+    list_display = ('pk', 'pilcop_garden_id', 'name', 'stewarded_target',
+                    'organizer', 'use', 'include_on_map',)
     list_filter = ('use', 'include_on_map',)
     readonly_fields = ('content_type', 'object_id', 'stewarded_target',
                        'steward_notification_link',)
-    search_fields = ('name',)
+    search_fields = ('name', 'pilcop_garden_id',)
 
     def steward_notification_link(self, obj):
         try:

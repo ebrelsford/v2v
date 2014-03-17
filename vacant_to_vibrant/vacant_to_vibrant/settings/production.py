@@ -8,7 +8,7 @@ ADMINS = (
 
 MANAGERS = (
     ('Grounded in Philly Facilitator', 'facilitators@groundedinphilly.org'),
-    ('Owen', 'otaylor@pilcop.org'),
+    ('Kirtrina', 'kbaxter@pilcop.org'),
 )
 
 FACILITATORS = {

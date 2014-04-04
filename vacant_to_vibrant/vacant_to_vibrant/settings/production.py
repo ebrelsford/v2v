@@ -14,7 +14,7 @@ MANAGERS = (
 FACILITATORS = {
     'global': [
         'facilitators@groundedinphilly.org',
-        'otaylor@pilcop.org',
+        'kbaxter@pilcop.org',
     ],
 }
 

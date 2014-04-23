@@ -44,16 +44,11 @@ define(
                 center: { lat: lat, lng: lon },
                 zoom: 17
             });
-            var key = $('#map').data('cloudmadekey'),
-                style = $('#map').data('cloudmadestyle');
-            var cloudmade = new L.TileLayer(
-                'http://{s}.tile.cloudmade.com/' + key + '/' + style + '/256/{z}/{x}/{y}.png',
-                {
-                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                    maxZoom: 18,
-                }
-            );
-            map.addLayer(cloudmade);
+            L.tileLayer('https://{s}.tiles.mapbox.com/v3/{mapboxId}/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, Imagery &copy; <a href="http://mapbox.com">Mapbox</a>',
+                maxZoom: 18,
+                mapboxId: $('#map').data('mapboxid')
+            }).addTo(map);
 
             $.get($('#map').data('url'), function (data) {
                 var feature_layer = new L.GeoJSON(data, { style: styleLayer })

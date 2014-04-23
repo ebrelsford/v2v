@@ -184,9 +184,7 @@ define(
         }
 
         $(document).ready(function () {
-            var key = $('#map').data('cloudmadekey'),
-                style = $('#map').data('cloudmadestyle');
-
+            var mapboxId = $('#map').data('mapboxid');
 
             // Prepare our map
             lotsMap = L.map('map', {
@@ -196,8 +194,7 @@ define(
                     [40.772, -73.952],
                 ],
                 zoom: 11,
-                cloudmadeKey: key,
-                cloudmadeStyleId: style,
+                mapboxId: mapboxId,
                 bingKey: 'ArBLp_jhvmrzT5Kg4_FXohJCKjbKmBW-nEEItp2dbceyHrJPMJJEqXDp8XsPy_cr',
                 clickHandler: function (e, feature) {
                     var featureId = null;

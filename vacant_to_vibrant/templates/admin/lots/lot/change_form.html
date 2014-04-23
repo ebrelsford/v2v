@@ -47,14 +47,11 @@
             zoom: 12,
 
             layers: [
-                L.tileLayer(
-                    'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', 
-                    {
-                        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://www.openstreetmap.org/copyright">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        key: '{% inplace_setting PLACES_CLOUDMADE_KEY %}',
-                        styleId: '{% inplace_setting PLACES_CLOUDMADE_STYLE %}',
-                    }
-                ),
+                L.tileLayer('https://{s}.tiles.mapbox.com/v3/{mapboxId}/{z}/{x}/{y}.png', {
+                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, Imagery &copy; <a href="http://mapbox.com">Mapbox</a>',
+                    maxZoom: 18,
+                    mapboxId: '{% inplace_setting PLACES_MAPBOX_ID %}'
+                })
             ],
         });       
 

@@ -34,14 +34,13 @@ define(
                 bingKey: String,
                 centroidBaseUrl: String,
                 centroidInitialFilters: Object,
-                cloudmadeKey: String,
-                cloudmadeStyleId: String,
                 enableLayersControl: Boolean,
                 enableChoropleth: Boolean,
                 enablePointTiles: Boolean,
                 enablePolygons: Boolean,
                 polygonBaseUrl: String,
                 polygonInitialFilters: Object,
+                mapboxId: String,
                 messageControl: Boolean,
                 messageDefault: String,
                 lotsCentroidThreshold: Integer,
@@ -98,14 +97,11 @@ define(
             */
 
             addStreetsLayer: function () {
-                this.streets = L.tileLayer(
-                    'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png',
-                    {
-                        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://www.openstreetmap.org/copyright">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        key: this.options.cloudmadeKey,
-                        styleId: this.options.cloudmadeStyleId,
-                    }
-                ).addTo(this);
+                this.streets = L.tileLayer('https://{s}.tiles.mapbox.com/v3/{mapboxId}/{z}/{x}/{y}.png', {
+                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, Imagery &copy; <a href="http://mapbox.com">Mapbox</a>',
+                    maxZoom: 18,
+                    mapboxId: this.options.mapboxId
+                }).addTo(this);
             },
 
             addSatelliteLayer: function (add) {
